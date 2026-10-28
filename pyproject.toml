@@ -1,0 +1,32 @@
+[project]
+name = "pyro-kd"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Daksh Shah", email = "daksh.shah15@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "torch>=2.8.0",
+    "torchvision>=0.23.0",
+    "tqdm>=4.67.1",
+    "torchmetrics>=1.8.2",
+    "opencv-python>=4.13.0.92",
+]
+
+[project.scripts]
+pyro-kd = "pyro_kd:main"
+
+[build-system]
+requires = ["uv_build>=0.13.5,<0.14.0"]
+build-backend = "uv_build"
+
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu126" }
+torchvision = { index = "pytorch-cu126" }
