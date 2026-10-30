@@ -17,6 +17,8 @@ dependencies = [
     "silero-vad>=6.2.3",
     "scenedetect>=0.7.2",
     "open-clip-torch>=3.3.0",
+    "bert-score>=0.3.13",
+    "sentence-transformers>=6.2.0",
 ]
 
 [[tool.uv.index]]
