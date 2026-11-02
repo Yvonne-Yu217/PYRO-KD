@@ -13,6 +13,7 @@ from src.generation.prompts import build_prompt, transcript_context, word_limit_
 from src.utils.selection import k_for_duration, uniform_timestamps
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+from build_moments import load_targets  # noqa: E402
 from run_ad_vlm import done_ids, read_jsonl  # noqa: E402
 
 
@@ -70,6 +71,20 @@ class MTGADTests(unittest.TestCase):
         dev = select_dev(videos, 5, min_ad_items=3)
         self.assertEqual(len(dev), 5)
         self.assertTrue(all(len(v.ad) >= 3 for v in dev))
+
+
+class LoadTargetsTests(unittest.TestCase):
+    def test_mtg_ad_dev_and_test_ids(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            for split in ("validation", "test"):
+                rows = [make_row("a", split=split, duration=120), make_row("b", split=split, duration=200)]
+                Path(tmp, f"{split}.jsonl").write_text("\n".join(json.dumps(r) for r in rows) + "\n")
+            splits = {"dev": {"videos": [{"video_id": "b"}]}, "test": {"video_ids": ["a"]}}
+            dev = load_targets("mtg-ad", "dev", splits, Path(tmp))
+            test = load_targets("mtg-ad", "test", splits, Path(tmp))
+        self.assertEqual([(i, d) for i, d, _ in dev], [("b", 200.0)])
+        self.assertEqual([(i, d) for i, d, _ in test], [("a", 120.0)])
+        self.assertEqual(dev[0][2][0].text, "first")
 
 
 class SelectionTests(unittest.TestCase):

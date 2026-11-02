@@ -7,8 +7,8 @@ Finished ids are skipped on restart, so a preempted/requeued SLURM job
 resumes where it stopped. <output>.meta.json records GPU, quantization, peak
 memory, and timing for the cost section of the report.
 
-    python scripts/run_ad_vlm.py --model qwen3-vl-8b --input data/moments/U_dev.jsonl --limit 4
-    python scripts/run_ad_vlm.py --input data/moments/U_dev.jsonl --dry-run   # no GPU
+    python scripts/run_ad_vlm.py --model qwen3-vl-8b --input data/moments/mtg-ad_U_dev.jsonl --limit 4
+    python scripts/run_ad_vlm.py --input data/moments/mtg-ad_U_dev.jsonl --dry-run   # no GPU
 """
 from __future__ import annotations
 
@@ -78,7 +78,7 @@ def parse_args():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--model", default="qwen3-vl-8b",
                    help=f"short name ({', '.join(MODELS)}) or any HF repo id")
-    p.add_argument("--input", default="data/moments/U_dev.jsonl")
+    p.add_argument("--input", default="data/moments/mtg-ad_U_dev.jsonl")
     p.add_argument("--output", default=None,
                    help="default: outputs/<model>/<input stem>_<prior>.jsonl")
     p.add_argument("--prior", choices=sorted(PROMPTS), default="P0")

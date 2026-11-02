@@ -11,9 +11,16 @@ Status as of 2026-11-02. Items marked **TEAM** still need a person to make the c
 - **Loader:** `src/datasets/mtg_ad.py` reads `data/annotations/*.jsonl` and sorts the AD and transcript segments by time. A few validation scripts list them out of order, and two validation videos have one AD start past the stated duration.
 - **Videos:** downloaded from YouTube with yt-dlp at ≤720p (`hpc/prepare_data.sh`). **Not verified yet:** whether every video is still online. The script lists any unavailable ones.
 - **Evaluation:** our temporal metrics, BERTScore, cosine similarity and rubric (`src/evaluation/`) already follow MTG-AD's format and judge definitions. The official MTG-AD-Eval (TTS-rendered timing and Quality-RF) is Gemini-based. **TEAM:** decide whether to run it as the primary timing check, as the proposal suggests.
-- **REFRAMED** is a secondary or backup option (`src/datasets/reframed.py`, `configs/reframed_pilot.json`).
+**Secondary: REFRAMED** (`igorsterner/reframed`, CC BY-NC 4.0), used as a movie-domain check of the MTG-AD findings (`src/datasets/reframed.py`, `configs/reframed_splits.json`).
 
-**Downstream: EgoSchema** (public 500-question subset). This is unchanged; see `scripts/prepare_egoschema.py`.
+- **Loader:** the validation and test metadata load and the test split decrypts. AD, subtitle and SDH times are clip-relative, and the clips are shorter (median 2.3 minutes, up to 8.7).
+- **Splits:** a 10-clip pilot from validation (one clip per movie) and a fixed 30-clip test sample spread across the 10 test movies. Report results per movie, because excerpts from one movie are not independent.
+- **K rate:** 5.0 descriptions per minute after merging AD cues less than 0.5 s apart (validation median). The raw cue rate of 12.6 per minute overstates how many separate descriptions there are.
+- **Videos:** downloaded by ffmpeg from the dataset's source. **Not verified yet:** whether the downloads work (the script prints each clip's duration drift).
+
+**Downstream: EgoSchema** (public 500-question subset), unchanged; see `scripts/prepare_egoschema.py`.
+
+All three datasets share the same frame cache, moment format and generation script. The proposal is updated to match (`CV Project Proposal.md`).
 
 ## Fixed splits (`configs/mtg_ad_splits.json`, seed 0)
 

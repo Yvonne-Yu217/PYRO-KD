@@ -36,7 +36,8 @@ cd /scratch/$USER && git clone https://github.com/Yvonne-Yu217/PYRO-KD.git && cd
 srun --account=csci_ga_2271-2026fa --partition=n2c48m24 --time=02:00:00 --pty /bin/bash
 bash hpc/setup_env.sh          # overlay + conda + packages (~20 min)
 bash hpc/download_models.sh    # Qwen3-VL-8B + Muse Glimmer (~80 GB)
-bash hpc/prepare_data.sh       # 10 dev videos -> data/cache/mtg-ad, data/moments/U_dev.jsonl
+bash hpc/prepare_data.sh       # MTG-AD dev videos -> data/cache/mtg-ad, data/moments/mtg-ad_U_dev.jsonl
+bash hpc/prepare_data.sh reframed   # optional: REFRAMED pilot clips
 exit
 ```
 

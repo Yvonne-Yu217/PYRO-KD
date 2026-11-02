@@ -1,6 +1,6 @@
 # PYRO-KD: cue-driven keyframe selection for MLLM audio description
 
-This project compares uniform, video-only, audio-only, fused audio+video and oracle selection of the moments where a frozen VLM writes inline audio descriptions. It evaluates against professional AD in [Mind the Gap (MTG-AD)](https://github.com/google/mtg-ad), with a downstream QA check on EgoSchema. Week 1 decisions are in [docs/week1_spec.md](docs/week1_spec.md).
+This project compares uniform, video-only, audio-only, fused audio+video and oracle selection of the moments where a frozen VLM writes inline audio descriptions. It evaluates against professional AD in [Mind the Gap (MTG-AD)](https://github.com/google/mtg-ad) (primary), checks the findings on movie excerpts from REFRAMED, and tests downstream QA on EgoSchema. Week 1 decisions are in [docs/week1_spec.md](docs/week1_spec.md).
 
 ## Local setup
 
@@ -17,6 +17,8 @@ On macOS, the CUDA torch wheels don't install. The tests use only the standard l
 python scripts/prepare_mtg_ad.py                     # annotations + configs/mtg_ad_splits.json
 python scripts/prepare_mtg_ad.py --download-videos --preprocess   # dev videos (needs yt-dlp)
 python scripts/build_moments.py --selector U --videos dev         # generation inputs
+python scripts/prepare_reframed.py                   # REFRAMED metadata + configs/reframed_splits.json
+python scripts/build_moments.py --dataset reframed --videos dev
 python scripts/prepare_egoschema.py                  # EgoSchema annotations + QA pilot
 ```
 
@@ -31,7 +33,7 @@ bash hpc/submit.sh qwen --limit 4                                               
 
 ## Layout
 
-- `src/datasets/`: MTG-AD (primary), EgoSchema, and REFRAMED (backup) loaders.
+- `src/datasets/`: MTG-AD (primary), REFRAMED (movie check), and EgoSchema loaders.
 - `src/utils/media.py`: ffprobe, 16 kHz audio, timestamped frame cache, frame windows.
 - `src/utils/selection.py`: shared K rule and the uniform selector (U).
 - `src/utils/visual_selector.py`, `audio_selector.py`: V and A selectors (in progress).

@@ -8,6 +8,43 @@
     "rate_per_minute": 5.0,
     "source": "median merged US AD descriptions/min on validation (merge gap 0.5 s)"
   },
+  "test": {
+    "split": "test",
+    "selection": "movie-balanced round-robin, seeded; >=3 US AD cues; has subtitles",
+    "video_ids": [
+      "b_nMwJOBy2L3",
+      "FCskdO_WFQ5e",
+      "_BjchgrAWAxM",
+      "U9_h_YTynZD9",
+      "mrEfJcER6AYY",
+      "2Rj_PIReZfTm",
+      "W5eRO6mGx87p",
+      "UwybOKDynkyB",
+      "FCYNP17ZXmZ6",
+      "jdaGqC2tmFl8",
+      "Fz8lDj3lgV58",
+      "rzPr6enlk1HY",
+      "l5Hlyecs4VHM",
+      "K_oHwNZ0u42s",
+      "jWkK_dmWy_os",
+      "Zmq9A7rdn_po",
+      "LnKORjoJDRZe",
+      "GwdAydQFY6eK",
+      "h147ZGqiXbxh",
+      "Bz9iXZc3QVHs",
+      "8hTRc4sY_MLG",
+      "r5LDWgwFmQYH",
+      "3SJm97MCmVn3",
+      "Wy_AaNCfzc_o",
+      "nhG3fu2CQLE0",
+      "Y_VUFhPLVeJN",
+      "_VtrRZ5QgIPl",
+      "1jUZEIy5W7Oj",
+      "koGw8kwcTE_S",
+      "KUYp9gIi_8Mn"
+    ],
+    "num_movies": 10
+  },
   "clips": [
     {
       "video_id": "l5lLQICPOcnb",

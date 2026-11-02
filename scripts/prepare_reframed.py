@@ -4,7 +4,7 @@ Examples:
     # metadata + pilot list only (seconds, no video traffic)
     uv run python scripts/prepare_reframed.py
 
-    # also download and preprocess the 10 pilot videos (run on HPC)
+    # also download and preprocess the selected videos (run on HPC)
     uv run python scripts/prepare_reframed.py --download-videos --preprocess
 """
 
@@ -26,9 +26,11 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--data-dir", type=Path, default=Path("data/reframed"))
     parser.add_argument("--cache-dir", type=Path, default=Path("data/cache/reframed"))
-    parser.add_argument("--pilot-out", type=Path, default=Path("configs/reframed_pilot.json"))
+    parser.add_argument("--splits-out", type=Path, default=Path("configs/reframed_splits.json"))
     parser.add_argument("--num-pilot", type=int, default=10)
+    parser.add_argument("--num-test", type=int, default=30)
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--videos", choices=["pilot", "test", "all"], default="pilot")
     parser.add_argument("--download-videos", action="store_true")
     parser.add_argument("--preprocess", action="store_true")
     parser.add_argument("--fps", type=float, default=2.0)
@@ -43,6 +45,7 @@ def main() -> None:
     # K rule is derived from validation only (proposal: never set K from test).
     rates = [len(merge_cues(c.ad_us)) / (c.video_duration / 60) for c in validation]
     pilot = select_pilot(validation, args.num_pilot, seed=args.seed)
+    test_sample = select_pilot(test, args.num_test, seed=args.seed)
     record = {
         "dataset": "igorsterner/reframed",
         "split": "validation",
@@ -52,6 +55,12 @@ def main() -> None:
             "formula": "K = max(1, round(rate_per_minute * video_duration / 60))",
             "rate_per_minute": round(statistics.median(rates), 2),
             "source": "median merged US AD descriptions/min on validation (merge gap 0.5 s)",
+        },
+        "test": {
+            "split": "test",
+            "selection": "movie-balanced round-robin, seeded; >=3 US AD cues; has subtitles",
+            "video_ids": [c.video_id for c in test_sample],
+            "num_movies": len({c.movie_id for c in test_sample}),
         },
         "clips": [
             {
@@ -66,13 +75,14 @@ def main() -> None:
             for c in pilot
         ],
     }
-    args.pilot_out.parent.mkdir(parents=True, exist_ok=True)
-    args.pilot_out.write_text(json.dumps(record, indent=2) + "\n")
-    print(f"wrote {args.pilot_out} ({len(pilot)} clips)")
+    args.splits_out.parent.mkdir(parents=True, exist_ok=True)
+    args.splits_out.write_text(json.dumps(record, indent=2) + "\n")
+    print(f"wrote {args.splits_out} (pilot {len(pilot)}, test {len(test_sample)})")
 
     if not (args.download_videos or args.preprocess):
         return
-    for clip in pilot:
+    targets = {"pilot": pilot, "test": test_sample, "all": pilot + test_sample}[args.videos]
+    for clip in targets:
         video_path = download_video(clip, args.data_dir / "videos")
         print(f"downloaded {video_path}")
         if args.preprocess:

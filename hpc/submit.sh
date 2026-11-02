@@ -13,8 +13,8 @@
 #
 # Examples:
 #   bash hpc/submit.sh qwen --limit 4                                  # smoke test
-#   bash hpc/submit.sh qwen-a100 --input data/moments/U_dev.jsonl
-#   bash hpc/submit.sh muse --input data/moments/U_dev.jsonl --limit 4
+#   bash hpc/submit.sh qwen-a100 --input data/moments/mtg-ad_U_dev.jsonl
+#   bash hpc/submit.sh muse --input data/moments/mtg-ad_U_dev.jsonl --limit 4
 set -euo pipefail
 cd "$(dirname "$0")/.."
 source hpc/config.sh
@@ -42,8 +42,10 @@ case "$preset" in
     echo "Unknown preset '$preset'. Use qwen, qwen-a100, muse or muse-4bit." >&2; exit 1 ;;
 esac
 
-if [ ! -f data/moments/U_dev.jsonl ] && [[ " $* " != *" --input "* ]]; then
-  echo "data/moments/U_dev.jsonl not found; run bash hpc/prepare_data.sh first" >&2; exit 1
+DEFAULT_INPUT=data/moments/mtg-ad_U_dev.jsonl
+if [[ " $* " != *" --input "* ]]; then
+  [ -f "$DEFAULT_INPUT" ] || { echo "$DEFAULT_INPUT not found; run bash hpc/prepare_data.sh first" >&2; exit 1; }
+  set -- --input "$DEFAULT_INPUT" "$@"
 fi
 
 mkdir -p logs outputs
