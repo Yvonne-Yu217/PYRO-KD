@@ -19,3 +19,12 @@ venv/
 .pytest_cache/
 .coverage
 htmlcov/
+
+# Datasets, caches, and run outputs (never commit videos: source rights are separate)
+data/
+outputs/
+logs/
+*.mp4
+
+# Local copy of the proposal
+*.docx

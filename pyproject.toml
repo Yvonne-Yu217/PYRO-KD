@@ -1,7 +1,7 @@
 [project]
 name = "pyro-kd"
 version = "0.1.0"
-description = "Add your description here"
+description = "Cue-driven keyframe selection for MLLM audio description"
 readme = "README.md"
 authors = [
     { name = "Daksh Shah", email = "daksh.shah15@gmail.com" }
@@ -19,6 +19,7 @@ dependencies = [
     "open-clip-torch>=3.3.0",
     "bert-score>=0.3.13",
     "sentence-transformers>=6.2.0",
+    "cryptography>=44.0.0",
 ]
 
 [[tool.uv.index]]
