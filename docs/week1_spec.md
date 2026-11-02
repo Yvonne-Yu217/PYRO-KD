@@ -1,59 +1,59 @@
-# Week 1 spec: data, pilot, and compute
+# Week 1 spec: data, splits, and compute
 
 Status as of 2026-11-02. Items marked **TEAM** still need a person to make the call or do the work.
 
 ## Dataset decision
 
-**Primary: REFRAMED** (`igorsterner/reframed`, CC BY-NC 4.0; source-video rights are separate, so videos are never committed).
+**Primary: Mind the Gap (MTG-AD).** The dataset is `google/mind-the-gap-inline-ad` on Hugging Face (CC BY 4.0), with code at [google/mtg-ad](https://github.com/google/mtg-ad). It's the proposal's original primary dataset, and it's now public, so no access request is needed.
 
-- Verified locally: the validation and test JSONL files load, and the test split decrypts with the published `keys.zip`. All SRT tracks parse.
-- Validation has 96 clips from 10 movies, about 229 minutes in total. Test has 91 clips from 10 movies.
-- All AD, subtitle and SDH times are **clip-relative**: AD end times never exceed `video_duration` by more than 0.11 s. `video_start` is the clip's offset within the full movie.
-- Every clip has US AD. Two validation clips have no subtitles, and 79 of 96 validation clips have a screenplay (no test clips do).
-- **Not verified yet:** whether videos download. The dataset's own recipe is an ffmpeg pull from theplatform.com, implemented in `download_video`. Run `scripts/hpc/prepare_pilot.sbatch` and check the reported duration drift.
-- Mind the Gap is still the fallback if REFRAMED videos are unavailable (**TEAM:** Kiran's author email). The MTG-AD parser in `src/evaluation/parsing.py` stays for that path.
+- **Size:** 433 YouTube videos, about 36 hours, with professional inline AD. 332 are validation and 101 are test (the paper's evaluation set).
+- **Fields:** the GT AD has **start times only**, with a median of 16 segments per video. Each video also has a timestamped ASR transcript (empty for 94 validation and 20 test videos with no speech) and Gemini-generated dense visual info.
+- **Loader:** `src/datasets/mtg_ad.py` reads `data/annotations/*.jsonl` and sorts the AD and transcript segments by time. A few validation scripts list them out of order, and two validation videos have one AD start past the stated duration.
+- **Videos:** downloaded from YouTube with yt-dlp at ≤720p (`hpc/prepare_data.sh`). **Not verified yet:** whether every video is still online. The script lists any unavailable ones.
+- **Evaluation:** our temporal metrics, BERTScore, cosine similarity and rubric (`src/evaluation/`) already follow MTG-AD's format and judge definitions. The official MTG-AD-Eval (TTS-rendered timing and Quality-RF) is Gemini-based. **TEAM:** decide whether to run it as the primary timing check, as the proposal suggests.
+- **REFRAMED** is a secondary or backup option (`src/datasets/reframed.py`, `configs/reframed_pilot.json`).
 
-**Downstream: EgoSchema**, using only the public subset of 500 labeled questions. `scripts/prepare_egoschema.py` fetches the annotations and fixes a 10-item pilot. The pilot is excluded from the reported evaluation. Videos follow the EgoSchema README (**TEAM:** download onto HPC scratch).
+**Downstream: EgoSchema** (public 500-question subset). This is unchanged; see `scripts/prepare_egoschema.py`.
 
-## Pilot and dev split
+## Fixed splits (`configs/mtg_ad_splits.json`, seed 0)
 
-`configs/reframed_pilot.json` holds 10 validation clips, one per validation movie. The pick is a seeded shuffle (seed 0) among clips with at least 3 US AD cues and subtitles. These 10 clips are also the **dev set** used to tune α, prompts and the judge. The test sample stays untouched until Week 4.
+| Set | Source | Size | Rule |
+|---|---|---|---|
+| Dev | validation | 10 videos | Category-stratified among videos with ≥ 3 AD segments. Used to tune α, prompts and the judge. |
+| Exemplar pool | validation | the rest | Any validation video not in dev; never test. |
+| Test | test | 50 of 101 | Category-stratified. Don't evaluate on it until Week 4. |
 
-Because several excerpts come from the same movie, report results per movie or with a cluster bootstrap by movie.
+The 10 dev videos are 5 vlog, 2 education, and 1 each of cooking, nature and travel. Their durations run from 214 to 517 s, and 3 of them have no speech.
+
+If compute allows, run all 101 test videos to compare with the paper's 12 released model configurations.
 
 ## Choosing K
 
-The proposal estimated about 16 descriptions per 5-minute video. REFRAMED is denser:
+We use one duration-based rule for every selector, set from validation only:
 
-| Validation, US track | Median per minute |
+`K = max(1, round(rate × duration_s / 60))`
+
+| Validation statistic | Value |
 |---|---|
-| Raw SRT cues | 12.6 |
-| Descriptions (cues ≤ 0.5 s apart merged) | **5.0** |
-| Descriptions (≤ 1.0 s merged) | 4.5 |
-| Descriptions (≤ 2.0 s merged) | 3.6 |
+| GT AD segments per minute, median | **3.48** |
+| GT AD segments per video, median | 16 |
+| K/human ratio at rate 3.5 | 1.00 |
+| K/human ratio at rate 5.0 | 1.45 |
 
-The UK track is sparser, at about 3.4 descriptions per minute with the 0.5 s merge.
+The configured rate is **3.48**. The earlier 5.0 per minute came from REFRAMED, where film AD is denser. On MTG-AD, a rate of 5.0 would select about 45% more moments than the human describers wrote, which lowers temporal precision for every selector equally.
 
-**Proposed rule:** `K = max(1, round(5.0 × duration_min))`, which gives K ≈ 11–12 for a typical 2.3-minute clip. The rule comes from validation only. **TEAM:** confirm the rule, or pick a lower rate if the UK track counts equally.
+The rate is a single value in `configs/mtg_ad_splits.json`. **TEAM:** confirm 3.48, or override it.
 
-Raw cue counts overstate how many descriptions there are, because REFRAMED splits single sentences across cues. Use `merge_cues` before any count-based metric.
+## Cache and moment schema
 
-## Cache schema (`src/utils/media.py`)
+- `data/cache/mtg-ad/<video_id>/` holds `manifest.json`, `audio_16k.wav` (mono) and `frames/%06d.jpg`. Frames are at 2 fps with the long side ≤ 768 px, and frame *i* is at *i/fps* seconds (`src/utils/media.py`).
+- `data/moments/<selector>_<set>.jsonl` holds one row per selected moment: `time`, 4 frames over 2 s, transcript within ±15 s, and the word limit (`scripts/build_moments.py`). Every selector writes the same fields, so the generator's inputs stay identical.
+- The word limit is 15 words until the VAD gap cache exists. After that it becomes `floor(gap × 3)`.
 
-`data/cache/<dataset>/<video_id>/` contains:
+## Models and compute (NYU HPC Cloud Bursting)
 
-- `manifest.json` with `media_info` (from ffprobe), `settings`, `config_hash`, `audio_path` and `frames[{index, timestamp, path}]`.
-- `audio_16k.wav`: mono 16-bit PCM for Silero VAD, Whisper and librosa. It is `null` when the video has no audio.
-- `frames/%06d.jpg`: frames at 2 fps (1 fps for EgoSchema), long side ≤ 768 px. Frame *i* is at *i/fps* seconds.
-
-Re-running with the same settings reuses the cache. Changing the settings rebuilds it.
-
-Shot detection must still run on the original video, not on the sparse frames (see the V5 caution in the proposal).
-
-## Models and compute
-
-- Both backbones are served through vLLM's OpenAI-compatible API (`src/generation/vlm_client.py`). Swapping models is a name change, and every call logs latency and token counts.
-- Qwen3-VL-8B-Instruct is the primary model. Muse-Glimmer-30B-NVFP4 is optional, because its NVFP4 path targets Blackwell GPUs. **TEAM:** confirm which GPU types the HPC allocation has.
-- `scripts/hpc/setup_vllm_env.sh` installs vLLM once, in a separate env.
-- `scripts/hpc/vlm_smoke_test.sbatch` serves a model, describes 3 windows of a pilot clip, logs GPU memory, and writes `outputs/smoke/`.
-- **TEAM:** HPC allocation and Slurm account (faculty sponsor), API spend cap, and the novelty or literature check.
+- **Account:** `csci_ga_2271-2026fa`, 300 GPU-hours per student. Setup and data prep run on the CPU partition `n2c48m24`. See `hpc/README.md`.
+- **Qwen3-VL-8B (primary):** runs on 1× L4 with the `qwen` preset, or 1× A100 with `qwen-a100`.
+- **Muse Glimmer 30B (`meta-models/Muse-Glimmer-30B`):** runs in bf16 on 2× A100 (`muse`) or 4-bit on 1× A100 (`muse-4bit`). Report the quantization alongside any Muse results.
+- **Generation:** transformers in-process (`src/generation/hf_vlm.py`), at temperature 0. Each run writes a `.meta.json` with GPU, peak memory, load time and seconds per item, and requeued jobs resume.
+- **TEAM:** set the API spending cap, and do the novelty and literature check.

@@ -1,37 +1,41 @@
 # PYRO-KD: cue-driven keyframe selection for MLLM audio description
 
-This project compares uniform, video-only, audio-only, fused audio+video and oracle selection of the moments where a frozen VLM writes audio descriptions. It evaluates against professional AD on REFRAMED, with a downstream QA check on EgoSchema. Week 1 decisions are in [docs/week1_spec.md](docs/week1_spec.md).
+This project compares uniform, video-only, audio-only, fused audio+video and oracle selection of the moments where a frozen VLM writes inline audio descriptions. It evaluates against professional AD in [Mind the Gap (MTG-AD)](https://github.com/google/mtg-ad), with a downstream QA check on EgoSchema. Week 1 decisions are in [docs/week1_spec.md](docs/week1_spec.md).
 
-## Setup
+## Local setup
 
 ```bash
-uv sync                      # Python 3.12; torch from the cu126 index
-uv run python -m unittest discover -s tests
+uv sync                      # Python 3.12; torch from the cu126 index (Linux)
+python3 -m unittest discover -s tests
 ```
 
-On macOS, the CUDA torch wheels don't install. Run the standard-library tests with `python3 -m unittest discover -s tests`. FFmpeg must be on `PATH`.
+On macOS, the CUDA torch wheels don't install. The tests use only the standard library, Pillow and FFmpeg, so `python3` is enough to run them.
 
 ## Data (never commit `data/`)
 
 ```bash
-uv run python scripts/prepare_reframed.py                                # metadata + pilot list
-uv run python scripts/prepare_reframed.py --download-videos --preprocess # pilot videos -> cache
-uv run python scripts/prepare_egoschema.py                               # annotations + QA pilot
+python scripts/prepare_mtg_ad.py                     # annotations + configs/mtg_ad_splits.json
+python scripts/prepare_mtg_ad.py --download-videos --preprocess   # dev videos (needs yt-dlp)
+python scripts/build_moments.py --selector U --videos dev         # generation inputs
+python scripts/prepare_egoschema.py                  # EgoSchema annotations + QA pilot
 ```
 
-## Models on HPC
+## Models on NYU HPC
+
+See [hpc/README.md](hpc/README.md). In short:
 
 ```bash
-bash scripts/hpc/setup_vllm_env.sh                                   # once
-sbatch --account=<acct> scripts/hpc/prepare_pilot.sbatch
-sbatch --account=<acct> scripts/hpc/vlm_smoke_test.sbatch            # Qwen3-VL-8B
-MODEL=nvidia/Muse-Glimmer-30B-NVFP4 sbatch --account=<acct> scripts/hpc/vlm_smoke_test.sbatch
+bash hpc/setup_env.sh && bash hpc/download_models.sh && bash hpc/prepare_data.sh   # CPU node
+bash hpc/submit.sh qwen --limit 4                                                    # GPU smoke test
 ```
 
 ## Layout
 
-- `src/datasets/`: REFRAMED (decryption, SRT tracks, pilot) and EgoSchema loaders.
+- `src/datasets/`: MTG-AD (primary), EgoSchema, and REFRAMED (backup) loaders.
 - `src/utils/media.py`: ffprobe, 16 kHz audio, timestamped frame cache, frame windows.
-- `src/utils/visual_selector.py`, `audio_selector.py`: the selectors (in progress).
-- `src/generation/vlm_client.py`: frozen VLM client for any vLLM / OpenAI-compatible server.
+- `src/utils/selection.py`: shared K rule and the uniform selector (U).
+- `src/utils/visual_selector.py`, `audio_selector.py`: V and A selectors (in progress).
+- `src/generation/`: transformers VLM loader and generator, and the P0/P1 prompts.
 - `src/evaluation/`: temporal P/R/F1, BERTScore, sentence cosine, LLM-judge rubric.
+- `scripts/`: data preparation, moment building, and AD generation (`run_ad_vlm.py`).
+- `hpc/`: Cloud Bursting setup, model download, data prep, and job submission.

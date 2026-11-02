@@ -1,13 +1,9 @@
-from http.server import BaseHTTPRequestHandler, HTTPServer
-import json
 from pathlib import Path
 import shutil
 import subprocess
 import tempfile
-import threading
 import unittest
 
-from src.generation.vlm_client import VLMClient
 from src.utils.media import frame_window, preprocess_video, probe
 
 HAS_FFMPEG = shutil.which("ffmpeg") is not None and shutil.which("ffprobe") is not None
@@ -85,60 +81,6 @@ class FrameWindowTests(unittest.TestCase):
         self.assertEqual(window[0].timestamp, 0.0)
         self.assertEqual(frame_window(self.MANIFEST, 9.0, 1)[0].timestamp, 5.0)
         self.assertEqual(frame_window({"frames": []}, 1.0), [])
-
-
-class _FakeChatHandler(BaseHTTPRequestHandler):
-    received: list = []
-
-    def do_POST(self):
-        body = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
-        type(self).received.append((self.path, self.headers.get("Authorization"), body))
-        payload = json.dumps({
-            "model": body["model"],
-            "choices": [{"message": {"content": "  A man opens the door. "}}],
-            "usage": {"prompt_tokens": 321, "completion_tokens": 7},
-        }).encode()
-        self.send_response(200)
-        self.send_header("Content-Type", "application/json")
-        self.send_header("Content-Length", str(len(payload)))
-        self.end_headers()
-        self.wfile.write(payload)
-
-    def log_message(self, *args):
-        pass
-
-
-class VLMClientTests(unittest.TestCase):
-    def test_request_shape_and_result(self):
-        _FakeChatHandler.received = []
-        server = HTTPServer(("127.0.0.1", 0), _FakeChatHandler)
-        thread = threading.Thread(target=server.serve_forever, daemon=True)
-        thread.start()
-        try:
-            with tempfile.TemporaryDirectory() as tmp:
-                frames = []
-                for name, data in (("a.jpg", b"\xff\xd8one"), ("b.png", b"\x89PNGtwo")):
-                    Path(tmp, name).write_bytes(data)
-                    frames.append(Path(tmp, name))
-                client = VLMClient("test/model", f"http://127.0.0.1:{server.server_port}/v1/", "k")
-                result = client.generate(frames, "Describe.", system="Be brief.", max_tokens=20)
-        finally:
-            server.shutdown()
-            server.server_close()
-
-        path, auth, body = _FakeChatHandler.received[0]
-        self.assertEqual(path, "/v1/chat/completions")
-        self.assertEqual(auth, "Bearer k")
-        self.assertEqual(body["temperature"], 0.0)
-        self.assertEqual(body["messages"][0], {"role": "system", "content": "Be brief."})
-        content = body["messages"][1]["content"]
-        self.assertTrue(content[0]["image_url"]["url"].startswith("data:image/jpeg;base64,"))
-        self.assertTrue(content[1]["image_url"]["url"].startswith("data:image/png;base64,"))
-        self.assertEqual(content[2], {"type": "text", "text": "Describe."})
-        self.assertEqual(result.text, "A man opens the door.")
-        self.assertEqual((result.prompt_tokens, result.completion_tokens), (321, 7))
-        self.assertEqual(result.request["num_images"], 2)
-        self.assertNotIn("messages", result.request)
 
 
 if __name__ == "__main__":
