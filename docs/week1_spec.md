@@ -42,7 +42,7 @@ We use one duration-based rule for every selector, set from validation only:
 
 The configured rate is **3.48**. The earlier 5.0 per minute came from REFRAMED, where film AD is denser. On MTG-AD, a rate of 5.0 would select about 45% more moments than the human describers wrote, which lowers temporal precision for every selector equally.
 
-The rate is a single value in `configs/mtg_ad_splits.json`. **TEAM:** confirm 3.48, or override it.
+**Confirmed 2026-11-02:** the rate stays at 3.48. It is a single value in `configs/mtg_ad_splits.json`.
 
 ## Cache and moment schema
 
