@@ -15,7 +15,10 @@ ACCOUNT="${ACCOUNT:-csci_ga_2271-2026fa}"
 CPU_PARTITION="n2c48m24"
 
 # Environment overlay and model cache on scratch (the course asks for /scratch/NetID).
-ENV_DIR="${ENV_DIR:-/scratch/$USER/pyro-env}"
+# Reuse the team's smoke-test environment if it exists (saves ~20 min and a 50 GB overlay).
+if [ -z "${ENV_DIR:-}" ]; then
+  if [ -d "/scratch/$USER/wdia-env" ]; then ENV_DIR="/scratch/$USER/wdia-env"; else ENV_DIR="/scratch/$USER/pyro-env"; fi
+fi
 OVERLAY="$ENV_DIR/overlay-50G-10M.ext3"
 OVERLAY_SRC="/share/apps/overlay-fs-ext3/overlay-50G-10M.ext3.gz"
 export HF_HOME="${HF_HOME:-/scratch/$USER/hf_cache}"   # Muse Glimmer alone is ~60 GB

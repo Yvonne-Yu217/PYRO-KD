@@ -9,7 +9,6 @@
 # the Python packages (useful when transformers adds model support).
 set -euo pipefail
 cd "$(dirname "$0")/.."
-REPO="$(pwd)"
 source hpc/config.sh
 
 mkdir -p "$ENV_DIR" "$HF_HOME"
@@ -23,7 +22,7 @@ fi
 echo "[setup] installing into overlay (takes ~10-20 min the first time)"
 [ -n "$SIF" ] || { echo "No CUDA image found; set SIF in hpc/config.sh" >&2; exit 1; }
 echo "[setup] image: $SIF"
-singularity exec --overlay "$OVERLAY:rw" --env REPO="$REPO" "$SIF" /bin/bash -c '
+singularity exec --overlay "$OVERLAY:rw" "$SIF" /bin/bash -c '
 set -euo pipefail
 if [ ! -d /ext3/miniforge3 ]; then
   wget -q https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh -O /tmp/miniforge.sh
@@ -39,8 +38,11 @@ EOF
 source /ext3/env.sh
 conda install -y -q ffmpeg pip           # ffmpeg: frame/audio cache, yt-dlp merging, torchcodec
 pip install -q --upgrade torch torchvision
-# Project deps (selectors, evaluation, dataset loaders) from pyproject.toml.
-pip install -q -e "$REPO"
+# Project dependencies (mirrors pyproject.toml). Not `pip install -e .`: the repo's
+# src/ packages are named datasets/utils/..., which would shadow Hugging Face `datasets`.
+# opencv-python-headless: the container has no libGL for the GUI build.
+pip install -q --upgrade tqdm torchmetrics opencv-python-headless librosa silero-vad \
+  scenedetect open-clip-torch bert-score sentence-transformers cryptography
 pip install -q --upgrade transformers accelerate pillow "huggingface_hub[cli]" hf_transfer torchcodec bitsandbytes yt-dlp
 python - <<PY
 import torch, transformers
