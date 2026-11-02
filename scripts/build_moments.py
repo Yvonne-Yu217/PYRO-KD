@@ -5,7 +5,10 @@ identical frame window, transcript-context rule, and word limit:
     {"id", "video_id", "selector", "time", "frames", "frame_times",
      "transcript", "word_limit"}
 
-Only the uniform selector (U) exists so far; V/A/AV/O plug in here in Week 3.
+Selectors so far: U (uniform) and A (audio-only). A needs audio_features.json
+(scripts/cache_audio_features.py). The word limit is floor(gap * 3), capped,
+where gap is the time from the moment to the next speech onset, computed the
+same way for every selector from the cached VAD segments.
 
     python scripts/build_moments.py --selector U --videos dev                  # MTG-AD
     python scripts/build_moments.py --dataset reframed --videos dev            # REFRAMED
@@ -19,11 +22,23 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.datasets import mtg_ad, reframed  # noqa: E402
-from src.generation.prompts import transcript_context  # noqa: E402
+from src.generation.prompts import transcript_context, word_limit_for_gap  # noqa: E402
+from src.utils.audio_features import available_gap, load_features, speech_of  # noqa: E402
+from src.utils.audio_selector import AudioSelector  # noqa: E402
 from src.utils.media import frame_window, load_manifest  # noqa: E402
 from src.utils.selection import k_for_duration, uniform_timestamps  # noqa: E402
 
-SELECTORS = {"U": lambda duration, k: uniform_timestamps(duration, k)}
+
+def _select_audio(duration, k, features):
+    if features is None:
+        raise SystemExit("selector A needs audio_features.json; run scripts/cache_audio_features.py")
+    return [c.time for c in AudioSelector().select(features, k)]
+
+
+SELECTORS = {
+    "U": lambda duration, k, features: uniform_timestamps(duration, k),
+    "A": _select_audio,
+}
 
 
 def load_targets(dataset: str, which: str, splits: dict, data_dir: Path):
@@ -65,7 +80,7 @@ def main() -> None:
 
     output = args.output or Path(f"data/moments/{name}_{args.selector}_{args.videos}.jsonl")
     output.parent.mkdir(parents=True, exist_ok=True)
-    rows, missing = 0, []
+    rows, missing, shortfalls = 0, [], []
     with output.open("w") as handle:
         for video_id, duration, transcript in targets:
             cache = cache_dir / video_id
@@ -73,8 +88,13 @@ def main() -> None:
                 missing.append(video_id)
                 continue
             manifest = load_manifest(cache)
+            features = load_features(cache)
+            speech = speech_of(features) if features else None
             k = k_for_duration(duration, rate)
-            for i, t in enumerate(SELECTORS[args.selector](duration, k)):
+            times = SELECTORS[args.selector](duration, k, features)
+            if len(times) < k:
+                shortfalls.append((video_id, k - len(times)))
+            for i, t in enumerate(times):
                 window = frame_window(manifest, t, args.num_frames, args.span)
                 handle.write(json.dumps({
                     "id": f"{video_id}_{args.selector}_{i:03d}",
@@ -85,10 +105,15 @@ def main() -> None:
                     "frames": [f.path for f in window],
                     "frame_times": [f.timestamp for f in window],
                     "transcript": transcript_context(transcript, t),
-                    "word_limit": None,  # gap-based limit arrives with the VAD cache
+                    "k_requested": k,
+                    "word_limit": (
+                        word_limit_for_gap(available_gap(t, speech, duration)) if speech is not None else None
+                    ),
                 }) + "\n")
                 rows += 1
     print(f"wrote {rows} moments to {output}")
+    if shortfalls:
+        print(f"shortfall (fewer than K valid moments): {', '.join(f'{v} -{n}' for v, n in shortfalls)}")
     if missing:
         print(f"no cache for {len(missing)} videos (run the matching prepare script with --preprocess): {' '.join(missing)}")
 

@@ -16,7 +16,8 @@ On macOS, the CUDA torch wheels don't install. The tests use only the standard l
 ```bash
 python scripts/prepare_mtg_ad.py                     # annotations + configs/mtg_ad_splits.json
 python scripts/prepare_mtg_ad.py --download-videos --preprocess   # dev videos (needs yt-dlp)
-python scripts/build_moments.py --selector U --videos dev         # generation inputs
+python scripts/cache_audio_features.py                            # Silero VAD + librosa (HPC env)
+python scripts/build_moments.py --selector U --videos dev         # generation inputs (U or A)
 python scripts/prepare_reframed.py                   # REFRAMED metadata + configs/reframed_splits.json
 python scripts/build_moments.py --dataset reframed --videos dev
 python scripts/prepare_egoschema.py                  # EgoSchema annotations + QA pilot
@@ -35,8 +36,9 @@ bash hpc/submit.sh qwen --limit 4                                               
 
 - `src/datasets/`: MTG-AD (primary), REFRAMED (movie check), and EgoSchema loaders.
 - `src/utils/media.py`: ffprobe, 16 kHz audio, timestamped frame cache, frame windows.
-- `src/utils/selection.py`: shared K rule and the uniform selector (U).
-- `src/utils/visual_selector.py`, `audio_selector.py`: V and A selectors (in progress).
+- `src/utils/selection.py`: shared K rule, uniform selector (U), and top-K with minimum separation.
+- `src/utils/audio_features.py`, `audio_selector.py`: Silero VAD gaps, librosa gap features, and the audio-only selector (A).
+- `src/utils/visual_selector.py`: CLIP novelty scoring for V (in progress).
 - `src/generation/`: transformers VLM loader and generator, and the P0/P1 prompts.
 - `src/evaluation/`: temporal P/R/F1, BERTScore, sentence cosine, LLM-judge rubric.
 - `scripts/`: data preparation, moment building, and AD generation (`run_ad_vlm.py`).

@@ -64,3 +64,10 @@ The configured rate is **3.48**. The earlier 5.0 per minute came from REFRAMED, 
 - **Muse Glimmer 30B (`meta-models/Muse-Glimmer-30B`):** runs in bf16 on 2× A100 (`muse`) or 4-bit on 1× A100 (`muse-4bit`). Report the quantization alongside any Muse results.
 - **Generation:** transformers in-process (`src/generation/hf_vlm.py`), at temperature 0. Each run writes a `.meta.json` with GPU, peak memory, load time and seconds per item, and requeued jobs resume.
 - **TEAM:** set the API spending cap, and do the novelty and literature check.
+
+## Audio branch (selector A and the word cap)
+
+- **Features** (`src/utils/audio_features.py`, `scripts/cache_audio_features.py`): Silero VAD gives speech segments, which are inverted into non-speech gaps. Gaps shorter than 1 s are dropped, and edges that touch speech are pulled in by 0.25 s. librosa then adds the mean RMS energy and mean onset strength inside each gap. Everything is cached as `audio_features.json` beside each video's manifest, and videos without audio are listed rather than skipped silently.
+- **A selector** (`src/utils/audio_selector.py`): `score = 1.0 × duration − 0.5 × energy − 0.0 × onset`, each term divided by its maximum over the video's gaps. The moment sits at the gap start. Top-K uses a 2 s minimum separation. If a video has fewer valid gaps than K, the selector returns fewer moments and the shortfall is reported, with no padding. The weights and the sign of the onset term are dev-set questions for Week 3.
+- **Word cap:** `floor(gap × 3)` words, between 3 and 30, where gap is the time from the moment to the next speech onset (0 inside speech). The rule is the same for every selector, so gap fit is comparable.
+- **Checked on:** synthetic speech made with macOS `say` and silence in between. VAD recovered the speech at 3.0–7.4 s, 13.5–16.1 s and 19.2–21.6 s, and found the four expected gaps. **Not yet checked:** real MTG-AD and REFRAMED audio (music, noise), and how well the gaps line up with human AD starts.

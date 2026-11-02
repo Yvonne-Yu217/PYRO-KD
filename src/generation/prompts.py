@@ -8,6 +8,7 @@ from src.datasets.srt import SubtitleItem
 
 WORDS_PER_SECOND = 3  # proposal: word limit = floor(gap seconds * 3)
 DEFAULT_WORD_LIMIT = 15
+MAX_WORDS = 30  # concision cap so long silences do not license long descriptions
 CONTEXT_SECONDS = 15.0
 
 P0 = (
@@ -40,11 +41,11 @@ def transcript_context(
     return " ".join(lines)
 
 
-def word_limit_for_gap(gap_seconds: float | None) -> int:
-    """floor(gap * 3) words, at least 3; DEFAULT_WORD_LIMIT when the gap is unknown."""
+def word_limit_for_gap(gap_seconds: float | None, max_words: int = MAX_WORDS) -> int:
+    """floor(gap * 3) words, between 3 and max_words; DEFAULT_WORD_LIMIT if the gap is unknown."""
     if gap_seconds is None:
         return DEFAULT_WORD_LIMIT
-    return max(3, int(gap_seconds * WORDS_PER_SECOND))
+    return min(max_words, max(3, int(gap_seconds * WORDS_PER_SECOND)))
 
 
 def build_prompt(

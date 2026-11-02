@@ -9,7 +9,7 @@ Per the course rules, coursework runs on **HPC Cloud Bursting**, not Torch. The 
 | `hpc/config.sh` | Account, partitions, paths, and the `in_env` container helper |
 | `hpc/setup_env.sh` | One-time setup: Singularity overlay, Miniforge, PyTorch/transformers, and the project's own dependencies |
 | `hpc/download_models.sh` | Pre-downloads Qwen3-VL-8B and Muse Glimmer 30B to `$HF_HOME` |
-| `hpc/prepare_data.sh` | Downloads MTG-AD annotations and videos (yt-dlp), builds the frame/audio cache, and writes the uniform-selector moments |
+| `hpc/prepare_data.sh` | Downloads annotations and videos, builds the frame/audio cache and Silero VAD gap features, and writes the U and A selector moments |
 | `hpc/submit.sh` | Submits a generation run on the right GPU for each model |
 | `hpc/run_ad.sbatch` | The SLURM job (called by `submit.sh`) |
 | `scripts/run_ad_vlm.py` | Model-agnostic AD generation; resumes after requeue |
