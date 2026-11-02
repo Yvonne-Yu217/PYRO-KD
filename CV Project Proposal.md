@@ -68,7 +68,34 @@ We evaluate on three complementary benchmarks:
 
 * **Budget $K$:** one duration-based rule, set from validation data only and identical across selectors: $K=\max(1,\mathrm{round}(r\cdot minutes))$. For MTG-AD, $r=3.48$ (the median human AD segments per minute on validation). For REFRAMED, $r=5.0$ (median descriptions per minute after merging AD cues less than 0.5 s apart, validation). Each dataset's $r$ is fixed in its split config before any test evaluation.
 
-![][image1]
+```text
+                    [Input Video & Subtitles / ASR Transcript]
+                                      |
+              +-----------------------+-----------------------+
+              v                                               v
+      [Visual Branch]                                 [Audio Branch]
+      - PySceneDetect (Shot Cuts)                     - Silero VAD (Speech Gaps)
+      - OpenCLIP Novelty Scoring                      - Librosa (Onset / Energy)
+              |                                               |
+              +-----------------------+-----------------------+
+                                      v
+                       [Selector Grid: U, V, A, AV, O]
+                                      v
+                [Top-K Timestamps, K = round(r x minutes), min gap 2 s]
+                                      v
+                       [Frozen MLLM + Prompt P0 / P1]
+                       Max Words = floor(gap_s x 3 wps)
+                                      |
+           +--------------------------+--------------------------+
+           v                          v                          v
+ [MTG-AD Evaluation]        [REFRAMED Check]            [EgoSchema QA]
+ (primary)                  (movie domain)              - 0-Shot QA Accuracy (%)
+ - Speech Overlap (s)       - same metrics, per movie
+ - Temporal Recall /
+   Precision (tau=+-2s)
+ - BERTScore & LLM Judge
+   Rubric
+```
 
 ### **Held-Constant Controls**
 
