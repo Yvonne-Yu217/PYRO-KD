@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 import sys
 import tempfile
+from types import SimpleNamespace
 import unittest
 
 from src.datasets.mtg_ad import load_split, parse_row, select_dev, select_stratified
@@ -14,7 +15,7 @@ from src.utils.selection import k_for_duration, uniform_timestamps
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 from build_moments import load_targets  # noqa: E402
-from run_ad_vlm import done_ids, read_jsonl  # noqa: E402
+from run_ad_vlm import done_ids, prepare, read_jsonl  # noqa: E402
 
 
 def make_row(video_id="vid", category="Vlog", num_ad=4, duration=300, split="validation"):
@@ -112,7 +113,9 @@ class PromptTests(unittest.TestCase):
     def test_word_limit(self):
         self.assertEqual(word_limit_for_gap(None), 15)
         self.assertEqual(word_limit_for_gap(2.9), 8)
-        self.assertEqual(word_limit_for_gap(0.2), 3)
+        self.assertEqual(word_limit_for_gap(0.2), 0)
+        self.assertEqual(word_limit_for_gap(0.4), 1)
+        self.assertEqual(word_limit_for_gap(0), 0)
 
     def test_build_prompt(self):
         with_speech = build_prompt("P0", 75.5, 4, 2.0, 12, "nice dog")
@@ -123,6 +126,21 @@ class PromptTests(unittest.TestCase):
         self.assertNotIn("speech", build_prompt("P0", 1.0, 4, 2.0, 12))
         with self.assertRaises(ValueError):
             build_prompt("P9", 1.0, 4, 2.0, 12)
+        with self.assertRaisesRegex(ValueError, "not safely speakable"):
+            build_prompt("P0", 1.0, 4, 2.0, 0)
+
+    def test_word_cap_has_no_minimum_and_rejects_unknown_nonfinite_capacity(self):
+        for gap, expected in ((0.0, 0), (-2.0, 0), (0.2, 0), (0.4, 1), (1.0, 3), (20.0, 30)):
+            with self.subTest(gap=gap):
+                self.assertEqual(word_limit_for_gap(gap), expected)
+        for gap in (float("nan"), float("inf")):
+            with self.assertRaises(ValueError):
+                word_limit_for_gap(gap)
+        self.assertEqual(word_limit_for_gap(None, max_words=5), 5)
+
+    def test_generator_rejects_zero_budget_before_opening_frames(self):
+        with self.assertRaisesRegex(ValueError, "zero-word budget"):
+            prepare({"word_limit": 0}, SimpleNamespace())
 
 
 class GenerationHelperTests(unittest.TestCase):
