@@ -9,6 +9,7 @@ Examples:
 """
 
 import argparse
+from collections import Counter
 import json
 from pathlib import Path
 import statistics
@@ -59,10 +60,11 @@ def main() -> None:
         },
         "test": {
             "split": "test",
-            "selection": "movie-balanced round-robin; seeded movie/video IDs only; no annotation filters",
+            "selection": "movie-balanced round-robin; seeded IDs; binary US-or-UK AD and subtitle availability only; no cue-count/density/text criteria",
             "selection_version": TEST_SELECTION_VERSION,
             "video_ids": [c.video_id for c in test_sample],
             "num_movies": len({c.movie_id for c in test_sample}),
+            "per_movie_counts": dict(sorted(Counter(c.movie_id for c in test_sample).items())),
         },
         "clips": [
             {

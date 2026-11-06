@@ -10,8 +10,8 @@
   },
   "test": {
     "split": "test",
-    "selection": "movie-balanced round-robin; seeded movie/video IDs only; no annotation filters",
-    "selection_version": "movie-balanced-metadata-v1",
+    "selection": "movie-balanced round-robin; seeded IDs; binary US-or-UK AD and subtitle availability only; no cue-count/density/text criteria",
+    "selection_version": "movie-balanced-binary-availability-v2",
     "video_ids": [
       "zM3TiMkJ_DDZ",
       "cWQi172fc4_p",
@@ -44,7 +44,19 @@
       "Bz9iXZc3QVHs",
       "LnKORjoJDRZe"
     ],
-    "num_movies": 10
+    "num_movies": 10,
+    "per_movie_counts": {
+      "tt10655524": 3,
+      "tt11145118": 3,
+      "tt12261776": 3,
+      "tt12299608": 3,
+      "tt1448754": 3,
+      "tt1684562": 3,
+      "tt17024450": 3,
+      "tt21235248": 3,
+      "tt27534307": 3,
+      "tt5433140": 3
+    }
   },
   "clips": [
     {

@@ -112,8 +112,10 @@ def main() -> None:
                 report["status"] = "ok"
             times = SELECTORS[args.selector](duration, k, features)
             report["num_selected"] = len(times)
-            report["selection_shortfall"] = k - len(times)
-            if len(times) < k:
+            report["selection_shortfall"] = (
+                0 if report["status"] == "missing_audio_features" else k - len(times)
+            )
+            if report["selection_shortfall"]:
                 shortfalls.append((video_id, k - len(times)))
             for i, t in enumerate(times):
                 gap = available_gap(t, speech, duration) if speech is not None else None

@@ -23,7 +23,7 @@ SPLITS = ("train", "validation", "test")
 METADATA_FILES = ("validation.jsonl", "test.jsonl", "keys.zip", "videos_encrypted.sh")
 # From the decrypted videos_encrypted.sh shipped with the dataset.
 VIDEO_URL_TEMPLATE = "https://link.theplatform.com/s/NGweTC/media/{video_id}?formats=M3U+none"
-TEST_SELECTION_VERSION = "movie-balanced-metadata-v1"
+TEST_SELECTION_VERSION = "movie-balanced-binary-availability-v2"
 
 Decryptor = Callable[[str], str]
 
@@ -263,16 +263,20 @@ def select_pilot(
 def select_test(
     clips: Iterable[ReframedClip], num_clips: int = 30, seed: int = 0,
 ) -> list[ReframedClip]:
-    """Movie-balanced held-out sample using only movie/video IDs and a seed.
+    """Movie-balanced held-out sample with binary evaluability requirements.
 
     Sort IDs before seeded shuffling, then take one clip per movie per round.
-    AD tracks, cue counts, subtitles, SDH, and screenplay are never inspected.
-    Unlike select_pilot, no development annotation-availability filter applies.
+    Require a nonempty US or UK AD track and nonempty subtitles, using only
+    boolean availability. Never use cue counts, density, or any text content
+    for eligibility/ranking. SDH and screenplay are not inspected. Pilot's
+    minimum US cue-count criterion remains development-only.
     """
     if num_clips < 0:
         raise ValueError("num_clips must be nonnegative")
     by_movie: dict[str, list[ReframedClip]] = {}
     for clip in clips:
+        if not (bool(clip.ad_us) or bool(clip.ad_uk)) or not bool(clip.subtitles):
+            continue
         by_movie.setdefault(clip.movie_id, []).append(clip)
     rng = random.Random(seed)
     movie_ids = sorted(by_movie)

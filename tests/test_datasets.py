@@ -89,21 +89,54 @@ class ReframedTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             load_split("unused", "dev")
 
-    def test_test_selection_ignores_changed_or_removed_target_tracks(self):
+    def test_test_selection_ignores_text_counts_and_density_when_available(self):
         clips = [
             parse_row(make_row(video_id=f"v{m}{i}", imdb_id=f"tt{m}"), "test")
             for m in range(4) for i in range(3)
         ]
         original = [c.video_id for c in select_test(clips, 6, seed=1)]
-        removed = [replace(c, ad_us=[], ad_uk=[], subtitles=[], sdh=[], screenplay=None) for c in clips]
+        sparse = [replace(c, ad_us=[SubtitleItem(100, 200, "One changed cue")],
+                          ad_uk=[], subtitles=[SubtitleItem(20, 21, "Changed subtitle")],
+                          sdh=[], screenplay=None) for c in clips]
         changed = [replace(c, ad_us=c.ad_us * 20, ad_uk=c.ad_us * 10,
                            subtitles=[SubtitleItem(0, 1, "Different text")],
                            screenplay={"scene": "Different annotation"}) for c in clips]
-        self.assertEqual(original, [c.video_id for c in select_test(removed, 6, seed=1)])
+        self.assertEqual(original, [c.video_id for c in select_test(sparse, 6, seed=1)])
         self.assertEqual(original, [c.video_id for c in select_test(changed, 6, seed=1)])
-        # Metadata-only objects have no target fields at all.
-        metadata = [SimpleNamespace(video_id=c.video_id, movie_id=c.movie_id) for c in clips]
+        # These availability objects forbid inspecting cue counts or content.
+        class Available:
+            def __bool__(self):
+                return True
+
+            def __len__(self):
+                raise AssertionError("test selection must not inspect cue counts")
+
+            def __iter__(self):
+                raise AssertionError("test selection must not inspect cue contents")
+
+        metadata = [SimpleNamespace(video_id=c.video_id, movie_id=c.movie_id,
+                                    ad_us=Available(), ad_uk=[], subtitles=Available()) for c in clips]
         self.assertEqual(original, [c.video_id for c in select_test(metadata, 6, seed=1)])
+
+    def test_test_selection_requires_us_or_uk_reference_availability(self):
+        base = parse_row(make_row(), "test")
+        clips = [replace(base, video_id="us"),
+                 replace(base, video_id="uk", ad_us=[], ad_uk=base.ad_us),
+                 replace(base, video_id="neither", ad_us=[], ad_uk=[])]
+        self.assertEqual({c.video_id for c in select_test(clips, 10)}, {"us", "uk"})
+
+    def test_test_selection_requires_subtitle_availability(self):
+        base = parse_row(make_row(), "test")
+        clips = [replace(base, video_id="present"), replace(base, video_id="absent", subtitles=[])]
+        self.assertEqual([c.video_id for c in select_test(clips, 10)], ["present"])
+
+    def test_committed_test_config_contains_per_movie_counts(self):
+        config = json.loads((Path(__file__).resolve().parents[1] / "configs/reframed_splits.json").read_text())
+        test = config["test"]
+        self.assertEqual(test["selection_version"], TEST_SELECTION_VERSION)
+        self.assertEqual(sum(test["per_movie_counts"].values()), len(test["video_ids"]))
+        self.assertEqual(len(test["per_movie_counts"]), test["num_movies"])
+        self.assertTrue(all(count > 0 for count in test["per_movie_counts"].values()))
 
     def test_test_selection_is_movie_balanced_seeded_and_order_independent(self):
         clips = [
@@ -121,10 +154,12 @@ class ReframedTests(unittest.TestCase):
     def test_prepare_uses_pilot_criteria_only_for_validation(self):
         validation = [parse_row(make_row(ad_us=SRT * 2), "validation")]
         test = [
-            replace(parse_row(make_row(video_id=f"test{i}", imdb_id=f"tt{i % 2}"), "test"),
-                    ad_us=[], ad_uk=[], subtitles=[])
+            parse_row(make_row(video_id=f"test{i}", imdb_id=f"tt{i % 2}"), "test")
             for i in range(6)
         ]
+        test[0] = replace(test[0], ad_us=[], ad_uk=[])
+        test[1] = replace(test[1], subtitles=[])
+        test[2] = replace(test[2], ad_us=[], ad_uk=test[2].ad_us)
         with tempfile.TemporaryDirectory() as tmp:
             output = Path(tmp, "splits.json")
             with (
@@ -137,15 +172,18 @@ class ReframedTests(unittest.TestCase):
                 prepare_reframed.main()
             record = json.loads(output.read_text())
         self.assertEqual(len(record["clips"]), 1)
-        self.assertEqual(len(record["test"]["video_ids"]), 6)
+        self.assertEqual(set(record["test"]["video_ids"]), {"test2", "test3", "test4", "test5"})
+        self.assertEqual(record["test"]["per_movie_counts"], {"tt0": 2, "tt1": 2})
         self.assertEqual(record["test"]["selection_version"], TEST_SELECTION_VERSION)
 
     def test_legacy_test_selection_is_rejected_until_regenerated(self):
         splits = {"test": {"video_ids": ["vid1"]}}
-        with patch.object(build_moments.reframed, "load_split") as loader:
-            with self.assertRaisesRegex(ValueError, "legacy REFRAMED test selection"):
-                build_moments.load_targets("reframed", "test", splits, Path("unused"))
-            loader.assert_not_called()
+        for version in (None, "movie-balanced-metadata-v1", "annotation-filtered"):
+            splits["test"]["selection_version"] = version
+            with self.subTest(version=version), patch.object(build_moments.reframed, "load_split") as loader:
+                with self.assertRaisesRegex(ValueError, "legacy REFRAMED test selection"):
+                    build_moments.load_targets("reframed", "test", splits, Path("unused"))
+                loader.assert_not_called()
         splits["test"]["selection_version"] = TEST_SELECTION_VERSION
         clip = parse_row(make_row(), "test")
         with patch.object(build_moments.reframed, "load_split", return_value=[clip]):

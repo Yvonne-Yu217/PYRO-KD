@@ -113,9 +113,28 @@ class AudioSelectorTests(unittest.TestCase):
         self.assertEqual([c.time for c in selected], list(range(0, 16, 2)))
 
     def test_short_gaps_carry_separation_and_do_not_create_false_shortfall(self):
-        gaps = [Gap(0, 0.5, 1, 0), Gap(1, 2.1, 0, 0), Gap(3, 4.1, 0, 0)]
+        gaps = [Gap(0, 0.5, 1, 0), Gap(1, 2.4, 0, 0), Gap(3, 4.4, 0, 0)]
         selected = AudioSelector().select(features_for(gaps), 3)
         self.assertEqual([c.time for c in selected], [0, 2, 4])
+
+    def test_subword_lattice_tail_is_not_feasible_capacity(self):
+        gap = Gap(0, 4.2, 0, 0)
+        selector = AudioSelector()
+        candidates = selector.candidates([gap])
+        selected = selector.select(features_for([gap]), 3)
+        self.assertEqual([c.time for c in candidates], [0, 2])
+        self.assertEqual(selected, candidates)
+        self.assertTrue(all(word_limit_for_gap(c.gap_end - c.time) >= 1 for c in selected))
+        self.assertEqual(word_limit_for_gap(gap.end - 4), 0)
+
+    def test_k_is_reached_with_genuinely_speakable_timestamps(self):
+        gaps = [Gap(0, 4.2, 0, 0), Gap(8, 10.4, 0, 0)]
+        selector = AudioSelector()
+        selected = selector.select(features_for(gaps), 4)
+        self.assertEqual([c.time for c in selected], [0, 2, 8, 10])
+        self.assertEqual(selected, selector.select(features_for(list(reversed(gaps))), 4))
+        self.assertTrue(all(b.time - a.time >= 2 for a, b in zip(selected, selected[1:])))
+        self.assertTrue(all(word_limit_for_gap(c.gap_end - c.time) > 0 for c in selected))
 
     def test_insufficient_non_speech_space_never_pads(self):
         gaps = [Gap(0, 0.5, 0, 0), Gap(2.5, 3, 0, 0)]
@@ -206,8 +225,39 @@ class BuildMomentsTests(unittest.TestCase):
         self.assertEqual([r["video_id"] for r in rows], ["good"] * 3)
         self.assertEqual(report["videos"][0]["status"], "missing_audio_features")
         self.assertEqual(report["videos"][0]["k_shortfall"], 3)
+        self.assertEqual(report["videos"][0]["num_selected"], 0)
+        self.assertEqual(report["videos"][0]["num_written"], 0)
+        self.assertEqual(report["videos"][0]["selection_shortfall"], 0)
         self.assertEqual(report["videos"][1]["k_shortfall"], 0)
         self.assertIn("zero A moments: missing", stdout)
+        self.assertNotIn("fewer than K feasible moments", stdout)
+
+    def test_missing_audio_and_genuine_capacity_shortfall_are_distinct(self):
+        features = {"limited": features_for([Gap(0, 2.1, 0, 0)]),
+                    "good": features_for([Gap(0, 60, 0, 0)])}
+        rows, report, stdout = self.run_batch(
+            "A", [("missing", 60, []), ("limited", 60, []), ("good", 60, [])], features,
+        )
+        self.assertEqual(report["videos"][0]["selection_shortfall"], 0)
+        self.assertEqual(report["videos"][1]["selection_shortfall"], 2)
+        self.assertEqual(report["videos"][1]["status"], "shortfall")
+        summary = next(line for line in stdout.splitlines() if "fewer than K feasible moments" in line)
+        self.assertIn("limited -2", summary)
+        self.assertNotIn("missing", summary)
+        self.assertEqual([r["video_id"] for r in rows], ["limited", "good", "good", "good"])
+
+    def test_audio_selection_and_written_counts_agree_after_tail_filtering(self):
+        for gap, expected in ((Gap(0, 4.2, 0, 0), 2), (Gap(0, 4.4, 0, 0), 3)):
+            with self.subTest(gap=gap):
+                features = features_for([gap])
+                features["speech"] = [[gap.end, 60]]
+                rows, report, _ = self.run_batch("A", [("v", 60, [])], {"v": features})
+                entry = report["videos"][0]
+                self.assertEqual(entry["num_selected"], expected)
+                self.assertEqual(entry["num_written"], expected)
+                self.assertEqual(entry["selection_shortfall"], 3 - expected)
+                self.assertEqual(entry["skipped_moments"], [])
+                self.assertTrue(all(r["word_limit"] > 0 for r in rows))
 
     def test_no_audio_stream_does_not_use_stale_features_or_stop_batch(self):
         features = {name: features_for([Gap(0, 60, 0, 0)]) for name in ("no_audio", "good")}

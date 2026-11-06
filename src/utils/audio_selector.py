@@ -12,6 +12,8 @@ marks a visual event).
 Candidates form a chronological earliest-feasible packing of half-open usable
 gaps [start, end): start at the first available time, then at least 2 s later,
 carrying separation across gap boundaries. Long gaps provide multiple moments.
+Each point must leave at least one word's usable time under the shared word
+budget policy; subword tails are not feasible candidates and add no capacity.
 This packing has maximum cardinality: moving an earlier feasible point later
 cannot create room for more subsequent points. All candidates are compatible,
 so ranking them by the existing gap score (ties: earlier time) returns K whenever
@@ -23,6 +25,7 @@ from dataclasses import dataclass
 import math
 from typing import Sequence
 
+from src.generation.prompts import word_limit_for_gap
 from src.utils.audio_features import Gap, gaps_of, merge_segments, speech_of
 from src.utils.selection import MIN_SEPARATION_SECONDS, select_top_k
 
@@ -64,7 +67,7 @@ class AudioSelector:
                 - self.onset_weight * g.onset / max_onset
             )
             time = max(g.start, next_time)
-            while time < g.end:
+            while time < g.end and word_limit_for_gap(g.end - time) > 0:
                 candidates.append(AudioCandidate(time, g.start, g.end, score))
                 next_time = time + min_separation
                 # Preserve the exact >= separation contract despite float rounding.
