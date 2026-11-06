@@ -1,11 +1,19 @@
+from collections import Counter
+from contextlib import redirect_stdout
+from dataclasses import replace
+import io
 import json
 from pathlib import Path
 import tempfile
 import unittest
+from types import SimpleNamespace
+from unittest.mock import patch
+
+from scripts import build_moments, prepare_reframed
 
 from src.datasets.egoschema import load_items, parse_items, split_pilot
 from src.datasets.reframed import (
-    decrypt_row, load_split, merge_cues, parse_row, select_pilot,
+    TEST_SELECTION_VERSION, decrypt_row, load_split, merge_cues, parse_row, select_pilot, select_test,
 )
 from src.datasets.srt import SubtitleItem, parse_srt, srt_time_to_seconds
 
@@ -80,6 +88,130 @@ class ReframedTests(unittest.TestCase):
         self.assertEqual([c.video_id for c in clips], ["a", "b"])
         with self.assertRaises(ValueError):
             load_split("unused", "dev")
+
+    def test_test_selection_ignores_text_counts_and_density_when_available(self):
+        clips = [
+            parse_row(make_row(video_id=f"v{m}{i}", imdb_id=f"tt{m}"), "test")
+            for m in range(4) for i in range(3)
+        ]
+        original = [c.video_id for c in select_test(clips, 6, seed=1)]
+        sparse = [replace(c, ad_us=[SubtitleItem(100, 200, "One changed cue")],
+                          ad_uk=[], subtitles=[SubtitleItem(20, 21, "Changed subtitle")],
+                          sdh=[], screenplay=None) for c in clips]
+        changed = [replace(c, ad_us=c.ad_us * 20, ad_uk=c.ad_us * 10,
+                           subtitles=[SubtitleItem(0, 1, "Different text")],
+                           screenplay={"scene": "Different annotation"}) for c in clips]
+        self.assertEqual(original, [c.video_id for c in select_test(sparse, 6, seed=1)])
+        self.assertEqual(original, [c.video_id for c in select_test(changed, 6, seed=1)])
+        # These availability objects forbid inspecting cue counts or content.
+        class Available:
+            def __bool__(self):
+                return True
+
+            def __len__(self):
+                raise AssertionError("test selection must not inspect cue counts")
+
+            def __iter__(self):
+                raise AssertionError("test selection must not inspect cue contents")
+
+        metadata = [SimpleNamespace(video_id=c.video_id, movie_id=c.movie_id,
+                                    ad_us=Available(), ad_uk=[], subtitles=Available()) for c in clips]
+        self.assertEqual(original, [c.video_id for c in select_test(metadata, 6, seed=1)])
+
+    def test_test_selection_requires_us_or_uk_reference_availability(self):
+        base = parse_row(make_row(), "test")
+        clips = [replace(base, video_id="us"),
+                 replace(base, video_id="uk", ad_us=[], ad_uk=base.ad_us),
+                 replace(base, video_id="neither", ad_us=[], ad_uk=[])]
+        self.assertEqual({c.video_id for c in select_test(clips, 10)}, {"us", "uk"})
+
+    def test_test_selection_requires_subtitle_availability(self):
+        base = parse_row(make_row(), "test")
+        clips = [replace(base, video_id="present"), replace(base, video_id="absent", subtitles=[])]
+        self.assertEqual([c.video_id for c in select_test(clips, 10)], ["present"])
+
+    def test_committed_test_config_contains_per_movie_counts(self):
+        # Movie identities from the released REFRAMED test metadata. Keep this
+        # offline lookup independent of the config's self-reported counts.
+        movie_by_video = {
+            "1Q_Xlv2OQWsy": "tt10655524", "5G21L0_TC5K4": "tt1448754",
+            "9TqVTYpf_Ndy": "tt1684562", "Bdg9hvz4obAD": "tt17024450",
+            "Bz9iXZc3QVHs": "tt5433140", "EdbtrdK5gZSC": "tt17024450",
+            "FCskdO_WFQ5e": "tt11145118", "Fz8lDj3lgV58": "tt10655524",
+            "LbrAzd5kfvof": "tt12261776", "LnKORjoJDRZe": "tt17024450",
+            "O_BiVwxyF17a": "tt1684562", "SPFnjwnUECib": "tt12261776",
+            "URJKJijOnEs_": "tt21235248", "VdeBUxmW0K_A": "tt11145118",
+            "Wy_AaNCfzc_o": "tt12299608", "XqL_Exul9JqE": "tt5433140",
+            "Y_VUFhPLVeJN": "tt1684562", "_BjchgrAWAxM": "tt12261776",
+            "_Iiy7W4NNteS": "tt12299608", "_ZtvoOooXix5": "tt27534307",
+            "cWQi172fc4_p": "tt27534307", "eqaPWbz_gqD8": "tt27534307",
+            "g8ew63BIIwEe": "tt1448754", "jdaGqC2tmFl8": "tt5433140",
+            "mgjX94dRCtNB": "tt10655524", "ml1BV2SPaFSF": "tt21235248",
+            "mrEfJcER6AYY": "tt1448754", "sDMuBUgC6SgW": "tt11145118",
+            "yG0zJls2UJJe": "tt12299608", "zM3TiMkJ_DDZ": "tt21235248",
+        }
+        config = json.loads((Path(__file__).resolve().parents[1] / "configs/reframed_splits.json").read_text())
+        test = config["test"]
+        self.assertEqual(test["selection_version"], TEST_SELECTION_VERSION)
+        self.assertEqual(len(test["video_ids"]), 30)
+        self.assertEqual(len(set(test["video_ids"])), 30)
+        actual_counts = Counter(movie_by_video[video_id] for video_id in test["video_ids"])
+        self.assertEqual(len(actual_counts), 10)
+        self.assertEqual(test["num_movies"], 10)
+        self.assertEqual(sorted(actual_counts.values()), [3] * 10)
+        self.assertEqual(test["per_movie_counts"], dict(actual_counts))
+
+    def test_test_selection_is_movie_balanced_seeded_and_order_independent(self):
+        clips = [
+            parse_row(make_row(video_id=f"v{m}{i}", imdb_id=f"tt{m}"), "test")
+            for m in range(4) for i in range(3)
+        ]
+        selected = select_test(clips, 6, seed=1)
+        self.assertEqual(len({c.movie_id for c in selected[:4]}), 4)
+        self.assertEqual(sorted(Counter(c.movie_id for c in selected).values()), [1, 1, 2, 2])
+        self.assertEqual(selected, select_test(list(reversed(clips)), 6, seed=1))
+        self.assertNotEqual(selected, select_test(clips, 6, seed=2))
+        self.assertEqual(len(select_test(clips, 100)), len(clips))
+        self.assertEqual(select_test(clips, 0), [])
+
+    def test_prepare_uses_pilot_criteria_only_for_validation(self):
+        validation = [parse_row(make_row(ad_us=SRT * 2), "validation")]
+        test = [
+            parse_row(make_row(video_id=f"test{i}", imdb_id=f"tt{i % 2}"), "test")
+            for i in range(6)
+        ]
+        test[0] = replace(test[0], ad_us=[], ad_uk=[])
+        test[1] = replace(test[1], subtitles=[])
+        test[2] = replace(test[2], ad_us=[], ad_uk=test[2].ad_us)
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp, "splits.json")
+            with (
+                patch("sys.argv", ["prepare_reframed.py", "--num-pilot", "1", "--num-test", "6",
+                                   "--splits-out", str(output)]),
+                patch.object(prepare_reframed, "download_metadata"),
+                patch.object(prepare_reframed, "load_split", side_effect=[validation, test]),
+                redirect_stdout(io.StringIO()),
+            ):
+                prepare_reframed.main()
+            record = json.loads(output.read_text())
+        self.assertEqual(len(record["clips"]), 1)
+        self.assertEqual(set(record["test"]["video_ids"]), {"test2", "test3", "test4", "test5"})
+        self.assertEqual(record["test"]["per_movie_counts"], {"tt0": 2, "tt1": 2})
+        self.assertEqual(record["test"]["selection_version"], TEST_SELECTION_VERSION)
+
+    def test_legacy_test_selection_is_rejected_until_regenerated(self):
+        splits = {"test": {"video_ids": ["vid1"]}}
+        for version in (None, "movie-balanced-metadata-v1", "annotation-filtered"):
+            splits["test"]["selection_version"] = version
+            with self.subTest(version=version), patch.object(build_moments.reframed, "load_split") as loader:
+                with self.assertRaisesRegex(ValueError, "legacy REFRAMED test selection"):
+                    build_moments.load_targets("reframed", "test", splits, Path("unused"))
+                loader.assert_not_called()
+        splits["test"]["selection_version"] = TEST_SELECTION_VERSION
+        clip = parse_row(make_row(), "test")
+        with patch.object(build_moments.reframed, "load_split", return_value=[clip]):
+            targets = build_moments.load_targets("reframed", "test", splits, Path("unused"))
+        self.assertEqual(targets[0][0], "vid1")
 
     def test_decrypt_row_json_decodes_each_field(self):
         encrypted = {k: f"enc:{json.dumps(v)}" for k, v in make_row().items()}

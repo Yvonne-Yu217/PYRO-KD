@@ -9,6 +9,7 @@ Examples:
 """
 
 import argparse
+from collections import Counter
 import json
 from pathlib import Path
 import statistics
@@ -17,7 +18,8 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.datasets.reframed import (  # noqa: E402
-    download_metadata, download_video, load_split, merge_cues, select_pilot,
+    TEST_SELECTION_VERSION, download_metadata, download_video, load_split, merge_cues,
+    select_pilot, select_test,
 )
 from src.utils.media import preprocess_video  # noqa: E402
 
@@ -45,7 +47,7 @@ def main() -> None:
     # K rule is derived from validation only (proposal: never set K from test).
     rates = [len(merge_cues(c.ad_us)) / (c.video_duration / 60) for c in validation]
     pilot = select_pilot(validation, args.num_pilot, seed=args.seed)
-    test_sample = select_pilot(test, args.num_test, seed=args.seed)
+    test_sample = select_test(test, args.num_test, seed=args.seed)
     record = {
         "dataset": "igorsterner/reframed",
         "split": "validation",
@@ -58,9 +60,11 @@ def main() -> None:
         },
         "test": {
             "split": "test",
-            "selection": "movie-balanced round-robin, seeded; >=3 US AD cues; has subtitles",
+            "selection": "movie-balanced round-robin; seeded IDs; binary US-or-UK AD and subtitle availability only; no cue-count/density/text criteria",
+            "selection_version": TEST_SELECTION_VERSION,
             "video_ids": [c.video_id for c in test_sample],
             "num_movies": len({c.movie_id for c in test_sample}),
+            "per_movie_counts": dict(sorted(Counter(c.movie_id for c in test_sample).items())),
         },
         "clips": [
             {

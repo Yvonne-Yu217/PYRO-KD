@@ -64,10 +64,14 @@ def resize_max_side(image, max_side: int | None):
 
 
 def prepare(row: dict, args) -> tuple[list, str, int]:
+    word_limit = row.get("word_limit")
+    if word_limit is None:
+        word_limit = word_limit_for_gap(None)
+    if word_limit <= 0:
+        raise ValueError("moment is not safely speakable: zero-word budget")
     from PIL import Image
 
     images = [resize_max_side(Image.open(p).convert("RGB"), args.max_side) for p in row["frames"]]
-    word_limit = row.get("word_limit") or word_limit_for_gap(None)
     prompt = build_prompt(
         args.prior, row["time"], len(images), args.span, word_limit, row.get("transcript", ""),
     )

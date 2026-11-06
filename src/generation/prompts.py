@@ -2,6 +2,7 @@
 exemplars) is added in Week 3. Everything except the prior itself is shared,
 so prompt differences cannot leak into the selector comparison."""
 
+import math
 from typing import Sequence
 
 from src.datasets.srt import SubtitleItem
@@ -42,10 +43,18 @@ def transcript_context(
 
 
 def word_limit_for_gap(gap_seconds: float | None, max_words: int = MAX_WORDS) -> int:
-    """floor(gap * 3) words, between 3 and max_words; DEFAULT_WORD_LIMIT if the gap is unknown."""
+    """min(max_words, floor(gap * 3)); nonpositive gaps have a zero budget.
+
+    A positive gap shorter than 1/3 s also fits no whole word. Unknown gaps
+    use the explicit 15-word fallback, capped by max_words, not a fit estimate.
+    """
+    if max_words < 0:
+        raise ValueError("max_words must be nonnegative")
     if gap_seconds is None:
-        return DEFAULT_WORD_LIMIT
-    return min(max_words, max(3, int(gap_seconds * WORDS_PER_SECOND)))
+        return min(max_words, DEFAULT_WORD_LIMIT)
+    if not math.isfinite(gap_seconds):
+        raise ValueError("gap_seconds must be finite or None")
+    return min(max_words, math.floor(max(0.0, gap_seconds) * WORDS_PER_SECOND))
 
 
 def build_prompt(
@@ -58,6 +67,8 @@ def build_prompt(
 ) -> str:
     if prior not in PROMPTS:
         raise ValueError(f"unknown prior {prior!r}; available: {sorted(PROMPTS)}")
+    if word_limit <= 0:
+        raise ValueError("moment is not safely speakable: word_limit must be positive")
     context = (
         f'Nearby speech in the video: "{transcript_text}"\n'
         "Do not repeat what is said.\n"

@@ -46,7 +46,7 @@ We evaluate on three complementary benchmarks:
 
   * $V$ \= Camera transitions (PySceneDetect) \+ OpenCLIP frame embedding novelty.
 
-  * $A$ \= Silero VAD non-speech gaps ranked by librosa audio energy and onset change.
+  * $A$ \= Silero VAD non-speech gaps ranked by librosa audio energy and onset change. Generate a maximum-capacity chronological packing inside the usable half-open gaps: start at the first available time, then at least 2 seconds later, carrying separation across gap boundaries. Count only points whose remaining usable gap permits at least one word under the shared 3 words/second budget; subword tails are excluded. Long gaps contribute multiple moments. Each candidate inherits its gap's normalized duration/energy/onset score; rank compatible candidates by score with earlier-time ties and take requested K. Return fewer only if speakable non-speech capacity is below K; use no speech padding or per-gap quota.
 
   * $AV$ \= Weighted linear fusion: $Score(t)=\alpha \cdot Novelty(t)+(1-\alpha )\cdot AudioGap(t)$.
 
@@ -62,11 +62,11 @@ We evaluate on three complementary benchmarks:
 
 * **MTG-AD (primary):** 10 dev videos (category-stratified, from the 332 validation videos) tune $\alpha$, prompts, and the judge. The remaining validation videos form the exemplar pool for ${P}_{1}$. The test set is a fixed category-stratified sample of 50 of the 101 official test videos, untouched until Week 4.
 
-* **REFRAMED (secondary):** 5–10 validation excerpts for a pilot and a fixed sample of about 30 official test excerpts across the 10 test movies. Exemplars come from training movies. Both US and UK reference tracks are kept separate and aggregated by a predefined rule.
+* **REFRAMED (secondary):** 5–10 validation excerpts for a pilot and a fixed sample of about 30 official test excerpts across the 10 test movies. Held-out eligibility uses only binary availability of a supported US or UK professional AD reference track and subtitles; selection then uses movie/video IDs and a fixed seed in movie-balanced round-robin. Never use cue counts, AD density, AD/subtitle/SDH text, or screenplay content for test eligibility or ranking. Record actual per-movie counts in the split config. Validation/pilot may use development cue-count criteria. Exemplars come from training movies. Both US and UK reference tracks are kept separate and aggregated by a predefined rule.
 
 * **EgoSchema (downstream):** the public 500-question labeled subset, with a fixed 10-question pilot excluded from the reported results.
 
-* **Budget $K$:** one duration-based rule, set from validation data only and identical across selectors: $K=\max(1,\mathrm{round}(r\cdot minutes))$. For MTG-AD, $r=3.48$ (the median human AD segments per minute on validation). For REFRAMED, $r=5.0$ (median descriptions per minute after merging AD cues less than 0.5 s apart, validation). Each dataset's $r$ is fixed in its split config before any test evaluation.
+* **Budget $K$:** one duration-based rule, set from validation data only and identical across selectors: $K=\max(1,\mathrm{round}(r\cdot minutes))$. For MTG-AD, $r=3.48$ (the median human AD segments per minute on validation). For REFRAMED, $r=5.0$ (median descriptions per minute after merging AD cues less than 0.5 s apart, validation). Each dataset's $r$ is fixed in its split config before any test evaluation. Missing/no audio yields zero A moments and a recorded K shortfall while processing continues; classify it as a preprocessing/data failure with `selection_shortfall = 0`, not an acoustic capacity shortage. Record genuine selection-capacity shortfalls separately from generation skips caused by zero-word budgets; never silently change requested K.
 
 ```text
                     [Input Video & Subtitles / ASR Transcript]
@@ -84,7 +84,7 @@ We evaluate on three complementary benchmarks:
                 [Top-K Timestamps, K = round(r x minutes), min gap 2 s]
                                       v
                        [Frozen MLLM + Prompt P0 / P1]
-                       Max Words = floor(gap_s x 3 wps)
+                       Max Words = min(30, floor(max(0, gap_s) x 3))
                                       |
            +--------------------------+--------------------------+
            v                          v                          v
@@ -99,7 +99,9 @@ We evaluate on three complementary benchmarks:
 
 ### **Held-Constant Controls**
 
-Across all configurations, the number of moments $K$, minimum temporal separation between moments ($\Delta {t}_{min}=2.0s$), visual frame window per moment (4 frames across 2s), ASR transcript context, word limit per gap (\$\\text{Words} \= \\lfloor \\Delta t \\times 3 \\rfloor\$), and temperature ($0.0$) are held identical.
+Across all configurations, requested moments $K$, minimum temporal separation between moments ($\Delta {t}_{min}=2.0s$), visual frame window per moment (4 frames across 2s), ASR transcript context, known-gap word budget (`min(30, floor(max(0, gap_seconds) * 3))`), and temperature ($0.0$) are held identical.
+
+The exact known-gap word budget is `min(30, floor(max(0, gap_seconds) * 3))`, with no invented minimum. Nonpositive gaps and positive gaps shorter than 1/3 second receive zero words: mark the moment `not_safely_speakable`, skip its generation, and record it in the moment report alongside requested K and the resulting shortfall. An unknown gap uses the explicit 15-word fallback, which is not a claim that speech will fit. These rules apply identically to all selectors.
 
 ## **4\. Evaluation Suite**
 
@@ -171,7 +173,7 @@ Across all configurations, the number of moments $K$, minimum temporal separatio
 
 * **Risk 1: Speech collisions caused by incorrect gap estimation.**
 
-  * *Mitigation:* Enforce a strict maximum word cap per prompt based on available gap duration (\$\\lfloor \\Delta t \\times 3 \\rfloor\$).
+  * *Mitigation:* Enforce `min(30, floor(max(0, gap_seconds) * 3))` words with no minimum. Skip and report zero-word moments before generation; never turn a zero budget into a positive fallback.
 
 * **Risk 2: API cost or runtime overruns.**
 
