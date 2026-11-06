@@ -13,6 +13,64 @@ Dialogue redundancy (MTG-style **does-not-restate**) and **TTS overlap / gap fit
 must be reported as separate metrics. They are not implemented by this rubric
 and must not be folded into its four ratings.
 
+## Evaluate a generation run
+
+```bash
+uv run --no-sync python scripts/evaluate_ad.py \
+  --input outputs/qwen3-vl-8b/mtg-ad_U_dev_P0.jsonl \
+  --data-dir data/mtg-ad --split validation \
+  --output outputs/qwen3-vl-8b/mtg-ad_U_dev_P0.evaluation.json
+```
+
+Use `--split test` for test annotations. `--tolerance` defaults to `2.0`
+seconds (inclusive). `--lang` and `--bert-model` configure BERTScore;
+`--cosine-model` defaults to `sentence-transformers/all-mpnet-base-v2`.
+The script does not download datasets, run selectors/generation, or call rubric
+providers. Real semantic scoring requires the declared model dependencies and
+may download model weights on first use.
+
+The callable `scripts.evaluate_ad.evaluate_ad(generated_path, data_dir, split,
+...)` returns the same JSON-compatible report. Tests and library callers may
+inject `bert_scorer` and `encoder` to avoid model loading. Annotations are loaded
+through `mtg_ad.load_split`; its existing `MTGVideo.ad` items are used directly.
+Each video is matched once. Both semantic functions receive the identical
+`TemporalMatch` list/objects; only those pairs enter the semantic scorers.
+
+The report contains `videos`, `aggregate`, input/model metadata, scope/coverage,
+and generation/semantic errors. Generated-item order and row metadata are
+retained so each match index identifies its source entry. Successful rows need
+a nonblank string `video_id`, finite nonnegative numeric `time`, and nonblank
+string `output`. Rows containing an `error` key still need `video_id`/`time`;
+they are counted/reported but excluded from predictions and semantic scoring.
+An error followed by a successful retry is allowed and its error attempt is
+still reported. Repeated successful IDs are rejected to avoid double counting.
+Blank JSONL lines are ignored; malformed rows fail with a file/line diagnostic.
+
+By default, evaluate only IDs represented in the input, including error-only
+videos. This supports dev subsets of the larger validation split. Other split
+IDs are listed in `coverage.split_video_ids_without_input`; use `--all-videos`
+to include them as empty predictions (their GT entries become false negatives).
+Unknown input video IDs are rejected before scoring. One experiment is expected
+per file: conflicting selector/model/model_id/prior/quant values are rejected
+instead of pooling different runs.
+
+Dataset temporal TP/FP/FN are sums over evaluated videos; Precision/Recall/F1
+are micro scores calculated from those totals. `total_matched_pairs` is summed
+TP, and mean temporal error pools all matches. BERTScore P/R/F1 means and cosine
+mean/median pool scored matched pairs, rather than averaging per-video means.
+Unavailable scores remain `null`; genuine zero scores remain zero. Each metric
+reports its scored-pair count, which can be below total matches if model calls
+fail. Both-empty temporal inputs have undefined (`null`) P/R/F1, as in the
+existing metrics; empty predictions with nonempty GT have zero P/R/F1.
+
+Semantic failures are recorded per video/metric while preserving temporal and
+other successful metric results. The CLI saves the report and returns status 1
+if any generation-error rows or semantic failures exist; invalid inputs return
+status 2. A completely empty input is labeled `empty_input`. Failed generations
+are excluded by design, so these temporal counts describe successfully generated
+AD; isolated selector evaluation still needs the complete selector output.
+There is no mAP, combined project score, or rubric networking in this script.
+
 ## Rubric definitions
 
 These definitions preserve the terminology and intent of Google's
