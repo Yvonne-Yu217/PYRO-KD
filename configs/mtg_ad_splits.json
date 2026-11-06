@@ -1,0 +1,155 @@
+{
+  "dataset": "google/mind-the-gap-inline-ad",
+  "seed": 0,
+  "k_rule": {
+    "formula": "K = max(1, round(rate_per_minute * duration_seconds / 60))",
+    "rate_per_minute": 3.48,
+    "source": "median GT AD segments per minute over the 332 validation videos"
+  },
+  "dev": {
+    "split": "validation",
+    "selection": "category-stratified seeded sample of validation videos with >=3 AD segments",
+    "videos": [
+      {
+        "video_id": "5EyHvPx7JY8",
+        "category": "Vlog",
+        "duration_seconds": 517.0,
+        "num_ad": 5,
+        "has_speech": true,
+        "k": 30
+      },
+      {
+        "video_id": "AWVtdHqZ_8c",
+        "category": "Cooking",
+        "duration_seconds": 265.0,
+        "num_ad": 27,
+        "has_speech": false,
+        "k": 15
+      },
+      {
+        "video_id": "CUF3onU96-M",
+        "category": "Vlog",
+        "duration_seconds": 260.0,
+        "num_ad": 33,
+        "has_speech": true,
+        "k": 15
+      },
+      {
+        "video_id": "D8IoHD-NtWM",
+        "category": "Education",
+        "duration_seconds": 400.0,
+        "num_ad": 12,
+        "has_speech": true,
+        "k": 23
+      },
+      {
+        "video_id": "EeKx5urmDz0",
+        "category": "Education",
+        "duration_seconds": 252.0,
+        "num_ad": 11,
+        "has_speech": true,
+        "k": 15
+      },
+      {
+        "video_id": "OrD9lJWgStU",
+        "category": "Vlog",
+        "duration_seconds": 401.0,
+        "num_ad": 15,
+        "has_speech": true,
+        "k": 23
+      },
+      {
+        "video_id": "d_xyD3nNQuo",
+        "category": "Travel",
+        "duration_seconds": 281.0,
+        "num_ad": 63,
+        "has_speech": false,
+        "k": 16
+      },
+      {
+        "video_id": "m0XgSrdYQRY",
+        "category": "Nature",
+        "duration_seconds": 222.0,
+        "num_ad": 7,
+        "has_speech": true,
+        "k": 13
+      },
+      {
+        "video_id": "oMxYJ8YQr30",
+        "category": "Vlog",
+        "duration_seconds": 214.0,
+        "num_ad": 25,
+        "has_speech": true,
+        "k": 12
+      },
+      {
+        "video_id": "rt-E4QOfvRs",
+        "category": "Vlog",
+        "duration_seconds": 464.0,
+        "num_ad": 7,
+        "has_speech": true,
+        "k": 27
+      }
+    ]
+  },
+  "exemplar_pool": {
+    "split": "validation",
+    "rule": "any validation video not in dev; never test"
+  },
+  "test": {
+    "split": "test",
+    "selection": "category-stratified seeded sample of the 101 official test videos",
+    "video_ids": [
+      "--T4zFh82Ao",
+      "-LlnzjDmHCg",
+      "0jK0ytvjv-E",
+      "1fB0BKm9dTE",
+      "1oNwOB91HI0",
+      "2kJ0X6eiSv4",
+      "33D3_rFQ420",
+      "3OvEas7QlvA",
+      "4PwDFddpo4c",
+      "4jrgZZ8Kw6A",
+      "6JhxhPVCdAI",
+      "7Frz3J25ZRw",
+      "9J_SCQhTmcM",
+      "9Ob93-ufMaM",
+      "9_NY-FRlZ6I",
+      "9m-vWlTfy4A",
+      "A0itqdwsuNg",
+      "BQPAgFH96mQ",
+      "CC-6RPCGguw",
+      "CHyA3pp4G_Y",
+      "CbWpp6VpTVI",
+      "DJ09PcG2Y1w",
+      "DPJPIrxQJgQ",
+      "DgVmcQ41PSI",
+      "E5WFalK_vmI",
+      "ERbp_DP02aM",
+      "EpMbbvpNYnU",
+      "EpQAa9YMphs",
+      "Eugat-Fk2Eg",
+      "F0WJ107nEwg",
+      "FX8zGcMDUyI",
+      "GopgKZcpvI8",
+      "HCy7A7qjXYA",
+      "Ijin6J_7AAw",
+      "InmYggBrBZM",
+      "L8GU74Xyw8w",
+      "OIsQPPj73aE",
+      "YfDQds9cBvM",
+      "bLG0fLwpo2o",
+      "cQez0x2CKn0",
+      "dvrAF2XWizo",
+      "eOhG0L6_XVI",
+      "ggiiZTwpGCA",
+      "iPUPmzG0-Fo",
+      "laeeAgX0RCI",
+      "oZc5RQBOrf0",
+      "p0O-UzFStdw",
+      "uIvataSQj5Q",
+      "wJ-Tp8bQC4M",
+      "wcKO9hv9aqk"
+    ]
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "dataset": "igorsterner/reframed",
+  "split": "validation",
+  "seed": 0,
+  "selection": "one clip per movie, seeded shuffle; >=3 US AD cues; has subtitles",
+  "k_rule": {
+    "formula": "K = max(1, round(rate_per_minute * video_duration / 60))",
+    "rate_per_minute": 5.0,
+    "source": "median merged US AD descriptions/min on validation (merge gap 0.5 s)"
+  },
+  "test": {
+    "split": "test",
+    "selection": "movie-balanced round-robin, seeded; >=3 US AD cues; has subtitles",
+    "video_ids": [
+      "b_nMwJOBy2L3",
+      "FCskdO_WFQ5e",
+      "_BjchgrAWAxM",
+      "U9_h_YTynZD9",
+      "mrEfJcER6AYY",
+      "2Rj_PIReZfTm",
+      "W5eRO6mGx87p",
+      "UwybOKDynkyB",
+      "FCYNP17ZXmZ6",
+      "jdaGqC2tmFl8",
+      "Fz8lDj3lgV58",
+      "rzPr6enlk1HY",
+      "l5Hlyecs4VHM",
+      "K_oHwNZ0u42s",
+      "jWkK_dmWy_os",
+      "Zmq9A7rdn_po",
+      "LnKORjoJDRZe",
+      "GwdAydQFY6eK",
+      "h147ZGqiXbxh",
+      "Bz9iXZc3QVHs",
+      "8hTRc4sY_MLG",
+      "r5LDWgwFmQYH",
+      "3SJm97MCmVn3",
+      "Wy_AaNCfzc_o",
+      "nhG3fu2CQLE0",
+      "Y_VUFhPLVeJN",
+      "_VtrRZ5QgIPl",
+      "1jUZEIy5W7Oj",
+      "koGw8kwcTE_S",
+      "KUYp9gIi_8Mn"
+    ],
+    "num_movies": 10
+  },
+  "clips": [
+    {
+      "video_id": "l5lLQICPOcnb",
+      "movie": "indiana_jones_and_the_last_crusade",
+      "imdb_id": "tt0097576",
+      "video_duration": 126.04,
+      "ad_us_cues": 28,
+      "ad_us_descriptions": 19,
+      "ad_uk_cues": 20
+    },
+    {
+      "video_id": "v2gCnXXTSp6W",
+      "movie": "reservoir_dogs",
+      "imdb_id": "tt0105236",
+      "video_duration": 147.24,
+      "ad_us_cues": 5,
+      "ad_us_descriptions": 5,
+      "ad_uk_cues": 1
+    },
+    {
+      "video_id": "q78W0DyIxH79",
+      "movie": "liar_liar",
+      "imdb_id": "tt0119528",
+      "video_duration": 127.8,
+      "ad_us_cues": 7,
+      "ad_us_descriptions": 6,
+      "ad_uk_cues": 2
+    },
+    {
+      "video_id": "HfOMXYYPG5nx",
+      "movie": "the_thing_2011",
+      "imdb_id": "tt0905372",
+      "video_duration": 159.8,
+      "ad_us_cues": 52,
+      "ad_us_descriptions": 14,
+      "ad_uk_cues": 42
+    },
+    {
+      "video_id": "QP7CsuF86J2V",
+      "movie": "1220551-bounty_hunter",
+      "imdb_id": "tt1038919",
+      "video_duration": 131.8,
+      "ad_us_cues": 37,
+      "ad_us_descriptions": 13,
+      "ad_uk_cues": 29
+    },
+    {
+      "video_id": "nhzM_vBuMrVq",
+      "movie": "2012",
+      "imdb_id": "tt1190080",
+      "video_duration": 178.01,
+      "ad_us_cues": 38,
+      "ad_us_descriptions": 16,
+      "ad_uk_cues": 17
+    },
+    {
+      "video_id": "CxWby8RuUwU6",
+      "movie": "easy-a",
+      "imdb_id": "tt1282140",
+      "video_duration": 73.17,
+      "ad_us_cues": 3,
+      "ad_us_descriptions": 3,
+      "ad_uk_cues": 2
+    },
+    {
+      "video_id": "XW8ibMVLyUUG",
+      "movie": "the-social-network",
+      "imdb_id": "tt1285016",
+      "video_duration": 154.79,
+      "ad_us_cues": 22,
+      "ad_us_descriptions": 9,
+      "ad_uk_cues": 13
+    },
+    {
+      "video_id": "KqNcAcZWNijZ",
+      "movie": "the_girl_with_the_dragon_tattoo",
+      "imdb_id": "tt1568346",
+      "video_duration": 96.34,
+      "ad_us_cues": 23,
+      "ad_us_descriptions": 10,
+      "ad_uk_cues": 22
+    },
+    {
+      "video_id": "eFTqT0_Z632j",
+      "movie": "super_8",
+      "imdb_id": "tt1650062",
+      "video_duration": 135.26,
+      "ad_us_cues": 26,
+      "ad_us_descriptions": 15,
+      "ad_uk_cues": 30
+    }
+  ]
+}
