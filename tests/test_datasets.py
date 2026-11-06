@@ -131,12 +131,35 @@ class ReframedTests(unittest.TestCase):
         self.assertEqual([c.video_id for c in select_test(clips, 10)], ["present"])
 
     def test_committed_test_config_contains_per_movie_counts(self):
+        # Movie identities from the released REFRAMED test metadata. Keep this
+        # offline lookup independent of the config's self-reported counts.
+        movie_by_video = {
+            "1Q_Xlv2OQWsy": "tt10655524", "5G21L0_TC5K4": "tt1448754",
+            "9TqVTYpf_Ndy": "tt1684562", "Bdg9hvz4obAD": "tt17024450",
+            "Bz9iXZc3QVHs": "tt5433140", "EdbtrdK5gZSC": "tt17024450",
+            "FCskdO_WFQ5e": "tt11145118", "Fz8lDj3lgV58": "tt10655524",
+            "LbrAzd5kfvof": "tt12261776", "LnKORjoJDRZe": "tt17024450",
+            "O_BiVwxyF17a": "tt1684562", "SPFnjwnUECib": "tt12261776",
+            "URJKJijOnEs_": "tt21235248", "VdeBUxmW0K_A": "tt11145118",
+            "Wy_AaNCfzc_o": "tt12299608", "XqL_Exul9JqE": "tt5433140",
+            "Y_VUFhPLVeJN": "tt1684562", "_BjchgrAWAxM": "tt12261776",
+            "_Iiy7W4NNteS": "tt12299608", "_ZtvoOooXix5": "tt27534307",
+            "cWQi172fc4_p": "tt27534307", "eqaPWbz_gqD8": "tt27534307",
+            "g8ew63BIIwEe": "tt1448754", "jdaGqC2tmFl8": "tt5433140",
+            "mgjX94dRCtNB": "tt10655524", "ml1BV2SPaFSF": "tt21235248",
+            "mrEfJcER6AYY": "tt1448754", "sDMuBUgC6SgW": "tt11145118",
+            "yG0zJls2UJJe": "tt12299608", "zM3TiMkJ_DDZ": "tt21235248",
+        }
         config = json.loads((Path(__file__).resolve().parents[1] / "configs/reframed_splits.json").read_text())
         test = config["test"]
         self.assertEqual(test["selection_version"], TEST_SELECTION_VERSION)
-        self.assertEqual(sum(test["per_movie_counts"].values()), len(test["video_ids"]))
-        self.assertEqual(len(test["per_movie_counts"]), test["num_movies"])
-        self.assertTrue(all(count > 0 for count in test["per_movie_counts"].values()))
+        self.assertEqual(len(test["video_ids"]), 30)
+        self.assertEqual(len(set(test["video_ids"])), 30)
+        actual_counts = Counter(movie_by_video[video_id] for video_id in test["video_ids"])
+        self.assertEqual(len(actual_counts), 10)
+        self.assertEqual(test["num_movies"], 10)
+        self.assertEqual(sorted(actual_counts.values()), [3] * 10)
+        self.assertEqual(test["per_movie_counts"], dict(actual_counts))
 
     def test_test_selection_is_movie_balanced_seeded_and_order_independent(self):
         clips = [

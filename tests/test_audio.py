@@ -6,7 +6,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 from src.generation.prompts import MAX_WORDS, word_limit_for_gap
 from src.utils.audio_features import (
@@ -190,13 +190,15 @@ class BuildMomentsTests(unittest.TestCase):
         self.assertEqual(sorted(build_moments.SELECTORS), ["A", "U"])
         self.assertEqual(build_moments.SELECTORS["U"](10.0, 4, None), [2.0, 4.0, 6.0, 8.0])
 
-    def run_batch(self, selector, videos, features, no_audio=()):
+    def run_batch(self, selector, videos, features, no_audio=(), missing_cache=()):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             splits = root / "splits.json"
             splits.write_text(json.dumps({"k_rule": {"rate_per_minute": 3}}))
             output = root / "moments.jsonl"
             for video_id, _, _ in videos:
+                if video_id in missing_cache:
+                    continue
                 cache = root / video_id
                 cache.mkdir()
                 (cache / "manifest.json").write_text("{}")
@@ -216,6 +218,25 @@ class BuildMomentsTests(unittest.TestCase):
             rows = [json.loads(line) for line in output.read_text().splitlines()]
             report = json.loads(output.with_suffix(".report.json").read_text())
             return rows, report, stdout.getvalue()
+
+    def test_missing_cache_is_not_selection_shortfall_and_batch_continues(self):
+        selector = Mock(wraps=build_moments.SELECTORS["A"])
+        with patch.dict(build_moments.SELECTORS, {"A": selector}):
+            rows, report, stdout = self.run_batch(
+                "A", [("missing", 60, []), ("good", 60, [])],
+                {"good": features_for([Gap(0, 60, 0, 0)])}, missing_cache=("missing",),
+            )
+        selector.assert_called_once()
+        self.assertEqual(report["videos"][0], {
+            "video_id": "missing", "k_requested": 3, "num_selected": 0,
+            "num_written": 0, "selection_shortfall": 0, "k_shortfall": 3,
+            "status": "missing_cache", "skipped_moments": [],
+        })
+        self.assertEqual([r["video_id"] for r in rows], ["good"] * 3)
+        self.assertEqual(report["videos"][1]["k_shortfall"], 0)
+        self.assertIn("no cache for 1 videos", stdout)
+        self.assertIn("missing", stdout)
+        self.assertNotIn("fewer than K feasible moments", stdout)
 
     def test_mixed_batch_continues_past_missing_audio_and_records_k(self):
         rows, report, stdout = self.run_batch(

@@ -92,7 +92,7 @@ def main() -> None:
             k = k_for_duration(duration, rate)
             report = {
                 "video_id": video_id, "k_requested": k, "num_selected": 0,
-                "num_written": 0, "selection_shortfall": k, "k_shortfall": k,
+                "num_written": 0, "selection_shortfall": 0, "k_shortfall": k,
                 "status": "missing_cache", "skipped_moments": [],
             }
             reports.append(report)
