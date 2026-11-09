@@ -23,6 +23,7 @@ SPLITS = ("train", "validation", "test")
 METADATA_FILES = ("validation.jsonl", "test.jsonl", "keys.zip", "videos_encrypted.sh")
 # From the decrypted videos_encrypted.sh shipped with the dataset.
 VIDEO_URL_TEMPLATE = "https://link.theplatform.com/s/NGweTC/media/{video_id}?formats=M3U+none"
+TEST_SELECTION_VERSION = "movie-balanced-binary-availability-v2"
 
 Decryptor = Callable[[str], str]
 
@@ -235,7 +236,7 @@ def select_pilot(
     min_ad_items: int = 3,
     seed: int = 0,
 ) -> list[ReframedClip]:
-    """Deterministic pilot: one clip per movie, round-robin until num_clips.
+    """Development-only pilot: one clip per movie, round-robin until num_clips.
 
     Within a movie, clips are shuffled with a fixed seed (after sorting by
     video_id) so the pilot is not biased toward unusually dense AD. Only clips
@@ -257,3 +258,37 @@ def select_pilot(
                 pilot.append(by_movie[movie_id][depth])
         depth += 1
     return pilot
+
+
+def select_test(
+    clips: Iterable[ReframedClip], num_clips: int = 30, seed: int = 0,
+) -> list[ReframedClip]:
+    """Movie-balanced held-out sample with binary evaluability requirements.
+
+    Sort IDs before seeded shuffling, then take one clip per movie per round.
+    Require a nonempty US or UK AD track and nonempty subtitles, using only
+    boolean availability. Never use cue counts, density, or any text content
+    for eligibility/ranking. SDH and screenplay are not inspected. Pilot's
+    minimum US cue-count criterion remains development-only.
+    """
+    if num_clips < 0:
+        raise ValueError("num_clips must be nonnegative")
+    by_movie: dict[str, list[ReframedClip]] = {}
+    for clip in clips:
+        if not (bool(clip.ad_us) or bool(clip.ad_uk)) or not bool(clip.subtitles):
+            continue
+        by_movie.setdefault(clip.movie_id, []).append(clip)
+    rng = random.Random(seed)
+    movie_ids = sorted(by_movie)
+    rng.shuffle(movie_ids)
+    for movie_id in movie_ids:
+        by_movie[movie_id].sort(key=lambda clip: clip.video_id)
+        rng.shuffle(by_movie[movie_id])
+    selected = []
+    depth = 0
+    while len(selected) < num_clips and any(len(group) > depth for group in by_movie.values()):
+        for movie_id in movie_ids:
+            if depth < len(by_movie[movie_id]) and len(selected) < num_clips:
+                selected.append(by_movie[movie_id][depth])
+        depth += 1
+    return selected
