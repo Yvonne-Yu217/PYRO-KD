@@ -7,6 +7,9 @@ Examples:
 
     # also download (yt-dlp) and preprocess the dev videos; run on a CPU node
     python scripts/prepare_mtg_ad.py --download-videos --preprocess --videos dev
+
+    # preprocess videos you already placed in data/mtg-ad/videos/<video_id>.mp4
+    python scripts/prepare_mtg_ad.py --preprocess --videos dev
 """
 
 import argparse
@@ -90,11 +93,17 @@ def main() -> None:
     targets = {"dev": dev, "test": test_sample, "all": dev + test_sample}[args.videos]
     failures = []
     for video in targets:
-        try:
-            path = download_video(video, args.data_dir / "videos")
-        except RuntimeError as exc:
+        path = args.data_dir / "videos" / video.video_filename
+        if args.download_videos:
+            try:
+                path = download_video(video, args.data_dir / "videos")
+            except RuntimeError as exc:
+                failures.append(video.video_id)
+                print(f"FAILED {video.video_id}: {exc}")
+                continue
+        elif not path.exists():
             failures.append(video.video_id)
-            print(f"FAILED {video.video_id}: {exc}")
+            print(f"MISSING {video.video_id}: expected {path}")
             continue
         if args.preprocess:
             manifest = preprocess_video(path, args.cache_dir / video.video_id, fps=args.fps)

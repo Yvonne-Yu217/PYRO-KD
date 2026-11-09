@@ -11,11 +11,14 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 source hpc/config.sh
 
+# SKIP_DOWNLOAD=1: use videos already in data/<dataset>/videos/ (YouTube may block cluster IPs).
+DL="--download-videos"
+[ "${SKIP_DOWNLOAD:-0}" = "1" ] && DL=""
 DATASET="${1:-mtg-ad}"     # mtg-ad | reframed
 WHICH="${2:-dev}"          # dev | test
 case "$DATASET" in
-  mtg-ad)   PREP="python scripts/prepare_mtg_ad.py --download-videos --preprocess --videos '$WHICH'" ;;
-  reframed) PREP="python scripts/prepare_reframed.py --download-videos --preprocess --videos '$([ "$WHICH" = dev ] && echo pilot || echo test)'" ;;
+  mtg-ad)   PREP="python scripts/prepare_mtg_ad.py $DL --preprocess --videos '$WHICH'" ;;
+  reframed) PREP="python scripts/prepare_reframed.py $DL --preprocess --videos '$([ "$WHICH" = dev ] && echo pilot || echo test)'" ;;
   *) echo "usage: bash hpc/prepare_data.sh [mtg-ad|reframed] [dev|test]" >&2; exit 1 ;;
 esac
 

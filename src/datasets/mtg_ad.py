@@ -29,8 +29,14 @@ ANNOTATION_FILES = {
     "validation_video_ids.txt": "validation_video_ids.txt",
     "test_video_ids.txt": "test_video_ids.txt",
 }
-# <=720p keeps frames sharp enough for the VLM while bounding download size.
-YTDLP_FORMAT = "bv*[height<=720][ext=mp4]+ba[ext=m4a]/b[height<=720][ext=mp4]/b[height<=720]/b"
+# <=720p H.264 keeps frames sharp and decodable while bounding download size. Plain HTTP(S)
+# formats only: the HLS (m3u8) variants a looser selector picks can stall at 0 bytes.
+# YouTube offers dubbed audio tracks; prefer the original-language one.
+YTDLP_FORMAT = (
+    "bv*[height<=720][vcodec^=avc1][protocol^=http]+ba[ext=m4a][format_note*=original][protocol^=http]"
+    "/bv*[height<=720][vcodec^=avc1][protocol^=http]+ba[ext=m4a][protocol^=http]"
+    "/b[height<=720][protocol^=http]"
+)
 
 
 @dataclass(frozen=True)
