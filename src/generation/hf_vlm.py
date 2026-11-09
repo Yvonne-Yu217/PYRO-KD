@@ -24,11 +24,23 @@ def resolve_model(name: str) -> str:
     return MODELS.get(name, name)
 
 
+FINAL_MARKER = "to=user"
+
+
 def clean(text: str) -> str:
-    """Strip reasoning blocks and stray end-of-turn tokens."""
+    """Return just the answer: strip reasoning blocks, end-of-turn tokens, and scratchpad.
+
+    Muse Glimmer decodes its scratchpad (a copy of the prompt, then its reasoning)
+    before the answer, which follows the last "assistant to=user" marker. Text
+    without that marker is returned as is, so other models are unaffected. If the
+    token limit cuts Muse off before the marker, the scratchpad comes back
+    unchanged; callers should check hit_token_limit and treat it as invalid.
+    """
     text = THINK_RE.sub("", text)
     for token in END_TOKENS:
         text = text.replace(token, "")
+    if FINAL_MARKER in text:
+        text = text.rsplit(FINAL_MARKER, 1)[1]
     return text.strip()
 
 
