@@ -9,7 +9,14 @@ Status as of 2026-11-02. Items marked **TEAM** still need a person to make the c
 - **Size:** 433 YouTube videos, about 36 hours, with professional inline AD. 332 are validation and 101 are test (the paper's evaluation set).
 - **Fields:** the GT AD has **start times only**, with a median of 16 segments per video. Each video also has a timestamped ASR transcript (empty for 94 validation and 20 test videos with no speech) and Gemini-generated dense visual info.
 - **Loader:** `src/datasets/mtg_ad.py` reads `data/annotations/*.jsonl` and sorts the AD and transcript segments by time. A few validation scripts list them out of order, and two validation videos have one AD start past the stated duration.
-- **Videos:** downloaded from YouTube with yt-dlp at ≤720p (`hpc/prepare_data.sh`). **Not verified yet:** whether every video is still online. The script lists any unavailable ones.
+- **Videos:** downloaded from YouTube with yt-dlp as plain-HTTPS H.264 at ≤720p
+  (`hpc/prepare_data.sh`). The preparation script continues past unavailable or
+  malformed videos and records every result in
+  `data/mtg-ad/preprocess_report.json`. If a cluster IP is blocked by YouTube,
+  videos can be supplied under `data/mtg-ad/videos/` and processed with
+  `SKIP_DOWNLOAD=1`. **Not verified yet:** whether every selected video remains
+  online. YouTube currently may require yt-dlp's documented PO-token provider;
+  provider credentials and tokens are never stored in the project.
 - **Evaluation:** our temporal metrics, BERTScore, cosine similarity and rubric (`src/evaluation/`) already follow MTG-AD's format and judge definitions. The official MTG-AD-Eval (TTS-rendered timing and Quality-RF) is Gemini-based. **TEAM:** decide whether to run it as the primary timing check, as the proposal suggests.
 **Secondary: REFRAMED** (`igorsterner/reframed`, CC BY-NC 4.0), used as a movie-domain check of the MTG-AD findings (`src/datasets/reframed.py`, `configs/reframed_splits.json`).
 
@@ -53,7 +60,7 @@ The configured rate is **3.48**. The earlier 5.0 per minute came from REFRAMED, 
 
 ## Cache and moment schema
 
-- `data/cache/mtg-ad/<video_id>/` holds `manifest.json`, `audio_16k.wav` (mono) and `frames/%06d.jpg`. Frames are at 2 fps with the long side ≤ 768 px, and frame *i* is at *i/fps* seconds (`src/utils/media.py`).
+- `data/cache/mtg-ad/<video_id>/` holds `manifest.json`, `audio_16k.wav` (mono) and `frames/%06d.jpg`. Frames are at 2 fps with the long side ≤ 768 px, and frame *i* is at *i/fps* seconds (`src/utils/media.py`). The manifest fingerprints the source and extraction settings; reuse occurs only when every recorded frame/audio artifact still exists.
 - `data/moments/<selector>_<set>.jsonl` holds one row per selected moment: `time`, 4 frames over 2 s, transcript within ±15 s, and the word limit (`scripts/build_moments.py`). Every selector writes the same fields, so the generator's inputs stay identical.
 - Unknown gaps use an explicit 15-word fallback, not a claimed gap-capacity estimate. Known gaps use `min(30, floor(max(0, gap) × 3))`, with no minimum. Zero-word moments are not sent to generation. The `.report.json` beside each moment JSONL records per-video requested K, number selected/written, selection shortfall, final K shortfall, and skipped times with zero budgets.
 

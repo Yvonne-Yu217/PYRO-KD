@@ -65,6 +65,30 @@ class MediaTests(unittest.TestCase):
         self.assertIsNone(manifest["audio_path"])
         self.assertEqual(len(manifest["frames"]), 3)
 
+    def test_missing_cached_artifact_is_regenerated(self):
+        cache = self.dir / "cache"
+        manifest = preprocess_video(self.video, cache, fps=1.0)
+        missing = Path(manifest["frames"][0]["path"])
+        missing.unlink()
+        repaired = preprocess_video(self.video, cache, fps=1.0)
+        self.assertTrue(Path(repaired["frames"][0]["path"]).is_file())
+
+    def test_malformed_manifest_is_rebuilt(self):
+        cache = self.dir / "cache"
+        cache.mkdir()
+        (cache / "manifest.json").write_text("{broken")
+        manifest = preprocess_video(self.video, cache, fps=1.0)
+        self.assertEqual(len(manifest["frames"]), 3)
+        self.assertEqual(manifest, preprocess_video(self.video, cache, fps=1.0))
+
+    def test_changed_source_invalidates_cache(self):
+        cache = self.dir / "cache"
+        first = preprocess_video(self.video, cache, fps=1.0)
+        make_test_video(self.video, seconds=2.0)
+        second = preprocess_video(self.video, cache, fps=1.0)
+        self.assertNotEqual(first["config_hash"], second["config_hash"])
+        self.assertEqual(len(second["frames"]), 2)
+
 
 class FrameWindowTests(unittest.TestCase):
     MANIFEST = {"frames": [

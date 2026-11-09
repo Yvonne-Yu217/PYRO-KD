@@ -29,8 +29,14 @@ ANNOTATION_FILES = {
     "validation_video_ids.txt": "validation_video_ids.txt",
     "test_video_ids.txt": "test_video_ids.txt",
 }
-# <=720p keeps frames sharp enough for the VLM while bounding download size.
-YTDLP_FORMAT = "bv*[height<=720][ext=mp4]+ba[ext=m4a]/b[height<=720][ext=mp4]/b[height<=720]/b"
+# <=720p H.264 keeps frames sharp and decodable while bounding download size. Plain HTTP(S)
+# formats only: the HLS (m3u8) variants a looser selector picks can stall at 0 bytes.
+# YouTube offers dubbed audio tracks; prefer the original-language one.
+YTDLP_FORMAT = (
+    "bv*[height<=720][vcodec^=avc1][protocol^=http]+ba[ext=m4a][format_note*=original][protocol^=http]"
+    "/bv*[height<=720][vcodec^=avc1][protocol^=http]+ba[ext=m4a][protocol^=http]"
+    "/b[height<=720][protocol^=http]"
+)
 
 
 @dataclass(frozen=True)
@@ -116,21 +122,24 @@ def download_video(video: MTGVideo, output_dir: str | Path, overwrite: bool = Fa
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     target = output_dir / video.video_filename
-    if target.exists() and not overwrite:
+    if target.is_file() and target.stat().st_size > 0 and not overwrite:
         return target
+    target.unlink(missing_ok=True)
     ytdlp = shutil.which("yt-dlp")
     if ytdlp is None:
         raise RuntimeError("yt-dlp not found on PATH (pip install yt-dlp)")
     result = subprocess.run(
         [
-            ytdlp, "--no-progress", "--no-playlist", "-f", YTDLP_FORMAT,
+            ytdlp, "--no-progress", "--no-playlist", "--retries", "3",
+            "--fragment-retries", "3", "-f", YTDLP_FORMAT,
             "--merge-output-format", "mp4", "-o", str(output_dir / "%(id)s.%(ext)s"),
             video.youtube_url,
         ],
         capture_output=True,
         text=True,
     )
-    if result.returncode != 0 or not target.exists():
+    if result.returncode != 0 or not target.is_file() or target.stat().st_size == 0:
+        target.unlink(missing_ok=True)
         raise RuntimeError(f"yt-dlp failed for {video.video_id}: {result.stderr.strip()[-500:]}")
     return target
 

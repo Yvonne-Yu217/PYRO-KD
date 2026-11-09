@@ -16,12 +16,22 @@ On macOS, the CUDA torch wheels don't install. The tests use only the standard l
 ```bash
 python scripts/prepare_mtg_ad.py                     # annotations + configs/mtg_ad_splits.json
 python scripts/prepare_mtg_ad.py --download-videos --preprocess   # dev videos (needs yt-dlp)
+python scripts/prepare_mtg_ad.py --preprocess                     # reuse manually supplied videos
 python scripts/cache_audio_features.py                            # Silero VAD + librosa (HPC env)
 python scripts/build_moments.py --selector U --videos dev         # generation inputs (U or A)
 python scripts/prepare_reframed.py                   # REFRAMED metadata + configs/reframed_splits.json
 python scripts/build_moments.py --dataset reframed --videos dev
 python scripts/prepare_egoschema.py                  # EgoSchema annotations + QA pilot
 ```
+
+MTG-AD preparation writes `data/mtg-ad/preprocess_report.json`, including
+download/preprocessing failures and whether each complete frame/audio cache was
+written or reused. A cache is rebuilt if its source changes or a recorded
+artifact is missing. On clusters where YouTube blocks downloads, place MP4s in
+`data/mtg-ad/videos/<video_id>.mp4` and use the second command above (or run
+`SKIP_DOWNLOAD=1 bash hpc/prepare_data.sh`). YouTube may require yt-dlp's
+[recommended PO-token provider setup](https://github.com/yt-dlp/yt-dlp/wiki/PO-Token-Guide);
+keep provider credentials/tokens outside the repository.
 
 ## Models on NYU HPC
 

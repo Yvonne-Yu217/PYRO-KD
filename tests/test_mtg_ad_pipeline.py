@@ -5,8 +5,9 @@ import sys
 import tempfile
 from types import SimpleNamespace
 import unittest
+from unittest.mock import patch
 
-from src.datasets.mtg_ad import load_split, parse_row, select_dev, select_stratified
+from src.datasets.mtg_ad import download_video, load_split, parse_row, select_dev, select_stratified
 from src.datasets.srt import SubtitleItem
 from src.evaluation.parsing import ADItem
 from src.generation.hf_vlm import build_conversation, clean, resolve_model
@@ -14,6 +15,7 @@ from src.generation.prompts import build_prompt, transcript_context, word_limit_
 from src.utils.selection import k_for_duration, uniform_timestamps
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+import prepare_mtg_ad  # noqa: E402
 from build_moments import load_targets  # noqa: E402
 from run_ad_vlm import done_ids, prepare, read_jsonl  # noqa: E402
 
@@ -72,6 +74,85 @@ class MTGADTests(unittest.TestCase):
         dev = select_dev(videos, 5, min_ad_items=3)
         self.assertEqual(len(dev), 5)
         self.assertTrue(all(len(v.ad) >= 3 for v in dev))
+
+    def test_download_reuses_nonempty_video(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp, "vid.mp4")
+            target.write_bytes(b"video")
+            with patch("src.datasets.mtg_ad.subprocess.run") as run:
+                self.assertEqual(download_video(parse_row(make_row()), tmp), target)
+            run.assert_not_called()
+
+    def test_download_rejects_zero_byte_output_and_uses_bounded_https_format(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp, "vid.mp4")
+            target.touch()
+            with (
+                patch("src.datasets.mtg_ad.shutil.which", return_value="/bin/yt-dlp"),
+                patch("src.datasets.mtg_ad.subprocess.run") as run,
+            ):
+                run.return_value.returncode = 0
+                run.return_value.stderr = ""
+                with self.assertRaisesRegex(RuntimeError, "yt-dlp failed"):
+                    download_video(parse_row(make_row()), tmp)
+            command = run.call_args.args[0]
+            self.assertIn("--retries", command)
+            self.assertIn("protocol^=http", command[command.index("-f") + 1])
+            self.assertFalse(target.exists())
+
+
+class PrepareTargetsTests(unittest.TestCase):
+    def test_batch_reports_missing_source_and_continues_after_preprocess_error(self):
+        videos = [parse_row(make_row(video_id)) for video_id in ("good", "missing", "bad")]
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            data = root / "data"
+            cache = root / "cache"
+            (data / "videos").mkdir(parents=True)
+            for video_id in ("good", "bad"):
+                (data / "videos" / f"{video_id}.mp4").write_bytes(b"video")
+
+            def fake_preprocess(path, cache_dir, fps):
+                if path.stem == "bad":
+                    raise RuntimeError("broken media")
+                cache_dir.mkdir(parents=True)
+                (cache_dir / "manifest.json").write_text("{}")
+                return {
+                    "media_info": {"duration": 300.0},
+                    "frames": [{"path": "frame.jpg"}],
+                    "audio_path": "audio.wav",
+                }
+
+            with patch.object(prepare_mtg_ad, "preprocess_video", side_effect=fake_preprocess):
+                results = prepare_mtg_ad.prepare_targets(
+                    videos, data, cache, download_videos=False, preprocess=True, fps=2.0,
+                )
+        self.assertEqual([item["status"] for item in results], ["ready", "unavailable", "failed"])
+        self.assertEqual(results[0]["preprocess"], "written")
+        self.assertEqual(results[1]["stage"], "source")
+        self.assertEqual(results[2]["stage"], "preprocess")
+
+    def test_batch_marks_unchanged_manifest_as_reused(self):
+        video = parse_row(make_row("cached"))
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            data = root / "data"
+            cache_dir = root / "cache" / "cached"
+            (data / "videos").mkdir(parents=True)
+            (data / "videos" / "cached.mp4").write_bytes(b"video")
+            cache_dir.mkdir(parents=True)
+            (cache_dir / "manifest.json").write_text("{}")
+            manifest = {
+                "media_info": {"duration": 300.0},
+                "frames": [{"path": "frame.jpg"}],
+                "audio_path": None,
+            }
+            with patch.object(prepare_mtg_ad, "preprocess_video", return_value=manifest):
+                [result] = prepare_mtg_ad.prepare_targets(
+                    [video], data, root / "cache", False, True, 2.0,
+                )
+        self.assertEqual(result["status"], "ready")
+        self.assertEqual(result["preprocess"], "reused")
 
 
 class LoadTargetsTests(unittest.TestCase):

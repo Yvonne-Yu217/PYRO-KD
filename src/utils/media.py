@@ -16,7 +16,7 @@ import subprocess
 from typing import Any, Sequence
 
 MANIFEST_NAME = "manifest.json"
-MANIFEST_VERSION = 1
+MANIFEST_VERSION = 2
 
 
 @dataclass(frozen=True)
@@ -154,6 +154,34 @@ def config_hash(config: dict[str, Any]) -> str:
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:12]
 
 
+def _source_fingerprint(path: Path) -> dict[str, Any]:
+    """Return cheap source identity fields that invalidate stale derived media."""
+    stat = path.stat()
+    return {
+        "path": str(path.resolve()),
+        "size": stat.st_size,
+        "mtime_ns": stat.st_mtime_ns,
+    }
+
+
+def _cache_is_complete(manifest: dict[str, Any]) -> bool:
+    """A matching manifest is reusable only while all recorded artifacts exist."""
+    frames = manifest.get("frames")
+    if not isinstance(frames, list) or not frames:
+        return False
+    if any(
+        not isinstance(frame, dict)
+        or not isinstance(frame.get("path"), str)
+        or not Path(frame["path"]).is_file()
+        for frame in frames
+    ):
+        return False
+    audio_path = manifest.get("audio_path")
+    return audio_path is None or (
+        isinstance(audio_path, str) and Path(audio_path).is_file()
+    )
+
+
 def preprocess_video(
     video_path: str | Path,
     cache_dir: str | Path,
@@ -175,11 +203,18 @@ def preprocess_video(
         "sample_rate": sample_rate,
         "max_side": max_side,
         "manifest_version": MANIFEST_VERSION,
+        "source_fingerprint": _source_fingerprint(video_path),
     }
     manifest_path = cache_dir / MANIFEST_NAME
     if manifest_path.exists() and not overwrite:
-        manifest = json.loads(manifest_path.read_text())
-        if manifest.get("config_hash") == config_hash(settings):
+        try:
+            manifest = json.loads(manifest_path.read_text())
+        except (OSError, json.JSONDecodeError):
+            manifest = {}
+        if (
+            manifest.get("config_hash") == config_hash(settings)
+            and _cache_is_complete(manifest)
+        ):
             return manifest
 
     info = probe(video_path)
@@ -188,13 +223,17 @@ def preprocess_video(
     frames = extract_frames(
         video_path, cache_dir / "frames", fps=fps, max_side=max_side,
     )
+    if not frames:
+        raise RuntimeError(f"FFmpeg extracted no frames from {video_path}")
     audio_path = None
     if info.has_audio:
         audio_path = str(extract_audio(video_path, cache_dir / "audio_16k.wav", sample_rate))
+    else:
+        (cache_dir / "audio_16k.wav").unlink(missing_ok=True)
 
     manifest = {
         "video_id": video_path.stem,
-        "source": str(video_path),
+        "source": str(video_path.resolve()),
         "media_info": asdict(info),
         "settings": settings,
         "config_hash": config_hash(settings),
@@ -202,7 +241,9 @@ def preprocess_video(
         "frames": [asdict(frame) for frame in frames],
     }
     cache_dir.mkdir(parents=True, exist_ok=True)
-    manifest_path.write_text(json.dumps(manifest, indent=2))
+    temporary_manifest = manifest_path.with_suffix(".json.tmp")
+    temporary_manifest.write_text(json.dumps(manifest, indent=2))
+    temporary_manifest.replace(manifest_path)
     return manifest
 
 
