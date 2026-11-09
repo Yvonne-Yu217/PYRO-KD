@@ -131,6 +131,21 @@ class GenerationHelperTests(unittest.TestCase):
         self.assertEqual(resolve_model("qwen3-vl-8b"), "Qwen/Qwen3-VL-8B-Instruct")
         self.assertEqual(resolve_model("org/custom"), "org/custom")
 
+    def test_clean_extracts_muse_final_answer(self):
+        scratchpad = (
+            "to=selfThese 4 frames are from a video, in order, spanning about 2 seconds around 0:02.4.\n"
+            "Write one audio description ... Output only the description.\n\n"
+            "Maybe: Color bars with moving rainbow line.\n\n"
+            'Count: Rainbow(1) line2 moves3 up4. Good.\n\nOutput only description.'
+        )
+        raw = scratchpad + "assistant to=userRainbow line moves across color bars while gray shapes change."
+        self.assertEqual(clean(raw), "Rainbow line moves across color bars while gray shapes change.")
+        self.assertEqual(clean(raw + "<|im_end|>"), "Rainbow line moves across color bars while gray shapes change.")
+        # Cut off before the answer: the marker is missing, so the scratchpad is returned unchanged.
+        self.assertTrue(clean(scratchpad).startswith("to=selfThese 4 frames"))
+        # Other models have no marker and pass through untouched.
+        self.assertEqual(clean("A dog runs across the yard."), "A dog runs across the yard.")
+
     def test_conversation_orders_frames_before_text(self):
         conversation = build_conversation(["f1", "f2"], "Describe.", system="Be brief.")
         self.assertEqual(conversation[0]["role"], "system")

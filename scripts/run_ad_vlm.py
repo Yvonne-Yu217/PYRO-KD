@@ -168,6 +168,7 @@ def main():
                     for j, i in enumerate(idx):
                         results[i] = {"output": texts[j], "raw_output": raws[j],
                                       "new_tokens": n_new[j], "batch_size": len(idx),
+                                      "hit_token_limit": n_new[j] >= args.max_new_tokens,
                                       "batch_latency_s": round(dt, 3)}
                 except Exception as e:
                     if torch.cuda.is_available():
