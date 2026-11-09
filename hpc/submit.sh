@@ -9,7 +9,7 @@
 #   qwen      Qwen3-VL-8B        1x L4 (24 GB)        1
 #   qwen-a100 Qwen3-VL-8B        1x A100 (40 GB)      1   (faster; use for big runs)
 #   muse      Muse Glimmer 30B   2x A100, bf16        2   (full precision)
-#   muse-4bit Muse Glimmer 30B   1x A100, 4-bit       1   (cheaper, slight quality loss)
+#   muse-4bit (disabled)         bitsandbytes 4-bit loads but generation fails; use muse
 #
 # Examples:
 #   bash hpc/submit.sh qwen --limit 4                                  # smoke test
@@ -36,10 +36,11 @@ case "$preset" in
     MODEL_ARGS=(--model muse-glimmer-30b --batch-size 4 --max-new-tokens 512 --reasoning-strength low)
     SB=(--job-name=pyro-muse --partition=c24m170-a100-2 --gres=gpu:2 --time=03:00:00) ;;
   muse-4bit)
-    MODEL_ARGS=(--model muse-glimmer-30b --quant 4bit --batch-size 4 --max-new-tokens 512 --reasoning-strength low)
-    SB=(--job-name=pyro-muse4 --partition=c12m85-a100-1 --gres=gpu:1 --time=03:00:00) ;;
+    echo "muse-4bit is disabled: the 4-bit model loads but every generation fails with" >&2
+    echo "LayerNormKernelImpl not implemented for 'Byte'. Use 'muse' (bf16 on 2x A100)." >&2
+    exit 1 ;;
   *)
-    echo "Unknown preset '$preset'. Use qwen, qwen-a100, muse or muse-4bit." >&2; exit 1 ;;
+    echo "Unknown preset '$preset'. Use qwen, qwen-a100 or muse." >&2; exit 1 ;;
 esac
 
 DEFAULT_INPUT=data/moments/mtg-ad_U_dev.jsonl
