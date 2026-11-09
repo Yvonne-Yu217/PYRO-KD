@@ -3,8 +3,9 @@ import shutil
 import subprocess
 import tempfile
 import unittest
+from unittest.mock import patch
 
-from src.utils.media import frame_window, preprocess_video, probe
+from src.utils.media import extract_frames, frame_window, preprocess_video, probe
 
 HAS_FFMPEG = shutil.which("ffmpeg") is not None and shutil.which("ffprobe") is not None
 
@@ -88,6 +89,44 @@ class MediaTests(unittest.TestCase):
         second = preprocess_video(self.video, cache, fps=1.0)
         self.assertNotEqual(first["config_hash"], second["config_hash"])
         self.assertEqual(len(second["frames"]), 2)
+
+
+class FrameExtractionTests(unittest.TestCase):
+    def test_failed_extraction_keeps_existing_frames(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            frames = Path(tmp, "frames")
+            frames.mkdir()
+            kept = frames / "000001.jpg"
+            kept.write_bytes(b"old")
+            with (
+                patch("src.utils.media._require", return_value="ffmpeg"),
+                patch("src.utils.media._run", side_effect=RuntimeError("ffmpeg failed")),
+            ):
+                with self.assertRaisesRegex(RuntimeError, "ffmpeg failed"):
+                    extract_frames(Path(tmp, "clip.mp4"), frames, fps=1.0)
+            self.assertEqual(kept.read_bytes(), b"old")
+            self.assertFalse((Path(tmp) / "frames.incoming").exists())
+            self.assertFalse((Path(tmp) / "frames.backup").exists())
+
+    def test_extraction_replaces_frames_only_after_success(self):
+        def fake_run(command):
+            Path(command[-1]).parent.joinpath("000001.jpg").write_bytes(b"new")
+            return ""
+
+        with tempfile.TemporaryDirectory() as tmp:
+            frames = Path(tmp, "frames")
+            frames.mkdir()
+            (frames / "000009.jpg").write_bytes(b"old")
+            with (
+                patch("src.utils.media._require", return_value="ffmpeg"),
+                patch("src.utils.media._run", side_effect=fake_run),
+            ):
+                entries = extract_frames(Path(tmp, "clip.mp4"), frames, fps=1.0)
+            self.assertEqual([entry.timestamp for entry in entries], [0.0])
+            self.assertEqual(Path(entries[0].path).read_bytes(), b"new")
+            self.assertFalse((frames / "000009.jpg").exists())
+            self.assertFalse((Path(tmp) / "frames.incoming").exists())
+            self.assertFalse((Path(tmp) / "frames.backup").exists())
 
 
 class FrameWindowTests(unittest.TestCase):

@@ -1,13 +1,18 @@
 from collections import Counter
 import json
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
 from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
-from src.datasets.mtg_ad import download_video, load_split, parse_row, select_dev, select_stratified
+from src.datasets.mtg_ad import (
+    EXPECTED_SPLIT_COUNTS, YTDLP_DOWNLOAD_TIMEOUT_SECONDS, YTDLP_FORMAT,
+    YTDLP_SOCKET_TIMEOUT_SECONDS, annotation_file_is_valid, download_annotations,
+    download_video, load_split, parse_row, select_dev, select_stratified,
+)
 from src.datasets.srt import SubtitleItem
 from src.evaluation.parsing import ADItem
 from src.generation.hf_vlm import build_conversation, clean, resolve_model
@@ -59,6 +64,13 @@ class MTGADTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             load_split("unused", "train")
 
+    def test_load_split_decodes_utf8(self):
+        row = make_row("a", num_ad=1)
+        row["gt_ad_segments"][0]["text"] = "č"
+        with tempfile.TemporaryDirectory() as tmp:
+            Path(tmp, "validation.jsonl").write_bytes((json.dumps(row) + "\n").encode("utf-8"))
+            self.assertEqual(load_split(tmp, "validation")[0].ad[0].text, "č")
+
     def test_stratified_sample_matches_category_mix(self):
         videos = [parse_row(make_row(f"v{i:03d}", "Vlog")) for i in range(60)]
         videos += [parse_row(make_row(f"e{i:03d}", "Education")) for i in range(30)]
@@ -75,15 +87,62 @@ class MTGADTests(unittest.TestCase):
         self.assertEqual(len(dev), 5)
         self.assertTrue(all(len(v.ad) >= 3 for v in dev))
 
-    def test_download_reuses_nonempty_video(self):
+    def test_download_reuses_decodable_video(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp, "vid.mp4")
             target.write_bytes(b"video")
-            with patch("src.datasets.mtg_ad.subprocess.run") as run:
+            info = SimpleNamespace(has_video=True)
+            with (
+                patch("src.datasets.mtg_ad.shutil.which", return_value="/bin/ffprobe"),
+                patch("src.datasets.mtg_ad.probe", return_value=info),
+                patch("src.datasets.mtg_ad.subprocess.run") as run,
+            ):
                 self.assertEqual(download_video(parse_row(make_row()), tmp), target)
             run.assert_not_called()
 
-    def test_download_rejects_zero_byte_output_and_uses_bounded_https_format(self):
+    def test_download_replaces_undecodable_video(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp, "vid.mp4")
+            target.write_bytes(b"not a video")
+            with (
+                patch("src.datasets.mtg_ad.shutil.which", return_value="/bin/yt-dlp"),
+                patch("src.datasets.mtg_ad.probe", side_effect=RuntimeError("invalid")),
+                patch("src.datasets.mtg_ad.subprocess.run") as run,
+            ):
+                run.return_value.returncode = 0
+                run.return_value.stderr = ""
+                with self.assertRaisesRegex(RuntimeError, "yt-dlp failed"):
+                    download_video(parse_row(make_row()), tmp)
+            run.assert_called_once()
+            self.assertFalse(target.exists())
+
+    def test_download_requires_ffprobe_before_reusing_video(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp, "vid.mp4")
+            target.write_bytes(b"video")
+            with (
+                patch("src.datasets.mtg_ad.shutil.which", return_value=None),
+                patch("src.datasets.mtg_ad.subprocess.run") as run,
+            ):
+                with self.assertRaisesRegex(RuntimeError, "ffprobe"):
+                    download_video(parse_row(make_row()), tmp)
+            run.assert_not_called()
+            self.assertTrue(target.is_file())
+
+    def test_download_timeout_removes_partial_file(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with (
+                patch("src.datasets.mtg_ad.shutil.which", return_value="/bin/yt-dlp"),
+                patch(
+                    "src.datasets.mtg_ad.subprocess.run",
+                    side_effect=subprocess.TimeoutExpired(cmd="yt-dlp", timeout=1),
+                ),
+            ):
+                with self.assertRaisesRegex(RuntimeError, "timed out"):
+                    download_video(parse_row(make_row()), tmp)
+            self.assertFalse(Path(tmp, "vid.mp4").exists())
+
+    def test_download_rejects_zero_byte_output_and_uses_progressive_https_format(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp, "vid.mp4")
             target.touch()
@@ -97,7 +156,15 @@ class MTGADTests(unittest.TestCase):
                     download_video(parse_row(make_row()), tmp)
             command = run.call_args.args[0]
             self.assertIn("--retries", command)
-            self.assertIn("protocol^=http", command[command.index("-f") + 1])
+            self.assertIn("--socket-timeout", command)
+            self.assertEqual(
+                command[command.index("--socket-timeout") + 1],
+                str(YTDLP_SOCKET_TIMEOUT_SECONDS),
+            )
+            self.assertEqual(run.call_args.kwargs["timeout"], YTDLP_DOWNLOAD_TIMEOUT_SECONDS)
+            self.assertEqual(command[command.index("-f") + 1], YTDLP_FORMAT)
+            self.assertIn("protocol=https", YTDLP_FORMAT)
+            self.assertNotIn("protocol^=http", YTDLP_FORMAT)
             self.assertFalse(target.exists())
 
     def test_download_passes_local_browser_auth_and_extractor_options(self):
@@ -132,6 +199,80 @@ class MTGADTests(unittest.TestCase):
                     parse_row(make_row()), tmp,
                     cookies="cookies.txt", cookies_from_browser="chrome",
                 )
+
+
+def _jsonl_bytes(count: int) -> bytes:
+    return "".join(json.dumps({"i": i}) + "\n" for i in range(count)).encode("utf-8")
+
+
+class AnnotationDownloadTests(unittest.TestCase):
+    def _urlopen(self, bodies):
+        class Response:
+            def __init__(self, payload):
+                self.payload = payload
+
+            def read(self):
+                return self.payload
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+        def urlopen(url, timeout=None):
+            self.assertEqual(timeout, 60)
+            for suffix, payload in bodies.items():
+                if str(url).endswith(suffix):
+                    return Response(payload)
+            raise AssertionError(url)
+
+        return urlopen
+
+    def test_invalid_download_keeps_existing_file_and_temp(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            existing = Path(tmp, "validation.jsonl")
+            existing.write_bytes("keep\n".encode("utf-8"))
+            bodies = {"data/annotations/validation.jsonl": b"\xff"}
+            with patch("src.datasets.mtg_ad.urllib.request.urlopen", side_effect=self._urlopen(bodies)):
+                with self.assertRaisesRegex(RuntimeError, "validation.jsonl"):
+                    download_annotations(tmp)
+            self.assertEqual(existing.read_text(encoding="utf-8"), "keep\n")
+            self.assertEqual(list(Path(tmp).glob("*.tmp")), [])
+
+    def test_complete_download_replaces_partial_jsonl(self):
+        bodies = {
+            "data/annotations/validation.jsonl": _jsonl_bytes(EXPECTED_SPLIT_COUNTS["validation"]),
+            "data/annotations/test.jsonl": _jsonl_bytes(EXPECTED_SPLIT_COUNTS["test"]),
+            "validation_video_ids.txt": "a\n".encode("utf-8"),
+            "test_video_ids.txt": "b\n".encode("utf-8"),
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            Path(tmp, "validation.jsonl").write_bytes(b"partial\n")
+            with patch("src.datasets.mtg_ad.urllib.request.urlopen", side_effect=self._urlopen(bodies)):
+                download_annotations(tmp)
+            self.assertTrue(annotation_file_is_valid(Path(tmp, "validation.jsonl")))
+            self.assertTrue(annotation_file_is_valid(Path(tmp, "test.jsonl")))
+            self.assertEqual(Path(tmp, "validation_video_ids.txt").read_text(encoding="utf-8"), "a\n")
+
+    def test_main_refuses_to_rewrite_splits_for_short_files(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            splits = Path(tmp, "splits.json")
+            splits.write_text("original\n", encoding="utf-8")
+            with (
+                patch.object(prepare_mtg_ad, "download_annotations"),
+                patch.object(
+                    prepare_mtg_ad, "load_split",
+                    side_effect=[[parse_row(make_row())], []],
+                ),
+                patch.object(sys, "argv", [
+                    "prepare_mtg_ad.py", "--data-dir", tmp, "--splits-out", str(splits),
+                ]),
+            ):
+                with self.assertRaises(SystemExit) as raised:
+                    prepare_mtg_ad.main()
+            self.assertEqual(raised.exception.code, 1)
+            self.assertEqual(splits.read_text(encoding="utf-8"), "original\n")
 
 
 class PrepareTargetsTests(unittest.TestCase):

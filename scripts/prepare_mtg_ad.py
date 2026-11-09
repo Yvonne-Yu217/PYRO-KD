@@ -21,7 +21,8 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.datasets.mtg_ad import (  # noqa: E402
-    download_annotations, download_video, load_split, select_dev, select_stratified,
+    EXPECTED_SPLIT_COUNTS, download_annotations, download_video, load_split, select_dev,
+    select_stratified,
 )
 from src.utils.media import MANIFEST_NAME, preprocess_video  # noqa: E402
 from src.utils.selection import k_for_duration  # noqa: E402
@@ -37,6 +38,7 @@ def prepare_targets(
         path = data_dir / "videos" / video.video_filename
         item = {"video_id": video.video_id, "source": str(path)}
         existed = path.is_file() and path.stat().st_size > 0
+        source_mtime = path.stat().st_mtime_ns if existed else None
         if download_videos:
             try:
                 path = download_video(
@@ -45,7 +47,10 @@ def prepare_targets(
                     cookies_from_browser=cookies_from_browser,
                     extractor_args=extractor_args,
                 )
-                item["download"] = "reused" if existed else "downloaded"
+                reused_source = (
+                    source_mtime is not None and path.stat().st_mtime_ns == source_mtime
+                )
+                item["download"] = "reused" if reused_source else "downloaded"
             except (OSError, RuntimeError) as exc:
                 item.update(status="unavailable", stage="download", error=str(exc))
                 results.append(item)
@@ -127,6 +132,16 @@ def main() -> None:
     validation = load_split(args.data_dir, "validation")
     test = load_split(args.data_dir, "test")
     print(f"validation: {len(validation)} videos, test: {len(test)} videos")
+    expected_validation = EXPECTED_SPLIT_COUNTS["validation"]
+    expected_test = EXPECTED_SPLIT_COUNTS["test"]
+    if len(validation) != expected_validation or len(test) != expected_test:
+        print(
+            f"refusing to write {args.splits_out}: "
+            f"validation={len(validation)} (expected {expected_validation}), "
+            f"test={len(test)} (expected {expected_test})",
+            file=sys.stderr,
+        )
+        sys.exit(1)
 
     # K rule and dev set come from validation only; test is sampled, not inspected.
     rate = round(statistics.median(len(v.ad) / (v.duration_seconds / 60) for v in validation), 2)
@@ -166,7 +181,7 @@ def main() -> None:
         },
     }
     args.splits_out.parent.mkdir(parents=True, exist_ok=True)
-    args.splits_out.write_text(json.dumps(record, indent=2) + "\n")
+    args.splits_out.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
     print(f"K rate {rate}/min; wrote {args.splits_out} (dev {len(dev)}, test {len(test_sample)})")
 
     if not (args.download_videos or args.preprocess):
@@ -187,7 +202,7 @@ def main() -> None:
         "num_ready": len(targets) - len(failures),
         "num_failed": len(failures),
         "videos": results,
-    }, indent=2) + "\n")
+    }, indent=2) + "\n", encoding="utf-8")
     print(f"wrote {report_path}")
     if failures:
         print(f"{len(failures)} videos unavailable: {' '.join(failures)}")

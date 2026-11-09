@@ -18,24 +18,29 @@ from typing import Iterable
 import urllib.request
 
 from src.evaluation.parsing import ADItem
+from src.utils.media import probe
 
 from .srt import SubtitleItem
 
 HF_BASE_URL = "https://huggingface.co/datasets/google/mind-the-gap-inline-ad/resolve/main"
 SPLITS = ("validation", "test")
+EXPECTED_SPLIT_COUNTS = {"validation": 332, "test": 101}
 ANNOTATION_FILES = {
     "validation.jsonl": "data/annotations/validation.jsonl",
     "test.jsonl": "data/annotations/test.jsonl",
     "validation_video_ids.txt": "validation_video_ids.txt",
     "test_video_ids.txt": "test_video_ids.txt",
 }
-# <=720p H.264 keeps frames sharp and decodable while bounding download size. Plain HTTP(S)
-# formats only: the HLS (m3u8) variants a looser selector picks can stall at 0 bytes.
-# YouTube offers dubbed audio tracks; prefer the original-language one.
+ANNOTATION_DOWNLOAD_TIMEOUT_SECONDS = 60
+# <=720p H.264 keeps frames sharp and decodable while bounding download size.
+# protocol=https is progressive HTTPS only: DASH (http_dash_segments) and HLS
+# (m3u8_native) can stall at 0 bytes. Prefer the original-language audio track.
+YTDLP_SOCKET_TIMEOUT_SECONDS = 20
+YTDLP_DOWNLOAD_TIMEOUT_SECONDS = 600
 YTDLP_FORMAT = (
-    "bv*[height<=720][vcodec^=avc1][protocol^=http]+ba[ext=m4a][format_note*=original][protocol^=http]"
-    "/bv*[height<=720][vcodec^=avc1][protocol^=http]+ba[ext=m4a][protocol^=http]"
-    "/b[height<=720][protocol^=http]"
+    "bv*[height<=720][vcodec^=avc1][protocol=https]+ba[ext=m4a][format_note*=original][protocol=https]"
+    "/bv*[height<=720][vcodec^=avc1][protocol=https]+ba[ext=m4a][protocol=https]"
+    "/b[height<=720][protocol=https]"
 )
 
 
@@ -60,16 +65,57 @@ class MTGVideo:
         return f"{self.video_id}.mp4"
 
 
+def annotation_file_is_valid(path: str | Path, name: str | None = None) -> bool:
+    """True when path is UTF-8 and a JSONL split has its official row count."""
+    path = Path(path)
+    name = name or path.name
+    try:
+        text = path.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError):
+        return False
+    if not name.endswith(".jsonl"):
+        return True
+    split = name.removesuffix(".jsonl")
+    expected = EXPECTED_SPLIT_COUNTS.get(split)
+    if expected is None:
+        return False
+    rows = [line for line in text.split("\n") if line.strip()]
+    if len(rows) != expected:
+        return False
+    for line in rows:
+        try:
+            json.loads(line)
+        except json.JSONDecodeError:
+            return False
+    return True
+
+
 def download_annotations(data_dir: str | Path, overwrite: bool = False) -> list[Path]:
-    """Fetch annotation JSONL and video-ID lists (~10 MB) into data_dir."""
+    """Fetch annotation JSONL and video-ID lists (~10 MB) into data_dir.
+
+    A file is replaced only after the downloaded bytes decode as UTF-8. JSONL
+    splits must also contain the official 332 validation and 101 test rows.
+    """
     data_dir = Path(data_dir)
     data_dir.mkdir(parents=True, exist_ok=True)
     paths = []
     for name, remote in ANNOTATION_FILES.items():
         target = data_dir / name
-        if overwrite or not target.exists():
-            with urllib.request.urlopen(f"{HF_BASE_URL}/{remote}") as response:
-                target.write_bytes(response.read())
+        if not overwrite and target.exists() and annotation_file_is_valid(target):
+            paths.append(target)
+            continue
+        temporary = target.with_suffix(target.suffix + ".tmp")
+        try:
+            with urllib.request.urlopen(
+                f"{HF_BASE_URL}/{remote}",
+                timeout=ANNOTATION_DOWNLOAD_TIMEOUT_SECONDS,
+            ) as response:
+                temporary.write_bytes(response.read())
+            if not annotation_file_is_valid(temporary, name):
+                raise RuntimeError(f"{name} is not complete UTF-8 annotation data")
+            temporary.replace(target)
+        finally:
+            temporary.unlink(missing_ok=True)
         paths.append(target)
     return paths
 
@@ -106,7 +152,7 @@ def load_split(data_dir: str | Path, split: str) -> list[MTGVideo]:
     if split not in SPLITS:
         raise ValueError(f"unknown split {split!r}; expected one of {SPLITS}")
     videos = []
-    with (Path(data_dir) / f"{split}.jsonl").open() as handle:
+    with (Path(data_dir) / f"{split}.jsonl").open(encoding="utf-8") as handle:
         for line_number, line in enumerate(handle, 1):
             if not line.strip():
                 continue
@@ -115,6 +161,16 @@ def load_split(data_dir: str | Path, split: str) -> list[MTGVideo]:
             except (KeyError, TypeError, ValueError) as exc:
                 raise ValueError(f"{split}.jsonl line {line_number}: {exc}") from exc
     return videos
+
+
+def _existing_video_is_reusable(path: Path) -> bool:
+    """A kept download must probe as a video. Undecodable files are fetched again."""
+    if shutil.which("ffprobe") is None:
+        raise RuntimeError("ffprobe not found on PATH; install FFmpeg")
+    try:
+        return probe(path).has_video
+    except (OSError, RuntimeError, ValueError, json.JSONDecodeError):
+        return False
 
 
 def download_video(
@@ -131,7 +187,12 @@ def download_video(
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     target = output_dir / video.video_filename
-    if target.is_file() and target.stat().st_size > 0 and not overwrite:
+    if (
+        target.is_file()
+        and target.stat().st_size > 0
+        and not overwrite
+        and _existing_video_is_reusable(target)
+    ):
         return target
     target.unlink(missing_ok=True)
     ytdlp = shutil.which("yt-dlp")
@@ -139,7 +200,9 @@ def download_video(
         raise RuntimeError("yt-dlp not found on PATH (pip install yt-dlp)")
     command = [
         ytdlp, "--no-progress", "--no-playlist", "--retries", "3",
-        "--fragment-retries", "3", "-f", YTDLP_FORMAT,
+        "--fragment-retries", "3",
+        "--socket-timeout", str(YTDLP_SOCKET_TIMEOUT_SECONDS),
+        "-f", YTDLP_FORMAT,
         "--merge-output-format", "mp4", "-o", str(output_dir / "%(id)s.%(ext)s"),
     ]
     if cookies:
@@ -149,11 +212,18 @@ def download_video(
     if extractor_args:
         command.extend(("--extractor-args", extractor_args))
     command.append(video.youtube_url)
-    result = subprocess.run(
-        command,
-        capture_output=True,
-        text=True,
-    )
+    try:
+        result = subprocess.run(
+            command,
+            capture_output=True,
+            text=True,
+            timeout=YTDLP_DOWNLOAD_TIMEOUT_SECONDS,
+        )
+    except subprocess.TimeoutExpired as exc:
+        target.unlink(missing_ok=True)
+        raise RuntimeError(
+            f"yt-dlp timed out after {YTDLP_DOWNLOAD_TIMEOUT_SECONDS}s for {video.video_id}"
+        ) from exc
     if result.returncode != 0 or not target.is_file() or target.stat().st_size == 0:
         target.unlink(missing_ok=True)
         raise RuntimeError(f"yt-dlp failed for {video.video_id}: {result.stderr.strip()[-500:]}")

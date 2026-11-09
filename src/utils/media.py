@@ -128,23 +128,44 @@ def extract_frames(
     if not fps > 0:
         raise ValueError("fps must be positive")
     output_dir = Path(output_dir)
-    output_dir.mkdir(parents=True, exist_ok=True)
-    for stale in output_dir.glob("*.jpg"):
-        stale.unlink()
-    filters = [f"fps={fps}"]
-    if max_side:
-        filters.append(
-            f"scale='if(gt(iw,ih),min({max_side},iw),-2)':'if(gt(iw,ih),-2,min({max_side},ih))'"
-        )
-    _run([
-        _require("ffmpeg"), "-v", "error", "-y", "-i", str(video_path),
-        "-map", "0:v:0", "-vf", ",".join(filters), "-q:v", "2",
-        str(output_dir / "%06d.jpg"),
-    ])
-    paths = sorted(output_dir.glob("*.jpg"))
+    output_dir.parent.mkdir(parents=True, exist_ok=True)
+    staging = output_dir.with_name(f"{output_dir.name}.incoming")
+    backup = output_dir.with_name(f"{output_dir.name}.backup")
+    for leftover in (staging, backup):
+        if leftover.exists():
+            shutil.rmtree(leftover)
+    staging.mkdir()
+    swapped = False
+    try:
+        filters = [f"fps={fps}"]
+        if max_side:
+            filters.append(
+                f"scale='if(gt(iw,ih),min({max_side},iw),-2)':'if(gt(iw,ih),-2,min({max_side},ih))'"
+            )
+        _run([
+            _require("ffmpeg"), "-v", "error", "-y", "-i", str(video_path),
+            "-map", "0:v:0", "-vf", ",".join(filters), "-q:v", "2",
+            str(staging / "%06d.jpg"),
+        ])
+        names = [path.name for path in sorted(staging.glob("*.jpg"))]
+        if not names:
+            raise RuntimeError(f"FFmpeg extracted no frames from {video_path}")
+        if output_dir.exists():
+            output_dir.rename(backup)
+        staging.rename(output_dir)
+        swapped = True
+    except Exception:
+        if staging.exists():
+            shutil.rmtree(staging, ignore_errors=True)
+        if backup.exists() and not output_dir.exists():
+            backup.rename(output_dir)
+        raise
+    finally:
+        if swapped and backup.exists():
+            shutil.rmtree(backup, ignore_errors=True)
     return [
-        FrameEntry(index=i, timestamp=round(i / fps, 6), path=str(path))
-        for i, path in enumerate(paths)
+        FrameEntry(index=i, timestamp=round(i / fps, 6), path=str(output_dir / name))
+        for i, name in enumerate(names)
     ]
 
 
@@ -164,7 +185,7 @@ def _source_fingerprint(path: Path) -> dict[str, Any]:
     }
 
 
-def _cache_is_complete(manifest: dict[str, Any]) -> bool:
+def cache_is_complete(manifest: dict[str, Any]) -> bool:
     """A matching manifest is reusable only while all recorded artifacts exist."""
     frames = manifest.get("frames")
     if not isinstance(frames, list) or not frames:
@@ -208,12 +229,12 @@ def preprocess_video(
     manifest_path = cache_dir / MANIFEST_NAME
     if manifest_path.exists() and not overwrite:
         try:
-            manifest = json.loads(manifest_path.read_text())
-        except (OSError, json.JSONDecodeError):
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError):
             manifest = {}
         if (
             manifest.get("config_hash") == config_hash(settings)
-            and _cache_is_complete(manifest)
+            and cache_is_complete(manifest)
         ):
             return manifest
 
@@ -242,13 +263,13 @@ def preprocess_video(
     }
     cache_dir.mkdir(parents=True, exist_ok=True)
     temporary_manifest = manifest_path.with_suffix(".json.tmp")
-    temporary_manifest.write_text(json.dumps(manifest, indent=2))
+    temporary_manifest.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     temporary_manifest.replace(manifest_path)
     return manifest
 
 
 def load_manifest(cache_dir: str | Path) -> dict[str, Any]:
-    return json.loads((Path(cache_dir) / MANIFEST_NAME).read_text())
+    return json.loads((Path(cache_dir) / MANIFEST_NAME).read_text(encoding="utf-8"))
 
 
 def frame_window(
