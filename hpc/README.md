@@ -21,7 +21,7 @@ Per the course rules, coursework runs on **HPC Cloud Bursting**, not Torch. The 
 | `qwen` | Qwen3-VL-8B (primary) | `g2-standard-12` (1× L4, 24 GB) | 1 |
 | `qwen-a100` | Qwen3-VL-8B | `c12m85-a100-1` (1× A100 40 GB) | 1 |
 | `muse` | Muse Glimmer 30B, bf16 | `c24m170-a100-2` (2× A100 40 GB) | 2 |
-| `muse-4bit` | Muse Glimmer 30B, 4-bit | `c12m85-a100-1` (1× A100 40 GB) | 1 |
+| `muse-4bit` | **Disabled.** 4-bit Muse loads but generation fails (see findings below) | - | - |
 
 To swap models, pass `--model qwen2.5-vl-7b` or any Hugging Face repo id. Each run's `.meta.json` records the quantization, GPU, peak memory and seconds per item. Report the quantization next to any Muse numbers.
 
@@ -82,3 +82,22 @@ Every selector writes the same fields. That keeps the frame window, transcript c
 - **Budget.** Each student has 300 GPU-hours. Smoke-test with `--limit`. The two-GPU `muse` preset uses hours twice as fast.
 - **Requeue.** Jobs use `#SBATCH --requeue`, and `run_ad_vlm.py` skips finished ids, so a requeued job resumes.
 - **Offline jobs.** Jobs set `HF_HUB_OFFLINE=1`, so run `download_models.sh` first. YouTube downloads happen only in `prepare_data.sh`.
+
+## Smoke-test findings (synthetic 4-moment clip, 2026-11-09)
+
+Run with `scripts/make_smoke_moments.py` (a test-pattern clip, so this checks the pipeline and cost, not description quality).
+
+| Model and setup | Result |
+|---|---|
+| Qwen3-VL-8B bf16, 2× A100 40 GB (split automatically) | 4/4 ok. Load 94 s, 1.5 s per item at batch 2. About 19 GB in total (the first meta file counted GPU 0 only, 9.45 GB; fixed). |
+| Muse Glimmer 30B bf16, 2× A100 40 GB | 4/4 ok. Load 418 s, 7.0 s per item at batch 4 (reasoning low, up to 512 new tokens). Peak 61.9 GB in total (30.9 + 31.0 per GPU), so it **does not fit one 40 GB GPU**. |
+| Muse Glimmer 30B 4-bit (bitsandbytes), 1× A100 | Loads (537 s, 20 GB) but all 4 generations fail with `LayerNormKernelImpl not implemented for 'Byte'`. The processor returns normal float pixels (`scripts/debug_processor.py`), so the cause is the 4-bit quantization. The preset is disabled. |
+
+Rough cost, estimated from these numbers and not yet measured on real data: a Muse configuration over about 1,000 moments takes roughly 2 hours of wall time on 2 GPUs (about 4 GPU-hours), and a Qwen configuration about 25 minutes on one A100.
+
+## Cluster behavior we hit
+
+- **L4 partition (`g2-standard-12`):** the cloud node never booted, and the scheduler cancelled the job after 14 minutes. The A100 partitions started in 1 to 2 minutes. Prefer `qwen-a100`. Qwen needs about 19 GB in total, which is tight on a 24 GB L4 anyway.
+- **Idle shutdown:** an interactive Jupyter node was shut down about 25 minutes in while Muse's long, disk-bound load kept GPU use near zero. Run long model loads as `sbatch` jobs, not in a Jupyter terminal. Request Jupyter with no GPUs, or cancel it when done, because idle GPUs still count against your hours.
+- **YouTube:** the cluster gets video metadata but `403 Forbidden` for the downloads. Download the dev videos on a laptop, upload them to `data/mtg-ad/videos/`, and run `SKIP_DOWNLOAD=1 bash hpc/prepare_data.sh`.
+- **Jupyter terminals:** a terminal can freeze while a model loads from `/scratch`. Reload the page. The job keeps running.
