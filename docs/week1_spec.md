@@ -17,6 +17,9 @@ Status as of 2026-11-02. Items marked **TEAM** still need a person to make the c
   `SKIP_DOWNLOAD=1`. **Not verified yet:** whether every selected video remains
   online. YouTube currently may require yt-dlp's documented PO-token provider;
   provider credentials and tokens are never stored in the project.
+  When a datacenter IP remains blocked, `prepare_mtg_ad.py
+  --download-videos --cookies-from-browser chrome` can be run on a local machine;
+  only the resulting `data/mtg-ad/videos/` directory is transferred to HPC.
 - **Evaluation:** our temporal metrics, BERTScore, cosine similarity and rubric (`src/evaluation/`) already follow MTG-AD's format and judge definitions. The official MTG-AD-Eval (TTS-rendered timing and Quality-RF) is Gemini-based. **TEAM:** decide whether to run it as the primary timing check, as the proposal suggests.
 **Secondary: REFRAMED** (`igorsterner/reframed`, CC BY-NC 4.0), used as a movie-domain check of the MTG-AD findings (`src/datasets/reframed.py`, `configs/reframed_splits.json`).
 

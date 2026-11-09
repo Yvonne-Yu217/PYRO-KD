@@ -100,6 +100,39 @@ class MTGADTests(unittest.TestCase):
             self.assertIn("protocol^=http", command[command.index("-f") + 1])
             self.assertFalse(target.exists())
 
+    def test_download_passes_local_browser_auth_and_extractor_options(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp, "vid.mp4")
+
+            def successful_download(command, **_kwargs):
+                target.write_bytes(b"video")
+                return type("Result", (), {"returncode": 0, "stderr": ""})()
+
+            with (
+                patch("src.datasets.mtg_ad.shutil.which", return_value="/bin/yt-dlp"),
+                patch("src.datasets.mtg_ad.subprocess.run", side_effect=successful_download) as run,
+            ):
+                result = download_video(
+                    parse_row(make_row()), tmp,
+                    cookies_from_browser="chrome:Default",
+                    extractor_args="youtube:player_client=mweb,tv",
+                )
+            self.assertEqual(result, target)
+            command = run.call_args.args[0]
+            self.assertEqual(command[command.index("--cookies-from-browser") + 1], "chrome:Default")
+            self.assertEqual(
+                command[command.index("--extractor-args") + 1],
+                "youtube:player_client=mweb,tv",
+            )
+
+    def test_download_rejects_two_cookie_sources(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaisesRegex(ValueError, "either"):
+                download_video(
+                    parse_row(make_row()), tmp,
+                    cookies="cookies.txt", cookies_from_browser="chrome",
+                )
+
 
 class PrepareTargetsTests(unittest.TestCase):
     def test_batch_reports_missing_source_and_continues_after_preprocess_error(self):

@@ -27,7 +27,10 @@ from src.utils.media import MANIFEST_NAME, preprocess_video  # noqa: E402
 from src.utils.selection import k_for_duration  # noqa: E402
 
 
-def prepare_targets(targets, data_dir, cache_dir, download_videos, preprocess, fps):
+def prepare_targets(
+    targets, data_dir, cache_dir, download_videos, preprocess, fps,
+    cookies=None, cookies_from_browser=None, extractor_args=None,
+):
     """Download/preprocess a batch, continuing after per-video failures."""
     results = []
     for video in targets:
@@ -36,7 +39,12 @@ def prepare_targets(targets, data_dir, cache_dir, download_videos, preprocess, f
         existed = path.is_file() and path.stat().st_size > 0
         if download_videos:
             try:
-                path = download_video(video, data_dir / "videos")
+                path = download_video(
+                    video, data_dir / "videos",
+                    cookies=cookies,
+                    cookies_from_browser=cookies_from_browser,
+                    extractor_args=extractor_args,
+                )
                 item["download"] = "reused" if existed else "downloaded"
             except (OSError, RuntimeError) as exc:
                 item.update(status="unavailable", stage="download", error=str(exc))
@@ -93,6 +101,19 @@ def main() -> None:
     parser.add_argument("--num-test", type=int, default=50)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--download-videos", action="store_true")
+    auth = parser.add_mutually_exclusive_group()
+    auth.add_argument(
+        "--cookies", type=Path,
+        help="yt-dlp Netscape cookie file; keep it outside the repository",
+    )
+    auth.add_argument(
+        "--cookies-from-browser",
+        help="read cookies from a local browser, e.g. chrome or firefox",
+    )
+    parser.add_argument(
+        "--yt-dlp-extractor-args",
+        help="optional yt-dlp extractor args, e.g. youtube:player_client=mweb,tv",
+    )
     parser.add_argument("--preprocess", action="store_true")
     parser.add_argument("--videos", choices=["dev", "test", "all"], default="dev")
     parser.add_argument("--fps", type=float, default=2.0)
@@ -154,6 +175,7 @@ def main() -> None:
     results = prepare_targets(
         targets, args.data_dir, args.cache_dir,
         args.download_videos, args.preprocess, args.fps,
+        args.cookies, args.cookies_from_browser, args.yt_dlp_extractor_args,
     )
     failures = [item["video_id"] for item in results if item["status"] != "ready"]
     report_path = args.report or args.data_dir / "preprocess_report.json"
