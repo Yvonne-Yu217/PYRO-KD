@@ -117,8 +117,17 @@ def load_split(data_dir: str | Path, split: str) -> list[MTGVideo]:
     return videos
 
 
-def download_video(video: MTGVideo, output_dir: str | Path, overwrite: bool = False) -> Path:
+def download_video(
+    video: MTGVideo,
+    output_dir: str | Path,
+    overwrite: bool = False,
+    cookies: str | Path | None = None,
+    cookies_from_browser: str | None = None,
+    extractor_args: str | None = None,
+) -> Path:
     """Download one video with yt-dlp as <video_id>.mp4 (raises if unavailable)."""
+    if cookies and cookies_from_browser:
+        raise ValueError("pass either cookies or cookies_from_browser, not both")
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     target = output_dir / video.video_filename
@@ -128,13 +137,20 @@ def download_video(video: MTGVideo, output_dir: str | Path, overwrite: bool = Fa
     ytdlp = shutil.which("yt-dlp")
     if ytdlp is None:
         raise RuntimeError("yt-dlp not found on PATH (pip install yt-dlp)")
+    command = [
+        ytdlp, "--no-progress", "--no-playlist", "--retries", "3",
+        "--fragment-retries", "3", "-f", YTDLP_FORMAT,
+        "--merge-output-format", "mp4", "-o", str(output_dir / "%(id)s.%(ext)s"),
+    ]
+    if cookies:
+        command.extend(("--cookies", str(cookies)))
+    elif cookies_from_browser:
+        command.extend(("--cookies-from-browser", cookies_from_browser))
+    if extractor_args:
+        command.extend(("--extractor-args", extractor_args))
+    command.append(video.youtube_url)
     result = subprocess.run(
-        [
-            ytdlp, "--no-progress", "--no-playlist", "--retries", "3",
-            "--fragment-retries", "3", "-f", YTDLP_FORMAT,
-            "--merge-output-format", "mp4", "-o", str(output_dir / "%(id)s.%(ext)s"),
-            video.youtube_url,
-        ],
+        command,
         capture_output=True,
         text=True,
     )

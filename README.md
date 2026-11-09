@@ -16,6 +16,7 @@ On macOS, the CUDA torch wheels don't install. The tests use only the standard l
 ```bash
 python scripts/prepare_mtg_ad.py                     # annotations + configs/mtg_ad_splits.json
 python scripts/prepare_mtg_ad.py --download-videos --preprocess   # dev videos (needs yt-dlp)
+python scripts/prepare_mtg_ad.py --download-videos --cookies-from-browser chrome  # run locally
 python scripts/prepare_mtg_ad.py --preprocess                     # reuse manually supplied videos
 python scripts/cache_audio_features.py                            # Silero VAD + librosa (HPC env)
 python scripts/build_moments.py --selector U --videos dev         # generation inputs (U or A)
@@ -32,6 +33,13 @@ artifact is missing. On clusters where YouTube blocks downloads, place MP4s in
 `SKIP_DOWNLOAD=1 bash hpc/prepare_data.sh`). YouTube may require yt-dlp's
 [recommended PO-token provider setup](https://github.com/yt-dlp/yt-dlp/wiki/PO-Token-Guide);
 keep provider credentials/tokens outside the repository.
+
+If a cloud/datacenter IP is blocked even with a PO token, run the browser-cookie
+command on the same local machine and network where YouTube plays normally.
+Copy `data/mtg-ad/videos/` to the cluster, then use `--preprocess` or
+`SKIP_DOWNLOAD=1`. Cookie files and browser profiles are credentials: never copy
+them to the cluster or commit them. `--cookies /safe/path/cookies.txt` and
+`--yt-dlp-extractor-args` are also available for advanced local setups.
 
 ## Models on NYU HPC
 
