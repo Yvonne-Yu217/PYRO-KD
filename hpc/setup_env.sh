@@ -34,6 +34,9 @@ cat > /ext3/env.sh <<EOF
 unset -f which
 source /ext3/miniforge3/etc/profile.d/conda.sh
 export PATH=/ext3/miniforge3/bin:\$PATH
+# Never read or write the host ~/.local: it leaks packages in and out of the overlay.
+export PIP_USER=0
+export PYTHONNOUSERSITE=1
 EOF
 source /ext3/env.sh
 python - <<PY
@@ -42,17 +45,27 @@ site_dir = sysconfig.get_paths()["purelib"]
 if not os.access(site_dir, os.W_OK):
     print("WARNING: " + site_dir + " is not writable; pip will install into ~/.local instead.")
 PY
+echo "[setup] conda: ffmpeg"
 conda install -y -q ffmpeg pip           # ffmpeg: frame/audio cache, yt-dlp merging, torchcodec
+echo "[setup] pip: torch"
 pip install -q --upgrade torch torchvision
-# Project dependencies (mirrors pyproject.toml). Not `pip install -e .`: the repo's
-# src/ packages are named datasets/utils/..., which would shadow Hugging Face `datasets`.
+# Model access first, so downloads work even if a later step fails.
+echo "[setup] pip: transformers and model tooling"
+pip install -q --upgrade transformers accelerate pillow "huggingface_hub[cli]" hf_transfer torchcodec bitsandbytes yt-dlp
+# Project dependencies (mirrors pyproject.toml). Not `pip install -e .`: the repo src/
+# packages are named datasets/utils/..., which would shadow Hugging Face datasets.
 # opencv-python-headless: the container has no libGL for the GUI build.
+echo "[setup] pip: project dependencies"
 pip install -q --upgrade tqdm torchmetrics opencv-python-headless librosa silero-vad \
   scenedetect open-clip-torch bert-score sentence-transformers cryptography
-pip install -q --upgrade transformers accelerate pillow "huggingface_hub[cli]" hf_transfer torchcodec bitsandbytes yt-dlp
+echo "[setup] verifying imports"
 python - <<PY
-import torch, transformers
-print("torch", torch.__version__, "| transformers", transformers.__version__)
+import importlib
+for name in ["torch", "transformers", "huggingface_hub", "silero_vad", "librosa", "open_clip",
+             "scenedetect", "bert_score", "sentence_transformers", "cryptography", "cv2", "yt_dlp"]:
+    module = importlib.import_module(name)
+    print("  ok", name, getattr(module, "__version__", ""))
+import transformers
 print("Muse Glimmer support:", hasattr(transformers, "AutoModelForMultimodalLM"))
 PY
 '
