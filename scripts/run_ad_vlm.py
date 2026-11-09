@@ -127,7 +127,8 @@ def main():
     load_s = time.time() - t0
     print(f"[run_ad] loaded {model_id} via {cls_name} in {load_s:.0f}s", flush=True)
     if torch.cuda.is_available():
-        torch.cuda.reset_peak_memory_stats()
+        for device in range(torch.cuda.device_count()):
+            torch.cuda.reset_peak_memory_stats(device)
 
     gen_s, n_ok, n_err = 0.0, 0, 0
     with open(out_path, "a") as fout:
@@ -191,7 +192,15 @@ def main():
         "n_ok": n_ok, "n_error": n_err, "load_s": round(load_s, 1),
         "generate_s": round(gen_s, 1),
         "s_per_item": round(gen_s / n_ok, 3) if n_ok else None,
-        "peak_gpu_mem_gb": round(torch.cuda.max_memory_allocated() / 1e9, 2) if torch.cuda.is_available() else None,
+        # Summed over all visible GPUs: device_map="auto" splits big models across them.
+        "peak_gpu_mem_gb": (
+            round(sum(torch.cuda.max_memory_allocated(i) for i in range(torch.cuda.device_count())) / 1e9, 2)
+            if torch.cuda.is_available() else None
+        ),
+        "peak_gpu_mem_gb_per_device": (
+            [round(torch.cuda.max_memory_allocated(i) / 1e9, 2) for i in range(torch.cuda.device_count())]
+            if torch.cuda.is_available() else None
+        ),
         "gpu": torch.cuda.get_device_name(0) if torch.cuda.is_available() else None,
         "torch": torch.__version__, "transformers": transformers.__version__,
         "host": platform.node(), "slurm_job_id": os.environ.get("SLURM_JOB_ID"),
