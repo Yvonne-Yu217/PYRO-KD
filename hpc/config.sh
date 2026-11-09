@@ -5,6 +5,10 @@
 # Course SLURM account (300 GPU-hours per student for Fall 2026).
 ACCOUNT="${ACCOUNT:-csci_ga_2271-2026fa}"
 
+# Some shells (e.g. inside a container) leave USER unset, which breaks `set -u` scripts.
+USER="${USER:-$(id -un)}"
+export USER
+
 # Partitions available to the course:
 #   interactive      quick test sessions
 #   n2c48m24         CPU only (setup, downloads, data prep)
