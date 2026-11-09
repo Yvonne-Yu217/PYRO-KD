@@ -36,6 +36,12 @@ source /ext3/miniforge3/etc/profile.d/conda.sh
 export PATH=/ext3/miniforge3/bin:\$PATH
 EOF
 source /ext3/env.sh
+python - <<PY
+import os, sysconfig
+site_dir = sysconfig.get_paths()["purelib"]
+if not os.access(site_dir, os.W_OK):
+    print("WARNING: " + site_dir + " is not writable; pip will install into ~/.local instead.")
+PY
 conda install -y -q ffmpeg pip           # ffmpeg: frame/audio cache, yt-dlp merging, torchcodec
 pip install -q --upgrade torch torchvision
 # Project dependencies (mirrors pyproject.toml). Not `pip install -e .`: the repo's

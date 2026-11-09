@@ -6,7 +6,7 @@
 #   bash hpc/download_models.sh                 # Qwen3-VL-8B + Muse Glimmer (~80 GB)
 #   bash hpc/download_models.sh Qwen/Qwen2.5-VL-7B-Instruct # anything else
 #
-# If a repo is gated, run `hf auth login` inside the env first (or export HF_TOKEN).
+# If a repo is gated, export HF_TOKEN=<your token> before running this.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 source hpc/config.sh
@@ -19,6 +19,7 @@ fi
 
 for m in "${MODELS[@]}"; do
   echo "[download] $m -> $HF_HOME"
-  in_env ro "hf download '$m'"
+  # Python API instead of the `hf` command: the script can land in ~/.local/bin, off PATH.
+  in_env ro "python -c 'from huggingface_hub import snapshot_download; print(snapshot_download(\"$m\"))'"
 done
 echo "[download] done. Next: bash hpc/prepare_data.sh"
