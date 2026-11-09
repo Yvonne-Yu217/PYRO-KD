@@ -20,6 +20,7 @@ dependencies = [
     "bert-score>=0.3.13",
     "sentence-transformers>=6.2.0",
     "cryptography>=44.0.0",
+    "yt-dlp[default]>=2026.10.26",
 ]
 
 [[tool.uv.index]]
