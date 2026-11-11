@@ -190,19 +190,29 @@ class BuildMomentsTests(unittest.TestCase):
         self.assertEqual(sorted(build_moments.SELECTORS), ["A", "U"])
         self.assertEqual(build_moments.SELECTORS["U"](10.0, 4, None), [2.0, 4.0, 6.0, 8.0])
 
-    def run_batch(self, selector, videos, features, no_audio=(), missing_cache=()):
+    def run_batch(self, selector, videos, features, no_audio=(), missing_cache=(), incomplete=()):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             splits = root / "splits.json"
             splits.write_text(json.dumps({"k_rule": {"rate_per_minute": 3}}))
             output = root / "moments.jsonl"
+            frame = root / "frame.jpg"
+            audio = root / "audio.wav"
+            frame.write_bytes(b"jpg")
+            audio.write_bytes(b"wav")
             for video_id, _, _ in videos:
                 if video_id in missing_cache:
                     continue
                 cache = root / video_id
                 cache.mkdir()
-                (cache / "manifest.json").write_text("{}")
-            manifests = {v: {"audio_path": None if v in no_audio else "audio.wav"} for v, _, _ in videos}
+                (cache / "manifest.json").write_text("{}", encoding="utf-8")
+            manifests = {}
+            for video_id, _, _ in videos:
+                frame_path = str(root / "missing-frame.jpg") if video_id in incomplete else str(frame)
+                manifests[video_id] = {
+                    "frames": [{"index": 0, "timestamp": 0.0, "path": frame_path}],
+                    "audio_path": None if video_id in no_audio else str(audio),
+                }
             stdout = io.StringIO()
             with (
                 patch.object(sys, "argv", ["build_moments.py", "--selector", selector,
@@ -237,6 +247,15 @@ class BuildMomentsTests(unittest.TestCase):
         self.assertIn("no cache for 1 videos", stdout)
         self.assertIn("missing", stdout)
         self.assertNotIn("fewer than K feasible moments", stdout)
+
+    def test_missing_frame_file_counts_as_missing_cache(self):
+        rows, report, stdout = self.run_batch(
+            "U", [("broken", 60, []), ("good", 60, [])], {}, incomplete=("broken",),
+        )
+        self.assertEqual(report["videos"][0]["status"], "missing_cache")
+        self.assertEqual(report["videos"][0]["video_id"], "broken")
+        self.assertEqual([row["video_id"] for row in rows], ["good"] * 3)
+        self.assertIn("broken", stdout)
 
     def test_mixed_batch_continues_past_missing_audio_and_records_k(self):
         rows, report, stdout = self.run_batch(

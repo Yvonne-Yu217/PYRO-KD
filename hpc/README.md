@@ -41,6 +41,11 @@ bash hpc/prepare_data.sh reframed   # optional: REFRAMED pilot clips
 exit
 ```
 
+Preparation writes `data/mtg-ad/preprocess_report.json`. If YouTube blocks the
+cluster IP, copy the selected MP4s to `data/mtg-ad/videos/<video_id>.mp4` and run
+`SKIP_DOWNLOAD=1 bash hpc/prepare_data.sh`. Complete unchanged caches are reused;
+changed sources or missing frame/audio artifacts are rebuilt.
+
 `prepare_data.sh` prints each video's duration drift against the annotations. It also lists any YouTube videos that are no longer available. Report those, because the test sample may need a fixed replacement rule.
 
 ## Running

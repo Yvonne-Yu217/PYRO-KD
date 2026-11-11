@@ -28,7 +28,7 @@ from src.datasets import mtg_ad, reframed  # noqa: E402
 from src.generation.prompts import transcript_context, word_limit_for_gap  # noqa: E402
 from src.utils.audio_features import available_gap, load_features, speech_of  # noqa: E402
 from src.utils.audio_selector import AudioSelector  # noqa: E402
-from src.utils.media import frame_window, load_manifest  # noqa: E402
+from src.utils.media import cache_is_complete, frame_window, load_manifest  # noqa: E402
 from src.utils.selection import k_for_duration, uniform_timestamps  # noqa: E402
 
 
@@ -87,7 +87,7 @@ def main() -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
     rows, missing, shortfalls, no_audio, unsafe = 0, [], [], [], []
     reports = []
-    with output.open("w") as handle:
+    with output.open("w", encoding="utf-8") as handle:
         for video_id, duration, transcript in targets:
             k = k_for_duration(duration, rate)
             report = {
@@ -97,10 +97,17 @@ def main() -> None:
             }
             reports.append(report)
             cache = cache_dir / video_id
-            if not (cache / "manifest.json").exists():
+            if not (cache / "manifest.json").is_file():
                 missing.append(video_id)
                 continue
-            manifest = load_manifest(cache)
+            try:
+                manifest = load_manifest(cache)
+            except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+                missing.append(video_id)
+                continue
+            if not cache_is_complete(manifest):
+                missing.append(video_id)
+                continue
             features = load_features(cache)
             if args.selector == "A" and "audio_path" in manifest and not manifest["audio_path"]:
                 features = None
@@ -148,7 +155,7 @@ def main() -> None:
     report_path = output.with_suffix(".report.json")
     report_path.write_text(json.dumps({
         "dataset": name, "selector": args.selector, "videos": reports,
-    }, indent=2) + "\n")
+    }, indent=2) + "\n", encoding="utf-8")
     print(f"wrote {rows} moments to {output}")
     if shortfalls:
         print(f"selection shortfall (fewer than K feasible moments): {', '.join(f'{v} -{n}' for v, n in shortfalls)}")

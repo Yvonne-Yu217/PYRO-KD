@@ -86,9 +86,16 @@ def main() -> None:
     if not (args.download_videos or args.preprocess):
         return
     targets = {"pilot": pilot, "test": test_sample, "all": pilot + test_sample}[args.videos]
+    failures = []
     for clip in targets:
-        video_path = download_video(clip, args.data_dir / "videos")
-        print(f"downloaded {video_path}")
+        video_path = args.data_dir / "videos" / f"{clip.video_id}.mp4"
+        if args.download_videos:
+            video_path = download_video(clip, args.data_dir / "videos")
+            print(f"downloaded {video_path}")
+        elif not video_path.exists():
+            print(f"MISSING {clip.video_id}: expected {video_path}")
+            failures.append(clip.video_id)
+            continue
         if args.preprocess:
             manifest = preprocess_video(video_path, args.cache_dir / clip.video_id, fps=args.fps)
             info = manifest["media_info"]
@@ -97,6 +104,9 @@ def main() -> None:
                 f"  cached {len(manifest['frames'])} frames, audio={bool(manifest['audio_path'])},"
                 f" duration drift vs metadata {drift:+.2f}s"
             )
+    if failures:
+        print(f"{len(failures)} videos unavailable: {' '.join(failures)}", file=sys.stderr)
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":

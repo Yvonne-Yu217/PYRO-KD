@@ -3,8 +3,9 @@ import shutil
 import subprocess
 import tempfile
 import unittest
+from unittest.mock import patch
 
-from src.utils.media import frame_window, preprocess_video, probe
+from src.utils.media import cache_is_complete, extract_frames, frame_window, preprocess_video, probe
 
 HAS_FFMPEG = shutil.which("ffmpeg") is not None and shutil.which("ffprobe") is not None
 
@@ -64,6 +65,83 @@ class MediaTests(unittest.TestCase):
         manifest = preprocess_video(silent, self.dir / "silent_cache", fps=1.0)
         self.assertIsNone(manifest["audio_path"])
         self.assertEqual(len(manifest["frames"]), 3)
+
+    def test_missing_cached_artifact_is_regenerated(self):
+        cache = self.dir / "cache"
+        manifest = preprocess_video(self.video, cache, fps=1.0)
+        missing = Path(manifest["frames"][0]["path"])
+        missing.unlink()
+        repaired = preprocess_video(self.video, cache, fps=1.0)
+        self.assertTrue(Path(repaired["frames"][0]["path"]).is_file())
+
+    def test_malformed_manifest_is_rebuilt(self):
+        cache = self.dir / "cache"
+        cache.mkdir()
+        (cache / "manifest.json").write_text("{broken")
+        manifest = preprocess_video(self.video, cache, fps=1.0)
+        self.assertEqual(len(manifest["frames"]), 3)
+        self.assertEqual(manifest, preprocess_video(self.video, cache, fps=1.0))
+
+    def test_changed_source_invalidates_cache(self):
+        cache = self.dir / "cache"
+        first = preprocess_video(self.video, cache, fps=1.0)
+        make_test_video(self.video, seconds=2.0)
+        second = preprocess_video(self.video, cache, fps=1.0)
+        self.assertNotEqual(first["config_hash"], second["config_hash"])
+        self.assertEqual(len(second["frames"]), 2)
+
+
+class FrameExtractionTests(unittest.TestCase):
+    def test_empty_artifacts_are_not_complete(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            frame = Path(tmp, "000001.jpg")
+            audio = Path(tmp, "audio.wav")
+            frame.touch()
+            audio.touch()
+            manifest = {"frames": [{"path": str(frame)}], "audio_path": str(audio)}
+            self.assertFalse(cache_is_complete(manifest))
+
+            frame.write_bytes(b"jpeg")
+            self.assertFalse(cache_is_complete(manifest))
+
+            audio.write_bytes(b"wav")
+            self.assertTrue(cache_is_complete(manifest))
+
+    def test_failed_extraction_keeps_existing_frames(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            frames = Path(tmp, "frames")
+            frames.mkdir()
+            kept = frames / "000001.jpg"
+            kept.write_bytes(b"old")
+            with (
+                patch("src.utils.media._require", return_value="ffmpeg"),
+                patch("src.utils.media._run", side_effect=RuntimeError("ffmpeg failed")),
+            ):
+                with self.assertRaisesRegex(RuntimeError, "ffmpeg failed"):
+                    extract_frames(Path(tmp, "clip.mp4"), frames, fps=1.0)
+            self.assertEqual(kept.read_bytes(), b"old")
+            self.assertFalse((Path(tmp) / "frames.incoming").exists())
+            self.assertFalse((Path(tmp) / "frames.backup").exists())
+
+    def test_extraction_replaces_frames_only_after_success(self):
+        def fake_run(command):
+            Path(command[-1]).parent.joinpath("000001.jpg").write_bytes(b"new")
+            return ""
+
+        with tempfile.TemporaryDirectory() as tmp:
+            frames = Path(tmp, "frames")
+            frames.mkdir()
+            (frames / "000009.jpg").write_bytes(b"old")
+            with (
+                patch("src.utils.media._require", return_value="ffmpeg"),
+                patch("src.utils.media._run", side_effect=fake_run),
+            ):
+                entries = extract_frames(Path(tmp, "clip.mp4"), frames, fps=1.0)
+            self.assertEqual([entry.timestamp for entry in entries], [0.0])
+            self.assertEqual(Path(entries[0].path).read_bytes(), b"new")
+            self.assertFalse((frames / "000009.jpg").exists())
+            self.assertFalse((Path(tmp) / "frames.incoming").exists())
+            self.assertFalse((Path(tmp) / "frames.backup").exists())
 
 
 class FrameWindowTests(unittest.TestCase):

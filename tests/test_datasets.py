@@ -199,6 +199,22 @@ class ReframedTests(unittest.TestCase):
         self.assertEqual(record["test"]["per_movie_counts"], {"tt0": 2, "tt1": 2})
         self.assertEqual(record["test"]["selection_version"], TEST_SELECTION_VERSION)
 
+    def test_prepare_fails_when_existing_video_is_missing(self):
+        validation = [parse_row(make_row(ad_us=SRT * 2), "validation")]
+        with tempfile.TemporaryDirectory() as tmp:
+            with (
+                patch("sys.argv", [
+                    "prepare_reframed.py", "--num-pilot", "1", "--num-test", "0",
+                    "--data-dir", tmp, "--splits-out", str(Path(tmp, "splits.json")),
+                    "--preprocess",
+                ]),
+                patch.object(prepare_reframed, "download_metadata"),
+                patch.object(prepare_reframed, "load_split", side_effect=[validation, []]),
+                redirect_stdout(io.StringIO()),
+            ):
+                with self.assertRaisesRegex(SystemExit, "1"):
+                    prepare_reframed.main()
+
     def test_legacy_test_selection_is_rejected_until_regenerated(self):
         splits = {"test": {"video_ids": ["vid1"]}}
         for version in (None, "movie-balanced-metadata-v1", "annotation-filtered"):
