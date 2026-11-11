@@ -1,1 +1,317 @@
-†‹-©ž:—«jØ¨žz-¥êæŠÛ^tˆˆ‰Q¥µ•ÍÑ…µÀµÁÉ•Í•ÉÙ¥¹œµ•‘¥„±½…‘¥¹œ‰Õ¥±Ð½¸µÁ•œ½™™ÁÉ½‰”¸()Ù•Éä‘•É¥Ù•…ÉÑ¥™…Ð€ ÄØ­!èµ½¹¼…Õ‘¥¼°ÍÁ…ÉÍ”™É…µ•Ì¤¥ÌÝÉ¥ÑÑ•¸¹•áÐÑ¼„)µ…¹¥™•ÍÐ¹©Í½¸Ñ¡…ÐÉ•½É‘ÌÑ¡”Í½ÕÉ”µ•‘¥„¥¹™¼°•áÑÉ…Ñ¥½¸Í•ÑÑ¥¹Ì°…¹)Ñ¡”±¥ÀµÉ•±…Ñ¥Ù”Ñ¥µ•ÍÑ…µÀ½˜•… ™É…µ”¸M•±•Ñ½ÉÌ…¹•¹•É…Ñ½ÉÌÍ¡½Õ±)É•…Ñ¥µ•ÍÑ…µÁÌ™É½´Ñ¡”µ…¹¥™•ÍÐ°¹•Ù•ÈÉ”µ‘•É¥Ù”Ñ¡•´™É½´™¥±”¹…µ•Ì¸(ˆˆˆ()™É½´‘…Ñ…±…ÍÍ•Ì¥µÁ½ÉÐ…Í‘¥Ð°‘…Ñ…±…ÍÌ)¥µÁ½ÉÐ¡…Í¡±¥ˆ)¥µÁ½ÉÐ©Í½¸)¥µÁ½ÉÐµ…Ñ )™É½´Á…Ñ¡±¥ˆ¥µÁ½ÉÐA…Ñ )¥µÁ½ÉÐÍ¡ÕÑ¥°)¥µÁ½ÉÐÍÕ‰ÁÉ½•ÍÌ)™É½´ÑåÁ¥¹œ¥µÁ½ÉÐ¹ä°M•ÅÕ•¹”()59%MQ}95€ô€‰µ…¹¥™•ÍÐ¹©Í½¸ˆ)59%MQ}YIM%=8€ô€È(()‘…Ñ…±…ÍÌ¡™É½é•¸õQÉÕ”¤)±…ÍÌ5•‘¥…%¹™¼è(€€€€ˆˆ‰AÉ½‰•½¹Ñ…¥¹•È½ÍÑÉ•…´µ•Ñ…‘…Ñ„¸Q¥µ•Ì…É”¥¸Í•½¹‘Ì¸ˆˆˆ((€€€Á…Ñ èÍÑÈ(€€€‘ÕÉ…Ñ¥½¸è™±½…Ð(€€€ÍÑ…ÉÑ}Ñ¥µ”è™±½…Ð(€€€¡…Í}Ù¥‘•¼è‰½½°(€€€¡…Í}…Õ‘¥¼è‰½½°(€€€Ý¥‘Ñ è¥¹Ðð9½¹”(€€€¡•¥¡Ðè¥¹Ðð9½¹”(€€€Ù¥‘•½}™ÁÌè™±½…Ðð9½¹”(€€€…Õ‘¥½}Í…µÁ±•}É…Ñ”è¥¹Ðð9½¹”(€€€…Õ‘¥½}¡…¹¹•±Ìè¥¹Ðð9½¹”(()‘…Ñ…±…ÍÌ¡™É½é•¸õQÉÕ”¤)±…ÍÌÉ…µ•¹ÑÉäè(€€€€ˆˆ‰…¡•™É…µ”…¹¥ÑÌ±¥ÀµÉ•±…Ñ¥Ù”Ñ¥µ•ÍÑ…µÀ¥¸Í•½¹‘Ì¸ˆˆˆ((€€€¥¹‘•àè¥¹Ð(€€€Ñ¥µ•ÍÑ…µÀè™±½…Ð(€€€Á…Ñ èÍÑÈ(()‘•˜}É•ÅÕ¥É”¡Ñ½½°èÍÑÈ¤€´øÍÑÈè(€€€É•Í½±Ù•€ôÍ¡ÕÑ¥°¹Ý¡¥ ¡Ñ½½°¤(€€€¥˜É•Í½±Ù•¥Ì9½¹”è(€€€€€€€É…¥Í”IÕ¹Ñ¥µ•ÉÉ½È¡˜‰íÑ½½±ô¹½Ð™½Õ¹½¸AQ ì¥¹ÍÑ…±°µÁ•œˆ¤(€€€É•ÑÕÉ¸É•Í½±Ù•(()‘•˜}ÉÕ¸¡½µµ…¹èM•ÅÕ•¹•mÍÑÉt¤€´øÍÑÈè(€€€É•ÍÕ±Ð€ôÍÕ‰ÁÉ½•ÍÌ¹ÉÕ¸¡½µµ…¹°…ÁÑÕÉ•}½ÕÑÁÕÐõQÉÕ”°Ñ•áÐõQÉÕ”¤(€€€¥˜É•ÍÕ±Ð¹É•ÑÕÉ¹½‘”€„ô€Àè(€€€€€€€É…¥Í”IÕ¹Ñ¥µ•ÉÉ½È (€€€€€€€€€€€˜‰½µµ…¹™…¥±•€¡íÉ•ÍÕ±Ð¹É•ÑÕÉ¹½‘•ô¤èìœ€œ¹©½¥¸¡½µµ…¹¥õq¸ˆ(€€€€€€€€€€€˜‰íÉ•ÍÕ±Ð¹ÍÑ‘•ÉÈ¹ÍÑÉ¥À ¥ôˆ(€€€€€€€€¤(€€€É•ÑÕÉ¸É•ÍÕ±Ð¹ÍÑ‘½ÕÐ(()‘•˜}Á…ÉÍ•}É…Ñ”¡É…Ñ”èÍÑÈð9½¹”¤€´ø™±½…Ðð9½¹”è(€€€¥˜¹½ÐÉ…Ñ”½ÈÉ…Ñ”¥¸ìˆÀ¼Àˆ°€‰8½‰ôè(€€€€€€€É•ÑÕÉ¸9½¹”(€€€¹Õµ•É…Ñ½È°|°‘•¹½µ¥¹…Ñ½È€ôÉ…Ñ”¹Á…ÉÑ¥Ñ¥½¸ ˆ¼ˆ¤(€€€Ù…±Õ”€ô™±½…Ð¡¹Õµ•É…Ñ½È¤€¼™±½…Ð¡‘•¹½µ¥¹…Ñ½È½È€Ä¤(€€€É•ÑÕÉ¸Ù…±Õ”¥˜µ…Ñ ¹¥Í™¥¹¥Ñ”¡Ù…±Õ”¤…¹Ù…±Õ”€ø€À•±Í”9½¹”(()‘•˜ÁÉ½‰”¡Á…Ñ èÍÑÈðA…Ñ ¤€´ø5•‘¥…%¹™¼è(€€€€ˆˆ‰I•ÑÕÉ¸½¹Ñ…¥¹•È…¹™¥ÉÍÐ…Õ‘¥¼½Ù¥‘•¼ÍÑÉ•…´µ•Ñ…‘…Ñ„Ù¥„™™ÁÉ½‰”¸ˆˆˆ(€€€½ÕÑÁÕÐ€ô}ÉÕ¸¡l(€€€€€€€}É•ÅÕ¥É” ‰™™ÁÉ½‰”ˆ¤°€ˆµØˆ°€‰•ÉÉ½Èˆ°€ˆµÁÉ¥¹Ñ}™½Éµ…Ðˆ°€‰©Í½¸ˆ°(€€€€€€€€ˆµÍ¡½Ý}™½Éµ…Ðˆ°€ˆµÍ¡½Ý}ÍÑÉ•…µÌˆ°ÍÑÈ¡Á…Ñ ¤°(€€€t¤(€€€‘…Ñ„€ô©Í½¸¹±½…‘Ì¡½ÕÑÁÕÐ¤(€€€ÍÑÉ•…µÌ€ô‘…Ñ„¹•Ð ‰ÍÑÉ•…µÌˆ°mt¤(€€€Ù¥‘•¼€ô¹•áÐ ¡Ì™½ÈÌ¥¸ÍÑÉ•…µÌ¥˜Ì¹•Ð ‰½‘•}ÑåÁ”ˆ¤€ôô€‰Ù¥‘•¼ˆ¤°9½¹”¤(€€€…Õ‘¥¼€ô¹•áÐ ¡Ì™½ÈÌ¥¸ÍÑÉ•…µÌ¥˜Ì¹•Ð ‰½‘•}ÑåÁ”ˆ¤€ôô€‰…Õ‘¥¼ˆ¤°9½¹”¤(€€€™µÐ€ô‘…Ñ„¹•Ð ‰™½Éµ…Ðˆ°íô¤(€€€‘ÕÉ…Ñ¥½¸€ô™±½…Ð¡™µÐ¹•Ð ‰‘ÕÉ…Ñ¥½¸ˆ¤½È€¡Ù¥‘•¼½È…Õ‘¥¼½Èíô¤¹•Ð ‰‘ÕÉ…Ñ¥½¸ˆ¤½È€À¸À¤(€€€É•ÑÕÉ¸5•‘¥…%¹™¼ (€€€€€€€Á…Ñ õÍÑÈ¡Á…Ñ ¤°(€€€€€€€‘ÕÉ…Ñ¥½¸õ‘ÕÉ…Ñ¥½¸°(€€€€€€€ÍÑ…ÉÑ}Ñ¥µ”õ™±½…Ð¡™µÐ¹•Ð ‰ÍÑ…ÉÑ}Ñ¥µ”ˆ¤½È€À¸À¤°(€€€€€€€¡…Í}Ù¥‘•¼õÙ¥‘•¼¥Ì¹½Ð9½¹”°(€€€€€€€¡…Í}…Õ‘¥¼õ…Õ‘¥¼¥Ì¹½Ð9½¹”°(€€€€€€€Ý¥‘Ñ õ¥¹Ð¡Ù¥‘•½l‰Ý¥‘Ñ ‰t¤¥˜Ù¥‘•¼…¹€‰Ý¥‘Ñ ˆ¥¸Ù¥‘•¼•±Í”9½¹”°(€€€€€€€¡•¥¡Ðõ¥¹Ð¡Ù¥‘•½l‰¡•¥¡Ð‰t¤¥˜Ù¥‘•¼…¹€‰¡•¥¡Ðˆ¥¸Ù¥‘•¼•±Í”9½¹”°(€€€€€€€Ù¥‘•½}™ÁÌõ}Á…ÉÍ•}É…Ñ”¡Ù¥‘•¼¹•Ð ‰…Ù}™É…µ•}É…Ñ”ˆ¤¤¥˜Ù¥‘•¼•±Í”9½¹”°(€€€€€€€…Õ‘¥½}Í…µÁ±•}É…Ñ”õ¥¹Ð¡…Õ‘¥½l‰Í…µÁ±•}É…Ñ”‰t¤¥˜…Õ‘¥¼…¹€‰Í…µÁ±•}É…Ñ”ˆ¥¸…Õ‘¥¼•±Í”9½¹”°(€€€€€€€…Õ‘¥½}¡…¹¹•±Ìõ¥¹Ð¡…Õ‘¥½l‰¡…¹¹•±Ì‰t¤¥˜…Õ‘¥¼…¹€‰¡…¹¹•±Ìˆ¥¸…Õ‘¥¼•±Í”9½¹”°(€€€€¤(()‘•˜•áÑÉ…Ñ}…Õ‘¥¼ (€€€Ù¥‘•½}Á…Ñ èÍÑÈðA…Ñ °(€€€½ÕÑÁÕÑ}Á…Ñ èÍÑÈðA…Ñ °(€€€Í…µÁ±•}É…Ñ”è¥¹Ð€ô€ÄÙ|ÀÀÀ°(¤€´øA…Ñ è(€€€€ˆˆ‰•½‘”Ñ¡”™¥ÉÍÐ…Õ‘¥¼ÍÑÉ•…´Ñ¼µ½¹¼€ÄØµ‰¥ÐA4]X…ÐÍ…µÁ±•}É…Ñ”¸ˆˆˆ(€€€½ÕÑÁÕÑ}Á…Ñ €ôA…Ñ ¡½ÕÑÁÕÑ}Á…Ñ ¤(€€€½ÕÑÁÕÑ}Á…Ñ ¹Á…É•¹Ð¹µ­‘¥È¡Á…É•¹ÑÌõQÉÕ”°•á¥ÍÑ}½¬õQÉÕ”¤(€€€}ÉÕ¸¡l(€€€€€€€}É•ÅÕ¥É” ‰™™µÁ•œˆ¤°€ˆµØˆ°€‰•ÉÉ½Èˆ°€ˆµäˆ°€ˆµ¤ˆ°ÍÑÈ¡Ù¥‘•½}Á…Ñ ¤°(€€€€€€€€ˆµµ…Àˆ°€ˆÀé„èÀˆ°€ˆµÙ¸ˆ°€ˆµ…Œˆ°€ˆÄˆ°€ˆµ…Èˆ°ÍÑÈ¡Í…µÁ±•}É…Ñ”¤°(€€€€€€€€ˆµŒé„ˆ°€‰Áµ}ÌÄÙ±”ˆ°ÍÑÈ¡½ÕÑÁÕÑ}Á…Ñ ¤°(€€€t¤(€€€É•ÑÕÉ¸½ÕÑÁÕÑ}Á…Ñ (()‘•˜•áÑÉ…Ñ}™É…µ•Ì (€€€Ù¥‘•½}Á…Ñ èÍÑÈðA…Ñ °(€€€½ÕÑÁÕÑ}‘¥ÈèÍÑÈðA…Ñ °(€€€™ÁÌè™±½…Ð€ô€È¸À°(€€€µ…á}Í¥‘”è¥¹Ðð9½¹”€ô€ÜØà°(¤€´ø±¥ÍÑmÉ…µ•¹ÑÉåtè(€€€€ˆˆ‰M…µÁ±”™É…µ•Ì…Ð„™¥á•É…Ñ”ì™É…µ”¤¥Ì…Ð±¥ÀÑ¥µ”¤€¼™ÁÌ¸((€€€Q¡”™ÁÌ™¥±Ñ•È•µ¥ÑÌ™É…µ”¤…Ð¤€¼™ÁÌ…™Ñ•ÈÑ¡”™¥ÉÍÐÙ¥‘•¼™É…µ”°(€€€¡½½Í¥¹œÑ¡”¹•…É•ÍÐ‘•½‘•™É…µ”°Í¼Ñ¥µ•ÍÑ…µÁÌ…É”É•±…Ñ¥Ù”Ñ¼Ñ¡”(€€€ÍÑÉ•…´ÍÑ…ÉÐ±¥­”II5MIPÕ•Ì¸Q¡”½¹Ñ…¥¹•ÈÍÑ…ÉÐ½™™Í•Ð¥Ì­•ÁÐ(€€€¥¸Ñ¡”µ…¹¥™•ÍÐÌµ•‘¥…}¥¹™¼™½È…±¥¹µ•¹Ð¡•­Ì¸µ…á}Í¥‘”‘½Ý¹Í¥é•ÌÑ¡”(€€€±½¹•È•‘”€¡¹•Ù•ÈÕÁÍ¥é•Ì¤Ñ¼­••ÀÑ¡”…¡”Íµ…±°¸(€€€€ˆˆˆ(€€€¥˜¹½Ð™ÁÌ€ø€Àè(€€€€€€€É…¥Í”Y…±Õ•ÉÉ½È ‰™ÁÌµÕÍÐ‰”Á½Í¥Ñ¥Ù”ˆ¤(€€€½ÕÑÁÕÑ}‘¥È€ôA…Ñ ¡½ÕÑÁÕÑ}‘¥È¤(€€€½ÕÑÁÕÑ}‘¥È¹Á…É•¹Ð¹µ­‘¥È¡Á…É•¹ÑÌõQÉÕ”°•á¥ÍÑ}½¬õQÉÕ”¤(€€€ÍÑ…¥¹œ€ô½ÕÑÁÕÑ}‘¥È¹Ý¥Ñ¡}¹…µ”¡˜‰í½ÕÑÁÕÑ}‘¥È¹¹…µ•ô¹¥¹½µ¥¹œˆ¤(€€€‰…­ÕÀ€ô½ÕÑÁÕÑ}‘¥È¹Ý¥Ñ¡}¹…µ”¡˜‰í½ÕÑÁÕÑ}‘¥È¹¹…µ•ô¹‰…­ÕÀˆ¤(€€€™½È±•™Ñ½Ù•È¥¸€¡ÍÑ…¥¹œ°‰…­ÕÀ¤è(€€€€€€€¥˜±•™Ñ½Ù•È¹•á¥ÍÑÌ ¤è(€€€€€€€€€€€Í¡ÕÑ¥°¹ÉµÑÉ•”¡±•™Ñ½Ù•È¤(€€€ÍÑ…¥¹œ¹µ­‘¥È ¤(€€€ÍÝ…ÁÁ•€ô…±Í”(€€€ÑÉäè(€€€€€€€™¥±Ñ•ÉÌ€ôm˜‰™ÁÌõí™ÁÍô‰t(€€€€€€€¥˜µ…á}Í¥‘”è(€€€€€€€€€€€™¥±Ñ•ÉÌ¹…ÁÁ•¹ (€€€€€€€€€€€€€€€˜‰Í…±”ô¥˜¡Ð¡¥Ü±¥ ¤±µ¥¸¡íµ…á}Í¥‘•ô±¥Ü¤°´È¤œè¥˜¡Ð¡¥Ü±¥ ¤°´È±µ¥¸¡íµ…á}Í¥‘•ô±¥ ¤¤œˆ(€€€€€€€€€€€€¤(€€€€€€€}ÉÕ¸¡l(€€€€€€€€€€€}É•ÅÕ¥É” ‰™™µÁ•œˆ¤°€ˆµØˆ°€‰•ÉÉ½Èˆ°€ˆµäˆ°€ˆµ¤ˆ°ÍÑÈ¡Ù¥‘•½}Á…Ñ ¤°(€€€€€€€€€€€€ˆµµ…Àˆ°€ˆÀéØèÀˆ°€ˆµÙ˜ˆ°€ˆ°ˆ¹©½¥¸¡™¥±Ñ•ÉÌ¤°€ˆµÄéØˆ°€ˆÈˆ°(€€€€€€€€€€€ÍÑÈ¡ÍÑ…¥¹œ€¼€ˆ”ÀÙ¹©Áœˆ¤°(€€€€€€€t¤(€€€€€€€¹…µ•Ì€ômÁ…Ñ ¹¹…µ”™½ÈÁ…Ñ ¥¸Í½ÉÑ•¡ÍÑ…¥¹œ¹±½ˆ ˆ¨¹©Áœˆ¤¥t(€€€€€€€¥˜¹½Ð¹…µ•Ìè(€€€€€€€€€€€É…¥Í”IÕ¹Ñ¥µ•ÉÉ½È¡˜‰µÁ•œ•áÑÉ…Ñ•¹¼™É…µ•Ì™É½´íÙ¥‘•½}Á…Ñ¡ôˆ¤(€€€€€€€¥˜½ÕÑÁÕÑ}‘¥È¹•á¥ÍÑÌ ¤è(€€€€€€€€€€€½ÕÑÁÕÑ}‘¥È¹É•¹…µ”¡‰…­ÕÀ¤(€€€€€€€ÍÑ…¥¹œ¹É•¹…µ”¡½ÕÑÁÕÑ}‘¥È¤(€€€€€€€ÍÝ…ÁÁ•€ôQÉÕ”(€€€•á•ÁÐá•ÁÑ¥½¸è(€€€€€€€¥˜ÍÑ…¥¹œ¹•á¥ÍÑÌ ¤è(€€€€€€€€€€€Í¡ÕÑ¥°¹ÉµÑÉ•”¡ÍÑ…¥¹œ°¥¹½É•}•ÉÉ½ÉÌõQÉÕ”¤(€€€€€€€¥˜‰…­ÕÀ¹•á¥ÍÑÌ ¤…¹¹½Ð½ÕÑÁÕÑ}‘¥È¹•á¥ÍÑÌ ¤è(€€€€€€€€€€€‰…­ÕÀ¹É•¹…µ”¡½ÕÑÁÕÑ}‘¥È¤(€€€€€€€É…¥Í”(€€€™¥¹…±±äè(€€€€€€€¥˜ÍÝ…ÁÁ•…¹‰…­ÕÀ¹•á¥ÍÑÌ ¤è(€€€€€€€€€€€Í¡ÕÑ¥°¹ÉµÑÉ•”¡‰…­ÕÀ°¥¹½É•}•ÉÉ½ÉÌõQÉÕ”¤(€€€É•ÑÕÉ¸l(€€€€€€€É…µ•¹ÑÉä¡¥¹‘•àõ¤°Ñ¥µ•ÍÑ…µÀõÉ½Õ¹¡¤€¼™ÁÌ°€Ø¤°Á…Ñ õÍÑÈ¡½ÕÑÁÕÑ}‘¥È€¼¹…µ”¤¤(€€€€€€€™½È¤°¹…µ”¥¸•¹Õµ•É…Ñ”¡¹…µ•Ì¤(€€€t(()‘•˜½¹™¥}¡…Í ¡½¹™¥œè‘¥ÑmÍÑÈ°¹åt¤€´øÍÑÈè(€€€€ˆˆ‰MÑ…‰±”Í¡½ÉÐ¡…Í ½˜„)M=8µÍ•É¥…±¥é…‰±”½¹™¥ÕÉ…Ñ¥½¸¸ˆˆˆ(€€€Á…å±½…€ô©Í½¸¹‘ÕµÁÌ¡½¹™¥œ°Í½ÉÑ}­•åÌõQÉÕ”°Í•Á…É…Ñ½ÉÌô ˆ°ˆ°€ˆèˆ¤¤(€€€É•ÑÕÉ¸¡…Í¡±¥ˆ¹Í¡„ÈÔØ¡Á…å±½…¹•¹½‘” ‰ÕÑ˜´àˆ¤¤¹¡•á‘¥•ÍÐ ¥lèÄÉt(()‘•˜}Í½ÕÉ•}™¥¹•ÉÁÉ¥¹Ð¡Á…Ñ èA…Ñ ¤€´ø‘¥ÑmÍÑÈ°¹åtè(€€€€ˆˆ‰I•ÑÕÉ¸¡•…ÀÍ½ÕÉ”¥‘•¹Ñ¥Ñä™¥•±‘ÌÑ¡…Ð¥¹Ù…±¥‘…Ñ”ÍÑ…±”‘•É¥Ù•µ•‘¥„¸ˆˆˆ(€€€ÍÑ…Ð€ôÁ…Ñ ¹ÍÑ…Ð ¤(€€€É•ÑÕÉ¸ì(€€€€€€€€‰Á…Ñ ˆèÍÑÈ¡Á…Ñ ¹É•Í½±Ù” ¤¤°(€€€€€€€€‰Í¥é”ˆèÍÑ…Ð¹ÍÑ}Í¥é”°(€€€€€€€€‰µÑ¥µ•}¹ÌˆèÍÑ…Ð¹ÍÑ}µÑ¥µ•}¹Ì°(€€€ô(()‘•˜…¡•}¥Í}½µÁ±•Ñ”¡µ…¹¥™•ÍÐè‘¥ÑmÍÑÈ°¹åt¤€´ø‰½½°è(€€€€ˆˆ‰µ…Ñ¡¥¹œµ…¹¥™•ÍÐ¥ÌÉ•ÕÍ…‰±”½¹±äÝ¡¥±”…±°…ÉÑ¥™…ÑÌ…É”¹½¸µ•µÁÑä¸ˆˆˆ(€€€™É…µ•Ì€ôµ…¹¥™•ÍÐ¹•Ð ‰™É…µ•Ìˆ¤(€€€¥˜¹½Ð¥Í¥¹ÍÑ…¹”¡™É…µ•Ì°±¥ÍÐ¤½È¹½Ð™É…µ•Ìè(€€€€€€€É•ÑÕÉ¸…±Í”(€€€¥˜…¹ä (€€€€€€€¹½Ð¥Í¥¹ÍÑ…¹”¡™É…µ”°‘¥Ð¤(€€€€€€€½È¹½Ð¥Í¥¹ÍÑ…¹”¡™É…µ”¹•Ð ‰Á…Ñ ˆ¤°ÍÑÈ¤(€€€€€€€½È¹½ÐA…Ñ ¡™É…µ•l‰Á…Ñ ‰t¤¹¥Í}™¥±” ¤(€€€€€€€½ÈA…Ñ ¡™É…µ•l‰Á…Ñ ‰t¤¹ÍÑ…Ð ¤¹ÍÑ}Í¥é”€ôô€À(€€€€€€€™½È™É…µ”¥¸™É…µ•Ì(€€€€¤è(€€€€€€€É•ÑÕÉ¸…±Í”(€€€…Õ‘¥½}Á…Ñ €ôµ…¹¥™•ÍÐ¹•Ð ‰…Õ‘¥½}Á…Ñ ˆ¤(€€€É•ÑÕÉ¸…Õ‘¥½}Á…Ñ ¥Ì9½¹”½È€ (€€€€€€€¥Í¥¹ÍÑ…¹”¡…Õ‘¥½}Á…Ñ °ÍÑÈ¤(€€€€€€€…¹A…Ñ ¡…Õ‘¥½}Á…Ñ ¤¹¥Í}™¥±” ¤(€€€€€€€…¹A…Ñ ¡…Õ‘¥½}Á…Ñ ¤¹ÍÑ…Ð ¤¹ÍÑ}Í¥é”€ø€À(€€€€¤(()‘•˜ÁÉ•ÁÉ½•ÍÍ}Ù¥‘•¼ (€€€Ù¥‘•½}Á…Ñ èÍÑÈðA…Ñ °(€€€…¡•}‘¥ÈèÍÑÈðA…Ñ °(€€€™ÁÌè™±½…Ð€ô€È¸À°(€€€Í…µÁ±•}É…Ñ”è¥¹Ð€ô€ÄÙ|ÀÀÀ°(€€€µ…á}Í¥‘”è¥¹Ðð9½¹”€ô€ÜØà°(€€€½Ù•ÉÝÉ¥Ñ”è‰½½°€ô…±Í”°(¤€´ø‘¥ÑmÍÑÈ°¹åtè(€€€€ˆˆ‰…¡”…Õ‘¥¼€¬™É…µ•Ì™½È½¹”Ù¥‘•¼…¹É•ÑÕÉ¸¥ÑÌµ…¹¥™•ÍÐ¸((€€€I”µÉÕ¹¹¥¹œÝ¥Ñ Ñ¡”Í…µ”Í•ÑÑ¥¹ÌÉ•ÕÍ•ÌÑ¡”…¡”¸Y¥‘•½ÌÝ¥Ñ¡½ÕÐ…¸(€€€…Õ‘¥¼ÍÑÉ•…´ÍÑ¥±°•Ð™É…µ•ÌìÑ¡”µ…¹¥™•ÍÐÉ•½É‘Ì…Õ‘¥½}Á…Ñ €ô9½¹”Í¼(€€€½XÍ•±•Ñ½ÉÌ…¸É•Á½ÉÐÑ¡”Í¡½ÉÑ™…±°É…Ñ¡•ÈÑ¡…¸Í¥±•¹Ñ±äÍ­¥À¸(€€€€ˆˆˆ(€€€Ù¥‘•½}Á…Ñ €ôA…Ñ ¡Ù¥‘•½}Á…Ñ ¤(€€€…¡•}‘¥È€ôA…Ñ ¡…¡•}‘¥È¤(€€€Í•ÑÑ¥¹Ì€ôì(€€€€€€€€‰™ÁÌˆè™ÁÌ°(€€€€€€€€‰Í…µÁ±•}É…Ñ”ˆèÍ…µÁ±•}É…Ñ”°(€€€€€€€€‰µ…á}Í¥‘”ˆèµ…á}Í¥‘”°(€€€€€€€€‰µ…¹¥™•ÍÑ}Ù•ÉÍ¥½¸ˆè59%MQ}YIM%=8°(€€€€€€€€‰Í½ÕÉ•}™¥¹•ÉÁÉ¥¹Ðˆè}Í½ÕÉ•}™¥¹•ÉÁÉ¥¹Ð¡Ù¥‘•½}Á…Ñ ¤°(€€€ô(€€€µ…¹¥™•ÍÑ}Á…Ñ €ô…¡•}‘¥È€¼59%MQ}95(€€€¥˜µ…¹¥™•ÍÑ}Á…Ñ ¹•á¥ÍÑÌ ¤…¹¹½Ð½Ù•ÉÝÉ¥Ñ”è(€€€€€€€ÑÉäè(€€€€€€€€€€€µ…¹¥™•ÍÐ€ô©Í½¸¹±½…‘Ì¡µ…¹¥™•ÍÑ}Á…Ñ ¹É•…‘}Ñ•áÐ¡•¹½‘¥¹œô‰ÕÑ˜´àˆ¤¤(€€€€€€€•á•ÁÐ€¡=MÉÉ½È°U¹¥½‘••½‘•ÉÉ½È°©Í½¸¹)M=9•½‘•ÉÉ½È¤è(€€€€€€€€€€€µ…¹¥™•ÍÐ€ôíô(€€€€€€€¥˜€ (€€€€€€€€€€€µ…¹¥™•ÍÐ¹•Ð ‰½¹™¥}¡…Í ˆ¤€ôô½¹™¥}¡…Í ¡Í•ÑÑ¥¹Ì¤(€€€€€€€€€€€…¹…¡•}¥Í}½µÁ±•Ñ”¡µ…¹¥™•ÍÐ¤(€€€€€€€€¤è(€€€€€€€€€€€É•ÑÕÉ¸µ…¹¥™•ÍÐ((€€€¥¹™¼€ôÁÉ½‰”¡Ù¥‘•½}Á…Ñ ¤(€€€¥˜¹½Ð¥¹™¼¹¡…Í}Ù¥‘•¼è(€€€€€€€É…¥Í”Y…±Õ•ÉÉ½È¡˜‰íÙ¥‘•½}Á…Ñ¡ô¡…Ì¹¼Ù¥‘•¼ÍÑÉ•…´ˆ¤(€€€™É…µ•Ì€ô•áÑÉ…Ñ}™É…µ•Ì (€€€€€€€Ù¥‘•½}Á…Ñ °…¡•}‘¥È€¼€‰™É…µ•Ìˆ°™ÁÌõ™ÁÌ°µ…á}Í¥‘”õµ…á}Í¥‘”°(€€€€¤(€€€¥˜¹½Ð™É…µ•Ìè(€€€€€€€É…¥Í”IÕ¹Ñ¥µ•ÉÉ½È¡˜‰µÁ•œ•áÑÉ…Ñ•¹¼™É…µ•Ì™É½´íÙ¥‘•½}Á…Ñ¡ôˆ¤(€€€…Õ‘¥½}Á…Ñ €ô9½¹”(€€€¥˜¥¹™¼¹¡…Í}…Õ‘¥¼è(€€€€€€€…Õ‘¥½}Á…Ñ €ôÍÑÈ¡•áÑÉ…Ñ}…Õ‘¥¼¡Ù¥‘•½}Á…Ñ °…¡•}‘¥È€¼€‰…Õ‘¥½|ÄÙ¬¹Ý…Øˆ°Í…µÁ±•}É…Ñ”¤¤(€€€•±Í”è(€€€€€€€€¡…¡•}‘¥È€¼€‰…Õ‘¥½|ÄÙ¬¹Ý…Øˆ¤¹Õ¹±¥¹¬¡µ¥ÍÍ¥¹}½¬õQÉÕ”¤((€€€µ…¹¥™•ÍÐ€ôì(€€€€€€€€‰Ù¥‘•½}¥ˆèÙ¥‘•½}Á…Ñ ¹ÍÑ•´°(€€€€€€€€‰Í½ÕÉ”ˆèÍÑÈ¡Ù¥‘•½}Á…Ñ ¹É•Í½±Ù” ¤¤°(€€€€€€€€‰µ•‘¥…}¥¹™¼ˆè…Í‘¥Ð¡¥¹™¼¤°(€€€€€€€€‰Í•ÑÑ¥¹ÌˆèÍ•ÑÑ¥¹Ì°(€€€€€€€€‰½¹™¥}¡…Í ˆè½¹™¥}¡…Í ¡Í•ÑÑ¥¹Ì¤°(€€€€€€€€‰…Õ‘¥½}Á…Ñ ˆè…Õ‘¥½}Á…Ñ °(€€€€€€€€‰™É…µ•Ìˆèm…Í‘¥Ð¡™É…µ”¤™½È™É…µ”¥¸™É…µ•Ít°(€€€ô(€€€…¡•}‘¥È¹µ­‘¥È¡Á…É•¹ÑÌõQÉÕ”°•á¥ÍÑ}½¬õQÉÕ”¤(€€€Ñ•µÁ½É…Éå}µ…¹¥™•ÍÐ€ôµ…¹¥™•ÍÑ}Á…Ñ ¹Ý¥Ñ¡}ÍÕ™™¥à ˆ¹©Í½¸¹ÑµÀˆ¤(€€€Ñ•µÁ½É…Éå}µ…¹¥™•ÍÐ¹ÝÉ¥Ñ•}Ñ•áÐ¡©Í½¸¹‘ÕµÁÌ¡µ…¹¥™•ÍÐ°¥¹‘•¹ÐôÈ¤°•¹½‘¥¹œô‰ÕÑ˜´àˆ¤(€€€Ñ•µÁ½É…Éå}µ…¹¥™•ÍÐ¹É•Á±…”¡µ…¹¥™•ÍÑ}Á…Ñ ¤(€€€É•ÑÕÉ¸µ…¹¥™•ÍÐ(()‘•˜±½…‘}µ…¹¥™•ÍÐ¡…¡•}‘¥ÈèÍÑÈðA…Ñ ¤€´ø‘¥ÑmÍÑÈ°¹åtè(€€€É•ÑÕÉ¸©Í½¸¹±½…‘Ì ¡A…Ñ ¡…¡•}‘¥È¤€¼59%MQ}95¤¹É•…‘}Ñ•áÐ¡•¹½‘¥¹œô‰ÕÑ˜´àˆ¤¤(()‘•˜™É…µ•}Ý¥¹‘½Ü (€€€µ…¹¥™•ÍÐè‘¥ÑmÍÑÈ°¹åt°(€€€•¹Ñ•Èè™±½…Ð°(€€€¹Õµ}™É…µ•Ìè¥¹Ð€ô€Ð°(€€€ÍÁ…¹}Í•½¹‘Ìè™±½…Ð€ô€È¸À°(¤€´ø±¥ÍÑmÉ…µ•¹ÑÉåtè(€€€€ˆˆ‰A¥¬¹Õµ}™É…µ•Ì…¡•™É…µ•ÌÍÁÉ•…½Ù•Èm•¹Ñ•È€´ÍÁ…¸¼È°•¹Ñ•È€¬ÍÁ…¸¼Ét¸((€€€… Ñ…É•ÐÑ¥µ”µ…ÁÌÑ¼Ñ¡”¹•…É•ÍÐ…¡•™É…µ”ìÑ¡”Ý¥¹‘½Ü¥Ì±…µÁ•(€€€Ñ¼Ñ¡”±¥À…¹‘ÕÁ±¥…Ñ•Ì…É”­•ÁÐÍ¼•Ù•ÉäÍ•±•Ñ½È•ÑÌÑ¡”Í…µ”½Õ¹Ð¸(€€€€ˆˆˆ(€€€™É…µ•Ì€ômÉ…µ•¹ÑÉä ¨©˜¤™½È˜¥¸µ…¹¥™•ÍÑl‰™É…µ•Ì‰ut(€€€¥˜¹½Ð™É…µ•Ìè(€€€€€€€É•ÑÕÉ¸mt(€€€¥˜¹Õµ}™É…µ•Ì€ôô€Äè(€€€€€€€Ñ…É•ÑÌ€ôm•¹Ñ•Ét(€€€•±Í”è(€€€€€€€ÍÑ•À€ôÍÁ…¹}Í•½¹‘Ì€¼€¡¹Õµ}™É…µ•Ì€´€Ä¤(€€€€€€€Ñ…É•ÑÌ€ôm•¹Ñ•È€´ÍÁ…¹}Í•½¹‘Ì€¼€È€¬¤€¨ÍÑ•À™½È¤¥¸É…¹”¡¹Õµ}™É…µ•Ì¥t(€€€±…ÍÐ€ô™É…µ•Íl´Åt¹Ñ¥µ•ÍÑ…µÀ(€€€Ý¥¹‘½Ü€ômt(€€€™½ÈÑ…É•Ð¥¸Ñ…É•ÑÌè(€€€€€€€Ñ…É•Ð€ôµ¥¸¡µ…à¡Ñ…É•Ð°€À¸À¤°±…ÍÐ¤(€€€€€€€Ý¥¹‘½Ü¹…ÁÁ•¹¡µ¥¸¡™É…µ•Ì°­•äõ±…µ‰‘„˜è…‰Ì¡˜¹Ñ¥µ•ÍÑ…µÀ€´Ñ…É•Ð¤¤¤(€€€É•ÑÕÉ¸Ý¥¹‘½Ü(()‘•˜±½…‘}…Õ‘¥¼¡Á…Ñ èÍÑÈðA…Ñ °Í…µÁ±•}É…Ñ”è¥¹Ð€ô€ÄÙ|ÀÀÀ¤è(€€€€ˆˆ‰1½……¡•…Õ‘¥¼…Ì€¡™±½…ÐÌÈµ½¹¼…ÉÉ…ä°Í…µÁ±•}É…Ñ”¤Ù¥„±¥‰É½Í„¸ˆˆˆ(€€€¥µÁ½ÉÐ±¥‰É½Í„((€€€Ý…Ù•™½É´°ÍÈ€ô±¥‰É½Í„¹±½…¡ÍÑÈ¡Á…Ñ ¤°ÍÈõÍ…µÁ±•}É…Ñ”°µ½¹¼õQÉÕ”¤(€€€É•ÑÕÉ¸Ý…Ù•™½É´°ÍÈ(()‘•˜±½…‘}™É…µ•Ì¡•¹ÑÉ¥•ÌèM•ÅÕ•¹•mÉ…µ•¹ÑÉåt¤è(€€€€ˆˆ‰=Á•¸…¡•™É…µ•Ì…ÌIA%0¥µ…•Ì°”¹œ¸™½ÈY¥ÍÕ…±M•±•Ñ½È¸ˆˆˆ(€€€™É½´A%0¥µÁ½ÉÐ%µ…”((€€€É•ÑÕÉ¸m%µ…”¹½Á•¸¡•¹ÑÉä¹Á…Ñ ¤¹½¹Ù•ÉÐ ‰Iˆ¤™½È•¹ÑÉä¥¸•¹ÑÉ¥•Ít(
+"""Timestamp-preserving media loading built on FFmpeg/ffprobe.
+
+Every derived artifact (16 kHz mono audio, sparse frames) is written next to a
+manifest.json that records the source media info, extraction settings, and
+the clip-relative timestamp of each frame. Selectors and generators should
+read timestamps from the manifest, never re-derive them from file names.
+"""
+
+from dataclasses import asdict, dataclass
+import hashlib
+import json
+import math
+from pathlib import Path
+import shutil
+import subprocess
+from typing import Any, Sequence
+
+MANIFEST_NAME = "manifest.json"
+MANIFEST_VERSION = 2
+
+
+@dataclass(frozen=True)
+class MediaInfo:
+    """Probed container/stream metadata. Times are in seconds."""
+
+    path: str
+    duration: float
+    start_time: float
+    has_video: bool
+    has_audio: bool
+    width: int | None
+    height: int | None
+    video_fps: float | None
+    audio_sample_rate: int | None
+    audio_channels: int | None
+
+
+@dataclass(frozen=True)
+class FrameEntry:
+    """A cached frame and its clip-relative timestamp in seconds."""
+
+    index: int
+    timestamp: float
+    path: str
+
+
+def _require(tool: str) -> str:
+    resolved = shutil.which(tool)
+    if resolved is None:
+        raise RuntimeError(f"{tool} not found on PATH; install FFmpeg")
+    return resolved
+
+
+def _run(command: Sequence[str]) -> str:
+    result = subprocess.run(command, capture_output=True, text=True)
+    if result.returncode != 0:
+        raise RuntimeError(
+            f"command failed ({result.returncode}): {' '.join(command)}\n"
+            f"{result.stderr.strip()}"
+        )
+    return result.stdout
+
+
+def _parse_rate(rate: str | None) -> float | None:
+    if not rate or rate in {"0/0", "N/A"}:
+        return None
+    numerator, _, denominator = rate.partition("/")
+    value = float(numerator) / float(denominator or 1)
+    return value if math.isfinite(value) and value > 0 else None
+
+
+def probe(path: str | Path) -> MediaInfo:
+    """Return container and first audio/video stream metadata via ffprobe."""
+    output = _run([
+        _require("ffprobe"), "-v", "error", "-print_format", "json",
+        "-show_format", "-show_streams", str(path),
+    ])
+    data = json.loads(output)
+    streams = data.get("streams", [])
+    video = next((s for s in streams if s.get("codec_type") == "video"), None)
+    audio = next((s for s in streams if s.get("codec_type") == "audio"), None)
+    fmt = data.get("format", {})
+    duration = float(fmt.get("duration") or (video or audio or {}).get("duration") or 0.0)
+    return MediaInfo(
+        path=str(path),
+        duration=duration,
+        start_time=float(fmt.get("start_time") or 0.0),
+        has_video=video is not None,
+        has_audio=audio is not None,
+        width=int(video["width"]) if video and "width" in video else None,
+        height=int(video["height"]) if video and "height" in video else None,
+        video_fps=_parse_rate(video.get("avg_frame_rate")) if video else None,
+        audio_sample_rate=int(audio["sample_rate"]) if audio and "sample_rate" in audio else None,
+        audio_channels=int(audio["channels"]) if audio and "channels" in audio else None,
+    )
+
+
+def extract_audio(
+    video_path: str | Path,
+    output_path: str | Path,
+    sample_rate: int = 16_000,
+) -> Path:
+    """Decode the first audio stream to mono 16-bit PCM WAV at sample_rate."""
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    _run([
+        _require("ffmpeg"), "-v", "error", "-y", "-i", str(video_path),
+        "-map", "0:a:0", "-vn", "-ac", "1", "-ar", str(sample_rate),
+        "-c:a", "pcm_s16le", str(output_path),
+    ])
+    return output_path
+
+
+def extract_frames(
+    video_path: str | Path,
+    output_dir: str | Path,
+    fps: float = 2.0,
+    max_side: int | None = 768,
+) -> list[FrameEntry]:
+    """Sample frames at a fixed rate; frame i is at clip time i / fps.
+
+    The fps filter emits frame i at i / fps after the first video frame,
+    choosing the nearest decoded frame, so timestamps are relative to the
+    stream start like REFRAMED SRT cues. The container start offset is kept
+    in the manifest's media_info for alignment checks. max_side downsizes the
+    longer edge (never upsizes) to keep the cache small.
+    """
+    if not fps > 0:
+        raise ValueError("fps must be positive")
+    output_dir = Path(output_dir)
+    output_dir.parent.mkdir(parents=True, exist_ok=True)
+    staging = output_dir.with_name(f"{output_dir.name}.incoming")
+    backup = output_dir.with_name(f"{output_dir.name}.backup")
+    for leftover in (staging, backup):
+        if leftover.exists():
+            shutil.rmtree(leftover)
+    staging.mkdir()
+    swapped = False
+    try:
+        filters = [f"fps={fps}"]
+        if max_side:
+            filters.append(
+                f"scale='if(gt(iw,ih),min({max_side},iw),-2)':'if(gt(iw,ih),-2,min({max_side},ih))'"
+            )
+        _run([
+            _require("ffmpeg"), "-v", "error", "-y", "-i", str(video_path),
+            "-map", "0:v:0", "-vf", ",".join(filters), "-q:v", "2",
+            str(staging / "%06d.jpg"),
+        ])
+        names = [path.name for path in sorted(staging.glob("*.jpg"))]
+        if not names:
+            raise RuntimeError(f"FFmpeg extracted no frames from {video_path}")
+        if output_dir.exists():
+            output_dir.rename(backup)
+        staging.rename(output_dir)
+        swapped = True
+    except Exception:
+        if staging.exists():
+            shutil.rmtree(staging, ignore_errors=True)
+        if backup.exists() and not output_dir.exists():
+            backup.rename(output_dir)
+        raise
+    finally:
+        if swapped and backup.exists():
+            shutil.rmtree(backup, ignore_errors=True)
+    return [
+        FrameEntry(index=i, timestamp=round(i / fps, 6), path=str(output_dir / name))
+        for i, name in enumerate(names)
+    ]
+
+
+def config_hash(config: dict[str, Any]) -> str:
+    """Stable short hash of a JSON-serializable configuration."""
+    payload = json.dumps(config, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:12]
+
+
+def _source_fingerprint(path: Path) -> dict[str, Any]:
+    """Return cheap source identity fields that invalidate stale derived media."""
+    stat = path.stat()
+    return {
+        "path": str(path.resolve()),
+        "size": stat.st_size,
+        "mtime_ns": stat.st_mtime_ns,
+    }
+
+
+def cache_is_complete(manifest: dict[str, Any]) -> bool:
+    """A matching manifest is reusable only while all artifacts are non-empty."""
+    frames = manifest.get("frames")
+    if not isinstance(frames, list) or not frames:
+        return False
+    if any(
+        not isinstance(frame, dict)
+        or not isinstance(frame.get("path"), str)
+        or not Path(frame["path"]).is_file()
+        or Path(frame["path"]).stat().st_size == 0
+        for frame in frames
+    ):
+        return False
+    audio_path = manifest.get("audio_path")
+    return audio_path is None or (
+        isinstance(audio_path, str)
+        and Path(audio_path).is_file()
+        and Path(audio_path).stat().st_size > 0
+    )
+
+
+def preprocess_video(
+    video_path: str | Path,
+    cache_dir: str | Path,
+    fps: float = 2.0,
+    sample_rate: int = 16_000,
+    max_side: int | None = 768,
+    overwrite: bool = False,
+) -> dict[str, Any]:
+    """Cache audio + frames for one video and return its manifest.
+
+    Re-running with the same settings reuses the cache. Videos without an
+    audio stream still get frames; the manifest records audio_path = None so
+    A/AV selectors can report the shortfall rather than silently skip.
+    """
+    video_path = Path(video_path)
+    cache_dir = Path(cache_dir)
+    settings = {
+        "fps": fps,
+        "sample_rate": sample_rate,
+        "max_side": max_side,
+        "manifest_version": MANIFEST_VERSION,
+        "source_fingerprint": _source_fingerprint(video_path),
+    }
+    manifest_path = cache_dir / MANIFEST_NAME
+    if manifest_path.exists() and not overwrite:
+        try:
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+            manifest = {}
+        if (
+            manifest.get("config_hash") == config_hash(settings)
+            and cache_is_complete(manifest)
+        ):
+            return manifest
+
+    info = probe(video_path)
+    if not info.has_video:
+        raise ValueError(f"{video_path} has no video stream")
+    frames = extract_frames(
+        video_path, cache_dir / "frames", fps=fps, max_side=max_side,
+    )
+    if not frames:
+        raise RuntimeError(f"FFmpeg extracted no frames from {video_path}")
+    audio_path = None
+    if info.has_audio:
+        audio_path = str(extract_audio(video_path, cache_dir / "audio_16k.wav", sample_rate))
+    else:
+        (cache_dir / "audio_16k.wav").unlink(missing_ok=True)
+
+    manifest = {
+        "video_id": video_path.stem,
+        "source": str(video_path.resolve()),
+        "media_info": asdict(info),
+        "settings": settings,
+        "config_hash": config_hash(settings),
+        "audio_path": audio_path,
+        "frames": [asdict(frame) for frame in frames],
+    }
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    temporary_manifest = manifest_path.with_suffix(".json.tmp")
+    temporary_manifest.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    temporary_manifest.replace(manifest_path)
+    return manifest
+
+
+def load_manifest(cache_dir: str | Path) -> dict[str, Any]:
+    return json.loads((Path(cache_dir) / MANIFEST_NAME).read_text(encoding="utf-8"))
+
+
+def frame_window(
+    manifest: dict[str, Any],
+    center: float,
+    num_frames: int = 4,
+    span_seconds: float = 2.0,
+) -> list[FrameEntry]:
+    """Pick num_frames cached frames spread over [center - span/2, center + span/2].
+
+    Each target time maps to the nearest cached frame; the window is clamped
+    to the clip and duplicates are kept so every selector gets the same count.
+    """
+    frames = [FrameEntry(**f) for f in manifest["frames"]]
+    if not frames:
+        return []
+    if num_frames == 1:
+        targets = [center]
+    else:
+        step = span_seconds / (num_frames - 1)
+        targets = [center - span_seconds / 2 + i * step for i in range(num_frames)]
+    last = frames[-1].timestamp
+    window = []
+    for target in targets:
+        target = min(max(target, 0.0), last)
+        window.append(min(frames, key=lambda f: abs(f.timestamp - target)))
+    return window
+
+
+def load_audio(path: str | Path, sample_rate: int = 16_000):
+    """Load cached audio as (float32 mono array, sample_rate) via librosa."""
+    import librosa
+
+    waveform, sr = librosa.load(str(path), sr=sample_rate, mono=True)
+    return waveform, sr
+
+
+def load_frames(entries: Sequence[FrameEntry]):
+    """Open cached frames as RGB PIL images, e.g. for VisualSelector."""
+    from PIL import Image
+
+    return [Image.open(entry.path).convert("RGB") for entry in entries]

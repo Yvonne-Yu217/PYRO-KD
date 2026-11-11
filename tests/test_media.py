@@ -1,1 +1,165 @@
-†‹-©ž:—«jØ¨žz-¥êæŠÛ^u™É½´Á…Ñ¡±¥ˆ¥µÁ½ÉÐA…Ñ )¥µÁ½ÉÐÍ¡ÕÑ¥°)¥µÁ½ÉÐÍÕ‰ÁÉ½•ÍÌ)¥µÁ½ÉÐÑ•µÁ™¥±”)¥µÁ½ÉÐÕ¹¥ÑÑ•ÍÐ)™É½´Õ¹¥ÑÑ•ÍÐ¹µ½¬¥µÁ½ÉÐÁ…Ñ ()™É½´ÍÉŒ¹ÕÑ¥±Ì¹µ•‘¥„¥µÁ½ÉÐ…¡•}¥Í}½µÁ±•Ñ”°•áÑÉ…Ñ}™É…µ•Ì°™É…µ•}Ý¥¹‘½Ü°ÁÉ•ÁÉ½•ÍÍ}Ù¥‘•¼°ÁÉ½‰”()!M}5A€ôÍ¡ÕÑ¥°¹Ý¡¥  ‰™™µÁ•œˆ¤¥Ì¹½Ð9½¹”…¹Í¡ÕÑ¥°¹Ý¡¥  ‰™™ÁÉ½‰”ˆ¤¥Ì¹½Ð9½¹”(()‘•˜µ…­•}Ñ•ÍÑ}Ù¥‘•¼¡Á…Ñ èA…Ñ °Í•½¹‘Ìè™±½…Ð€ô€Ì¸À°…Õ‘¥¼è‰½½°€ôQÉÕ”¤€´ø9½¹”è(€€€½µµ…¹€ôl(€€€€€€€€‰™™µÁ•œˆ°€ˆµØˆ°€‰•ÉÉ½Èˆ°€ˆµäˆ°(€€€€€€€€ˆµ˜ˆ°€‰±…Ù™¤ˆ°€ˆµ¤ˆ°˜‰Ñ•ÍÑÍÉŒõÍ¥é”ôÌÈÁàÈÐÀéÉ…Ñ”ôÈÔé‘ÕÉ…Ñ¥½¸õíÍ•½¹‘Íôˆ°(€€€t(€€€¥˜…Õ‘¥¼è(€€€€€€€½µµ…¹€¬ôlˆµ˜ˆ°€‰±…Ù™¤ˆ°€ˆµ¤ˆ°˜‰Í¥¹”õ™É•ÅÕ•¹äôÐÐÀéÍ…µÁ±•}É…Ñ”ôÐÐÄÀÀé‘ÕÉ…Ñ¥½¸õíÍ•½¹‘Íô‰t(€€€½µµ…¹€¬ôlˆµŒéØˆ°€‰±¥‰àÈØÐˆ°€ˆµÁ¥á}™µÐˆ°€‰åÕØÐÈÁÀ‰t(€€€½µµ…¹€¬ôlˆµŒé„ˆ°€‰……Œˆ°€ˆµ…Œˆ°€ˆÈ‰t¥˜…Õ‘¥¼•±Í”mt(€€€½µµ…¹€¬ôlˆµÍ¡½ÉÑ•ÍÐˆ°ÍÑÈ¡Á…Ñ ¥t(€€€ÍÕ‰ÁÉ½•ÍÌ¹ÉÕ¸¡½µµ…¹°¡•¬õQÉÕ”¤(()Õ¹¥ÑÑ•ÍÐ¹Í­¥ÁU¹±•ÍÌ¡!M}5A°€‰™™µÁ•œ½™™ÁÉ½‰”¹½Ð¥¹ÍÑ…±±•ˆ¤)±…ÍÌ5•‘¥…Q•ÍÑÌ¡Õ¹¥ÑÑ•ÍÐ¹Q•ÍÑ…Í”¤è(€€€‘•˜Í•ÑUÀ¡Í•±˜¤è(€€€€€€€Í•±˜¹ÑµÀ€ôÑ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤(€€€€€€€Í•±˜¹‘¥È€ôA…Ñ ¡Í•±˜¹ÑµÀ¹¹…µ”¤(€€€€€€€Í•±˜¹Ù¥‘•¼€ôÍ•±˜¹‘¥È€¼€‰±¥À¹µÀÐˆ(€€€€€€€µ…­•}Ñ•ÍÑ}Ù¥‘•¼¡Í•±˜¹Ù¥‘•¼¤((€€€‘•˜Ñ•…É½Ý¸¡Í•±˜¤è(€€€€€€€Í•±˜¹ÑµÀ¹±•…¹ÕÀ ¤((€€€‘•˜Ñ•ÍÑ}ÁÉ½‰”¡Í•±˜¤è(€€€€€€€¥¹™¼€ôÁÉ½‰”¡Í•±˜¹Ù¥‘•¼¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑQÉÕ”¡¥¹™¼¹¡…Í}Ù¥‘•¼…¹¥¹™¼¹¡…Í}…Õ‘¥¼¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑ±µ½ÍÑÅÕ…°¡¥¹™¼¹‘ÕÉ…Ñ¥½¸°€Ì¸À°‘•±Ñ„ôÀ¸ÄÔ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…° ¡¥¹™¼¹Ý¥‘Ñ °¥¹™¼¹¡•¥¡Ð¤°€ ÌÈÀ°€ÈÐÀ¤¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑ±µ½ÍÑÅÕ…°¡¥¹™¼¹Ù¥‘•½}™ÁÌ°€ÈÔ¸À¤((€€€‘•˜Ñ•ÍÑ}ÁÉ•ÁÉ½•ÍÍ}ÝÉ¥Ñ•Í}…Õ‘¥½}™É…µ•Í}µ…¹¥™•ÍÑ}…¹‘}…¡•Ì¡Í•±˜¤è(€€€€€€€…¡”€ôÍ•±˜¹‘¥È€¼€‰…¡”ˆ(€€€€€€€µ…¹¥™•ÍÐ€ôÁÉ•ÁÉ½•ÍÍ}Ù¥‘•¼¡Í•±˜¹Ù¥‘•¼°…¡”°™ÁÌôÈ¸À°µ…á}Í¥‘”ôÄØÀ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡µ…¹¥™•ÍÑl‰Ù¥‘•½}¥‰t°€‰±¥Àˆ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡m™l‰Ñ¥µ•ÍÑ…µÀ‰t™½È˜¥¸µ…¹¥™•ÍÑl‰™É…µ•Ì‰ut°lÀ¸À°€À¸Ô°€Ä¸À°€Ä¸Ô°€È¸À°€È¸Õt¤(€€€€€€€…Õ‘¥¼€ôÁÉ½‰”¡µ…¹¥™•ÍÑl‰…Õ‘¥½}Á…Ñ ‰t¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…° ¡…Õ‘¥¼¹…Õ‘¥½}Í…µÁ±•}É…Ñ”°…Õ‘¥¼¹…Õ‘¥½}¡…¹¹•±Ì¤°€ ÄØÀÀÀ°€Ä¤¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑ…±Í”¡…Õ‘¥¼¹¡…Í}Ù¥‘•¼¤(€€€€€€€™¥ÉÍÑ}™É…µ”€ôÁÉ½‰”¡µ…¹¥™•ÍÑl‰™É…µ•Ì‰ulÁul‰Á…Ñ ‰t¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…° ¡™¥ÉÍÑ}™É…µ”¹Ý¥‘Ñ °™¥ÉÍÑ}™É…µ”¹¡•¥¡Ð¤°€ ÄØÀ°€ÄÈÀ¤¤((€€€€€€€µÑ¥µ”€ô€¡…¡”€¼€‰µ…¹¥™•ÍÐ¹©Í½¸ˆ¤¹ÍÑ…Ð ¤¹ÍÑ}µÑ¥µ•}¹Ì(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡ÁÉ•ÁÉ½•ÍÍ}Ù¥‘•¼¡Í•±˜¹Ù¥‘•¼°…¡”°™ÁÌôÈ¸À°µ…á}Í¥‘”ôÄØÀ¤°µ…¹¥™•ÍÐ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…° ¡…¡”€¼€‰µ…¹¥™•ÍÐ¹©Í½¸ˆ¤¹ÍÑ…Ð ¤¹ÍÑ}µÑ¥µ•}¹Ì°µÑ¥µ”¤(€€€€€€€¡…¹•€ôÁÉ•ÁÉ½•ÍÍ}Ù¥‘•¼¡Í•±˜¹Ù¥‘•¼°…¡”°™ÁÌôÄ¸À°µ…á}Í¥‘”ôÄØÀ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±•¸¡¡…¹•‘l‰™É…µ•Ì‰t¤°€Ì¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±•¸¡±¥ÍÐ ¡…¡”€¼€‰™É…µ•Ìˆ¤¹±½ˆ ˆ¨¹©Áœˆ¤¤¤°€Ì¤((€€€‘•˜Ñ•ÍÑ}Ù¥‘•½}Ý¥Ñ¡½ÕÑ}…Õ‘¥¼¡Í•±˜¤è(€€€€€€€Í¥±•¹Ð€ôÍ•±˜¹‘¥È€¼€‰Í¥±•¹Ð¹µÀÐˆ(€€€€€€€µ…­•}Ñ•ÍÑ}Ù¥‘•¼¡Í¥±•¹Ð°…Õ‘¥¼õ…±Í”¤(€€€€€€€µ…¹¥™•ÍÐ€ôÁÉ•ÁÉ½•ÍÍ}Ù¥‘•¼¡Í¥±•¹Ð°Í•±˜¹‘¥È€¼€‰Í¥±•¹Ñ}…¡”ˆ°™ÁÌôÄ¸À¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑ%Í9½¹”¡µ…¹¥™•ÍÑl‰…Õ‘¥½}Á…Ñ ‰t¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±•¸¡µ…¹¥™•ÍÑl‰™É…µ•Ì‰t¤°€Ì¤((€€€‘•˜Ñ•ÍÑ}µ¥ÍÍ¥¹}…¡•‘}…ÉÑ¥™…Ñ}¥Í}É••¹•É…Ñ•¡Í•±˜¤è(€€€€€€€…¡”€ôÍ•±˜¹‘¥È€¼€‰…¡”ˆ(€€€€€€€µ…¹¥™•ÍÐ€ôÁÉ•ÁÉ½•ÍÍ}Ù¥‘•¼¡Í•±˜¹Ù¥‘•¼°…¡”°™ÁÌôÄ¸À¤(€€€€€€€µ¥ÍÍ¥¹œ€ôA…Ñ ¡µ…¹¥™•ÍÑl‰™É…µ•Ì‰ulÁul‰Á…Ñ ‰t¤(€€€€€€€µ¥ÍÍ¥¹œ¹Õ¹±¥¹¬ ¤(€€€€€€€É•Á…¥É•€ôÁÉ•ÁÉ½•ÍÍ}Ù¥‘•¼¡Í•±˜¹Ù¥‘•¼°…¡”°™ÁÌôÄ¸À¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑQÉÕ”¡A…Ñ ¡É•Á…¥É•‘l‰™É…µ•Ì‰ulÁul‰Á…Ñ ‰t¤¹¥Í}™¥±” ¤¤((€€€‘•˜Ñ•ÍÑ}µ…±™½Éµ•‘}µ…¹¥™•ÍÑ}¥Í}É•‰Õ¥±Ð¡Í•±˜¤è(€€€€€€€…¡”€ôÍ•±˜¹‘¥È€¼€‰…¡”ˆ(€€€€€€€…¡”¹µ­‘¥È ¤(€€€€€€€€¡…¡”€¼€‰µ…¹¥™•ÍÐ¹©Í½¸ˆ¤¹ÝÉ¥Ñ•}Ñ•áÐ ‰í‰É½­•¸ˆ¤(€€€€€€€µ…¹¥™•ÍÐ€ôÁÉ•ÁÉ½•ÍÍ}Ù¥‘•¼¡Í•±˜¹Ù¥‘•¼°…¡”°™ÁÌôÄ¸À¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±•¸¡µ…¹¥™•ÍÑl‰™É…µ•Ì‰t¤°€Ì¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡µ…¹¥™•ÍÐ°ÁÉ•ÁÉ½•ÍÍ}Ù¥‘•¼¡Í•±˜¹Ù¥‘•¼°…¡”°™ÁÌôÄ¸À¤¤((€€€‘•˜Ñ•ÍÑ}¡…¹•‘}Í½ÕÉ•}¥¹Ù…±¥‘…Ñ•Í}…¡”¡Í•±˜¤è(€€€€€€€…¡”€ôÍ•±˜¹‘¥È€¼€‰…¡”ˆ(€€€€€€€™¥ÉÍÐ€ôÁÉ•ÁÉ½•ÍÍ}Ù¥‘•¼¡Í•±˜¹Ù¥‘•¼°…¡”°™ÁÌôÄ¸À¤(€€€€€€€µ…­•}Ñ•ÍÑ}Ù¥‘•¼¡Í•±˜¹Ù¥‘•¼°Í•½¹‘ÌôÈ¸À¤(€€€€€€€Í•½¹€ôÁÉ•ÁÉ½•ÍÍ}Ù¥‘•¼¡Í•±˜¹Ù¥‘•¼°…¡”°™ÁÌôÄ¸À¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑ9½ÑÅÕ…°¡™¥ÉÍÑl‰½¹™¥}¡…Í ‰t°Í•½¹‘l‰½¹™¥}¡…Í ‰t¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±•¸¡Í•½¹‘l‰™É…µ•Ì‰t¤°€È¤(()±…ÍÌÉ…µ•áÑÉ…Ñ¥½¹Q•ÍÑÌ¡Õ¹¥ÑÑ•ÍÐ¹Q•ÍÑ…Í”¤è(€€€‘•˜Ñ•ÍÑ}•µÁÑå}…ÉÑ¥™…ÑÍ}…É•}¹½Ñ}½µÁ±•Ñ”¡Í•±˜¤è(€€€€€€€Ý¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€€€€€™É…µ”€ôA…Ñ ¡ÑµÀ°€ˆÀÀÀÀÀÄ¹©Áœˆ¤(€€€€€€€€€€€…Õ‘¥¼€ôA…Ñ ¡ÑµÀ°€‰…Õ‘¥¼¹Ý…Øˆ¤(€€€€€€€€€€€™É…µ”¹Ñ½Õ  ¤(€€€€€€€€€€€…Õ‘¥¼¹Ñ½Õ  ¤(€€€€€€€€€€€µ…¹¥™•ÍÐ€ôì‰™É…µ•Ìˆèmì‰Á…Ñ ˆèÍÑÈ¡™É…µ”¥õt°€‰…Õ‘¥½}Á…Ñ ˆèÍÑÈ¡…Õ‘¥¼¥ô(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑ…±Í”¡…¡•}¥Í}½µÁ±•Ñ”¡µ…¹¥™•ÍÐ¤¤((€€€€€€€€€€€™É…µ”¹ÝÉ¥Ñ•}‰åÑ•Ì¡ˆ‰©Á•œˆ¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑ…±Í”¡…¡•}¥Í}½µÁ±•Ñ”¡µ…¹¥™•ÍÐ¤¤((€€€€€€€€€€€…Õ‘¥¼¹ÝÉ¥Ñ•}‰åÑ•Ì¡ˆ‰Ý…Øˆ¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑQÉÕ”¡…¡•}¥Í}½µÁ±•Ñ”¡µ…¹¥™•ÍÐ¤¤((€€€‘•˜Ñ•ÍÑ}™…¥±•‘}•áÑÉ…Ñ¥½¹}­••ÁÍ}•á¥ÍÑ¥¹}™É…µ•Ì¡Í•±˜¤è(€€€€€€€Ý¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€€€€€™É…µ•Ì€ôA…Ñ ¡ÑµÀ°€‰™É…µ•Ìˆ¤(€€€€€€€€€€€™É…µ•Ì¹µ­‘¥È ¤(€€€€€€€€€€€­•ÁÐ€ô™É…µ•Ì€¼€ˆÀÀÀÀÀÄ¹©Áœˆ(€€€€€€€€€€€­•ÁÐ¹ÝÉ¥Ñ•}‰åÑ•Ì¡ˆ‰½±ˆ¤(€€€€€€€€€€€Ý¥Ñ € (€€€€€€€€€€€€€€€Á…Ñ  ‰ÍÉŒ¹ÕÑ¥±Ì¹µ•‘¥„¹}É•ÅÕ¥É”ˆ°É•ÑÕÉ¹}Ù…±Õ”ô‰™™µÁ•œˆ¤°(€€€€€€€€€€€€€€€Á…Ñ  ‰ÍÉŒ¹ÕÑ¥±Ì¹µ•‘¥„¹}ÉÕ¸ˆ°Í¥‘•}•™™•ÐõIÕ¹Ñ¥µ•ÉÉ½È ‰™™µÁ•œ™…¥±•ˆ¤¤°(€€€€€€€€€€€€¤è(€€€€€€€€€€€€€€€Ý¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•ÍI••à¡IÕ¹Ñ¥µ•ÉÉ½È°€‰™™µÁ•œ™…¥±•ˆ¤è(€€€€€€€€€€€€€€€€€€€•áÑÉ…Ñ}™É…µ•Ì¡A…Ñ ¡ÑµÀ°€‰±¥À¹µÀÐˆ¤°™É…µ•Ì°™ÁÌôÄ¸À¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡­•ÁÐ¹É•…‘}‰åÑ•Ì ¤°ˆ‰½±ˆ¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑ…±Í” ¡A…Ñ ¡ÑµÀ¤€¼€‰™É…µ•Ì¹¥¹½µ¥¹œˆ¤¹•á¥ÍÑÌ ¤¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑ…±Í” ¡A…Ñ ¡ÑµÀ¤€¼€‰™É…µ•Ì¹‰…­ÕÀˆ¤¹•á¥ÍÑÌ ¤¤((€€€‘•˜Ñ•ÍÑ}•áÑÉ…Ñ¥½¹}É•Á±…•Í}™É…µ•Í}½¹±å}…™Ñ•É}ÍÕ•ÍÌ¡Í•±˜¤è(€€€€€€€‘•˜™…­•}ÉÕ¸¡½µµ…¹¤è(€€€€€€€€€€€A…Ñ ¡½µµ…¹‘l´Åt¤¹Á…É•¹Ð¹©½¥¹Á…Ñ  ˆÀÀÀÀÀÄ¹©Áœˆ¤¹ÝÉ¥Ñ•}‰åÑ•Ì¡ˆ‰¹•Üˆ¤(€€€€€€€€€€€É•ÑÕÉ¸€ˆˆ((€€€€€€€Ý¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€€€€€™É…µ•Ì€ôA…Ñ ¡ÑµÀ°€‰™É…µ•Ìˆ¤(€€€€€€€€€€€™É…µ•Ì¹µ­‘¥È ¤(€€€€€€€€€€€€¡™É…µ•Ì€¼€ˆÀÀÀÀÀä¹©Áœˆ¤¹ÝÉ¥Ñ•}‰åÑ•Ì¡ˆ‰½±ˆ¤(€€€€€€€€€€€Ý¥Ñ € (€€€€€€€€€€€€€€€Á…Ñ  ‰ÍÉŒ¹ÕÑ¥±Ì¹µ•‘¥„¹}É•ÅÕ¥É”ˆ°É•ÑÕÉ¹}Ù…±Õ”ô‰™™µÁ•œˆ¤°(€€€€€€€€€€€€€€€Á…Ñ  ‰ÍÉŒ¹ÕÑ¥±Ì¹µ•‘¥„¹}ÉÕ¸ˆ°Í¥‘•}•™™•Ðõ™…­•}ÉÕ¸¤°(€€€€€€€€€€€€¤è(€€€€€€€€€€€€€€€•¹ÑÉ¥•Ì€ô•áÑÉ…Ñ}™É…µ•Ì¡A…Ñ ¡ÑµÀ°€‰±¥À¹µÀÐˆ¤°™É…µ•Ì°™ÁÌôÄ¸À¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡m•¹ÑÉä¹Ñ¥µ•ÍÑ…µÀ™½È•¹ÑÉä¥¸•¹ÑÉ¥•Ít°lÀ¸Át¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡A…Ñ ¡•¹ÑÉ¥•ÍlÁt¹Á…Ñ ¤¹É•…‘}‰åÑ•Ì ¤°ˆ‰¹•Üˆ¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑ…±Í” ¡™É…µ•Ì€¼€ˆÀÀÀÀÀä¹©Áœˆ¤¹•á¥ÍÑÌ ¤¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑ…±Í” ¡A…Ñ ¡ÑµÀ¤€¼€‰™É…µ•Ì¹¥¹½µ¥¹œˆ¤¹•á¥ÍÑÌ ¤¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑ…±Í” ¡A…Ñ ¡ÑµÀ¤€¼€‰™É…µ•Ì¹‰…­ÕÀˆ¤¹•á¥ÍÑÌ ¤¤(()±…ÍÌÉ…µ•]¥¹‘½ÝQ•ÍÑÌ¡Õ¹¥ÑÑ•ÍÐ¹Q•ÍÑ…Í”¤è(€€€59%MP€ôì‰™É…µ•Ìˆèl(€€€€€€€ì‰¥¹‘•àˆè¤°€‰Ñ¥µ•ÍÑ…µÀˆè¤€¨€À¸Ô°€‰Á…Ñ ˆè˜‰í¤èÀÙ‘ô¹©Áœ‰ô™½È¤¥¸É…¹” ÄÄ¤(€€€uô((€€€‘•˜Ñ•ÍÑ}Ý¥¹‘½Ý}ÍÁ…¹Í}•¹Ñ•È¡Í•±˜¤è(€€€€€€€Ý¥¹‘½Ü€ô™É…µ•}Ý¥¹‘½Ü¡Í•±˜¹59%MP°€È¸À°¹Õµ}™É…µ•ÌôÐ°ÍÁ…¹}Í•½¹‘ÌôÈ¸À¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡m˜¹Ñ¥µ•ÍÑ…µÀ™½È˜¥¸Ý¥¹‘½Ýt°lÄ¸À°€Ä¸Ô°€È¸Ô°€Ì¸Át¤((€€€‘•˜Ñ•ÍÑ}Ý¥¹‘½Ý}±…µÁÍ}…¹‘}­••ÁÍ}½Õ¹Ð¡Í•±˜¤è(€€€€€€€Ý¥¹‘½Ü€ô™É…µ•}Ý¥¹‘½Ü¡Í•±˜¹59%MP°€À¸À°¹Õµ}™É…µ•ÌôÐ°ÍÁ…¹}Í•½¹‘ÌôÈ¸À¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±•¸¡Ý¥¹‘½Ü¤°€Ð¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Ý¥¹‘½ÝlÁt¹Ñ¥µ•ÍÑ…µÀ°€À¸À¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡™É…µ•}Ý¥¹‘½Ü¡Í•±˜¹59%MP°€ä¸À°€Ä¥lÁt¹Ñ¥µ•ÍÑ…µÀ°€Ô¸À¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡™É…µ•}Ý¥¹‘½Ü¡ì‰™É…µ•Ìˆèmuô°€Ä¸À¤°mt¤(()¥˜}}¹…µ•}|€ôô€‰}}µ…¥¹}|ˆè(€€€Õ¹¥ÑÑ•ÍÐ¹µ…¥¸ ¤
+from pathlib import Path
+import shutil
+import subprocess
+import tempfile
+import unittest
+from unittest.mock import patch
+
+from src.utils.media import cache_is_complete, extract_frames, frame_window, preprocess_video, probe
+
+HAS_FFMPEG = shutil.which("ffmpeg") is not None and shutil.which("ffprobe") is not None
+
+
+def make_test_video(path: Path, seconds: float = 3.0, audio: bool = True) -> None:
+    command = [
+        "ffmpeg", "-v", "error", "-y",
+        "-f", "lavfi", "-i", f"testsrc=size=320x240:rate=25:duration={seconds}",
+    ]
+    if audio:
+        command += ["-f", "lavfi", "-i", f"sine=frequency=440:sample_rate=44100:duration={seconds}"]
+    command += ["-c:v", "libx264", "-pix_fmt", "yuv420p"]
+    command += ["-c:a", "aac", "-ac", "2"] if audio else []
+    command += ["-shortest", str(path)]
+    subprocess.run(command, check=True)
+
+
+@unittest.skipUnless(HAS_FFMPEG, "ffmpeg/ffprobe not installed")
+class MediaTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.dir = Path(self.tmp.name)
+        self.video = self.dir / "clip.mp4"
+        make_test_video(self.video)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_probe(self):
+        info = probe(self.video)
+        self.assertTrue(info.has_video and info.has_audio)
+        self.assertAlmostEqual(info.duration, 3.0, delta=0.15)
+        self.assertEqual((info.width, info.height), (320, 240))
+        self.assertAlmostEqual(info.video_fps, 25.0)
+
+    def test_preprocess_writes_audio_frames_manifest_and_caches(self):
+        cache = self.dir / "cache"
+        manifest = preprocess_video(self.video, cache, fps=2.0, max_side=160)
+        self.assertEqual(manifest["video_id"], "clip")
+        self.assertEqual([f["timestamp"] for f in manifest["frames"]], [0.0, 0.5, 1.0, 1.5, 2.0, 2.5])
+        audio = probe(manifest["audio_path"])
+        self.assertEqual((audio.audio_sample_rate, audio.audio_channels), (16000, 1))
+        self.assertFalse(audio.has_video)
+        first_frame = probe(manifest["frames"][0]["path"])
+        self.assertEqual((first_frame.width, first_frame.height), (160, 120))
+
+        mtime = (cache / "manifest.json").stat().st_mtime_ns
+        self.assertEqual(preprocess_video(self.video, cache, fps=2.0, max_side=160), manifest)
+        self.assertEqual((cache / "manifest.json").stat().st_mtime_ns, mtime)
+        changed = preprocess_video(self.video, cache, fps=1.0, max_side=160)
+        self.assertEqual(len(changed["frames"]), 3)
+        self.assertEqual(len(list((cache / "frames").glob("*.jpg"))), 3)
+
+    def test_video_without_audio(self):
+        silent = self.dir / "silent.mp4"
+        make_test_video(silent, audio=False)
+        manifest = preprocess_video(silent, self.dir / "silent_cache", fps=1.0)
+        self.assertIsNone(manifest["audio_path"])
+        self.assertEqual(len(manifest["frames"]), 3)
+
+    def test_missing_cached_artifact_is_regenerated(self):
+        cache = self.dir / "cache"
+        manifest = preprocess_video(self.video, cache, fps=1.0)
+        missing = Path(manifest["frames"][0]["path"])
+        missing.unlink()
+        repaired = preprocess_video(self.video, cache, fps=1.0)
+        self.assertTrue(Path(repaired["frames"][0]["path"]).is_file())
+
+    def test_malformed_manifest_is_rebuilt(self):
+        cache = self.dir / "cache"
+        cache.mkdir()
+        (cache / "manifest.json").write_text("{broken")
+        manifest = preprocess_video(self.video, cache, fps=1.0)
+        self.assertEqual(len(manifest["frames"]), 3)
+        self.assertEqual(manifest, preprocess_video(self.video, cache, fps=1.0))
+
+    def test_changed_source_invalidates_cache(self):
+        cache = self.dir / "cache"
+        first = preprocess_video(self.video, cache, fps=1.0)
+        make_test_video(self.video, seconds=2.0)
+        second = preprocess_video(self.video, cache, fps=1.0)
+        self.assertNotEqual(first["config_hash"], second["config_hash"])
+        self.assertEqual(len(second["frames"]), 2)
+
+
+class FrameExtractionTests(unittest.TestCase):
+    def test_empty_artifacts_are_not_complete(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            frame = Path(tmp, "000001.jpg")
+            audio = Path(tmp, "audio.wav")
+            frame.touch()
+            audio.touch()
+            manifest = {"frames": [{"path": str(frame)}], "audio_path": str(audio)}
+            self.assertFalse(cache_is_complete(manifest))
+
+            frame.write_bytes(b"jpeg")
+            self.assertFalse(cache_is_complete(manifest))
+
+            audio.write_bytes(b"wav")
+            self.assertTrue(cache_is_complete(manifest))
+
+    def test_failed_extraction_keeps_existing_frames(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            frames = Path(tmp, "frames")
+            frames.mkdir()
+            kept = frames / "000001.jpg"
+            kept.write_bytes(b"old")
+            with (
+                patch("src.utils.media._require", return_value="ffmpeg"),
+                patch("src.utils.media._run", side_effect=RuntimeError("ffmpeg failed")),
+            ):
+                with self.assertRaisesRegex(RuntimeError, "ffmpeg failed"):
+                    extract_frames(Path(tmp, "clip.mp4"), frames, fps=1.0)
+            self.assertEqual(kept.read_bytes(), b"old")
+            self.assertFalse((Path(tmp) / "frames.incoming").exists())
+            self.assertFalse((Path(tmp) / "frames.backup").exists())
+
+    def test_extraction_replaces_frames_only_after_success(self):
+        def fake_run(command):
+            Path(command[-1]).parent.joinpath("000001.jpg").write_bytes(b"new")
+            return ""
+
+        with tempfile.TemporaryDirectory() as tmp:
+            frames = Path(tmp, "frames")
+            frames.mkdir()
+            (frames / "000009.jpg").write_bytes(b"old")
+            with (
+                patch("src.utils.media._require", return_value="ffmpeg"),
+                patch("src.utils.media._run", side_effect=fake_run),
+            ):
+                entries = extract_frames(Path(tmp, "clip.mp4"), frames, fps=1.0)
+            self.assertEqual([entry.timestamp for entry in entries], [0.0])
+            self.assertEqual(Path(entries[0].path).read_bytes(), b"new")
+            self.assertFalse((frames / "000009.jpg").exists())
+            self.assertFalse((Path(tmp) / "frames.incoming").exists())
+            self.assertFalse((Path(tmp) / "frames.backup").exists())
+
+
+class FrameWindowTests(unittest.TestCase):
+    MANIFEST = {"frames": [
+        {"index": i, "timestamp": i * 0.5, "path": f"{i:06d}.jpg"} for i in range(11)
+    ]}
+
+    def test_window_spans_center(self):
+        window = frame_window(self.MANIFEST, 2.0, num_frames=4, span_seconds=2.0)
+        self.assertEqual([f.timestamp for f in window], [1.0, 1.5, 2.5, 3.0])
+
+    def test_window_clamps_and_keeps_count(self):
+        window = frame_window(self.MANIFEST, 0.0, num_frames=4, span_seconds=2.0)
+        self.assertEqual(len(window), 4)
+        self.assertEqual(window[0].timestamp, 0.0)
+        self.assertEqual(frame_window(self.MANIFEST, 9.0, 1)[0].timestamp, 5.0)
+        self.assertEqual(frame_window({"frames": []}, 1.0), [])
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -1,1 +1,451 @@
-†‹-©ž:—«jØ¨žz-¥êæŠÛ^u™É½´½±±•Ñ¥½¹Ì¥µÁ½ÉÐ½Õ¹Ñ•È)¥µÁ½ÉÐ©Í½¸)™É½´Á…Ñ¡±¥ˆ¥µÁ½ÉÐA…Ñ )¥µÁ½ÉÐÍÕ‰ÁÉ½•ÍÌ)¥µÁ½ÉÐÍåÌ)¥µÁ½ÉÐÑ•µÁ™¥±”)™É½´ÑåÁ•Ì¥µÁ½ÉÐM¥µÁ±•9…µ•ÍÁ…”)¥µÁ½ÉÐÕ¹¥ÑÑ•ÍÐ)™É½´Õ¹¥ÑÑ•ÍÐ¹µ½¬¥µÁ½ÉÐÁ…Ñ ()™É½´ÍÉŒ¹‘…Ñ…Í•ÑÌ¹µÑ}…¥µÁ½ÉÐ€ (€€€aAQ}MA1%Q}=U9QL°eQ1A}=]91=}Q%5=UQ}M=9L°eQ1A}=I5P°(€€€eQ1A}M=-Q}Q%5=UQ}M=9L°…¹¹½Ñ…Ñ¥½¹}™¥±•}¥Í}Ù…±¥°‘½Ý¹±½…‘}…¹¹½Ñ…Ñ¥½¹Ì°(€€€‘½Ý¹±½…‘}Ù¥‘•¼°±½…‘}ÍÁ±¥Ð°Á…ÉÍ•}É½Ü°Í•±•Ñ}‘•Ø°Í•±•Ñ}ÍÑÉ…Ñ¥™¥•°(¤)™É½´ÍÉŒ¹‘…Ñ…Í•ÑÌ¹ÍÉÐ¥µÁ½ÉÐMÕ‰Ñ¥Ñ±•%Ñ•´)™É½´ÍÉŒ¹•Ù…±Õ…Ñ¥½¸¹Á…ÉÍ¥¹œ¥µÁ½ÉÐ%Ñ•´)™É½´ÍÉŒ¹•¹•É…Ñ¥½¸¹¡™}Ù±´¥µÁ½ÉÐ‰Õ¥±‘}½¹Ù•ÉÍ…Ñ¥½¸°±•…¸°É•Í½±Ù•}µ½‘•°)™É½´ÍÉŒ¹•¹•É…Ñ¥½¸¹ÁÉ½µÁÑÌ¥µÁ½ÉÐ‰Õ¥±‘}ÁÉ½µÁÐ°ÑÉ…¹ÍÉ¥ÁÑ}½¹Ñ•áÐ°Ý½É‘}±¥µ¥Ñ}™½É}…À)™É½´ÍÉŒ¹ÕÑ¥±Ì¹Í•±•Ñ¥½¸¥µÁ½ÉÐ­}™½É}‘ÕÉ…Ñ¥½¸°Õ¹¥™½Éµ}Ñ¥µ•ÍÑ…µÁÌ()ÍåÌ¹Á…Ñ ¹¥¹Í•ÉÐ À°ÍÑÈ¡A…Ñ ¡}}™¥±•}|¤¹É•Í½±Ù” ¤¹Á…É•¹ÑÍlÅt€¼€‰ÍÉ¥ÁÑÌˆ¤¤)¥µÁ½ÉÐÁÉ•Á…É•}µÑ}…€€Œ¹½Å„èÐÀÈ)™É½´‰Õ¥±‘}µ½µ•¹ÑÌ¥µÁ½ÉÐ±½…‘}Ñ…É•ÑÌ€€Œ¹½Å„èÐÀÈ)™É½´ÉÕ¹}…‘}Ù±´¥µÁ½ÉÐ‘½¹•}¥‘Ì°ÁÉ•Á…É”°É•…‘}©Í½¹°€€Œ¹½Å„èÐÀÈ(()‘•˜µ…­•}É½Ü¡Ù¥‘•½}¥ô‰Ù¥ˆ°…Ñ•½Éäô‰Y±½œˆ°¹Õµ}…ôÐ°‘ÕÉ…Ñ¥½¸ôÌÀÀ°ÍÁ±¥Ðô‰Ù…±¥‘…Ñ¥½¸ˆ¤è(€€€É•ÑÕÉ¸ì(€€€€€€€€‰Ù¥‘•½}¥ˆèÙ¥‘•½}¥°€‰ÍÁ±¥ÐˆèÍÁ±¥Ð°€‰…Ñ•½Éäˆè…Ñ•½Éä°(€€€€€€€€‰‘ÕÉ…Ñ¥½¹}Í•½¹‘Ìˆè‘ÕÉ…Ñ¥½¸°(€€€€€€€€‰Ñ}…‘}Í•µ•¹ÑÌˆèl(€€€€€€€€€€€ì‰ÍÑ…ÉÑ}Í•½¹‘Ìˆè™±½…Ð ÄÀ€¨€¡¹Õµ}…€´¤¤¤°€‰Ñ•áÐˆè˜ˆ…í¥ô€‰ô™½È¤¥¸É…¹”¡¹Õµ}…¤(€€€€€€€t°(€€€€€€€€‰ÑÉ…¹ÍÉ¥ÁÑ}Í•µ•¹ÑÌˆèl(€€€€€€€€€€€ì‰ÍÑ…ÉÑ}Í•½¹‘Ìˆè€ÈÀ¸À°€‰•¹‘}Í•½¹‘Ìˆè€ÈÔ¸À°€‰Ñ•áÐˆè€‰Í•½¹‰ô°(€€€€€€€€€€€ì‰ÍÑ…ÉÑ}Í•½¹‘Ìˆè€Ä¸À°€‰•¹‘}Í•½¹‘Ìˆè€Ð¸À°€‰Ñ•áÐˆè€‰™¥ÉÍÐ‰ô°(€€€€€€€t°(€€€€€€€€‰Ù¥ÍÕ…±}¥¹™¼ˆè9½¹”°(€€€ô(()±…ÍÌ5QQ•ÍÑÌ¡Õ¹¥ÑÑ•ÍÐ¹Q•ÍÑ…Í”¤è(€€€‘•˜Ñ•ÍÑ}Á…ÉÍ•}É½Ý}Í½ÉÑÍ}…¹‘}ÍÑÉ¥ÁÌ¡Í•±˜¤è(€€€€€€€Ù¥‘•¼€ôÁ…ÉÍ•}É½Ü¡µ…­•}É½Ü¡¹Õµ}…ôÌ¤¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Ù¥‘•¼¹…°m%Ñ•´ ÄÀ¸À°€‰…€Èˆ¤°%Ñ•´ ÈÀ¸À°€‰…€Äˆ¤°%Ñ•´ ÌÀ¸À°€‰…€Àˆ¥t¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Ù¥‘•¼¹ÑÉ…¹ÍÉ¥ÁÑlÁt°MÕ‰Ñ¥Ñ±•%Ñ•´ Ä¸À°€Ð¸À°€‰™¥ÉÍÐˆ¤¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Ù¥‘•¼¹å½ÕÑÕ‰•}ÕÉ°°€‰¡ÑÑÁÌè¼½ÝÝÜ¹å½ÕÑÕ‰”¹½´½Ý…Ñ ýØõÙ¥ˆ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Ù¥‘•¼¹Ù¥‘•½}™¥±•¹…µ”°€‰Ù¥¹µÀÐˆ¤((€€€‘•˜Ñ•ÍÑ}Á…ÉÍ•}É½Ý}Ý¥Ñ¡½ÕÑ}ÍÁ•• ¡Í•±˜¤è(€€€€€€€É½Ü€ôµ…­•}É½Ü ¤(€€€€€€€É½Ýl‰ÑÉ…¹ÍÉ¥ÁÑ}Í•µ•¹ÑÌ‰t€ômt(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Á…ÉÍ•}É½Ü¡É½Ü¤¹ÑÉ…¹ÍÉ¥ÁÐ°mt¤((€€€‘•˜Ñ•ÍÑ}±½…‘}ÍÁ±¥Ð¡Í•±˜¤è(€€€€€€€Ý¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€€€€€É½ÝÌ€ômµ…­•}É½Ü ‰„ˆ¤°µ…­•}É½Ü ‰ˆˆ¥t(€€€€€€€€€€€A…Ñ ¡ÑµÀ°€‰Ù…±¥‘…Ñ¥½¸¹©Í½¹°ˆ¤¹ÝÉ¥Ñ•}Ñ•áÐ ‰q¸ˆ¹©½¥¸¡©Í½¸¹‘ÕµÁÌ¡È¤™½ÈÈ¥¸É½ÝÌ¤€¬€‰q¸ˆ¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡mØ¹Ù¥‘•½}¥™½ÈØ¥¸±½…‘}ÍÁ±¥Ð¡ÑµÀ°€‰Ù…±¥‘…Ñ¥½¸ˆ¥t°l‰„ˆ°€‰ˆ‰t¤(€€€€€€€€€€€A…Ñ ¡ÑµÀ°€‰Ñ•ÍÐ¹©Í½¹°ˆ¤¹ÝÉ¥Ñ•}Ñ•áÐ ì‰Ù¥‘•½}¥ˆè€‰à‰õq¸œ¤(€€€€€€€€€€€Ý¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•ÍI••à¡Y…±Õ•ÉÉ½È°€‰±¥¹”€Äˆ¤è(€€€€€€€€€€€€€€€±½…‘}ÍÁ±¥Ð¡ÑµÀ°€‰Ñ•ÍÐˆ¤(€€€€€€€Ý¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•Ì¡Y…±Õ•ÉÉ½È¤è(€€€€€€€€€€€±½…‘}ÍÁ±¥Ð ‰Õ¹ÕÍ•ˆ°€‰ÑÉ…¥¸ˆ¤((€€€‘•˜Ñ•ÍÑ}±½…‘}ÍÁ±¥Ñ}‘•½‘•Í}ÕÑ˜à¡Í•±˜¤è(€€€€€€€É½Ü€ôµ…­•}É½Ü ‰„ˆ°¹Õµ}…ôÄ¤(€€€€€€€É½Ýl‰Ñ}…‘}Í•µ•¹ÑÌ‰ulÁul‰Ñ•áÐ‰t€ô€‹4ˆ(€€€€€€€Ý¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€€€€€A…Ñ ¡ÑµÀ°€‰Ù…±¥‘…Ñ¥½¸¹©Í½¹°ˆ¤¹ÝÉ¥Ñ•}‰åÑ•Ì ¡©Í½¸¹‘ÕµÁÌ¡É½Ü¤€¬€‰q¸ˆ¤¹•¹½‘” ‰ÕÑ˜´àˆ¤¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±½…‘}ÍÁ±¥Ð¡ÑµÀ°€‰Ù…±¥‘…Ñ¥½¸ˆ¥lÁt¹…‘lÁt¹Ñ•áÐ°€‹4ˆ¤((€€€‘•˜Ñ•ÍÑ}ÍÑÉ…Ñ¥™¥•‘}Í…µÁ±•}µ…Ñ¡•Í}…Ñ•½Éå}µ¥à¡Í•±˜¤è(€€€€€€€Ù¥‘•½Ì€ômÁ…ÉÍ•}É½Ü¡µ…­•}É½Ü¡˜‰Ùí¤èÀÍ‘ôˆ°€‰Y±½œˆ¤¤™½È¤¥¸É…¹” ØÀ¥t(€€€€€€€Ù¥‘•½Ì€¬ômÁ…ÉÍ•}É½Ü¡µ…­•}É½Ü¡˜‰•í¤èÀÍ‘ôˆ°€‰‘Õ…Ñ¥½¸ˆ¤¤™½È¤¥¸É…¹” ÌÀ¥t(€€€€€€€Ù¥‘•½Ì€¬ômÁ…ÉÍ•}É½Ü¡µ…­•}É½Ü¡˜‰½í¤èÀÍ‘ôˆ°€‰=Ñ¡•Èˆ¤¤™½È¤¥¸É…¹” ÄÀ¥t(€€€€€€€Í…µÁ±”€ôÍ•±•Ñ}ÍÑÉ…Ñ¥™¥•¡Ù¥‘•½Ì°€ÄÀ°Í••ôÈ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡½Õ¹Ñ•È¡Ø¹…Ñ•½Éä™½ÈØ¥¸Í…µÁ±”¤°ì‰Y±½œˆè€Ø°€‰‘Õ…Ñ¥½¸ˆè€Ì°€‰=Ñ¡•Èˆè€Åô¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Í…µÁ±”°Í•±•Ñ}ÍÑÉ…Ñ¥™¥•¡±¥ÍÐ¡É•Ù•ÉÍ•¡Ù¥‘•½Ì¤¤°€ÄÀ°Í••ôÈ¤¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑ9½ÑÅÕ…°¡Í…µÁ±”°Í•±•Ñ}ÍÑÉ…Ñ¥™¥•¡Ù¥‘•½Ì°€ÄÀ°Í••ôÌ¤¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±•¸¡Í•±•Ñ}ÍÑÉ…Ñ¥™¥•¡Ù¥‘•½ÍlèÕt°€ÄÀ¤¤°€Ô¤((€€€‘•˜Ñ•ÍÑ}‘•Ù}É•ÅÕ¥É•Í}•¹½Õ¡}…¡Í•±˜¤è(€€€€€€€Ù¥‘•½Ì€ômÁ…ÉÍ•}É½Ü¡µ…­•}É½Ü¡˜‰Ùí¥ôˆ°¹Õµ}…ôÈ€¬¤€”€È¤¤™½È¤¥¸É…¹” ÈÀ¥t(€€€€€€€‘•Ø€ôÍ•±•Ñ}‘•Ø¡Ù¥‘•½Ì°€Ô°µ¥¹}…‘}¥Ñ•µÌôÌ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±•¸¡‘•Ø¤°€Ô¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑQÉÕ”¡…±°¡±•¸¡Ø¹…¤€øô€Ì™½ÈØ¥¸‘•Ø¤¤((€€€‘•˜Ñ•ÍÑ}‘½Ý¹±½…‘}É•ÕÍ•Í}‘•½‘…‰±•}Ù¥‘•¼¡Í•±˜¤è(€€€€€€€Ý¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€€€€€Ñ…É•Ð€ôA…Ñ ¡ÑµÀ°€‰Ù¥¹µÀÐˆ¤(€€€€€€€€€€€Ñ…É•Ð¹ÝÉ¥Ñ•}‰åÑ•Ì¡ˆ‰Ù¥‘•¼ˆ¤(€€€€€€€€€€€¥¹™¼€ôM¥µÁ±•9…µ•ÍÁ…”¡¡…Í}Ù¥‘•¼õQÉÕ”¤(€€€€€€€€€€€Ý¥Ñ € (€€€€€€€€€€€€€€€Á…Ñ  ‰ÍÉŒ¹‘…Ñ…Í•ÑÌ¹µÑ}…¹Í¡ÕÑ¥°¹Ý¡¥ ˆ°É•ÑÕÉ¹}Ù…±Õ”ôˆ½‰¥¸½™™ÁÉ½‰”ˆ¤°(€€€€€€€€€€€€€€€Á…Ñ  ‰ÍÉŒ¹‘…Ñ…Í•ÑÌ¹µÑ}…¹ÁÉ½‰”ˆ°É•ÑÕÉ¹}Ù…±Õ”õ¥¹™¼¤°(€€€€€€€€€€€€€€€Á…Ñ  ‰ÍÉŒ¹‘…Ñ…Í•ÑÌ¹µÑ}…¹ÍÕ‰ÁÉ½•ÍÌ¹ÉÕ¸ˆ¤…ÌÉÕ¸°(€€€€€€€€€€€€¤è(€€€€€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡‘½Ý¹±½…‘}Ù¥‘•¼¡Á…ÉÍ•}É½Ü¡µ…­•}É½Ü ¤¤°ÑµÀ¤°Ñ…É•Ð¤(€€€€€€€€€€€ÉÕ¸¹…ÍÍ•ÉÑ}¹½Ñ}…±±• ¤((€€€‘•˜Ñ•ÍÑ}‘½Ý¹±½…‘}É•Á±…•Í}Õ¹‘•½‘…‰±•}Ù¥‘•¼¡Í•±˜¤è(€€€€€€€Ý¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€€€€€Ñ…É•Ð€ôA…Ñ ¡ÑµÀ°€‰Ù¥¹µÀÐˆ¤(€€€€€€€€€€€Ñ…É•Ð¹ÝÉ¥Ñ•}‰åÑ•Ì¡ˆ‰¹½Ð„Ù¥‘•¼ˆ¤(€€€€€€€€€€€Ý¥Ñ € (€€€€€€€€€€€€€€€Á…Ñ  ‰ÍÉŒ¹‘…Ñ…Í•ÑÌ¹µÑ}…¹Í¡ÕÑ¥°¹Ý¡¥ ˆ°É•ÑÕÉ¹}Ù…±Õ”ôˆ½‰¥¸½åÐµ‘±Àˆ¤°(€€€€€€€€€€€€€€€Á…Ñ  ‰ÍÉŒ¹‘…Ñ…Í•ÑÌ¹µÑ}…¹ÁÉ½‰”ˆ°Í¥‘•}•™™•ÐõIÕ¹Ñ¥µ•ÉÉ½È ‰¥¹Ù…±¥ˆ¤¤°(€€€€€€€€€€€€€€€Á…Ñ  ‰ÍÉŒ¹‘…Ñ…Í•ÑÌ¹µÑ}…¹ÍÕ‰ÁÉ½•ÍÌ¹ÉÕ¸ˆ¤…ÌÉÕ¸°(€€€€€€€€€€€€¤è(€€€€€€€€€€€€€€€ÉÕ¸¹É•ÑÕÉ¹}Ù…±Õ”¹É•ÑÕÉ¹½‘”€ô€À(€€€€€€€€€€€€€€€ÉÕ¸¹É•ÑÕÉ¹}Ù…±Õ”¹ÍÑ‘•ÉÈ€ô€ˆˆ(€€€€€€€€€€€€€€€Ý¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•ÍI••à¡IÕ¹Ñ¥µ•ÉÉ½È°€‰åÐµ‘±À™…¥±•ˆ¤è(€€€€€€€€€€€€€€€€€€€‘½Ý¹±½…‘}Ù¥‘•¼¡Á…ÉÍ•}É½Ü¡µ…­•}É½Ü ¤¤°ÑµÀ¤(€€€€€€€€€€€ÉÕ¸¹…ÍÍ•ÉÑ}…±±•‘}½¹” ¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑ…±Í”¡Ñ…É•Ð¹•á¥ÍÑÌ ¤¤((€€€‘•˜Ñ•ÍÑ}‘½Ý¹±½…‘}É•ÅÕ¥É•Í}™™ÁÉ½‰•}‰•™½É•}É•ÕÍ¥¹}Ù¥‘•¼¡Í•±˜¤è(€€€€€€€Ý¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€€€€€Ñ…É•Ð€ôA…Ñ ¡ÑµÀ°€‰Ù¥¹µÀÐˆ¤(€€€€€€€€€€€Ñ…É•Ð¹ÝÉ¥Ñ•}‰åÑ•Ì¡ˆ‰Ù¥‘•¼ˆ¤(€€€€€€€€€€€Ý¥Ñ € (€€€€€€€€€€€€€€€Á…Ñ  ‰ÍÉŒ¹‘…Ñ…Í•ÑÌ¹µÑ}…¹Í¡ÕÑ¥°¹Ý¡¥ ˆ°É•ÑÕÉ¹}Ù…±Õ”õ9½¹”¤°(€€€€€€€€€€€€€€€Á…Ñ  ‰ÍÉŒ¹‘…Ñ…Í•ÑÌ¹µÑ}…¹ÍÕ‰ÁÉ½•ÍÌ¹ÉÕ¸ˆ¤…ÌÉÕ¸°(€€€€€€€€€€€€¤è(€€€€€€€€€€€€€€€Ý¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•ÍI••à¡IÕ¹Ñ¥µ•ÉÉ½È°€‰™™ÁÉ½‰”ˆ¤è(€€€€€€€€€€€€€€€€€€€‘½Ý¹±½…‘}Ù¥‘•¼¡Á…ÉÍ•}É½Ü¡µ…­•}É½Ü ¤¤°ÑµÀ¤(€€€€€€€€€€€ÉÕ¸¹…ÍÍ•ÉÑ}¹½Ñ}…±±• ¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑQÉÕ”¡Ñ…É•Ð¹¥Í}™¥±” ¤¤((€€€‘•˜Ñ•ÍÑ}‘½Ý¹±½…‘}Ñ¥µ•½ÕÑ}É•µ½Ù•Í}Á…ÉÑ¥…±}™¥±”¡Í•±˜¤è(€€€€€€€Ý¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€€€€€Ý¥Ñ € (€€€€€€€€€€€€€€€Á…Ñ  ‰ÍÉŒ¹‘…Ñ…Í•ÑÌ¹µÑ}…¹Í¡ÕÑ¥°¹Ý¡¥ ˆ°É•ÑÕÉ¹}Ù…±Õ”ôˆ½‰¥¸½åÐµ‘±Àˆ¤°(€€€€€€€€€€€€€€€Á…Ñ  (€€€€€€€€€€€€€€€€€€€€‰ÍÉŒ¹‘…Ñ…Í•ÑÌ¹µÑ}…¹ÍÕ‰ÁÉ½•ÍÌ¹ÉÕ¸ˆ°(€€€€€€€€€€€€€€€€€€€Í¥‘•}•™™•ÐõÍÕ‰ÁÉ½•ÍÌ¹Q¥µ•½ÕÑáÁ¥É•¡µô‰åÐµ‘±Àˆ°Ñ¥µ•½ÕÐôÄ¤°(€€€€€€€€€€€€€€€€¤°(€€€€€€€€€€€€¤è(€€€€€€€€€€€€€€€Ý¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•ÍI••à¡IÕ¹Ñ¥µ•ÉÉ½È°€‰Ñ¥µ•½ÕÐˆ¤è(€€€€€€€€€€€€€€€€€€€‘½Ý¹±½…‘}Ù¥‘•¼¡Á…ÉÍ•}É½Ü¡µ…­•}É½Ü ¤¤°ÑµÀ¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑ…±Í”¡A…Ñ ¡ÑµÀ°€‰Ù¥¹µÀÐˆ¤¹•á¥ÍÑÌ ¤¤((€€€‘•˜Ñ•ÍÑ}‘½Ý¹±½…‘}É•©•ÑÍ}é•É½}‰åÑ•}½ÕÑÁÕÑ}…¹‘}ÕÍ•Í}ÁÉ½É•ÍÍ¥Ù•}¡ÑÑÁÍ}™½Éµ…Ð¡Í•±˜¤è(€€€€€€€Ý¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€€€€€Ñ…É•Ð€ôA…Ñ ¡ÑµÀ°€‰Ù¥¹µÀÐˆ¤(€€€€€€€€€€€Ñ…É•Ð¹Ñ½Õ  ¤(€€€€€€€€€€€Ý¥Ñ € (€€€€€€€€€€€€€€€Á…Ñ  ‰ÍÉŒ¹‘…Ñ…Í•ÑÌ¹µÑ}…¹Í¡ÕÑ¥°¹Ý¡¥ ˆ°É•ÑÕÉ¹}Ù…±Õ”ôˆ½‰¥¸½åÐµ‘±Àˆ¤°(€€€€€€€€€€€€€€€Á…Ñ  ‰ÍÉŒ¹‘…Ñ…Í•ÑÌ¹µÑ}…¹ÍÕ‰ÁÉ½•ÍÌ¹ÉÕ¸ˆ¤…ÌÉÕ¸°(€€€€€€€€€€€€¤è(€€€€€€€€€€€€€€€ÉÕ¸¹É•ÑÕÉ¹}Ù…±Õ”¹É•ÑÕÉ¹½‘”€ô€À(€€€€€€€€€€€€€€€ÉÕ¸¹É•ÑÕÉ¹}Ù…±Õ”¹ÍÑ‘•ÉÈ€ô€ˆˆ(€€€€€€€€€€€€€€€Ý¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•ÍI••à¡IÕ¹Ñ¥µ•ÉÉ½È°€‰åÐµ‘±À™…¥±•ˆ¤è(€€€€€€€€€€€€€€€€€€€‘½Ý¹±½…‘}Ù¥‘•¼¡Á…ÉÍ•}É½Ü¡µ…­•}É½Ü ¤¤°ÑµÀ¤(€€€€€€€€€€€½µµ…¹€ôÉÕ¸¹…±±}…ÉÌ¹…ÉÍlÁt(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑ%¸ ˆ´µÉ•ÑÉ¥•Ìˆ°½µµ…¹¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑ%¸ ˆ´µÍ½­•ÐµÑ¥µ•½ÕÐˆ°½µµ…¹¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…° (€€€€€€€€€€€€€€€½µµ…¹‘m½µµ…¹¹¥¹‘•à ˆ´µÍ½­•ÐµÑ¥µ•½ÕÐˆ¤€¬€Åt°(€€€€€€€€€€€€€€€ÍÑÈ¡eQ1A}M=-Q}Q%5=UQ}M=9L¤°(€€€€€€€€€€€€¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡ÉÕ¸¹…±±}…ÉÌ¹­Ý…ÉÍl‰Ñ¥µ•½ÕÐ‰t°eQ1A}=]91=}Q%5=UQ}M=9L¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡½µµ…¹‘m½µµ…¹¹¥¹‘•à ˆµ˜ˆ¤€¬€Åt°eQ1A}=I5P¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡½µµ…¹‘m½µµ…¹¹¥¹‘•à ˆ´µÉ•µÕàµÙ¥‘•¼ˆ¤€¬€Åt°€‰µÀÐˆ¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑ%¸ ‰ÁÉ½Ñ½½°õ¡ÑÑÁÌˆ°eQ1A}=I5P¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑ9½Ñ%¸ ‰ÁÉ½Ñ½½±xõ¡ÑÑÀˆ°eQ1A}=I5P¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑ…±Í”¡Ñ…É•Ð¹•á¥ÍÑÌ ¤¤((€€€‘•˜Ñ•ÍÑ}‘½Ý¹±½…‘}Á…ÍÍ•Í}±½…±}‰É½ÝÍ•É}…ÕÑ¡}…¹‘}•áÑÉ…Ñ½É}½ÁÑ¥½¹Ì¡Í•±˜¤è(€€€€€€€Ý¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€€€€€Ñ…É•Ð€ôA…Ñ ¡ÑµÀ°€‰Ù¥¹µÀÐˆ¤((€€€€€€€€€€€‘•˜ÍÕ•ÍÍ™Õ±}‘½Ý¹±½…¡½µµ…¹°€¨©}­Ý…ÉÌ¤è(€€€€€€€€€€€€€€€Ñ…É•Ð¹ÝÉ¥Ñ•}‰åÑ•Ì¡ˆ‰Ù¥‘•¼ˆ¤(€€€€€€€€€€€€€€€É•ÑÕÉ¸ÑåÁ” ‰I•ÍÕ±Ðˆ°€ ¤°ì‰É•ÑÕÉ¹½‘”ˆè€À°€‰ÍÑ‘•ÉÈˆè€ˆ‰ô¤ ¤((€€€€€€€€€€€Ý¥Ñ € (€€€€€€€€€€€€€€€Á…Ñ  ‰ÍÉŒ¹‘…Ñ…Í•ÑÌ¹µÑ}…¹Í¡ÕÑ¥°¹Ý¡¥ ˆ°É•ÑÕÉ¹}Ù…±Õ”ôˆ½‰¥¸½åÐµ‘±Àˆ¤°(€€€€€€€€€€€€€€€Á…Ñ  (€€€€€€€€€€€€€€€€€€€€‰ÍÉŒ¹‘…Ñ…Í•ÑÌ¹µÑ}…¹ÁÉ½‰”ˆ°(€€€€€€€€€€€€€€€€€€€É•ÑÕÉ¹}Ù…±Õ”õM¥µÁ±•9…µ•ÍÁ…”¡¡…Í}Ù¥‘•¼õQÉÕ”¤°(€€€€€€€€€€€€€€€€¤°(€€€€€€€€€€€€€€€Á…Ñ  ‰ÍÉŒ¹‘…Ñ…Í•ÑÌ¹µÑ}…¹ÍÕ‰ÁÉ½•ÍÌ¹ÉÕ¸ˆ°Í¥‘•}•™™•ÐõÍÕ•ÍÍ™Õ±}‘½Ý¹±½…¤…ÌÉÕ¸°(€€€€€€€€€€€€¤è(€€€€€€€€€€€€€€€É•ÍÕ±Ð€ô‘½Ý¹±½…‘}Ù¥‘•¼ (€€€€€€€€€€€€€€€€€€€Á…ÉÍ•}É½Ü¡µ…­•}É½Ü ¤¤°ÑµÀ°(€€€€€€€€€€€€€€€€€€€½½­¥•Í}™É½µ}‰É½ÝÍ•Èô‰¡É½µ”é•™…Õ±Ðˆ°(€€€€€€€€€€€€€€€€€€€•áÑÉ…Ñ½É}…ÉÌô‰å½ÕÑÕ‰”éÁ±…å•É}±¥•¹ÐõµÝ•ˆ±ÑØˆ°(€€€€€€€€€€€€€€€€¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡É•ÍÕ±Ð°Ñ…É•Ð¤(€€€€€€€€€€€½µµ…¹€ôÉÕ¸¹…±±}…ÉÌ¹…ÉÍlÁt(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡½µµ…¹‘m½µµ…¹¹¥¹‘•à ˆ´µ½½­¥•Ìµ™É½´µ‰É½ÝÍ•Èˆ¤€¬€Åt°€‰¡É½µ”é•™…Õ±Ðˆ¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…° (€€€€€€€€€€€€€€€½µµ…¹‘m½µµ…¹¹¥¹‘•à ˆ´µ•áÑÉ…Ñ½Èµ…ÉÌˆ¤€¬€Åt°(€€€€€€€€€€€€€€€€‰å½ÕÑÕ‰”éÁ±…å•É}±¥•¹ÐõµÝ•ˆ±ÑØˆ°(€€€€€€€€€€€€¤((€€€‘•˜Ñ•ÍÑ}‘½Ý¹±½…‘}É•©•ÑÍ}Õ¹‘•½‘…‰±•}¹•Ý}½ÕÑÁÕÐ¡Í•±˜¤è(€€€€€€€Ý¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€€€€€Ñ…É•Ð€ôA…Ñ ¡ÑµÀ°€‰Ù¥¹µÀÐˆ¤((€€€€€€€€€€€‘•˜½ÉÉÕÁÑ}‘½Ý¹±½…¡}½µµ…¹°€¨©}­Ý…ÉÌ¤è(€€€€€€€€€€€€€€€Ñ…É•Ð¹ÝÉ¥Ñ•}‰åÑ•Ì¡ˆ‰¹½Ð„Ù¥‘•¼ˆ¤(€€€€€€€€€€€€€€€É•ÑÕÉ¸ÑåÁ” ‰I•ÍÕ±Ðˆ°€ ¤°ì‰É•ÑÕÉ¹½‘”ˆè€À°€‰ÍÑ‘•ÉÈˆè€ˆ‰ô¤ ¤((€€€€€€€€€€€Ý¥Ñ € (€€€€€€€€€€€€€€€Á…Ñ  ‰ÍÉŒ¹‘…Ñ…Í•ÑÌ¹µÑ}…¹Í¡ÕÑ¥°¹Ý¡¥ ˆ°É•ÑÕÉ¹}Ù…±Õ”ôˆ½‰¥¸½åÐµ‘±Àˆ¤°(€€€€€€€€€€€€€€€Á…Ñ  ‰ÍÉŒ¹‘…Ñ…Í•ÑÌ¹µÑ}…¹ÁÉ½‰”ˆ°Í¥‘•}•™™•ÐõIÕ¹Ñ¥µ•ÉÉ½È ‰¥¹Ù…±¥ˆ¤¤°(€€€€€€€€€€€€€€€Á…Ñ  ‰ÍÉŒ¹‘…Ñ…Í•ÑÌ¹µÑ}…¹ÍÕ‰ÁÉ½•ÍÌ¹ÉÕ¸ˆ°Í¥‘•}•™™•Ðõ½ÉÉÕÁÑ}‘½Ý¹±½…¤°(€€€€€€€€€€€€¤è(€€€€€€€€€€€€€€€Ý¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•ÍI••à¡IÕ¹Ñ¥µ•ÉÉ½È°€‰åÐµ‘±À™…¥±•ˆ¤è(€€€€€€€€€€€€€€€€€€€‘½Ý¹±½…‘}Ù¥‘•¼¡Á…ÉÍ•}É½Ü¡µ…­•}É½Ü ¤¤°ÑµÀ¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑ…±Í”¡Ñ…É•Ð¹•á¥ÍÑÌ ¤¤((€€€‘•˜Ñ•ÍÑ}‘½Ý¹±½…‘}É•©•ÑÍ}ÑÝ½}½½­¥•}Í½ÕÉ•Ì¡Í•±˜¤è(€€€€€€€Ý¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€€€€€Ý¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•ÍI••à¡Y…±Õ•ÉÉ½È°€‰•¥Ñ¡•Èˆ¤è(€€€€€€€€€€€€€€€‘½Ý¹±½…‘}Ù¥‘•¼ (€€€€€€€€€€€€€€€€€€€Á…ÉÍ•}É½Ü¡µ…­•}É½Ü ¤¤°ÑµÀ°(€€€€€€€€€€€€€€€€€€€½½­¥•Ìô‰½½­¥•Ì¹ÑáÐˆ°½½­¥•Í}™É½µ}‰É½ÝÍ•Èô‰¡É½µ”ˆ°(€€€€€€€€€€€€€€€€¤(()‘•˜}©Í½¹±}‰åÑ•Ì¡½Õ¹Ðè¥¹Ð¤€´ø‰åÑ•Ìè(€€€É•ÑÕÉ¸€ˆˆ¹©½¥¸¡©Í½¸¹‘ÕµÁÌ¡ì‰¤ˆè¥ô¤€¬€‰q¸ˆ™½È¤¥¸É…¹”¡½Õ¹Ð¤¤¹•¹½‘” ‰ÕÑ˜´àˆ¤(()±…ÍÌ¹¹½Ñ…Ñ¥½¹½Ý¹±½…‘Q•ÍÑÌ¡Õ¹¥ÑÑ•ÍÐ¹Q•ÍÑ…Í”¤è(€€€‘•˜}ÕÉ±½Á•¸¡Í•±˜°‰½‘¥•Ì¤è(€€€€€€€±…ÍÌI•ÍÁ½¹Í”è(€€€€€€€€€€€‘•˜}}¥¹¥Ñ}|¡Í•±˜°Á…å±½…¤è(€€€€€€€€€€€€€€€Í•±˜¹Á…å±½…€ôÁ…å±½…((€€€€€€€€€€€‘•˜É•…¡Í•±˜¤è(€€€€€€€€€€€€€€€É•ÑÕÉ¸Í•±˜¹Á…å±½…((€€€€€€€€€€€‘•˜}}•¹Ñ•É}|¡Í•±˜¤è(€€€€€€€€€€€€€€€É•ÑÕÉ¸Í•±˜((€€€€€€€€€€€‘•˜}}•á¥Ñ}|¡Í•±˜°€©…ÉÌ¤è(€€€€€€€€€€€€€€€É•ÑÕÉ¸…±Í”((€€€€€€€‘•˜ÕÉ±½Á•¸¡ÕÉ°°Ñ¥µ•½ÕÐõ9½¹”¤è(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Ñ¥µ•½ÕÐ°€ØÀ¤(€€€€€€€€€€€™½ÈÍÕ™™¥à°Á…å±½…¥¸‰½‘¥•Ì¹¥Ñ•µÌ ¤è(€€€€€€€€€€€€€€€¥˜ÍÑÈ¡ÕÉ°¤¹•¹‘ÍÝ¥Ñ ¡ÍÕ™™¥à¤è(€€€€€€€€€€€€€€€€€€€É•ÑÕÉ¸I•ÍÁ½¹Í”¡Á…å±½…¤(€€€€€€€€€€€É…¥Í”ÍÍ•ÉÑ¥½¹ÉÉ½È¡ÕÉ°¤((€€€€€€€É•ÑÕÉ¸ÕÉ±½Á•¸((€€€‘•˜Ñ•ÍÑ}¥¹Ù…±¥‘}‘½Ý¹±½…‘}­••ÁÍ}•á¥ÍÑ¥¹}™¥±•}…¹‘}Ñ•µÀ¡Í•±˜¤è(€€€€€€€Ý¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€€€€€•á¥ÍÑ¥¹œ€ôA…Ñ ¡ÑµÀ°€‰Ù…±¥‘…Ñ¥½¸¹©Í½¹°ˆ¤(€€€€€€€€€€€•á¥ÍÑ¥¹œ¹ÝÉ¥Ñ•}‰åÑ•Ì ‰­••Áq¸ˆ¹•¹½‘” ‰ÕÑ˜´àˆ¤¤(€€€€€€€€€€€‰½‘¥•Ì€ôì‰‘…Ñ„½…¹¹½Ñ…Ñ¥½¹Ì½Ù…±¥‘…Ñ¥½¸¹©Í½¹°ˆèˆ‰qá™˜‰ô(€€€€€€€€€€€Ý¥Ñ Á…Ñ  ‰ÍÉŒ¹‘…Ñ…Í•ÑÌ¹µÑ}…¹ÕÉ±±¥ˆ¹É•ÅÕ•ÍÐ¹ÕÉ±½Á•¸ˆ°Í¥‘•}•™™•ÐõÍ•±˜¹}ÕÉ±½Á•¸¡‰½‘¥•Ì¤¤è(€€€€€€€€€€€€€€€Ý¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•ÍI••à¡IÕ¹Ñ¥µ•ÉÉ½È°€‰Ù…±¥‘…Ñ¥½¸¹©Í½¹°ˆ¤è(€€€€€€€€€€€€€€€€€€€‘½Ý¹±½…‘}…¹¹½Ñ…Ñ¥½¹Ì¡ÑµÀ¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡•á¥ÍÑ¥¹œ¹É•…‘}Ñ•áÐ¡•¹½‘¥¹œô‰ÕÑ˜´àˆ¤°€‰­••Áq¸ˆ¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±¥ÍÐ¡A…Ñ ¡ÑµÀ¤¹±½ˆ ˆ¨¹ÑµÀˆ¤¤°mt¤((€€€‘•˜Ñ•ÍÑ}½µÁ±•Ñ•}‘½Ý¹±½…‘}É•Á±…•Í}Á…ÉÑ¥…±}©Í½¹°¡Í•±˜¤è(€€€€€€€‰½‘¥•Ì€ôì(€€€€€€€€€€€€‰‘…Ñ„½…¹¹½Ñ…Ñ¥½¹Ì½Ù…±¥‘…Ñ¥½¸¹©Í½¹°ˆè}©Í½¹±}‰åÑ•Ì¡aAQ}MA1%Q}=U9QMl‰Ù…±¥‘…Ñ¥½¸‰t¤°(€€€€€€€€€€€€‰‘…Ñ„½…¹¹½Ñ…Ñ¥½¹Ì½Ñ•ÍÐ¹©Í½¹°ˆè}©Í½¹±}‰åÑ•Ì¡aAQ}MA1%Q}=U9QMl‰Ñ•ÍÐ‰t¤°(€€€€€€€€€€€€‰Ù…±¥‘…Ñ¥½¹}Ù¥‘•½}¥‘Ì¹ÑáÐˆè€‰…q¸ˆ¹•¹½‘” ‰ÕÑ˜´àˆ¤°(€€€€€€€€€€€€‰Ñ•ÍÑ}Ù¥‘•½}¥‘Ì¹ÑáÐˆè€‰‰q¸ˆ¹•¹½‘” ‰ÕÑ˜´àˆ¤°(€€€€€€€ô(€€€€€€€Ý¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€€€€€A…Ñ ¡ÑµÀ°€‰Ù…±¥‘…Ñ¥½¸¹©Í½¹°ˆ¤¹ÝÉ¥Ñ•}‰åÑ•Ì¡ˆ‰Á…ÉÑ¥…±q¸ˆ¤(€€€€€€€€€€€Ý¥Ñ Á…Ñ  ‰ÍÉŒ¹‘…Ñ…Í•ÑÌ¹µÑ}…¹ÕÉ±±¥ˆ¹É•ÅÕ•ÍÐ¹ÕÉ±½Á•¸ˆ°Í¥‘•}•™™•ÐõÍ•±˜¹}ÕÉ±½Á•¸¡‰½‘¥•Ì¤¤è(€€€€€€€€€€€€€€€‘½Ý¹±½…‘}…¹¹½Ñ…Ñ¥½¹Ì¡ÑµÀ¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑQÉÕ”¡…¹¹½Ñ…Ñ¥½¹}™¥±•}¥Í}Ù…±¥¡A…Ñ ¡ÑµÀ°€‰Ù…±¥‘…Ñ¥½¸¹©Í½¹°ˆ¤¤¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑQÉÕ”¡…¹¹½Ñ…Ñ¥½¹}™¥±•}¥Í}Ù…±¥¡A…Ñ ¡ÑµÀ°€‰Ñ•ÍÐ¹©Í½¹°ˆ¤¤¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡A…Ñ ¡ÑµÀ°€‰Ù…±¥‘…Ñ¥½¹}Ù¥‘•½}¥‘Ì¹ÑáÐˆ¤¹É•…‘}Ñ•áÐ¡•¹½‘¥¹œô‰ÕÑ˜´àˆ¤°€‰…q¸ˆ¤((€€€‘•˜Ñ•ÍÑ}µ…¥¹}É•™ÕÍ•Í}Ñ½}É•ÝÉ¥Ñ•}ÍÁ±¥ÑÍ}™½É}Í¡½ÉÑ}™¥±•Ì¡Í•±˜¤è(€€€€€€€Ý¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€€€€€ÍÁ±¥ÑÌ€ôA…Ñ ¡ÑµÀ°€‰ÍÁ±¥ÑÌ¹©Í½¸ˆ¤(€€€€€€€€€€€ÍÁ±¥ÑÌ¹ÝÉ¥Ñ•}Ñ•áÐ ‰½É¥¥¹…±q¸ˆ°•¹½‘¥¹œô‰ÕÑ˜´àˆ¤(€€€€€€€€€€€Ý¥Ñ € (€€€€€€€€€€€€€€€Á…Ñ ¹½‰©•Ð¡ÁÉ•Á…É•}µÑ}…°€‰‘½Ý¹±½…‘}…¹¹½Ñ…Ñ¥½¹Ìˆ¤°(€€€€€€€€€€€€€€€Á…Ñ ¹½‰©•Ð (€€€€€€€€€€€€€€€€€€€ÁÉ•Á…É•}µÑ}…°€‰±½…‘}ÍÁ±¥Ðˆ°(€€€€€€€€€€€€€€€€€€€Í¥‘•}•™™•ÐõmmÁ…ÉÍ•}É½Ü¡µ…­•}É½Ü ¤¥t°mut°(€€€€€€€€€€€€€€€€¤°(€€€€€€€€€€€€€€€Á…Ñ ¹½‰©•Ð¡ÍåÌ°€‰…ÉØˆ°l(€€€€€€€€€€€€€€€€€€€€‰ÁÉ•Á…É•}µÑ}…¹Áäˆ°€ˆ´µ‘…Ñ„µ‘¥Èˆ°ÑµÀ°€ˆ´µÍÁ±¥ÑÌµ½ÕÐˆ°ÍÑÈ¡ÍÁ±¥ÑÌ¤°(€€€€€€€€€€€€€€€t¤°(€€€€€€€€€€€€¤è(€€€€€€€€€€€€€€€Ý¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•Ì¡MåÍÑ•µá¥Ð¤…ÌÉ…¥Í•è(€€€€€€€€€€€€€€€€€€€ÁÉ•Á…É•}µÑ}…¹µ…¥¸ ¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡É…¥Í•¹•á•ÁÑ¥½¸¹½‘”°€Ä¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡ÍÁ±¥ÑÌ¹É•…‘}Ñ•áÐ¡•¹½‘¥¹œô‰ÕÑ˜´àˆ¤°€‰½É¥¥¹…±q¸ˆ¤(()±…ÍÌAÉ•Á…É•Q…É•ÑÍQ•ÍÑÌ¡Õ¹¥ÑÑ•ÍÐ¹Q•ÍÑ…Í”¤è(€€€‘•˜Ñ•ÍÑ}‰…Ñ¡}É•Á½ÉÑÍ}µ¥ÍÍ¥¹}Í½ÕÉ•}…¹‘}½¹Ñ¥¹Õ•Í}…™Ñ•É}ÁÉ•ÁÉ½•ÍÍ}•ÉÉ½È¡Í•±˜¤è(€€€€€€€Ù¥‘•½Ì€ômÁ…ÉÍ•}É½Ü¡µ…­•}É½Ü¡Ù¥‘•½}¥¤¤™½ÈÙ¥‘•½}¥¥¸€ ‰½½ˆ°€‰µ¥ÍÍ¥¹œˆ°€‰‰…ˆ¥t(€€€€€€€Ý¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€€€€€É½½Ð€ôA…Ñ ¡ÑµÀ¤(€€€€€€€€€€€‘…Ñ„€ôÉ½½Ð€¼€‰‘…Ñ„ˆ(€€€€€€€€€€€…¡”€ôÉ½½Ð€¼€‰…¡”ˆ(€€€€€€€€€€€€¡‘…Ñ„€¼€‰Ù¥‘•½Ìˆ¤¹µ­‘¥È¡Á…É•¹ÑÌõQÉÕ”¤(€€€€€€€€€€€™½ÈÙ¥‘•½}¥¥¸€ ‰½½ˆ°€‰‰…ˆ¤è(€€€€€€€€€€€€€€€€¡‘…Ñ„€¼€‰Ù¥‘•½Ìˆ€¼˜‰íÙ¥‘•½}¥‘ô¹µÀÐˆ¤¹ÝÉ¥Ñ•}‰åÑ•Ì¡ˆ‰Ù¥‘•¼ˆ¤((€€€€€€€€€€€‘•˜™…­•}ÁÉ•ÁÉ½•ÍÌ¡Á…Ñ °…¡•}‘¥È°™ÁÌ¤è(€€€€€€€€€€€€€€€¥˜Á…Ñ ¹ÍÑ•´€ôô€‰‰…ˆè(€€€€€€€€€€€€€€€€€€€É…¥Í”IÕ¹Ñ¥µ•ÉÉ½È ‰‰É½­•¸µ•‘¥„ˆ¤(€€€€€€€€€€€€€€€…¡•}‘¥È¹µ­‘¥È¡Á…É•¹ÑÌõQÉÕ”¤(€€€€€€€€€€€€€€€€¡…¡•}‘¥È€¼€‰µ…¹¥™•ÍÐ¹©Í½¸ˆ¤¹ÝÉ¥Ñ•}Ñ•áÐ ‰íôˆ¤(€€€€€€€€€€€€€€€É•ÑÕÉ¸ì(€€€€€€€€€€€€€€€€€€€€‰µ•‘¥…}¥¹™¼ˆèì‰‘ÕÉ…Ñ¥½¸ˆè€ÌÀÀ¸Áô°(€€€€€€€€€€€€€€€€€€€€‰™É…µ•Ìˆèmì‰Á…Ñ ˆè€‰™É…µ”¹©Áœ‰õt°(€€€€€€€€€€€€€€€€€€€€‰…Õ‘¥½}Á…Ñ ˆè€‰…Õ‘¥¼¹Ý…Øˆ°(€€€€€€€€€€€€€€€ô((€€€€€€€€€€€Ý¥Ñ Á…Ñ ¹½‰©•Ð¡ÁÉ•Á…É•}µÑ}…°€‰ÁÉ•ÁÉ½•ÍÍ}Ù¥‘•¼ˆ°Í¥‘•}•™™•Ðõ™…­•}ÁÉ•ÁÉ½•ÍÌ¤è(€€€€€€€€€€€€€€€É•ÍÕ±ÑÌ€ôÁÉ•Á…É•}µÑ}…¹ÁÉ•Á…É•}Ñ…É•ÑÌ (€€€€€€€€€€€€€€€€€€€Ù¥‘•½Ì°‘…Ñ„°…¡”°‘½Ý¹±½…‘}Ù¥‘•½Ìõ…±Í”°ÁÉ•ÁÉ½•ÍÌõQÉÕ”°™ÁÌôÈ¸À°(€€€€€€€€€€€€€€€€¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡m¥Ñ•µl‰ÍÑ…ÑÕÌ‰t™½È¥Ñ•´¥¸É•ÍÕ±ÑÍt°l‰É•…‘äˆ°€‰Õ¹…Ù…¥±…‰±”ˆ°€‰™…¥±•‰t¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡É•ÍÕ±ÑÍlÁul‰ÁÉ•ÁÉ½•ÍÌ‰t°€‰ÝÉ¥ÑÑ•¸ˆ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡É•ÍÕ±ÑÍlÅul‰ÍÑ…”‰t°€‰Í½ÕÉ”ˆ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡É•ÍÕ±ÑÍlÉul‰ÍÑ…”‰t°€‰ÁÉ•ÁÉ½•ÍÌˆ¤((€€€‘•˜Ñ•ÍÑ}‰…Ñ¡}µ…É­Í}Õ¹¡…¹•‘}µ…¹¥™•ÍÑ}…Í}É•ÕÍ•¡Í•±˜¤è(€€€€€€€Ù¥‘•¼€ôÁ…ÉÍ•}É½Ü¡µ…­•}É½Ü ‰…¡•ˆ¤¤(€€€€€€€Ý¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€€€€€É½½Ð€ôA…Ñ ¡ÑµÀ¤(€€€€€€€€€€€‘…Ñ„€ôÉ½½Ð€¼€‰‘…Ñ„ˆ(€€€€€€€€€€€…¡•}‘¥È€ôÉ½½Ð€¼€‰…¡”ˆ€¼€‰…¡•ˆ(€€€€€€€€€€€€¡‘…Ñ„€¼€‰Ù¥‘•½Ìˆ¤¹µ­‘¥È¡Á…É•¹ÑÌõQÉÕ”¤(€€€€€€€€€€€€¡‘…Ñ„€¼€‰Ù¥‘•½Ìˆ€¼€‰…¡•¹µÀÐˆ¤¹ÝÉ¥Ñ•}‰åÑ•Ì¡ˆ‰Ù¥‘•¼ˆ¤(€€€€€€€€€€€…¡•}‘¥È¹µ­‘¥È¡Á…É•¹ÑÌõQÉÕ”¤(€€€€€€€€€€€€¡…¡•}‘¥È€¼€‰µ…¹¥™•ÍÐ¹©Í½¸ˆ¤¹ÝÉ¥Ñ•}Ñ•áÐ ‰íôˆ¤(€€€€€€€€€€€µ…¹¥™•ÍÐ€ôì(€€€€€€€€€€€€€€€€‰µ•‘¥…}¥¹™¼ˆèì‰‘ÕÉ…Ñ¥½¸ˆè€ÌÀÀ¸Áô°(€€€€€€€€€€€€€€€€‰™É…µ•Ìˆèmì‰Á…Ñ ˆè€‰™É…µ”¹©Áœ‰õt°(€€€€€€€€€€€€€€€€‰…Õ‘¥½}Á…Ñ ˆè9½¹”°(€€€€€€€€€€€ô(€€€€€€€€€€€Ý¥Ñ Á…Ñ ¹½‰©•Ð¡ÁÉ•Á…É•}µÑ}…°€‰ÁÉ•ÁÉ½•ÍÍ}Ù¥‘•¼ˆ°É•ÑÕÉ¹}Ù…±Õ”õµ…¹¥™•ÍÐ¤è(€€€€€€€€€€€€€€€mÉ•ÍÕ±Ñt€ôÁÉ•Á…É•}µÑ}…¹ÁÉ•Á…É•}Ñ…É•ÑÌ (€€€€€€€€€€€€€€€€€€€mÙ¥‘•½t°‘…Ñ„°É½½Ð€¼€‰…¡”ˆ°…±Í”°QÉÕ”°€È¸À°(€€€€€€€€€€€€€€€€¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡É•ÍÕ±Ñl‰ÍÑ…ÑÕÌ‰t°€‰É•…‘äˆ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡É•ÍÕ±Ñl‰ÁÉ•ÁÉ½•ÍÌ‰t°€‰É•ÕÍ•ˆ¤(()±…ÍÌ1½…‘Q…É•ÑÍQ•ÍÑÌ¡Õ¹¥ÑÑ•ÍÐ¹Q•ÍÑ…Í”¤è(€€€‘•˜Ñ•ÍÑ}µÑ}…‘}‘•Ù}…¹‘}Ñ•ÍÑ}¥‘Ì¡Í•±˜¤è(€€€€€€€Ý¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€€€€€™½ÈÍÁ±¥Ð¥¸€ ‰Ù…±¥‘…Ñ¥½¸ˆ°€‰Ñ•ÍÐˆ¤è(€€€€€€€€€€€€€€€É½ÝÌ€ômµ…­•}É½Ü ‰„ˆ°ÍÁ±¥ÐõÍÁ±¥Ð°‘ÕÉ…Ñ¥½¸ôÄÈÀ¤°µ…­•}É½Ü ‰ˆˆ°ÍÁ±¥ÐõÍÁ±¥Ð°‘ÕÉ…Ñ¥½¸ôÈÀÀ¥t(€€€€€€€€€€€€€€€A…Ñ ¡ÑµÀ°˜‰íÍÁ±¥Ñô¹©Í½¹°ˆ¤¹ÝÉ¥Ñ•}Ñ•áÐ ‰q¸ˆ¹©½¥¸¡©Í½¸¹‘ÕµÁÌ¡È¤™½ÈÈ¥¸É½ÝÌ¤€¬€‰q¸ˆ¤(€€€€€€€€€€€ÍÁ±¥ÑÌ€ôì‰‘•Øˆèì‰Ù¥‘•½Ìˆèmì‰Ù¥‘•½}¥ˆè€‰ˆ‰õuô°€‰Ñ•ÍÐˆèì‰Ù¥‘•½}¥‘Ìˆèl‰„‰uõô(€€€€€€€€€€€‘•Ø€ô±½…‘}Ñ…É•ÑÌ ‰µÑœµ…ˆ°€‰‘•Øˆ°ÍÁ±¥ÑÌ°A…Ñ ¡ÑµÀ¤¤(€€€€€€€€€€€Ñ•ÍÐ€ô±½…‘}Ñ…É•ÑÌ ‰µÑœµ…ˆ°€‰Ñ•ÍÐˆ°ÍÁ±¥ÑÌ°A…Ñ ¡ÑµÀ¤¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡l¡¤°¤™½È¤°°|¥¸‘•Ùt°l ‰ˆˆ°€ÈÀÀ¸À¥t¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡l¡¤°¤™½È¤°°|¥¸Ñ•ÍÑt°l ‰„ˆ°€ÄÈÀ¸À¥t¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡‘•ÙlÁulÉulÁt¹Ñ•áÐ°€‰™¥ÉÍÐˆ¤(()±…ÍÌM•±•Ñ¥½¹Q•ÍÑÌ¡Õ¹¥ÑÑ•ÍÐ¹Q•ÍÑ…Í”¤è(€€€‘•˜Ñ•ÍÑ}­}ÉÕ±”¡Í•±˜¤è(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡­}™½É}‘ÕÉ…Ñ¥½¸ ÌÀÀ°€Ì¸Ô¤°€Äà¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡­}™½É}‘ÕÉ…Ñ¥½¸ ÌÀÀ°€Ô¸À¤°€ÈÔ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡­}™½É}‘ÕÉ…Ñ¥½¸ Ô°€Ì¸Ô¤°€Ä¤(€€€€€€€Ý¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•Ì¡Y…±Õ•ÉÉ½È¤è(€€€€€€€€€€€­}™½É}‘ÕÉ…Ñ¥½¸ À¤((€€€‘•˜Ñ•ÍÑ}Õ¹¥™½Éµ}•á±Õ‘•Í}•¹‘Á½¥¹ÑÌ¡Í•±˜¤è(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Õ¹¥™½Éµ}Ñ¥µ•ÍÑ…µÁÌ ÄÀ°€Ð¤°lÈ¸À°€Ð¸À°€Ø¸À°€à¸Át¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Õ¹¥™½Éµ}Ñ¥µ•ÍÑ…µÁÌ ä°€Ä¤°lÐ¸Õt¤(€€€€€€€Ý¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•Ì¡Y…±Õ•ÉÉ½È¤è(€€€€€€€€€€€Õ¹¥™½Éµ}Ñ¥µ•ÍÑ…µÁÌ ÄÀ°€À¤(()±…ÍÌAÉ½µÁÑQ•ÍÑÌ¡Õ¹¥ÑÑ•ÍÐ¹Q•ÍÑ…Í”¤è(€€€QI9MI%AP€ômMÕ‰Ñ¥Ñ±•%Ñ•´ À°€Ð°€‰¡•±±¼ˆ¤°MÕ‰Ñ¥Ñ±•%Ñ•´ ÄÀ°€ÄÈ°€‰Ñ¡•É”ˆ¤°MÕ‰Ñ¥Ñ±•%Ñ•´ ÔÀ°€ÔÔ°€‰™…Èˆ¥t((€€€‘•˜Ñ•ÍÑ}ÑÉ…¹ÍÉ¥ÁÑ}½¹Ñ•áÑ}Ý¥¹‘½Ü¡Í•±˜¤è(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡ÑÉ…¹ÍÉ¥ÁÑ}½¹Ñ•áÐ¡Í•±˜¹QI9MI%AP°€ÄÔ¸À°Ý¥¹‘½ÜôÄÔ¸À¤°€‰¡•±±¼Ñ¡•É”ˆ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡ÑÉ…¹ÍÉ¥ÁÑ}½¹Ñ•áÐ¡Í•±˜¹QI9MI%AP°€ÄÀÀ¸À¤°€ˆˆ¤((€€€‘•˜Ñ•ÍÑ}Ý½É‘}±¥µ¥Ð¡Í•±˜¤è(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Ý½É‘}±¥µ¥Ñ}™½É}…À¡9½¹”¤°€ÄÔ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Ý½É‘}±¥µ¥Ñ}™½É}…À È¸ä¤°€à¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Ý½É‘}±¥µ¥Ñ}™½É}…À À¸È¤°€À¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Ý½É‘}±¥µ¥Ñ}™½É}…À À¸Ð¤°€Ä¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Ý½É‘}±¥µ¥Ñ}™½É}…À À¤°€À¤((€€€‘•˜Ñ•ÍÑ}‰Õ¥±‘}ÁÉ½µÁÐ¡Í•±˜¤è(€€€€€€€Ý¥Ñ¡}ÍÁ•• €ô‰Õ¥±‘}ÁÉ½µÁÐ ‰@Àˆ°€ÜÔ¸Ô°€Ð°€È¸À°€ÄÈ°€‰¹¥”‘½œˆ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑ%¸ ˆÐ™É…µ•Ìˆ°Ý¥Ñ¡}ÍÁ•• ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑ%¸ ˆÄèÄÔ¸Ôˆ°Ý¥Ñ¡}ÍÁ•• ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑ%¸ ‰…Ðµ½ÍÐ€ÄÈÝ½É‘Ìˆ°Ý¥Ñ¡}ÍÁ•• ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑ%¸ œ‰¹¥”‘½œˆœ°Ý¥Ñ¡}ÍÁ•• ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑ9½Ñ%¸ ‰ÍÁ•• ˆ°‰Õ¥±‘}ÁÉ½µÁÐ ‰@Àˆ°€Ä¸À°€Ð°€È¸À°€ÄÈ¤¤(€€€€€€€Ý¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•Ì¡Y…±Õ•ÉÉ½È¤è(€€€€€€€€€€€‰Õ¥±‘}ÁÉ½µÁÐ ‰@äˆ°€Ä¸À°€Ð°€È¸À°€ÄÈ¤(€€€€€€€Ý¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•ÍI••à¡Y…±Õ•ÉÉ½È°€‰¹½ÐÍ…™•±äÍÁ•…­…‰±”ˆ¤è(€€€€€€€€€€€‰Õ¥±‘}ÁÉ½µÁÐ ‰@Àˆ°€Ä¸À°€Ð°€È¸À°€À¤((€€€‘•˜Ñ•ÍÑ}Ý½É‘}…Á}¡…Í}¹½}µ¥¹¥µÕµ}…¹‘}É•©•ÑÍ}Õ¹­¹½Ý¹}¹½¹™¥¹¥Ñ•}…Á…¥Ñä¡Í•±˜¤è(€€€€€€€™½È…À°•áÁ•Ñ•¥¸€  À¸À°€À¤°€ ´È¸À°€À¤°€ À¸È°€À¤°€ À¸Ð°€Ä¤°€ Ä¸À°€Ì¤°€ ÈÀ¸À°€ÌÀ¤¤è(€€€€€€€€€€€Ý¥Ñ Í•±˜¹ÍÕ‰Q•ÍÐ¡…Àõ…À¤è(€€€€€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Ý½É‘}±¥µ¥Ñ}™½É}…À¡…À¤°•áÁ•Ñ•¤(€€€€€€€™½È…À¥¸€¡™±½…Ð ‰¹…¸ˆ¤°™±½…Ð ‰¥¹˜ˆ¤¤è(€€€€€€€€€€€Ý¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•Ì¡Y…±Õ•ÉÉ½È¤è(€€€€€€€€€€€€€€€Ý½É‘}±¥µ¥Ñ}™½É}…À¡…À¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Ý½É‘}±¥µ¥Ñ}™½É}…À¡9½¹”°µ…á}Ý½É‘ÌôÔ¤°€Ô¤((€€€‘•˜Ñ•ÍÑ}•¹•É…Ñ½É}É•©•ÑÍ}é•É½}‰Õ‘•Ñ}‰•™½É•}½Á•¹¥¹}™É…µ•Ì¡Í•±˜¤è(€€€€€€€Ý¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•ÍI••à¡Y…±Õ•ÉÉ½È°€‰é•É¼µÝ½É‰Õ‘•Ðˆ¤è(€€€€€€€€€€€ÁÉ•Á…É”¡ì‰Ý½É‘}±¥µ¥Ðˆè€Áô°M¥µÁ±•9…µ•ÍÁ…” ¤¤(()±…ÍÌ•¹•É…Ñ¥½¹!•±Á•ÉQ•ÍÑÌ¡Õ¹¥ÑÑ•ÍÐ¹Q•ÍÑ…Í”¤è(€€€‘•˜Ñ•ÍÑ}±•…¹}…¹‘}µ½‘•±Ì¡Í•±˜¤è(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±•…¸ ˆñÑ¡¥¹¬ù¡µ´ð½Ñ¡¥¹¬ø‘½œÉÕ¹Ì¸ññ¥µ}•¹‘ðøˆ¤°€‰‘½œÉÕ¹Ì¸ˆ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡É•Í½±Ù•}µ½‘•° ‰ÅÝ•¸ÌµÙ°´áˆˆ¤°€‰EÝ•¸½EÝ•¸ÌµY0´áµ%¹ÍÑÉÕÐˆ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡É•Í½±Ù•}µ½‘•° ‰½Éœ½ÕÍÑ½´ˆ¤°€‰½Éœ½ÕÍÑ½´ˆ¤((€€€‘•˜Ñ•ÍÑ}½¹Ù•ÉÍ…Ñ¥½¹}½É‘•ÉÍ}™É…µ•Í}‰•™½É•}Ñ•áÐ¡Í•±˜¤è(€€€€€€€½¹Ù•ÉÍ…Ñ¥½¸€ô‰Õ¥±‘}½¹Ù•ÉÍ…Ñ¥½¸¡l‰˜Äˆ°€‰˜È‰t°€‰•ÍÉ¥‰”¸ˆ°ÍåÍÑ•´ô‰	”‰É¥•˜¸ˆ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡½¹Ù•ÉÍ…Ñ¥½¹lÁul‰É½±”‰t°€‰ÍåÍÑ•´ˆ¤(€€€€€€€½¹Ñ•¹Ð€ô½¹Ù•ÉÍ…Ñ¥½¹lÅul‰½¹Ñ•¹Ð‰t(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡ml‰ÑåÁ”‰t™½ÈŒ¥¸½¹Ñ•¹Ñt°l‰¥µ…”ˆ°€‰¥µ…”ˆ°€‰Ñ•áÐ‰t¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡½¹Ñ•¹ÑlÅul‰¥µ…”‰t°€‰˜Èˆ¤((€€€‘•˜Ñ•ÍÑ}É•ÍÕµ•}¡•±Á•ÉÌ¡Í•±˜¤è(€€€€€€€Ý¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€€€€€½ÕÐ€ôA…Ñ ¡ÑµÀ°€‰½ÕÐ¹©Í½¹°ˆ¤(€€€€€€€€€€€½ÕÐ¹ÝÉ¥Ñ•}Ñ•áÐ ì‰¥ˆè€‰„ˆ°€‰½ÕÑÁÕÐˆè€‰à‰õq¹ì‰¥ˆè€‰ˆˆ°€‰•ÉÉ½Èˆè€‰½½´‰õq¹ì‰¥ˆè€‰Œˆ°€‰½Ôœ¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡‘½¹•}¥‘Ì¡½ÕÐ¤°ì‰„‰ô¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡‘½¹•}¥‘Ì¡A…Ñ ¡ÑµÀ°€‰µ¥ÍÍ¥¹œ¹©Í½¹°ˆ¤¤°Í•Ð ¤¤(€€€€€€€€€€€µ½µ•¹ÑÌ€ôA…Ñ ¡ÑµÀ°€‰´¹©Í½¹°ˆ¤(€€€€€€€€€€€µ½µ•¹ÑÌ¹ÝÉ¥Ñ•}Ñ•áÐ ì‰¥ˆè€‰´ˆ°€‰™É…µ•Ìˆèmt°€‰Ñ¥µ”ˆè€Ä¸Áõq¹q¸œ¤(€€€€€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡É•…‘}©Í½¹°¡µ½µ•¹ÑÌ¥lÁul‰¥‰t°€‰´ˆ¤(€€€€€€€€€€€µ½µ•¹ÑÌ¹ÝÉ¥Ñ•}Ñ•áÐ ì‰¥ˆè€‰´‰õq¸œ¤(€€€€€€€€€€€Ý¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•Ì¡Y…±Õ•ÉÉ½È¤è(€€€€€€€€€€€€€€€É•…‘}©Í½¹°¡µ½µ•¹ÑÌ¤(()¥˜}}¹…µ•}|€ôô€‰}}µ…¥¹}|ˆè(€€€Õ¹¥ÑÑ•ÍÐ¹µ…¥¸ ¤
+from collections import Counter
+import json
+from pathlib import Path
+import subprocess
+import sys
+import tempfile
+from types import SimpleNamespace
+import unittest
+from unittest.mock import patch
+
+from src.datasets.mtg_ad import (
+    EXPECTED_SPLIT_COUNTS, YTDLP_DOWNLOAD_TIMEOUT_SECONDS, YTDLP_FORMAT,
+    YTDLP_SOCKET_TIMEOUT_SECONDS, annotation_file_is_valid, download_annotations,
+    download_video, load_split, parse_row, select_dev, select_stratified,
+)
+from src.datasets.srt import SubtitleItem
+from src.evaluation.parsing import ADItem
+from src.generation.hf_vlm import build_conversation, clean, resolve_model
+from src.generation.prompts import build_prompt, transcript_context, word_limit_for_gap
+from src.utils.selection import k_for_duration, uniform_timestamps
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+import prepare_mtg_ad  # noqa: E402
+from build_moments import load_targets  # noqa: E402
+from run_ad_vlm import done_ids, prepare, read_jsonl  # noqa: E402
+
+
+def make_row(video_id="vid", category="Vlog", num_ad=4, duration=300, split="validation"):
+    return {
+        "video_id": video_id, "split": split, "category": category,
+        "duration_seconds": duration,
+        "gt_ad_segments": [
+            {"start_seconds": float(10 * (num_ad - i)), "text": f" ad {i} "} for i in range(num_ad)
+        ],
+        "transcript_segments": [
+            {"start_seconds": 20.0, "end_seconds": 25.0, "text": "second"},
+            {"start_seconds": 1.0, "end_seconds": 4.0, "text": "first"},
+        ],
+        "visual_info": None,
+    }
+
+
+class MTGADTests(unittest.TestCase):
+    def test_parse_row_sorts_and_strips(self):
+        video = parse_row(make_row(num_ad=3))
+        self.assertEqual(video.ad, [ADItem(10.0, "ad 2"), ADItem(20.0, "ad 1"), ADItem(30.0, "ad 0")])
+        self.assertEqual(video.transcript[0], SubtitleItem(1.0, 4.0, "first"))
+        self.assertEqual(video.youtube_url, "https://www.youtube.com/watch?v=vid")
+        self.assertEqual(video.video_filename, "vid.mp4")
+
+    def test_parse_row_without_speech(self):
+        row = make_row()
+        row["transcript_segments"] = []
+        self.assertEqual(parse_row(row).transcript, [])
+
+    def test_load_split(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            rows = [make_row("a"), make_row("b")]
+            Path(tmp, "validation.jsonl").write_text("\n".join(json.dumps(r) for r in rows) + "\n")
+            self.assertEqual([v.video_id for v in load_split(tmp, "validation")], ["a", "b"])
+            Path(tmp, "test.jsonl").write_text('{"video_id": "x"}\n')
+            with self.assertRaisesRegex(ValueError, "line 1"):
+                load_split(tmp, "test")
+        with self.assertRaises(ValueError):
+            load_split("unused", "train")
+
+    def test_load_split_decodes_utf8(self):
+        row = make_row("a", num_ad=1)
+        row["gt_ad_segments"][0]["text"] = "Ä"
+        with tempfile.TemporaryDirectory() as tmp:
+            Path(tmp, "validation.jsonl").write_bytes((json.dumps(row) + "\n").encode("utf-8"))
+            self.assertEqual(load_split(tmp, "validation")[0].ad[0].text, "Ä")
+
+    def test_stratified_sample_matches_category_mix(self):
+        videos = [parse_row(make_row(f"v{i:03d}", "Vlog")) for i in range(60)]
+        videos += [parse_row(make_row(f"e{i:03d}", "Education")) for i in range(30)]
+        videos += [parse_row(make_row(f"o{i:03d}", "Other")) for i in range(10)]
+        sample = select_stratified(videos, 10, seed=2)
+        self.assertEqual(Counter(v.category for v in sample), {"Vlog": 6, "Education": 3, "Other": 1})
+        self.assertEqual(sample, select_stratified(list(reversed(videos)), 10, seed=2))
+        self.assertNotEqual(sample, select_stratified(videos, 10, seed=3))
+        self.assertEqual(len(select_stratified(videos[:5], 10)), 5)
+
+    def test_dev_requires_enough_ad(self):
+        videos = [parse_row(make_row(f"v{i}", num_ad=2 + i % 2)) for i in range(20)]
+        dev = select_dev(videos, 5, min_ad_items=3)
+        self.assertEqual(len(dev), 5)
+        self.assertTrue(all(len(v.ad) >= 3 for v in dev))
+
+    def test_download_reuses_decodable_video(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp, "vid.mp4")
+            target.write_bytes(b"video")
+            info = SimpleNamespace(has_video=True)
+            with (
+                patch("src.datasets.mtg_ad.shutil.which", return_value="/bin/ffprobe"),
+                patch("src.datasets.mtg_ad.probe", return_value=info),
+                patch("src.datasets.mtg_ad.subprocess.run") as run,
+            ):
+                self.assertEqual(download_video(parse_row(make_row()), tmp), target)
+            run.assert_not_called()
+
+    def test_download_replaces_undecodable_video(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp, "vid.mp4")
+            target.write_bytes(b"not a video")
+            with (
+                patch("src.datasets.mtg_ad.shutil.which", return_value="/bin/yt-dlp"),
+                patch("src.datasets.mtg_ad.probe", side_effect=RuntimeError("invalid")),
+                patch("src.datasets.mtg_ad.subprocess.run") as run,
+            ):
+                run.return_value.returncode = 0
+                run.return_value.stderr = ""
+                with self.assertRaisesRegex(RuntimeError, "yt-dlp failed"):
+                    download_video(parse_row(make_row()), tmp)
+            run.assert_called_once()
+            self.assertFalse(target.exists())
+
+    def test_download_requires_ffprobe_before_reusing_video(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp, "vid.mp4")
+            target.write_bytes(b"video")
+            with (
+                patch("src.datasets.mtg_ad.shutil.which", return_value=None),
+                patch("src.datasets.mtg_ad.subprocess.run") as run,
+            ):
+                with self.assertRaisesRegex(RuntimeError, "ffprobe"):
+                    download_video(parse_row(make_row()), tmp)
+            run.assert_not_called()
+            self.assertTrue(target.is_file())
+
+    def test_download_timeout_removes_partial_file(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with (
+                patch("src.datasets.mtg_ad.shutil.which", return_value="/bin/yt-dlp"),
+                patch(
+                    "src.datasets.mtg_ad.subprocess.run",
+                    side_effect=subprocess.TimeoutExpired(cmd="yt-dlp", timeout=1),
+                ),
+            ):
+                with self.assertRaisesRegex(RuntimeError, "timed out"):
+                    download_video(parse_row(make_row()), tmp)
+            self.assertFalse(Path(tmp, "vid.mp4").exists())
+
+    def test_download_rejects_zero_byte_output_and_uses_progressive_https_format(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp, "vid.mp4")
+            target.touch()
+            with (
+                patch("src.datasets.mtg_ad.shutil.which", return_value="/bin/yt-dlp"),
+                patch("src.datasets.mtg_ad.subprocess.run") as run,
+            ):
+                run.return_value.returncode = 0
+                run.return_value.stderr = ""
+                with self.assertRaisesRegex(RuntimeError, "yt-dlp failed"):
+                    download_video(parse_row(make_row()), tmp)
+            command = run.call_args.args[0]
+            self.assertIn("--retries", command)
+            self.assertIn("--socket-timeout", command)
+            self.assertEqual(
+                command[command.index("--socket-timeout") + 1],
+                str(YTDLP_SOCKET_TIMEOUT_SECONDS),
+            )
+            self.assertEqual(run.call_args.kwargs["timeout"], YTDLP_DOWNLOAD_TIMEOUT_SECONDS)
+            self.assertEqual(command[command.index("-f") + 1], YTDLP_FORMAT)
+            self.assertEqual(command[command.index("--remux-video") + 1], "mp4")
+            self.assertIn("protocol=https", YTDLP_FORMAT)
+            self.assertNotIn("protocol^=http", YTDLP_FORMAT)
+            self.assertFalse(target.exists())
+
+    def test_download_passes_local_browser_auth_and_extractor_options(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp, "vid.mp4")
+
+            def successful_download(command, **_kwargs):
+                target.write_bytes(b"video")
+                return type("Result", (), {"returncode": 0, "stderr": ""})()
+
+            with (
+                patch("src.datasets.mtg_ad.shutil.which", return_value="/bin/yt-dlp"),
+                patch(
+                    "src.datasets.mtg_ad.probe",
+                    return_value=SimpleNamespace(has_video=True),
+                ),
+                patch("src.datasets.mtg_ad.subprocess.run", side_effect=successful_download) as run,
+            ):
+                result = download_video(
+                    parse_row(make_row()), tmp,
+                    cookies_from_browser="chrome:Default",
+                    extractor_args="youtube:player_client=mweb,tv",
+                )
+            self.assertEqual(result, target)
+            command = run.call_args.args[0]
+            self.assertEqual(command[command.index("--cookies-from-browser") + 1], "chrome:Default")
+            self.assertEqual(
+                command[command.index("--extractor-args") + 1],
+                "youtube:player_client=mweb,tv",
+            )
+
+    def test_download_rejects_undecodable_new_output(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp, "vid.mp4")
+
+            def corrupt_download(_command, **_kwargs):
+                target.write_bytes(b"not a video")
+                return type("Result", (), {"returncode": 0, "stderr": ""})()
+
+            with (
+                patch("src.datasets.mtg_ad.shutil.which", return_value="/bin/yt-dlp"),
+                patch("src.datasets.mtg_ad.probe", side_effect=RuntimeError("invalid")),
+                patch("src.datasets.mtg_ad.subprocess.run", side_effect=corrupt_download),
+            ):
+                with self.assertRaisesRegex(RuntimeError, "yt-dlp failed"):
+                    download_video(parse_row(make_row()), tmp)
+            self.assertFalse(target.exists())
+
+    def test_download_rejects_two_cookie_sources(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaisesRegex(ValueError, "either"):
+                download_video(
+                    parse_row(make_row()), tmp,
+                    cookies="cookies.txt", cookies_from_browser="chrome",
+                )
+
+
+def _jsonl_bytes(count: int) -> bytes:
+    return "".join(json.dumps({"i": i}) + "\n" for i in range(count)).encode("utf-8")
+
+
+class AnnotationDownloadTests(unittest.TestCase):
+    def _urlopen(self, bodies):
+        class Response:
+            def __init__(self, payload):
+                self.payload = payload
+
+            def read(self):
+                return self.payload
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+        def urlopen(url, timeout=None):
+            self.assertEqual(timeout, 60)
+            for suffix, payload in bodies.items():
+                if str(url).endswith(suffix):
+                    return Response(payload)
+            raise AssertionError(url)
+
+        return urlopen
+
+    def test_invalid_download_keeps_existing_file_and_temp(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            existing = Path(tmp, "validation.jsonl")
+            existing.write_bytes("keep\n".encode("utf-8"))
+            bodies = {"data/annotations/validation.jsonl": b"\xff"}
+            with patch("src.datasets.mtg_ad.urllib.request.urlopen", side_effect=self._urlopen(bodies)):
+                with self.assertRaisesRegex(RuntimeError, "validation.jsonl"):
+                    download_annotations(tmp)
+            self.assertEqual(existing.read_text(encoding="utf-8"), "keep\n")
+            self.assertEqual(list(Path(tmp).glob("*.tmp")), [])
+
+    def test_complete_download_replaces_partial_jsonl(self):
+        bodies = {
+            "data/annotations/validation.jsonl": _jsonl_bytes(EXPECTED_SPLIT_COUNTS["validation"]),
+            "data/annotations/test.jsonl": _jsonl_bytes(EXPECTED_SPLIT_COUNTS["test"]),
+            "validation_video_ids.txt": "a\n".encode("utf-8"),
+            "test_video_ids.txt": "b\n".encode("utf-8"),
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            Path(tmp, "validation.jsonl").write_bytes(b"partial\n")
+            with patch("src.datasets.mtg_ad.urllib.request.urlopen", side_effect=self._urlopen(bodies)):
+                download_annotations(tmp)
+            self.assertTrue(annotation_file_is_valid(Path(tmp, "validation.jsonl")))
+            self.assertTrue(annotation_file_is_valid(Path(tmp, "test.jsonl")))
+            self.assertEqual(Path(tmp, "validation_video_ids.txt").read_text(encoding="utf-8"), "a\n")
+
+    def test_main_refuses_to_rewrite_splits_for_short_files(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            splits = Path(tmp, "splits.json")
+            splits.write_text("original\n", encoding="utf-8")
+            with (
+                patch.object(prepare_mtg_ad, "download_annotations"),
+                patch.object(
+                    prepare_mtg_ad, "load_split",
+                    side_effect=[[parse_row(make_row())], []],
+                ),
+                patch.object(sys, "argv", [
+                    "prepare_mtg_ad.py", "--data-dir", tmp, "--splits-out", str(splits),
+                ]),
+            ):
+                with self.assertRaises(SystemExit) as raised:
+                    prepare_mtg_ad.main()
+            self.assertEqual(raised.exception.code, 1)
+            self.assertEqual(splits.read_text(encoding="utf-8"), "original\n")
+
+
+class PrepareTargetsTests(unittest.TestCase):
+    def test_batch_reports_missing_source_and_continues_after_preprocess_error(self):
+        videos = [parse_row(make_row(video_id)) for video_id in ("good", "missing", "bad")]
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            data = root / "data"
+            cache = root / "cache"
+            (data / "videos").mkdir(parents=True)
+            for video_id in ("good", "bad"):
+                (data / "videos" / f"{video_id}.mp4").write_bytes(b"video")
+
+            def fake_preprocess(path, cache_dir, fps):
+                if path.stem == "bad":
+                    raise RuntimeError("broken media")
+                cache_dir.mkdir(parents=True)
+                (cache_dir / "manifest.json").write_text("{}")
+                return {
+                    "media_info": {"duration": 300.0},
+                    "frames": [{"path": "frame.jpg"}],
+                    "audio_path": "audio.wav",
+                }
+
+            with patch.object(prepare_mtg_ad, "preprocess_video", side_effect=fake_preprocess):
+                results = prepare_mtg_ad.prepare_targets(
+                    videos, data, cache, download_videos=False, preprocess=True, fps=2.0,
+                )
+        self.assertEqual([item["status"] for item in results], ["ready", "unavailable", "failed"])
+        self.assertEqual(results[0]["preprocess"], "written")
+        self.assertEqual(results[1]["stage"], "source")
+        self.assertEqual(results[2]["stage"], "preprocess")
+
+    def test_batch_marks_unchanged_manifest_as_reused(self):
+        video = parse_row(make_row("cached"))
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            data = root / "data"
+            cache_dir = root / "cache" / "cached"
+            (data / "videos").mkdir(parents=True)
+            (data / "videos" / "cached.mp4").write_bytes(b"video")
+            cache_dir.mkdir(parents=True)
+            (cache_dir / "manifest.json").write_text("{}")
+            manifest = {
+                "media_info": {"duration": 300.0},
+                "frames": [{"path": "frame.jpg"}],
+                "audio_path": None,
+            }
+            with patch.object(prepare_mtg_ad, "preprocess_video", return_value=manifest):
+                [result] = prepare_mtg_ad.prepare_targets(
+                    [video], data, root / "cache", False, True, 2.0,
+                )
+        self.assertEqual(result["status"], "ready")
+        self.assertEqual(result["preprocess"], "reused")
+
+
+class LoadTargetsTests(unittest.TestCase):
+    def test_mtg_ad_dev_and_test_ids(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            for split in ("validation", "test"):
+                rows = [make_row("a", split=split, duration=120), make_row("b", split=split, duration=200)]
+                Path(tmp, f"{split}.jsonl").write_text("\n".join(json.dumps(r) for r in rows) + "\n")
+            splits = {"dev": {"videos": [{"video_id": "b"}]}, "test": {"video_ids": ["a"]}}
+            dev = load_targets("mtg-ad", "dev", splits, Path(tmp))
+            test = load_targets("mtg-ad", "test", splits, Path(tmp))
+        self.assertEqual([(i, d) for i, d, _ in dev], [("b", 200.0)])
+        self.assertEqual([(i, d) for i, d, _ in test], [("a", 120.0)])
+        self.assertEqual(dev[0][2][0].text, "first")
+
+
+class SelectionTests(unittest.TestCase):
+    def test_k_rule(self):
+        self.assertEqual(k_for_duration(300, 3.5), 18)
+        self.assertEqual(k_for_duration(300, 5.0), 25)
+        self.assertEqual(k_for_duration(5, 3.5), 1)
+        with self.assertRaises(ValueError):
+            k_for_duration(0)
+
+    def test_uniform_excludes_endpoints(self):
+        self.assertEqual(uniform_timestamps(10, 4), [2.0, 4.0, 6.0, 8.0])
+        self.assertEqual(uniform_timestamps(9, 1), [4.5])
+        with self.assertRaises(ValueError):
+            uniform_timestamps(10, 0)
+
+
+class PromptTests(unittest.TestCase):
+    TRANSCRIPT = [SubtitleItem(0, 4, "hello"), SubtitleItem(10, 12, "there"), SubtitleItem(50, 55, "far")]
+
+    def test_transcript_context_window(self):
+        self.assertEqual(transcript_context(self.TRANSCRIPT, 15.0, window=15.0), "hello there")
+        self.assertEqual(transcript_context(self.TRANSCRIPT, 100.0), "")
+
+    def test_word_limit(self):
+        self.assertEqual(word_limit_for_gap(None), 15)
+        self.assertEqual(word_limit_for_gap(2.9), 8)
+        self.assertEqual(word_limit_for_gap(0.2), 0)
+        self.assertEqual(word_limit_for_gap(0.4), 1)
+        self.assertEqual(word_limit_for_gap(0), 0)
+
+    def test_build_prompt(self):
+        with_speech = build_prompt("P0", 75.5, 4, 2.0, 12, "nice dog")
+        self.assertIn("4 frames", with_speech)
+        self.assertIn("1:15.5", with_speech)
+        self.assertIn("at most 12 words", with_speech)
+        self.assertIn('"nice dog"', with_speech)
+        self.assertNotIn("speech", build_prompt("P0", 1.0, 4, 2.0, 12))
+        with self.assertRaises(ValueError):
+            build_prompt("P9", 1.0, 4, 2.0, 12)
+        with self.assertRaisesRegex(ValueError, "not safely speakable"):
+            build_prompt("P0", 1.0, 4, 2.0, 0)
+
+    def test_word_cap_has_no_minimum_and_rejects_unknown_nonfinite_capacity(self):
+        for gap, expected in ((0.0, 0), (-2.0, 0), (0.2, 0), (0.4, 1), (1.0, 3), (20.0, 30)):
+            with self.subTest(gap=gap):
+                self.assertEqual(word_limit_for_gap(gap), expected)
+        for gap in (float("nan"), float("inf")):
+            with self.assertRaises(ValueError):
+                word_limit_for_gap(gap)
+        self.assertEqual(word_limit_for_gap(None, max_words=5), 5)
+
+    def test_generator_rejects_zero_budget_before_opening_frames(self):
+        with self.assertRaisesRegex(ValueError, "zero-word budget"):
+            prepare({"word_limit": 0}, SimpleNamespace())
+
+
+class GenerationHelperTests(unittest.TestCase):
+    def test_clean_and_models(self):
+        self.assertEqual(clean("<think>hmm</think> A dog runs.<|im_end|>"), "A dog runs.")
+        self.assertEqual(resolve_model("qwen3-vl-8b"), "Qwen/Qwen3-VL-8B-Instruct")
+        self.assertEqual(resolve_model("org/custom"), "org/custom")
+
+    def test_conversation_orders_frames_before_text(self):
+        conversation = build_conversation(["f1", "f2"], "Describe.", system="Be brief.")
+        self.assertEqual(conversation[0]["role"], "system")
+        content = conversation[1]["content"]
+        self.assertEqual([c["type"] for c in content], ["image", "image", "text"])
+        self.assertEqual(content[1]["image"], "f2")
+
+    def test_resume_helpers(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp, "out.jsonl")
+            out.write_text('{"id": "a", "output": "x"}\n{"id": "b", "error": "oom"}\n{"id": "c", "ou')
+            self.assertEqual(done_ids(out), {"a"})
+            self.assertEqual(done_ids(Path(tmp, "missing.jsonl")), set())
+            moments = Path(tmp, "m.jsonl")
+            moments.write_text('{"id": "m", "frames": [], "time": 1.0}\n\n')
+            self.assertEqual(read_jsonl(moments)[0]["id"], "m")
+            moments.write_text('{"id": "m"}\n')
+            with self.assertRaises(ValueError):
+                read_jsonl(moments)
+
+
+if __name__ == "__main__":
+    unittest.main()

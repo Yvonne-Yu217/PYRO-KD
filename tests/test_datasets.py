@@ -1,1 +1,278 @@
-†‹-©:—«jØ¨z-¥êæŠÛ^u™É½´½±±•Ñ¥½¹Ì¥µÁ½ÉĞ½Õ¹Ñ•È)™É½´½¹Ñ•áÑ±¥ˆ¥µÁ½ÉĞÉ•‘¥É•Ñ}ÍÑ‘½ÕĞ)™É½´‘…Ñ…±…ÍÍ•Ì¥µÁ½ÉĞÉ•Á±…”)¥µÁ½ÉĞ¥¼)¥µÁ½ÉĞ©Í½¸)™É½´Á…Ñ¡±¥ˆ¥µÁ½ÉĞA…Ñ )¥µÁ½ÉĞÑ•µÁ™¥±”)¥µÁ½ÉĞÕ¹¥ÑÑ•ÍĞ)™É½´ÑåÁ•Ì¥µÁ½ÉĞM¥µÁ±•9…µ•ÍÁ…”)™É½´Õ¹¥ÑÑ•ÍĞ¹µ½¬¥µÁ½ÉĞÁ…Ñ ()™É½´ÍÉ¥ÁÑÌ¥µÁ½ÉĞ‰Õ¥±‘}µ½µ•¹ÑÌ°ÁÉ•Á…É•}É•™É…µ•()™É½´ÍÉŒ¹‘…Ñ…Í•ÑÌ¹•½Í¡•µ„¥µÁ½ÉĞ±½…‘}¥Ñ•µÌ°Á…ÉÍ•}¥Ñ•µÌ°ÍÁ±¥Ñ}Á¥±½Ğ)™É½´ÍÉŒ¹‘…Ñ…Í•ÑÌ¹É•™É…µ•¥µÁ½ÉĞ€ (€€€QMQ}M1Q%=9}YIM%=8°‘•ÉåÁÑ}É½Ü°±½…‘}ÍÁ±¥Ğ°µ•É•}Õ•Ì°Á…ÉÍ•}É½Ü°Í•±•Ñ}Á¥±½Ğ°Í•±•Ñ}Ñ•ÍĞ°(¤)™É½´ÍÉŒ¹‘…Ñ…Í•ÑÌ¹ÍÉĞ¥µÁ½ÉĞMÕ‰Ñ¥Ñ±•%Ñ•´°Á…ÉÍ•}ÍÉĞ°ÍÉÑ}Ñ¥µ•}Ñ½}Í•½¹‘Ì()MIP€ô€ (€€€€‹¾îüÅqÉq¸ÀÀèÀÈèÈÈ°ÌÔÀ€´´ø€ÀÀèÀÈèÈÌ°ÀØÁqÉq¹M¡”É…‰Ì¡¥´¹qÉq¹qÉq¸ˆ(€€€€ˆÉq¸ÀÀèÀÈèĞÈ°ÜÀÀ€´´ø€ÀÀèÀÈèĞĞ°ÜÄÁq¹M¡”±•…Ù•Ì5…É­q¹…ĞÑ¡”Ñ…‰±”¹q¹q¸ˆ(¤(()‘•˜µ…­•}É½Ü¡Ù¥‘•½}¥ô‰Ù¥Äˆ°¥µ‘‰}¥ô‰ÑĞÄˆ°…‘}ÕÌõMIP°ÍÉ••¹Á±…äô‰¹Õ±°ˆ¤è(€€€É•ÑÕÉ¸ì(€€€€€€€€‰É½ÑÑ•¹Ñ½µ…Ñ½•Í}¥ˆè€‰µ½Ù¥”ˆ°€‰¥µ‘‰}¥ˆè¥µ‘‰}¥°€‰Ù¥‘•½}¥ˆèÙ¥‘•½}¥°(€€€€€€€€‰…Õ‘¥½}‘•ÍÉ¥ÁÑ¥½¹}ÕÌˆè…‘}ÕÌ°€‰…Õ‘¥½}‘•ÍÉ¥ÁÑ¥½¹}Õ¬ˆè€ˆˆ°€‰ÍÕ‰Ñ¥Ñ±•ÌˆèMIP°(€€€€€€€€‰Í‘ ˆèMIP°€‰ÍÉ••¹Á±…äˆèÍÉ••¹Á±…ä°€‰µ½Ù¥•}‘ÕÉ…Ñ¥½¸ˆè€ˆÜÈĞÄ¸Ìàˆ°(€€€€€€€€‰Ù¥‘•½}ÍÑ…ÉĞˆè€ˆÄÔĞ¸ĞÀˆ°€‰Ù¥‘•½}‘ÕÉ…Ñ¥½¸ˆè€ˆÄØÜ¸Ôàˆ°(€€€ô(()±…ÍÌMÉÑQ•ÍÑÌ¡Õ¹¥ÑÑ•ÍĞ¹Q•ÍÑ…Í”¤è(€€€‘•˜Ñ•ÍÑ}Á…ÉÍ•Í}‰½µ}É±™}…¹‘}µÕ±Ñ¥±¥¹”¡Í•±˜¤è(€€€€€€€¥Ñ•µÌ€ôÁ…ÉÍ•}ÍÉĞ¡MIP¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡¥Ñ•µÍlÁt°MÕ‰Ñ¥Ñ±•%Ñ•´ ÄĞÈ¸ÌÔ°€ÄĞÌ¸ÀØ°€‰M¡”É…‰Ì¡¥´¸ˆ¤¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡¥Ñ•µÍlÅt¹Ñ•áĞ°€‰M¡”±•…Ù•Ì5…É­q¹…ĞÑ¡”Ñ…‰±”¸ˆ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑ±µ½ÍÑÅÕ…°¡¥Ñ•µÍlÅt¹•¹°€ÄØĞ¸ÜÄ¤((€€€‘•˜Ñ•ÍÑ}•µÁÑå}…¹‘}µ¥ÍÍ¥¹}¥¹‘•à¡Í•±˜¤è(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Á…ÉÍ•}ÍÉĞ ˆˆ¤°mt¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Á…ÉÍ•}ÍÉĞ¡9½¹”¤°mt¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Á…ÉÍ•}ÍÉĞ ˆÀÀèÀÀèÀÄ¸Ô€´´ø€ÀÀèÀÀèÀÈ°ÀÀÁq¹àˆ¥lÁt¹ÍÑ…ÉĞ°€Ä¸Ô¤((€€€‘•˜Ñ•ÍÑ}É•©•ÑÍ}µ…±™½Éµ•¡Í•±˜¤è(€€€€€€€İ¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•Ì¡Y…±Õ•ÉÉ½È¤è(€€€€€€€€€€€Á…ÉÍ•}ÍÉĞ ˆÅq¹¹½Ğ„Ñ¥µ¥¹œ±¥¹•q¹Ñ•áĞˆ¤(€€€€€€€İ¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•Ì¡Y…±Õ•ÉÉ½È¤è(€€€€€€€€€€€Á…ÉÍ•}ÍÉĞ ˆÅq¸ÀÀèÀÀèÀÔ°ÀÀÀ€´´ø€ÀÀèÀÀèÀĞ°ÀÀÁq¹Ñ•áĞˆ¤(€€€€€€€İ¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•Ì¡Y…±Õ•ÉÉ½È¤è(€€€€€€€€€€€ÍÉÑ}Ñ¥µ•}Ñ½}Í•½¹‘Ì ˆÀÀèØÄèÀÀ°ÀÀÀˆ¤(()±…ÍÌI•™É…µ•‘Q•ÍÑÌ¡Õ¹¥ÑÑ•ÍĞ¹Q•ÍÑ…Í”¤è(€€€‘•˜Ñ•ÍÑ}Á…ÉÍ•}É½Ü¡Í•±˜¤è(€€€€€€€±¥À€ôÁ…ÉÍ•}É½Ü¡µ…­•}É½Ü¡ÍÉ••¹Á±…äôì‰Í•¹•|Äˆè€ˆñÍ•¹”¼ø‰ôœ¤°€‰Ù…±¥‘…Ñ¥½¸ˆ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±•¸¡±¥À¹…‘}ÕÌ¤°€È¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±¥À¹…‘}Õ¬°mt¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±¥À¹ÍÉ••¹Á±…ä°ì‰Í•¹•|Äˆè€ˆñÍ•¹”¼ø‰ô¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑ±µ½ÍÑÅÕ…°¡±¥À¹Ù¥‘•½}‘ÕÉ…Ñ¥½¸°€ÄØÜ¸Ôà¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±¥À¹µ½Ù¥•}¥°€‰ÑĞÄˆ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑ%¸ ‰Ù¥Äˆ°±¥À¹Ù¥‘•½}ÕÉ°¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑ%Í9½¹”¡Á…ÉÍ•}É½Ü¡µ…­•}É½Ü ¤°€‰Ù…±¥‘…Ñ¥½¸ˆ¤¹ÍÉ••¹Á±…ä¤((€€€‘•˜Ñ•ÍÑ}µ•É•}Õ•Ì¡Í•±˜¤è(€€€€€€€¥Ñ•µÌ€ômMÕ‰Ñ¥Ñ±•%Ñ•´ À°€Ä°€‰„°ˆ¤°MÕ‰Ñ¥Ñ±•%Ñ•´ Ä¸È°€È°€‰ˆ¸ˆ¤°MÕ‰Ñ¥Ñ±•%Ñ•´ Ô°€Ø°€‰Œˆ¥t(€€€€€€€µ•É•€ôµ•É•}Õ•Ì¡¥Ñ•µÌ°µ…á}…ÀôÀ¸Ô¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡µ•É•°mMÕ‰Ñ¥Ñ±•%Ñ•´ À°€È°€‰„°ˆ¸ˆ¤°MÕ‰Ñ¥Ñ±•%Ñ•´ Ô°€Ø°€‰Œˆ¥t¤((€€€‘•˜Ñ•ÍÑ}Í•±•Ñ}Á¥±½Ñ}½¹•}Á•É}µ½Ù¥•}…¹‘}‘•Ñ•Éµ¥¹¥ÍÑ¥Œ¡Í•±˜¤è(€€€€€€€±¥ÁÌ€ôl(€€€€€€€€€€€Á…ÉÍ•}É½Ü¡µ…­•}É½Ü¡Ù¥‘•½}¥õ˜‰Ùíµõí¥ôˆ°¥µ‘‰}¥õ˜‰ÑÑíµôˆ°…‘}ÕÌõMIP€¨€È¤°€‰Ù…±¥‘…Ñ¥½¸ˆ¤(€€€€€€€€€€€™½È´¥¸É…¹” Ğ¤™½È¤¥¸É…¹” Ì¤(€€€€€€€t(€€€€€€€Á¥±½Ğ€ôÍ•±•Ñ}Á¥±½Ğ¡±¥ÁÌ°¹Õµ}±¥ÁÌôØ°µ¥¹}…‘}¥Ñ•µÌôÌ°Í••ôÄ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±•¸¡Á¥±½Ğ¤°€Ø¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±•¸¡íŒ¹µ½Ù¥•}¥™½ÈŒ¥¸Á¥±½ÑlèÑuô¤°€Ğ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Á¥±½Ğ°Í•±•Ñ}Á¥±½Ğ¡±¥ÍĞ¡É•Ù•ÉÍ•¡±¥ÁÌ¤¤°€Ø°€Ì°Í••ôÄ¤¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Í•±•Ñ}Á¥±½Ğ¡±¥ÁÌ°€Ø°µ¥¹}…‘}¥Ñ•µÌôÔ¤°mt¤((€€€‘•˜Ñ•ÍÑ}±½…‘}Ù…±¥‘…Ñ¥½¹}ÍÁ±¥Ğ¡Í•±˜¤è(€€€€€€€İ¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€€€€€É½İÌ€ômµ…­•}É½Ü¡Ù¥‘•½}¥ô‰„ˆ¤°µ…­•}É½Ü¡Ù¥‘•½}¥ô‰ˆˆ¥t(€€€€€€€€€€€A…Ñ ¡ÑµÀ°€‰Ù…±¥‘…Ñ¥½¸¹©Í½¹°ˆ¤¹İÉ¥Ñ•}Ñ•áĞ ‰q¸ˆ¹©½¥¸¡©Í½¸¹‘ÕµÁÌ¡È¤™½ÈÈ¥¸É½İÌ¤€¬€‰q¸ˆ¤(€€€€€€€€€€€±¥ÁÌ€ô±½…‘}ÍÁ±¥Ğ¡ÑµÀ°€‰Ù…±¥‘…Ñ¥½¸ˆ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡mŒ¹Ù¥‘•½}¥™½ÈŒ¥¸±¥ÁÍt°l‰„ˆ°€‰ˆ‰t¤(€€€€€€€İ¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•Ì¡Y…±Õ•ÉÉ½È¤è(€€€€€€€€€€€±½…‘}ÍÁ±¥Ğ ‰Õ¹ÕÍ•ˆ°€‰‘•Øˆ¤((€€€‘•˜Ñ•ÍÑ}Ñ•ÍÑ}Í•±•Ñ¥½¹}¥¹½É•Í}Ñ•áÑ}½Õ¹ÑÍ}…¹‘}‘•¹Í¥Ñå}İ¡•¹}…Ù…¥±…‰±”¡Í•±˜¤è(€€€€€€€±¥ÁÌ€ôl(€€€€€€€€€€€Á…ÉÍ•}É½Ü¡µ…­•}É½Ü¡Ù¥‘•½}¥õ˜‰Ùíµõí¥ôˆ°¥µ‘‰}¥õ˜‰ÑÑíµôˆ¤°€‰Ñ•ÍĞˆ¤(€€€€€€€€€€€™½È´¥¸É…¹” Ğ¤™½È¤¥¸É…¹” Ì¤(€€€€€€€t(€€€€€€€½É¥¥¹…°€ômŒ¹Ù¥‘•½}¥™½ÈŒ¥¸Í•±•Ñ}Ñ•ÍĞ¡±¥ÁÌ°€Ø°Í••ôÄ¥t(€€€€€€€ÍÁ…ÉÍ”€ômÉ•Á±…”¡Œ°…‘}ÕÌõmMÕ‰Ñ¥Ñ±•%Ñ•´ ÄÀÀ°€ÈÀÀ°€‰=¹”¡…¹•Õ”ˆ¥t°(€€€€€€€€€€€€€€€€€€€€€€€€€…‘}Õ¬õmt°ÍÕ‰Ñ¥Ñ±•ÌõmMÕ‰Ñ¥Ñ±•%Ñ•´ ÈÀ°€ÈÄ°€‰¡…¹•ÍÕ‰Ñ¥Ñ±”ˆ¥t°(€€€€€€€€€€€€€€€€€€€€€€€€€Í‘ õmt°ÍÉ••¹Á±…äõ9½¹”¤™½ÈŒ¥¸±¥ÁÍt(€€€€€€€¡…¹•€ômÉ•Á±…”¡Œ°…‘}ÕÌõŒ¹…‘}ÕÌ€¨€ÈÀ°…‘}Õ¬õŒ¹…‘}ÕÌ€¨€ÄÀ°(€€€€€€€€€€€€€€€€€€€€€€€€€€ÍÕ‰Ñ¥Ñ±•ÌõmMÕ‰Ñ¥Ñ±•%Ñ•´ À°€Ä°€‰¥™™•É•¹ĞÑ•áĞˆ¥t°(€€€€€€€€€€€€€€€€€€€€€€€€€€ÍÉ••¹Á±…äõì‰Í•¹”ˆè€‰¥™™•É•¹Ğ…¹¹½Ñ…Ñ¥½¸‰ô¤™½ÈŒ¥¸±¥ÁÍt(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡½É¥¥¹…°°mŒ¹Ù¥‘•½}¥™½ÈŒ¥¸Í•±•Ñ}Ñ•ÍĞ¡ÍÁ…ÉÍ”°€Ø°Í••ôÄ¥t¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡½É¥¥¹…°°mŒ¹Ù¥‘•½}¥™½ÈŒ¥¸Í•±•Ñ}Ñ•ÍĞ¡¡…¹•°€Ø°Í••ôÄ¥t¤(€€€€€€€€ŒQ¡•Í”…Ù…¥±…‰¥±¥Ñä½‰©•ÑÌ™½É‰¥¥¹ÍÁ•Ñ¥¹œÕ”½Õ¹ÑÌ½È½¹Ñ•¹Ğ¸(€€€€€€€±…ÍÌÙ…¥±…‰±”è(€€€€€€€€€€€‘•˜}}‰½½±}|¡Í•±˜¤è(€€€€€€€€€€€€€€€É•ÑÕÉ¸QÉÕ”((€€€€€€€€€€€‘•˜}}±•¹}|¡Í•±˜¤è(€€€€€€€€€€€€€€€É…¥Í”ÍÍ•ÉÑ¥½¹ÉÉ½È ‰Ñ•ÍĞÍ•±•Ñ¥½¸µÕÍĞ¹½Ğ¥¹ÍÁ•ĞÕ”½Õ¹ÑÌˆ¤((€€€€€€€€€€€‘•˜}}¥Ñ•É}|¡Í•±˜¤è(€€€€€€€€€€€€€€€É…¥Í”ÍÍ•ÉÑ¥½¹ÉÉ½È ‰Ñ•ÍĞÍ•±•Ñ¥½¸µÕÍĞ¹½Ğ¥¹ÍÁ•ĞÕ”½¹Ñ•¹ÑÌˆ¤((€€€€€€€µ•Ñ…‘…Ñ„€ômM¥µÁ±•9…µ•ÍÁ…”¡Ù¥‘•½}¥õŒ¹Ù¥‘•½}¥°µ½Ù¥•}¥õŒ¹µ½Ù¥•}¥°(€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€…‘}ÕÌõÙ…¥±…‰±” ¤°…‘}Õ¬õmt°ÍÕ‰Ñ¥Ñ±•ÌõÙ…¥±…‰±” ¤¤™½ÈŒ¥¸±¥ÁÍt(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡½É¥¥¹…°°mŒ¹Ù¥‘•½}¥™½ÈŒ¥¸Í•±•Ñ}Ñ•ÍĞ¡µ•Ñ…‘…Ñ„°€Ø°Í••ôÄ¥t¤((€€€‘•˜Ñ•ÍÑ}Ñ•ÍÑ}Í•±•Ñ¥½¹}É•ÅÕ¥É•Í}ÕÍ}½É}Õ­}É•™•É•¹•}…Ù…¥±…‰¥±¥Ñä¡Í•±˜¤è(€€€€€€€‰…Í”€ôÁ…ÉÍ•}É½Ü¡µ…­•}É½Ü ¤°€‰Ñ•ÍĞˆ¤(€€€€€€€±¥ÁÌ€ômÉ•Á±…”¡‰…Í”°Ù¥‘•½}¥ô‰ÕÌˆ¤°(€€€€€€€€€€€€€€€€É•Á±…”¡‰…Í”°Ù¥‘•½}¥ô‰Õ¬ˆ°…‘}ÕÌõmt°…‘}Õ¬õ‰…Í”¹…‘}ÕÌ¤°(€€€€€€€€€€€€€€€€É•Á±…”¡‰…Í”°Ù¥‘•½}¥ô‰¹•¥Ñ¡•Èˆ°…‘}ÕÌõmt°…‘}Õ¬õmt¥t(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡íŒ¹Ù¥‘•½}¥™½ÈŒ¥¸Í•±•Ñ}Ñ•ÍĞ¡±¥ÁÌ°€ÄÀ¥ô°ì‰ÕÌˆ°€‰Õ¬‰ô¤((€€€‘•˜Ñ•ÍÑ}Ñ•ÍÑ}Í•±•Ñ¥½¹}É•ÅÕ¥É•Í}ÍÕ‰Ñ¥Ñ±•}…Ù…¥±…‰¥±¥Ñä¡Í•±˜¤è(€€€€€€€‰…Í”€ôÁ…ÉÍ•}É½Ü¡µ…­•}É½Ü ¤°€‰Ñ•ÍĞˆ¤(€€€€€€€±¥ÁÌ€ômÉ•Á±…”¡‰…Í”°Ù¥‘•½}¥ô‰ÁÉ•Í•¹Ğˆ¤°É•Á±…”¡‰…Í”°Ù¥‘•½}¥ô‰…‰Í•¹Ğˆ°ÍÕ‰Ñ¥Ñ±•Ìõmt¥t(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡mŒ¹Ù¥‘•½}¥™½ÈŒ¥¸Í•±•Ñ}Ñ•ÍĞ¡±¥ÁÌ°€ÄÀ¥t°l‰ÁÉ•Í•¹Ğ‰t¤((€€€‘•˜Ñ•ÍÑ}½µµ¥ÑÑ•‘}Ñ•ÍÑ}½¹™¥}½¹Ñ…¥¹Í}Á•É}µ½Ù¥•}½Õ¹ÑÌ¡Í•±˜¤è(€€€€€€€€Œ5½Ù¥”¥‘•¹Ñ¥Ñ¥•Ì™É½´Ñ¡”É•±•…Í•II5Ñ•ÍĞµ•Ñ…‘…Ñ„¸-••ÀÑ¡¥Ì(€€€€€€€€Œ½™™±¥¹”±½½­ÕÀ¥¹‘•Á•¹‘•¹Ğ½˜Ñ¡”½¹™¥œÌÍ•±˜µÉ•Á½ÉÑ•½Õ¹ÑÌ¸(€€€€€€€µ½Ù¥•}‰å}Ù¥‘•¼€ôì(€€€€€€€€€€€€ˆÅE}a±ØÉ=E]Íäˆè€‰ÑĞÄÀØÔÔÔÈĞˆ°€ˆÕÈÅ0Á}QÕ,Ğˆè€‰ÑĞÄĞĞàÜÔĞˆ°(€€€€€€€€€€€€ˆåQÅYQeÁ™}9‘äˆè€‰ÑĞÄØàĞÔØÈˆ°€‰	‘œå¡ÙèÑ½‰ˆè€‰ÑĞÄÜÀÈĞĞÔÀˆ°(€€€€€€€€€€€€‰	èå¥aiŒÍEY!Ìˆè€‰ÑĞÔĞÌÌÄĞÀˆ°€‰‘‰ÑÉ‘,ÕiMˆè€‰ÑĞÄÜÀÈĞĞÔÀˆ°(€€€€€€€€€€€€‰Í­‘=}]DÕ”ˆè€‰ÑĞÄÄÄĞÔÄÄàˆ°€‰èá±¨Í±XÔàˆè€‰ÑĞÄÀØÔÔÔÈĞˆ°(€€€€€€€€€€€€‰1‰ÉéÕ­™Ù½˜ˆè€‰ÑĞÄÈÈØÄÜÜØˆ°€‰1¹-=I©½)Ii”ˆè€‰ÑĞÄÜÀÈĞĞÔÀˆ°(€€€€€€€€€€€€‰=}	¥YİáåÄİ„ˆè€‰ÑĞÄØàĞÔØÈˆ°€‰MA¹©İ¹U¥ˆˆè€‰ÑĞÄÈÈØÄÜÜØˆ°(€€€€€€€€€€€€‰UI)-)¥©=¹Í|ˆè€‰ÑĞÈÄÈÌÔÈĞàˆ°€‰Y‘•	Uáµ\Á-}ˆè€‰ÑĞÄÄÄĞÔÄÄàˆ°(€€€€€€€€€€€€‰]å}…9™é}¼ˆè€‰ÑĞÄÈÈääØÀàˆ°€‰aÅ1}áÕ°å)Åˆè€‰ÑĞÔĞÌÌÄĞÀˆ°(€€€€€€€€€€€€‰e}YU¡A1Y•)8ˆè€‰ÑĞÄØàĞÔØÈˆ°€‰}	©¡É]á4ˆè€‰ÑĞÄÈÈØÄÜÜØˆ°(€€€€€€€€€€€€‰}%¥äİ\Ñ99Ñ•Lˆè€‰ÑĞÄÈÈääØÀàˆ°€‰}iÑÙ½=½½a¥àÔˆè€‰ÑĞÈÜÔÌĞÌÀÜˆ°(€€€€€€€€€€€€‰]E¤ÄÜÉ™ŒÑ}Àˆè€‰ÑĞÈÜÔÌĞÌÀÜˆ°€‰•Å…A]‰é}Åàˆè€‰ÑĞÈÜÔÌĞÌÀÜˆ°(€€€€€€€€€€€€‰œá•ÜØÍ	%%İ”ˆè€‰ÑĞÄĞĞàÜÔĞˆ°€‰©‘…ÅÉÑµ°àˆè€‰ÑĞÔĞÌÌÄĞÀˆ°(€€€€€€€€€€€€‰µ©`äÑ‘IÑ9ˆè€‰ÑĞÄÀØÔÔÔÈĞˆ°€‰µ°Å	XÉMA…Mˆè€‰ÑĞÈÄÈÌÔÈĞàˆ°(€€€€€€€€€€€€‰µÉ™)HÙedˆè€‰ÑĞÄĞĞàÜÔĞˆ°€‰Í5Õ	UÙM\ˆè€‰ÑĞÄÄÄĞÔÄÄàˆ°(€€€€€€€€€€€€‰åÁé)±ÌÉU))”ˆè€‰ÑĞÄÈÈääØÀàˆ°€‰é4ÍQ¥5­)}hˆè€‰ÑĞÈÄÈÌÔÈĞàˆ°(€€€€€€€ô(€€€€€€€½¹™¥œ€ô©Í½¸¹±½…‘Ì ¡A…Ñ ¡}}™¥±•}|¤¹É•Í½±Ù” ¤¹Á…É•¹ÑÍlÅt€¼€‰½¹™¥Ì½É•™É…µ•‘}ÍÁ±¥ÑÌ¹©Í½¸ˆ¤¹É•…‘}Ñ•áĞ ¤¤(€€€€€€€Ñ•ÍĞ€ô½¹™¥l‰Ñ•ÍĞ‰t(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Ñ•ÍÑl‰Í•±•Ñ¥½¹}Ù•ÉÍ¥½¸‰t°QMQ}M1Q%=9}YIM%=8¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±•¸¡Ñ•ÍÑl‰Ù¥‘•½}¥‘Ì‰t¤°€ÌÀ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±•¸¡Í•Ğ¡Ñ•ÍÑl‰Ù¥‘•½}¥‘Ì‰t¤¤°€ÌÀ¤(€€€€€€€…ÑÕ…±}½Õ¹ÑÌ€ô½Õ¹Ñ•È¡µ½Ù¥•}‰å}Ù¥‘•½mÙ¥‘•½}¥‘t™½ÈÙ¥‘•½}¥¥¸Ñ•ÍÑl‰Ù¥‘•½}¥‘Ì‰t¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±•¸¡…ÑÕ…±}½Õ¹ÑÌ¤°€ÄÀ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Ñ•ÍÑl‰¹Õµ}µ½Ù¥•Ì‰t°€ÄÀ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Í½ÉÑ•¡…ÑÕ…±}½Õ¹ÑÌ¹Ù…±Õ•Ì ¤¤°lÍt€¨€ÄÀ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Ñ•ÍÑl‰Á•É}µ½Ù¥•}½Õ¹ÑÌ‰t°‘¥Ğ¡…ÑÕ…±}½Õ¹ÑÌ¤¤((€€€‘•˜Ñ•ÍÑ}Ñ•ÍÑ}Í•±•Ñ¥½¹}¥Í}µ½Ù¥•}‰…±…¹•‘}Í••‘•‘}…¹‘}½É‘•É}¥¹‘•Á•¹‘•¹Ğ¡Í•±˜¤è(€€€€€€€±¥ÁÌ€ôl(€€€€€€€€€€€Á…ÉÍ•}É½Ü¡µ…­•}É½Ü¡Ù¥‘•½}¥õ˜‰Ùíµõí¥ôˆ°¥µ‘‰}¥õ˜‰ÑÑíµôˆ¤°€‰Ñ•ÍĞˆ¤(€€€€€€€€€€€™½È´¥¸É…¹” Ğ¤™½È¤¥¸É…¹” Ì¤(€€€€€€€t(€€€€€€€Í•±•Ñ•€ôÍ•±•Ñ}Ñ•ÍĞ¡±¥ÁÌ°€Ø°Í••ôÄ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±•¸¡íŒ¹µ½Ù¥•}¥™½ÈŒ¥¸Í•±•Ñ•‘lèÑuô¤°€Ğ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Í½ÉÑ•¡½Õ¹Ñ•È¡Œ¹µ½Ù¥•}¥™½ÈŒ¥¸Í•±•Ñ•¤¹Ù…±Õ•Ì ¤¤°lÄ°€Ä°€È°€Ét¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Í•±•Ñ•°Í•±•Ñ}Ñ•ÍĞ¡±¥ÍĞ¡É•Ù•ÉÍ•¡±¥ÁÌ¤¤°€Ø°Í••ôÄ¤¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑ9½ÑÅÕ…°¡Í•±•Ñ•°Í•±•Ñ}Ñ•ÍĞ¡±¥ÁÌ°€Ø°Í••ôÈ¤¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±•¸¡Í•±•Ñ}Ñ•ÍĞ¡±¥ÁÌ°€ÄÀÀ¤¤°±•¸¡±¥ÁÌ¤¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Í•±•Ñ}Ñ•ÍĞ¡±¥ÁÌ°€À¤°mt¤((€€€‘•˜Ñ•ÍÑ}ÁÉ•Á…É•}ÕÍ•Í}Á¥±½Ñ}É¥Ñ•É¥…}½¹±å}™½É}Ù…±¥‘…Ñ¥½¸¡Í•±˜¤è(€€€€€€€Ù…±¥‘…Ñ¥½¸€ômÁ…ÉÍ•}É½Ü¡µ…­•}É½Ü¡…‘}ÕÌõMIP€¨€È¤°€‰Ù…±¥‘…Ñ¥½¸ˆ¥t(€€€€€€€Ñ•ÍĞ€ôl(€€€€€€€€€€€Á…ÉÍ•}É½Ü¡µ…­•}É½Ü¡Ù¥‘•½}¥õ˜‰Ñ•ÍÑí¥ôˆ°¥µ‘‰}¥õ˜‰ÑÑí¤€”€Éôˆ¤°€‰Ñ•ÍĞˆ¤(€€€€€€€€€€€™½È¤¥¸É…¹” Ø¤(€€€€€€€t(€€€€€€€Ñ•ÍÑlÁt€ôÉ•Á±…”¡Ñ•ÍÑlÁt°…‘}ÕÌõmt°…‘}Õ¬õmt¤(€€€€€€€Ñ•ÍÑlÅt€ôÉ•Á±…”¡Ñ•ÍÑlÅt°ÍÕ‰Ñ¥Ñ±•Ìõmt¤(€€€€€€€Ñ•ÍÑlÉt€ôÉ•Á±…”¡Ñ•ÍÑlÉt°…‘}ÕÌõmt°…‘}Õ¬õÑ•ÍÑlÉt¹…‘}ÕÌ¤(€€€€€€€İ¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€€€€€½ÕÑÁÕĞ€ôA…Ñ ¡ÑµÀ°€‰ÍÁ±¥ÑÌ¹©Í½¸ˆ¤(€€€€€€€€€€€İ¥Ñ € (€€€€€€€€€€€€€€€Á…Ñ  ‰ÍåÌ¹…ÉØˆ°l‰ÁÉ•Á…É•}É•™É…µ•¹Áäˆ°€ˆ´µ¹Õ´µÁ¥±½Ğˆ°€ˆÄˆ°€ˆ´µ¹Õ´µÑ•ÍĞˆ°€ˆØˆ°(€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€€ˆ´µÍÁ±¥ÑÌµ½ÕĞˆ°ÍÑÈ¡½ÕÑÁÕĞ¥t¤°(€€€€€€€€€€€€€€€Á…Ñ ¹½‰©•Ğ¡ÁÉ•Á…É•}É•™É…µ•°€‰‘½İ¹±½…‘}µ•Ñ…‘…Ñ„ˆ¤°(€€€€€€€€€€€€€€€Á…Ñ ¹½‰©•Ğ¡ÁÉ•Á…É•}É•™É…µ•°€‰±½…‘}ÍÁ±¥Ğˆ°Í¥‘•}•™™•ĞõmÙ…±¥‘…Ñ¥½¸°Ñ•ÍÑt¤°(€€€€€€€€€€€€€€€É•‘¥É•Ñ}ÍÑ‘½ÕĞ¡¥¼¹MÑÉ¥¹%< ¤¤°(€€€€€€€€€€€€¤è(€€€€€€€€€€€€€€€ÁÉ•Á…É•}É•™É…µ•¹µ…¥¸ ¤(€€€€€€€€€€€É•½É€ô©Í½¸¹±½…‘Ì¡½ÕÑÁÕĞ¹É•…‘}Ñ•áĞ ¤¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±•¸¡É•½É‘l‰±¥ÁÌ‰t¤°€Ä¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Í•Ğ¡É•½É‘l‰Ñ•ÍĞ‰ul‰Ù¥‘•½}¥‘Ì‰t¤°ì‰Ñ•ÍĞÈˆ°€‰Ñ•ÍĞÌˆ°€‰Ñ•ÍĞĞˆ°€‰Ñ•ÍĞÔ‰ô¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡É•½É‘l‰Ñ•ÍĞ‰ul‰Á•É}µ½Ù¥•}½Õ¹ÑÌ‰t°ì‰ÑĞÀˆè€È°€‰ÑĞÄˆè€Éô¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡É•½É‘l‰Ñ•ÍĞ‰ul‰Í•±•Ñ¥½¹}Ù•ÉÍ¥½¸‰t°QMQ}M1Q%=9}YIM%=8¤((€€€‘•˜Ñ•ÍÑ}ÁÉ•Á…É•}™…¥±Í}İ¡•¹}•á¥ÍÑ¥¹}Ù¥‘•½}¥Í}µ¥ÍÍ¥¹œ¡Í•±˜¤è(€€€€€€€Ù…±¥‘…Ñ¥½¸€ômÁ…ÉÍ•}É½Ü¡µ…­•}É½Ü¡…‘}ÕÌõMIP€¨€È¤°€‰Ù…±¥‘…Ñ¥½¸ˆ¥t(€€€€€€€İ¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€€€€€İ¥Ñ € (€€€€€€€€€€€€€€€Á…Ñ  ‰ÍåÌ¹…ÉØˆ°l(€€€€€€€€€€€€€€€€€€€€‰ÁÉ•Á…É•}É•™É…µ•¹Áäˆ°€ˆ´µ¹Õ´µÁ¥±½Ğˆ°€ˆÄˆ°€ˆ´µ¹Õ´µÑ•ÍĞˆ°€ˆÀˆ°(€€€€€€€€€€€€€€€€€€€€ˆ´µ‘…Ñ„µ‘¥Èˆ°ÑµÀ°€ˆ´µÍÁ±¥ÑÌµ½ÕĞˆ°ÍÑÈ¡A…Ñ ¡ÑµÀ°€‰ÍÁ±¥ÑÌ¹©Í½¸ˆ¤¤°(€€€€€€€€€€€€€€€€€€€€ˆ´µÁÉ•ÁÉ½•ÍÌˆ°(€€€€€€€€€€€€€€€t¤°(€€€€€€€€€€€€€€€Á…Ñ ¹½‰©•Ğ¡ÁÉ•Á…É•}É•™É…µ•°€‰‘½İ¹±½…‘}µ•Ñ…‘…Ñ„ˆ¤°(€€€€€€€€€€€€€€€Á…Ñ ¹½‰©•Ğ¡ÁÉ•Á…É•}É•™É…µ•°€‰±½…‘}ÍÁ±¥Ğˆ°Í¥‘•}•™™•ĞõmÙ…±¥‘…Ñ¥½¸°mut¤°(€€€€€€€€€€€€€€€É•‘¥É•Ñ}ÍÑ‘½ÕĞ¡¥¼¹MÑÉ¥¹%< ¤¤°(€€€€€€€€€€€€¤è(€€€€€€€€€€€€€€€İ¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•ÍI••à¡MåÍÑ•µá¥Ğ°€ˆÄˆ¤è(€€€€€€€€€€€€€€€€€€€ÁÉ•Á…É•}É•™É…µ•¹µ…¥¸ ¤((€€€‘•˜Ñ•ÍÑ}±•…å}Ñ•ÍÑ}Í•±•Ñ¥½¹}¥Í}É•©•Ñ•‘}Õ¹Ñ¥±}É••¹•É…Ñ•¡Í•±˜¤è(€€€€€€€ÍÁ±¥ÑÌ€ôì‰Ñ•ÍĞˆèì‰Ù¥‘•½}¥‘Ìˆèl‰Ù¥Ä‰uõô(€€€€€€€™½ÈÙ•ÉÍ¥½¸¥¸€¡9½¹”°€‰µ½Ù¥”µ‰…±…¹•µµ•Ñ…‘…Ñ„µØÄˆ°€‰…¹¹½Ñ…Ñ¥½¸µ™¥±Ñ•É•ˆ¤è(€€€€€€€€€€€ÍÁ±¥ÑÍl‰Ñ•ÍĞ‰ul‰Í•±•Ñ¥½¹}Ù•ÉÍ¥½¸‰t€ôÙ•ÉÍ¥½¸(€€€€€€€€€€€İ¥Ñ Í•±˜¹ÍÕ‰Q•ÍĞ¡Ù•ÉÍ¥½¸õÙ•ÉÍ¥½¸¤°Á…Ñ ¹½‰©•Ğ¡‰Õ¥±‘}µ½µ•¹ÑÌ¹É•™É…µ•°€‰±½…‘}ÍÁ±¥Ğˆ¤…Ì±½…‘•Èè(€€€€€€€€€€€€€€€İ¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•ÍI••à¡Y…±Õ•ÉÉ½È°€‰±•…äII5Ñ•ÍĞÍ•±•Ñ¥½¸ˆ¤è(€€€€€€€€€€€€€€€€€€€‰Õ¥±‘}µ½µ•¹ÑÌ¹±½…‘}Ñ…É•ÑÌ ‰É•™É…µ•ˆ°€‰Ñ•ÍĞˆ°ÍÁ±¥ÑÌ°A…Ñ  ‰Õ¹ÕÍ•ˆ¤¤(€€€€€€€€€€€€€€€±½…‘•È¹…ÍÍ•ÉÑ}¹½Ñ}…±±• ¤(€€€€€€€ÍÁ±¥ÑÍl‰Ñ•ÍĞ‰ul‰Í•±•Ñ¥½¹}Ù•ÉÍ¥½¸‰t€ôQMQ}M1Q%=9}YIM%=8(€€€€€€€±¥À€ôÁ…ÉÍ•}É½Ü¡µ…­•}É½Ü ¤°€‰Ñ•ÍĞˆ¤(€€€€€€€İ¥Ñ Á…Ñ ¹½‰©•Ğ¡‰Õ¥±‘}µ½µ•¹ÑÌ¹É•™É…µ•°€‰±½…‘}ÍÁ±¥Ğˆ°É•ÑÕÉ¹}Ù…±Õ”õm±¥Át¤è(€€€€€€€€€€€Ñ…É•ÑÌ€ô‰Õ¥±‘}µ½µ•¹ÑÌ¹±½…‘}Ñ…É•ÑÌ ‰É•™É…µ•ˆ°€‰Ñ•ÍĞˆ°ÍÁ±¥ÑÌ°A…Ñ  ‰Õ¹ÕÍ•ˆ¤¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Ñ…É•ÑÍlÁulÁt°€‰Ù¥Äˆ¤((€€€‘•˜Ñ•ÍÑ}‘•ÉåÁÑ}É½İ}©Í½¹}‘•½‘•Í}•…¡}™¥•±¡Í•±˜¤è(€€€€€€€•¹ÉåÁÑ•€ôí¬è˜‰•¹Œéí©Í½¸¹‘ÕµÁÌ¡Ø¥ôˆ™½È¬°Ø¥¸µ…­•}É½Ü ¤¹¥Ñ•µÌ ¥ô(€€€€€€€É½Ü€ô‘•ÉåÁÑ}É½Ü¡•¹ÉåÁÑ•°±…µ‰‘„Ù…±Õ”èÙ…±Õ”¹É•µ½Ù•ÁÉ•™¥à ‰•¹Œèˆ¤¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡É½Ü°µ…­•}É½Ü ¤¤(€€€€€€€±¥À€ô±½…‘}ÍÁ±¥Ñ}İ¥Ñ¡}‘•ÉåÁÑ½È¡•¹ÉåÁÑ•¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±¥À¹Ù¥‘•½}¥°€‰Ù¥Äˆ¤(()‘•˜±½…‘}ÍÁ±¥Ñ}İ¥Ñ¡}‘•ÉåÁÑ½È¡•¹ÉåÁÑ•‘}É½Ü¤è(€€€İ¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€A…Ñ ¡ÑµÀ°€‰Ñ•ÍĞ¹©Í½¹°ˆ¤¹İÉ¥Ñ•}Ñ•áĞ¡©Í½¸¹‘ÕµÁÌ¡•¹ÉåÁÑ•‘}É½Ü¤€¬€‰q¸ˆ¤(€€€€€€€É•ÑÕÉ¸±½…‘}ÍÁ±¥Ğ¡ÑµÀ°€‰Ñ•ÍĞˆ°‘•ÉåÁĞõ±…µ‰‘„Ù…±Õ”èÙ…±Õ”¹É•µ½Ù•ÁÉ•™¥à ‰•¹Œèˆ¤¥lÁt(()±…ÍÌ½M¡•µ…Q•ÍÑÌ¡Õ¹¥ÑÑ•ÍĞ¹Q•ÍÑ…Í”¤è(€€€EUMQ%=9L€ôl(€€€€€€€ì‰Å}Õ¥ˆè˜‰Åí¤èÀÉ‘ôˆ°€‰½½±•}‘É¥Ù•}¥ˆè˜‰í¥ôˆ°€‰ÅÕ•ÍÑ¥½¸ˆè˜‰Eí¥ôüˆ°(€€€€€€€€€¨©í˜‰½ÁÑ¥½¸í©ôˆè˜‰½ÁÑí©ôˆ™½È¨¥¸É…¹” Ô¥õô(€€€€€€€™½È¤¥¸É…¹” ÈÀ¤(€€€t((€€€‘•˜Ñ•ÍÑ}Á…ÉÍ•}…¹‘}±…‰•±•‘}™¥±Ñ•È¡Í•±˜¤è(€€€€€€€İ¥Ñ Ñ•µÁ™¥±”¹Q•µÁ½É…Éå¥É•Ñ½Éä ¤…ÌÑµÀè(€€€€€€€€€€€A…Ñ ¡ÑµÀ°€‰ÅÕ•ÍÑ¥½¹Ì¹©Í½¸ˆ¤¹İÉ¥Ñ•}Ñ•áĞ¡©Í½¸¹‘ÕµÁÌ¡Í•±˜¹EUMQ%=9L¤¤(€€€€€€€€€€€A…Ñ ¡ÑµÀ°€‰ÍÕ‰Í•Ñ}…¹Íİ•ÉÌ¹©Í½¸ˆ¤¹İÉ¥Ñ•}Ñ•áĞ¡©Í½¸¹‘ÕµÁÌ¡ì‰ÄÀÌˆè€È°€‰ÄÀÜˆè€Áô¤¤(€€€€€€€€€€€±…‰•±•€ô±½…‘}¥Ñ•µÌ¡ÑµÀ¤(€€€€€€€€€€€•Ù•ÉåÑ¡¥¹œ€ô±½…‘}¥Ñ•µÌ¡ÑµÀ°±…‰•±•‘}½¹±äõ…±Í”¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡l¡¤¹Å}Õ¥°¤¹…¹Íİ•È¤™½È¤¥¸±…‰•±•‘t°l ‰ÄÀÌˆ°€È¤°€ ‰ÄÀÜˆ°€À¥t¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±•¸¡•Ù•ÉåÑ¡¥¹œ¤°€ÈÀ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±…‰•±•‘lÁt¹½ÁÑ¥½¹Ì°ÑÕÁ±”¡˜‰½ÁÑí©ôˆ™½È¨¥¸É…¹” Ô¤¤¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±…‰•±•‘lÁt¹Ù¥‘•½}™¥±•¹…µ”°€‰ÄÀÌ¹µÀĞˆ¤((€€€‘•˜Ñ•ÍÑ}É•©•ÑÍ}½ÕÑ}½™}É…¹•}…¹Íİ•È¡Í•±˜¤è(€€€€€€€İ¥Ñ Í•±˜¹…ÍÍ•ÉÑI…¥Í•Ì¡Y…±Õ•ÉÉ½È¤è(€€€€€€€€€€€Á…ÉÍ•}¥Ñ•µÌ¡Í•±˜¹EUMQ%=9MlèÅt°ì‰ÄÀÀˆè€Õô¤((€€€‘•˜Ñ•ÍÑ}Á¥±½Ñ}ÍÁ±¥Ñ}¥Í}‘¥Í©½¥¹Ñ}…¹‘}‘•Ñ•Éµ¥¹¥ÍÑ¥Œ¡Í•±˜¤è(€€€€€€€¥Ñ•µÌ€ôÁ…ÉÍ•}¥Ñ•µÌ¡Í•±˜¹EUMQ%=9L°íÅl‰Å}Õ¥‰tè€Ä™½ÈÄ¥¸Í•±˜¹EUMQ%=9Mô¤(€€€€€€€Á¥±½Ğ°É•ÍĞ€ôÍÁ±¥Ñ}Á¥±½Ğ¡¥Ñ•µÌ°¹Õµ}Á¥±½ĞôÔ°Í••ôÌ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±•¸¡Á¥±½Ğ¤°€Ô¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡±•¸¡É•ÍĞ¤°€ÄÔ¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑ…±Í”¡í¤¹Å}Õ¥™½È¤¥¸Á¥±½Ñô€˜í¤¹Å}Õ¥™½È¤¥¸É•ÍÑô¤(€€€€€€€Í•±˜¹…ÍÍ•ÉÑÅÕ…°¡Á¥±½Ğ°ÍÁ±¥Ñ}Á¥±½Ğ¡±¥ÍĞ¡É•Ù•ÉÍ•¡¥Ñ•µÌ¤¤°€Ô°Í••ôÌ¥lÁt¤(()¥˜}}¹…µ•}|€ôô€‰}}µ…¥¹}|ˆè(€€€Õ¹¥ÑÑ•ÍĞ¹µ…¥¸ ¤(
+from collections import Counter
+from contextlib import redirect_stdout
+from dataclasses import replace
+import io
+import json
+from pathlib import Path
+import tempfile
+import unittest
+from types import SimpleNamespace
+from unittest.mock import patch
+
+from scripts import build_moments, prepare_reframed
+
+from src.datasets.egoschema import load_items, parse_items, split_pilot
+from src.datasets.reframed import (
+    TEST_SELECTION_VERSION, decrypt_row, load_split, merge_cues, parse_row, select_pilot, select_test,
+)
+from src.datasets.srt import SubtitleItem, parse_srt, srt_time_to_seconds
+
+SRT = (
+    "ï»¿1\r\n00:02:22,350 --> 00:02:23,060\r\nShe grabs him.\r\n\r\n"
+    "2\n00:02:42,700 --> 00:02:44,710\nShe leaves Mark\nat the table.\n\n"
+)
+
+
+def make_row(video_id="vid1", imdb_id="tt1", ad_us=SRT, screenplay="null"):
+    return {
+        "rottentomatoes_id": "movie", "imdb_id": imdb_id, "video_id": video_id,
+        "audio_description_us": ad_us, "audio_description_uk": "", "subtitles": SRT,
+        "sdh": SRT, "screenplay": screenplay, "movie_duration": "7241.38",
+        "video_start": "154.40", "video_duration": "167.58",
+    }
+
+
+class SrtTests(unittest.TestCase):
+    def test_parses_bom_crlf_and_multiline(self):
+        items = parse_srt(SRT)
+        self.assertEqual(items[0], SubtitleItem(142.35, 143.06, "She grabs him."))
+        self.assertEqual(items[1].text, "She leaves Mark\nat the table.")
+        self.assertAlmostEqual(items[1].end, 164.71)
+
+    def test_empty_and_missing_index(self):
+        self.assertEqual(parse_srt(""), [])
+        self.assertEqual(parse_srt(None), [])
+        self.assertEqual(parse_srt("00:00:01.5 --> 00:00:02,000\nx")[0].start, 1.5)
+
+    def test_rejects_malformed(self):
+        with self.assertRaises(ValueError):
+            parse_srt("1\nnot a timing line\ntext")
+        with self.assertRaises(ValueError):
+            parse_srt("1\n00:00:05,000 --> 00:00:04,000\ntext")
+        with self.assertRaises(ValueError):
+            srt_time_to_seconds("00:61:00,000")
+
+
+class ReframedTests(unittest.TestCase):
+    def test_parse_row(self):
+        clip = parse_row(make_row(screenplay='{"scene_1": "<scene/>"}'), "validation")
+        self.assertEqual(len(clip.ad_us), 2)
+        self.assertEqual(clip.ad_uk, [])
+        self.assertEqual(clip.screenplay, {"scene_1": "<scene/>"})
+        self.assertAlmostEqual(clip.video_duration, 167.58)
+        self.assertEqual(clip.movie_id, "tt1")
+        self.assertIn("vid1", clip.video_url)
+        self.assertIsNone(parse_row(make_row(), "validation").screenplay)
+
+    def test_merge_cues(self):
+        items = [SubtitleItem(0, 1, "a,"), SubtitleItem(1.2, 2, "b."), SubtitleItem(5, 6, "c")]
+        merged = merge_cues(items, max_gap=0.5)
+        self.assertEqual(merged, [SubtitleItem(0, 2, "a, b."), SubtitleItem(5, 6, "c")])
+
+    def test_select_pilot_one_per_movie_and_deterministic(self):
+        clips = [
+            parse_row(make_row(video_id=f"v{m}{i}", imdb_id=f"tt{m}", ad_us=SRT * 2), "validation")
+            for m in range(4) for i in range(3)
+        ]
+        pilot = select_pilot(clips, num_clips=6, min_ad_items=3, seed=1)
+        self.assertEqual(len(pilot), 6)
+        self.assertEqual(len({c.movie_id for c in pilot[:4]}), 4)
+        self.assertEqual(pilot, select_pilot(list(reversed(clips)), 6, 3, seed=1))
+        self.assertEqual(select_pilot(clips, 6, min_ad_items=5), [])
+
+    def test_load_validation_split(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            rows = [make_row(video_id="a"), make_row(video_id="b")]
+            Path(tmp, "validation.jsonl").write_text("\n".join(json.dumps(r) for r in rows) + "\n")
+            clips = load_split(tmp, "validation")
+        self.assertEqual([c.video_id for c in clips], ["a", "b"])
+        with self.assertRaises(ValueError):
+            load_split("unused", "dev")
+
+    def test_test_selection_ignores_text_counts_and_density_when_available(self):
+        clips = [
+            parse_row(make_row(video_id=f"v{m}{i}", imdb_id=f"tt{m}"), "test")
+            for m in range(4) for i in range(3)
+        ]
+        original = [c.video_id for c in select_test(clips, 6, seed=1)]
+        sparse = [replace(c, ad_us=[SubtitleItem(100, 200, "One changed cue")],
+                          ad_uk=[], subtitles=[SubtitleItem(20, 21, "Changed subtitle")],
+                          sdh=[], screenplay=None) for c in clips]
+        changed = [replace(c, ad_us=c.ad_us * 20, ad_uk=c.ad_us * 10,
+                           subtitles=[SubtitleItem(0, 1, "Different text")],
+                           screenplay={"scene": "Different annotation"}) for c in clips]
+        self.assertEqual(original, [c.video_id for c in select_test(sparse, 6, seed=1)])
+        self.assertEqual(original, [c.video_id for c in select_test(changed, 6, seed=1)])
+        # These availability objects forbid inspecting cue counts or content.
+        class Available:
+            def __bool__(self):
+                return True
+
+            def __len__(self):
+                raise AssertionError("test selection must not inspect cue counts")
+
+            def __iter__(self):
+                raise AssertionError("test selection must not inspect cue contents")
+
+        metadata = [SimpleNamespace(video_id=c.video_id, movie_id=c.movie_id,
+                                    ad_us=Available(), ad_uk=[], subtitles=Available()) for c in clips]
+        self.assertEqual(original, [c.video_id for c in select_test(metadata, 6, seed=1)])
+
+    def test_test_selection_requires_us_or_uk_reference_availability(self):
+        base = parse_row(make_row(), "test")
+        clips = [replace(base, video_id="us"),
+                 replace(base, video_id="uk", ad_us=[], ad_uk=base.ad_us),
+                 replace(base, video_id="neither", ad_us=[], ad_uk=[])]
+        self.assertEqual({c.video_id for c in select_test(clips, 10)}, {"us", "uk"})
+
+    def test_test_selection_requires_subtitle_availability(self):
+        base = parse_row(make_row(), "test")
+        clips = [replace(base, video_id="present"), replace(base, video_id="absent", subtitles=[])]
+        self.assertEqual([c.video_id for c in select_test(clips, 10)], ["present"])
+
+    def test_committed_test_config_contains_per_movie_counts(self):
+        # Movie identities from the released REFRAMED test metadata. Keep this
+        # offline lookup independent of the config's self-reported counts.
+        movie_by_video = {
+            "1Q_Xlv2OQWsy": "tt10655524", "5G21L0_TC5K4": "tt1448754",
+            "9TqVTYpf_Ndy": "tt1684562", "Bdg9hvz4obAD": "tt17024450",
+            "Bz9iXZc3QVHs": "tt5433140", "EdbtrdK5gZSC": "tt17024450",
+            "FCskdO_WFQ5e": "tt11145118", "Fz8lDj3lgV58": "tt10655524",
+            "LbrAzd5kfvof": "tt12261776", "LnKORjoJDRZe": "tt17024450",
+            "O_BiVwxyF17a": "tt1684562", "SPFnjwnUECib": "tt12261776",
+            "URJKJijOnEs_": "tt21235248", "VdeBUxmW0K_A": "tt11145118",
+            "Wy_AaNCfzc_o": "tt12299608", "XqL_Exul9JqE": "tt5433140",
+            "Y_VUFhPLVeJN": "tt1684562", "_BjchgrAWAxM": "tt12261776",
+            "_Iiy7W4NNteS": "tt12299608", "_ZtvoOooXix5": "tt27534307",
+            "cWQi172fc4_p": "tt27534307", "eqaPWbz_gqD8": "tt27534307",
+            "g8ew63BIIwEe": "tt1448754", "jdaGqC2tmFl8": "tt5433140",
+            "mgjX94dRCtNB": "tt10655524", "ml1BV2SPaFSF": "tt21235248",
+            "mrEfJcER6AYY": "tt1448754", "sDMuBUgC6SgW": "tt11145118",
+            "yG0zJls2UJJe": "tt12299608", "zM3TiMkJ_DDZ": "tt21235248",
+        }
+        config = json.loads((Path(__file__).resolve().parents[1] / "configs/reframed_splits.json").read_text())
+        test = config["test"]
+        self.assertEqual(test["selection_version"], TEST_SELECTION_VERSION)
+        self.assertEqual(len(test["video_ids"]), 30)
+        self.assertEqual(len(set(test["video_ids"])), 30)
+        actual_counts = Counter(movie_by_video[video_id] for video_id in test["video_ids"])
+        self.assertEqual(len(actual_counts), 10)
+        self.assertEqual(test["num_movies"], 10)
+        self.assertEqual(sorted(actual_counts.values()), [3] * 10)
+        self.assertEqual(test["per_movie_counts"], dict(actual_counts))
+
+    def test_test_selection_is_movie_balanced_seeded_and_order_independent(self):
+        clips = [
+            parse_row(make_row(video_id=f"v{m}{i}", imdb_id=f"tt{m}"), "test")
+            for m in range(4) for i in range(3)
+        ]
+        selected = select_test(clips, 6, seed=1)
+        self.assertEqual(len({c.movie_id for c in selected[:4]}), 4)
+        self.assertEqual(sorted(Counter(c.movie_id for c in selected).values()), [1, 1, 2, 2])
+        self.assertEqual(selected, select_test(list(reversed(clips)), 6, seed=1))
+        self.assertNotEqual(selected, select_test(clips, 6, seed=2))
+        self.assertEqual(len(select_test(clips, 100)), len(clips))
+        self.assertEqual(select_test(clips, 0), [])
+
+    def test_prepare_uses_pilot_criteria_only_for_validation(self):
+        validation = [parse_row(make_row(ad_us=SRT * 2), "validation")]
+        test = [
+            parse_row(make_row(video_id=f"test{i}", imdb_id=f"tt{i % 2}"), "test")
+            for i in range(6)
+        ]
+        test[0] = replace(test[0], ad_us=[], ad_uk=[])
+        test[1] = replace(test[1], subtitles=[])
+        test[2] = replace(test[2], ad_us=[], ad_uk=test[2].ad_us)
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp, "splits.json")
+            with (
+                patch("sys.argv", ["prepare_reframed.py", "--num-pilot", "1", "--num-test", "6",
+                                   "--splits-out", str(output)]),
+                patch.object(prepare_reframed, "download_metadata"),
+                patch.object(prepare_reframed, "load_split", side_effect=[validation, test]),
+                redirect_stdout(io.StringIO()),
+            ):
+                prepare_reframed.main()
+            record = json.loads(output.read_text())
+        self.assertEqual(len(record["clips"]), 1)
+        self.assertEqual(set(record["test"]["video_ids"]), {"test2", "test3", "test4", "test5"})
+        self.assertEqual(record["test"]["per_movie_counts"], {"tt0": 2, "tt1": 2})
+        self.assertEqual(record["test"]["selection_version"], TEST_SELECTION_VERSION)
+
+    def test_prepare_fails_when_existing_video_is_missing(self):
+        validation = [parse_row(make_row(ad_us=SRT * 2), "validation")]
+        with tempfile.TemporaryDirectory() as tmp:
+            with (
+                patch("sys.argv", [
+                    "prepare_reframed.py", "--num-pilot", "1", "--num-test", "0",
+                    "--data-dir", tmp, "--splits-out", str(Path(tmp, "splits.json")),
+                    "--preprocess",
+                ]),
+                patch.object(prepare_reframed, "download_metadata"),
+                patch.object(prepare_reframed, "load_split", side_effect=[validation, []]),
+                redirect_stdout(io.StringIO()),
+            ):
+                with self.assertRaisesRegex(SystemExit, "1"):
+                    prepare_reframed.main()
+
+    def test_legacy_test_selection_is_rejected_until_regenerated(self):
+        splits = {"test": {"video_ids": ["vid1"]}}
+        for version in (None, "movie-balanced-metadata-v1", "annotation-filtered"):
+            splits["test"]["selection_version"] = version
+            with self.subTest(version=version), patch.object(build_moments.reframed, "load_split") as loader:
+                with self.assertRaisesRegex(ValueError, "legacy REFRAMED test selection"):
+                    build_moments.load_targets("reframed", "test", splits, Path("unused"))
+                loader.assert_not_called()
+        splits["test"]["selection_version"] = TEST_SELECTION_VERSION
+        clip = parse_row(make_row(), "test")
+        with patch.object(build_moments.reframed, "load_split", return_value=[clip]):
+            targets = build_moments.load_targets("reframed", "test", splits, Path("unused"))
+        self.assertEqual(targets[0][0], "vid1")
+
+    def test_decrypt_row_json_decodes_each_field(self):
+        encrypted = {k: f"enc:{json.dumps(v)}" for k, v in make_row().items()}
+        row = decrypt_row(encrypted, lambda value: value.removeprefix("enc:"))
+        self.assertEqual(row, make_row())
+        clip = load_split_with_decryptor(encrypted)
+        self.assertEqual(clip.video_id, "vid1")
+
+
+def load_split_with_decryptor(encrypted_row):
+    with tempfile.TemporaryDirectory() as tmp:
+        Path(tmp, "test.jsonl").write_text(json.dumps(encrypted_row) + "\n")
+        return load_split(tmp, "test", decrypt=lambda value: value.removeprefix("enc:"))[0]
+
+
+class EgoSchemaTests(unittest.TestCase):
+    QUESTIONS = [
+        {"q_uid": f"q{i:02d}", "google_drive_id": f"g{i}", "question": f"Q{i}?",
+         **{f"option {j}": f"opt{j}" for j in range(5)}}
+        for i in range(20)
+    ]
+
+    def test_parse_and_labeled_filter(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            Path(tmp, "questions.json").write_text(json.dumps(self.QUESTIONS))
+            Path(tmp, "subset_answers.json").write_text(json.dumps({"q03": 2, "q07": 0}))
+            labeled = load_items(tmp)
+            everything = load_items(tmp, labeled_only=False)
+        self.assertEqual([(i.q_uid, i.answer) for i in labeled], [("q03", 2), ("q07", 0)])
+        self.assertEqual(len(everything), 20)
+        self.assertEqual(labeled[0].options, tuple(f"opt{j}" for j in range(5)))
+        self.assertEqual(labeled[0].video_filename, "q03.mp4")
+
+    def test_rejects_out_of_range_answer(self):
+        with self.assertRaises(ValueError):
+            parse_items(self.QUESTIONS[:1], {"q00": 5})
+
+    def test_pilot_split_is_disjoint_and_deterministic(self):
+        items = parse_items(self.QUESTIONS, {q["q_uid"]: 1 for q in self.QUESTIONS})
+        pilot, rest = split_pilot(items, num_pilot=5, seed=3)
+        self.assertEqual(len(pilot), 5)
+        self.assertEqual(len(rest), 15)
+        self.assertFalse({i.q_uid for i in pilot} & {i.q_uid for i in rest})
+        self.assertEqual(pilot, split_pilot(list(reversed(items)), 5, seed=3)[0])
+
+
+if __name__ == "__main__":
+    unittest.main()

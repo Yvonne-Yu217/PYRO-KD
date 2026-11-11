@@ -1,1 +1,276 @@
-†‹-©ž:—«jØ¨žz-¥êæŠÛ^tˆˆ‰5¥¹Ñ¡”…À€¡5Qµ¤¥¹±¥¹”µ‘…Ñ…Í•Ðè…¹¹½Ñ…Ñ¥½¹Ì°Ù¥‘•½Ì°™¥á•ÍÁ±¥ÑÌ¸()M½ÕÉ”è¡ÑÑÁÌè¼½¡Õ¥¹™…”¹¼½‘…Ñ…Í•ÑÌ½½½±”½µ¥¹µÑ¡”µ…Àµ¥¹±¥¹”µ…(¡	d€Ð¸À¤°½‘”…Ð¡ÑÑÁÌè¼½¥Ñ¡Õˆ¹½´½½½±”½µÑœµ…¸€ÐÌÌe½ÕQÕ‰”Ù¥‘•½Ìè(ÌÌÈÙ…±¥‘…Ñ¥½¸€¡‘•Ø°•á•µÁ±…ÉÌ¤…¹€ÄÀÄÑ•ÍÐ¸É½Õ¹µÑÉÕÑ ¡…ÌÍÑ…ÉÐÑ¥µ•Ì)½¹±äìÑÉ…¹ÍÉ¥ÁÑÌ…É”Ñ¥µ•ÍÑ…µÁ•MHÍ•µ•¹ÑÌ¸Y¥‘•½Ì…É”™•Ñ¡•™É½´)e½ÕQÕ‰”Ý¥Ñ åÐµ‘±À…¹¹•Ù•È½µµ¥ÑÑ•¸(ˆˆˆ()™É½´½±±•Ñ¥½¹Ì¥µÁ½ÉÐ‘•™…Õ±Ñ‘¥Ð)™É½´‘…Ñ…±…ÍÍ•Ì¥µÁ½ÉÐ‘…Ñ…±…ÍÌ)¥µÁ½ÉÐ©Í½¸)™É½´Á…Ñ¡±¥ˆ¥µÁ½ÉÐA…Ñ )¥µÁ½ÉÐÉ…¹‘½´)¥µÁ½ÉÐÍ¡ÕÑ¥°)¥µÁ½ÉÐÍÕ‰ÁÉ½•ÍÌ)™É½´ÑåÁ¥¹œ¥µÁ½ÉÐ%Ñ•É…‰±”)¥µÁ½ÉÐÕÉ±±¥ˆ¹É•ÅÕ•ÍÐ()™É½´ÍÉŒ¹•Ù…±Õ…Ñ¥½¸¹Á…ÉÍ¥¹œ¥µÁ½ÉÐ%Ñ•´)™É½´ÍÉŒ¹ÕÑ¥±Ì¹µ•‘¥„¥µÁ½ÉÐÁÉ½‰”()™É½´€¹ÍÉÐ¥µÁ½ÉÐMÕ‰Ñ¥Ñ±•%Ñ•´()!}	M}UI0€ô€‰¡ÑÑÁÌè¼½¡Õ¥¹™…”¹¼½‘…Ñ…Í•ÑÌ½½½±”½µ¥¹µÑ¡”µ…Àµ¥¹±¥¹”µ…½É•Í½±Ù”½µ…¥¸ˆ)MA1%QL€ô€ ‰Ù…±¥‘…Ñ¥½¸ˆ°€‰Ñ•ÍÐˆ¤)aAQ}MA1%Q}=U9QL€ôì‰Ù…±¥‘…Ñ¥½¸ˆè€ÌÌÈ°€‰Ñ•ÍÐˆè€ÄÀÅô)99=QQ%=9}%1L€ôì(€€€€‰Ù…±¥‘…Ñ¥½¸¹©Í½¹°ˆè€‰‘…Ñ„½…¹¹½Ñ…Ñ¥½¹Ì½Ù…±¥‘…Ñ¥½¸¹©Í½¹°ˆ°(€€€€‰Ñ•ÍÐ¹©Í½¹°ˆè€‰‘…Ñ„½…¹¹½Ñ…Ñ¥½¹Ì½Ñ•ÍÐ¹©Í½¹°ˆ°(€€€€‰Ù…±¥‘…Ñ¥½¹}Ù¥‘•½}¥‘Ì¹ÑáÐˆè€‰Ù…±¥‘…Ñ¥½¹}Ù¥‘•½}¥‘Ì¹ÑáÐˆ°(€€€€‰Ñ•ÍÑ}Ù¥‘•½}¥‘Ì¹ÑáÐˆè€‰Ñ•ÍÑ}Ù¥‘•½}¥‘Ì¹ÑáÐˆ°)ô)99=QQ%=9}=]91=}Q%5=UQ}M=9L€ô€ØÀ(Œ€ðôÜÈÁÀ ¸ÈØÐ­••ÁÌ™É…µ•ÌÍ¡…ÉÀ…¹‘•½‘…‰±”Ý¡¥±”‰½Õ¹‘¥¹œ‘½Ý¹±½…Í¥é”¸(ŒÁÉ½Ñ½½°õ¡ÑÑÁÌ¥ÌÁÉ½É•ÍÍ¥Ù”!QQAL½¹±äèM €¡¡ÑÑÁ}‘…Í¡}Í•µ•¹ÑÌ¤…¹!1L(Œ€¡´ÍÔá}¹…Ñ¥Ù”¤…¸ÍÑ…±°…Ð€À‰åÑ•Ì¸AÉ•™•ÈÑ¡”½É¥¥¹…°µ±…¹Õ…”…Õ‘¥¼ÑÉ…¬¸)eQ1A}M=-Q}Q%5=UQ}M=9L€ô€ÈÀ)eQ1A}=]91=}Q%5=UQ}M=9L€ô€ØÀÀ)eQ1A}=I5P€ô€ (€€€€‰‰Ø©m¡•¥¡ÐðôÜÈÁumÙ½‘•xõ…ÙŒÅumÁÉ½Ñ½½°õ¡ÑÑÁÍt­‰…m•áÐõ´Ñ…um™½Éµ…Ñ}¹½Ñ”¨õ½É¥¥¹…±umÁÉ½Ñ½½°õ¡ÑÑÁÍtˆ(€€€€ˆ½‰Ø©m¡•¥¡ÐðôÜÈÁumÙ½‘•xõ…ÙŒÅumÁÉ½Ñ½½°õ¡ÑÑÁÍt­‰…m•áÐõ´Ñ…umÁÉ½Ñ½½°õ¡ÑÑÁÍtˆ(€€€€ˆ½‰m¡•¥¡ÐðôÜÈÁumÁÉ½Ñ½½°õ¡ÑÑÁÍtˆ(¤(()‘…Ñ…±…ÍÌ¡™É½é•¸õQÉÕ”¤)±…ÍÌ5QY¥‘•¼è(€€€€ˆˆ‰=¹”5QµÙ¥‘•¼Ý¥Ñ Ñ¥µ”µÍ½ÉÑ•…¹ÑÉ…¹ÍÉ¥ÁÐÍ•µ•¹ÑÌ€¡Í•½¹‘Ì¤¸ˆˆˆ((€€€Ù¥‘•½}¥èÍÑÈ(€€€ÍÁ±¥ÐèÍÑÈ(€€€…Ñ•½ÉäèÍÑÈ(€€€‘ÕÉ…Ñ¥½¹}Í•½¹‘Ìè™±½…Ð(€€€…è±¥ÍÑm%Ñ•µt(€€€ÑÉ…¹ÍÉ¥ÁÐè±¥ÍÑmMÕ‰Ñ¥Ñ±•%Ñ•µt(€€€Ù¥ÍÕ…±}¥¹™¼èÍÑÈð9½¹”((€€€ÁÉ½Á•ÉÑä(€€€‘•˜å½ÕÑÕ‰•}ÕÉ°¡Í•±˜¤€´øÍÑÈè(€€€€€€€É•ÑÕÉ¸˜‰¡ÑÑÁÌè¼½ÝÝÜ¹å½ÕÑÕ‰”¹½´½Ý…Ñ ýØõíÍ•±˜¹Ù¥‘•½}¥‘ôˆ((€€€ÁÉ½Á•ÉÑä(€€€‘•˜Ù¥‘•½}™¥±•¹…µ”¡Í•±˜¤€´øÍÑÈè(€€€€€€€É•ÑÕÉ¸˜‰íÍ•±˜¹Ù¥‘•½}¥‘ô¹µÀÐˆ(()‘•˜…¹¹½Ñ…Ñ¥½¹}™¥±•}¥Í}Ù…±¥¡Á…Ñ èÍÑÈðA…Ñ °¹…µ”èÍÑÈð9½¹”€ô9½¹”¤€´ø‰½½°è(€€€€ˆˆ‰QÉÕ”Ý¡•¸Á…Ñ ¥ÌUQ´à…¹„)M=90ÍÁ±¥Ð¡…Ì¥ÑÌ½™™¥¥…°É½Ü½Õ¹Ð¸ˆˆˆ(€€€Á…Ñ €ôA…Ñ ¡Á…Ñ ¤(€€€¹…µ”€ô¹…µ”½ÈÁ…Ñ ¹¹…µ”(€€€ÑÉäè(€€€€€€€Ñ•áÐ€ôÁ…Ñ ¹É•…‘}Ñ•áÐ¡•¹½‘¥¹œô‰ÕÑ˜´àˆ¤(€€€•á•ÁÐ€¡=MÉÉ½È°U¹¥½‘••½‘•ÉÉ½È¤è(€€€€€€€É•ÑÕÉ¸…±Í”(€€€¥˜¹½Ð¹…µ”¹•¹‘ÍÝ¥Ñ  ˆ¹©Í½¹°ˆ¤è(€€€€€€€É•ÑÕÉ¸QÉÕ”(€€€ÍÁ±¥Ð€ô¹…µ”¹É•µ½Ù•ÍÕ™™¥à ˆ¹©Í½¹°ˆ¤(€€€•áÁ•Ñ•€ôaAQ}MA1%Q}=U9QL¹•Ð¡ÍÁ±¥Ð¤(€€€¥˜•áÁ•Ñ•¥Ì9½¹”è(€€€€€€€É•ÑÕÉ¸…±Í”(€€€É½ÝÌ€ôm±¥¹”™½È±¥¹”¥¸Ñ•áÐ¹ÍÁ±¥Ð ‰q¸ˆ¤¥˜±¥¹”¹ÍÑÉ¥À ¥t(€€€¥˜±•¸¡É½ÝÌ¤€„ô•áÁ•Ñ•è(€€€€€€€É•ÑÕÉ¸…±Í”(€€€™½È±¥¹”¥¸É½ÝÌè(€€€€€€€ÑÉäè(€€€€€€€€€€€©Í½¸¹±½…‘Ì¡±¥¹”¤(€€€€€€€•á•ÁÐ©Í½¸¹)M=9•½‘•ÉÉ½Èè(€€€€€€€€€€€É•ÑÕÉ¸…±Í”(€€€É•ÑÕÉ¸QÉÕ”(()‘•˜‘½Ý¹±½…‘}…¹¹½Ñ…Ñ¥½¹Ì¡‘…Ñ…}‘¥ÈèÍÑÈðA…Ñ °½Ù•ÉÝÉ¥Ñ”è‰½½°€ô…±Í”¤€´ø±¥ÍÑmA…Ñ¡tè(€€€€ˆˆ‰•Ñ …¹¹½Ñ…Ñ¥½¸)M=90…¹Ù¥‘•¼µ%±¥ÍÑÌ€¡øÄÀ5¤¥¹Ñ¼‘…Ñ…}‘¥È¸((€€€™¥±”¥ÌÉ•Á±…•½¹±ä…™Ñ•ÈÑ¡”‘½Ý¹±½…‘•‰åÑ•Ì‘•½‘”…ÌUQ´à¸)M=90(€€€ÍÁ±¥ÑÌµÕÍÐ…±Í¼½¹Ñ…¥¸Ñ¡”½™™¥¥…°€ÌÌÈÙ…±¥‘…Ñ¥½¸…¹€ÄÀÄÑ•ÍÐÉ½ÝÌ¸(€€€€ˆˆˆ(€€€‘…Ñ…}‘¥È€ôA…Ñ ¡‘…Ñ…}‘¥È¤(€€€‘…Ñ…}‘¥È¹µ­‘¥È¡Á…É•¹ÑÌõQÉÕ”°•á¥ÍÑ}½¬õQÉÕ”¤(€€€Á…Ñ¡Ì€ômt(€€€™½È¹…µ”°É•µ½Ñ”¥¸99=QQ%=9}%1L¹¥Ñ•µÌ ¤è(€€€€€€€Ñ…É•Ð€ô‘…Ñ…}‘¥È€¼¹…µ”(€€€€€€€¥˜¹½Ð½Ù•ÉÝÉ¥Ñ”…¹Ñ…É•Ð¹•á¥ÍÑÌ ¤…¹…¹¹½Ñ…Ñ¥½¹}™¥±•}¥Í}Ù…±¥¡Ñ…É•Ð¤è(€€€€€€€€€€€Á…Ñ¡Ì¹…ÁÁ•¹¡Ñ…É•Ð¤(€€€€€€€€€€€½¹Ñ¥¹Õ”(€€€€€€€Ñ•µÁ½É…Éä€ôÑ…É•Ð¹Ý¥Ñ¡}ÍÕ™™¥à¡Ñ…É•Ð¹ÍÕ™™¥à€¬€ˆ¹ÑµÀˆ¤(€€€€€€€ÑÉäè(€€€€€€€€€€€Ý¥Ñ ÕÉ±±¥ˆ¹É•ÅÕ•ÍÐ¹ÕÉ±½Á•¸ (€€€€€€€€€€€€€€€˜‰í!}	M}UI1ô½íÉ•µ½Ñ•ôˆ°(€€€€€€€€€€€€€€€Ñ¥µ•½ÕÐõ99=QQ%=9}=]91=}Q%5=UQ}M=9L°(€€€€€€€€€€€€¤…ÌÉ•ÍÁ½¹Í”è(€€€€€€€€€€€€€€€Ñ•µÁ½É…Éä¹ÝÉ¥Ñ•}‰åÑ•Ì¡É•ÍÁ½¹Í”¹É•… ¤¤(€€€€€€€€€€€¥˜¹½Ð…¹¹½Ñ…Ñ¥½¹}™¥±•}¥Í}Ù…±¥¡Ñ•µÁ½É…Éä°¹…µ”¤è(€€€€€€€€€€€€€€€É…¥Í”IÕ¹Ñ¥µ•ÉÉ½È¡˜‰í¹…µ•ô¥Ì¹½Ð½µÁ±•Ñ”UQ´à…¹¹½Ñ…Ñ¥½¸‘…Ñ„ˆ¤(€€€€€€€€€€€Ñ•µÁ½É…Éä¹É•Á±…”¡Ñ…É•Ð¤(€€€€€€€™¥¹…±±äè(€€€€€€€€€€€Ñ•µÁ½É…Éä¹Õ¹±¥¹¬¡µ¥ÍÍ¥¹}½¬õQÉÕ”¤(€€€€€€€Á…Ñ¡Ì¹…ÁÁ•¹¡Ñ…É•Ð¤(€€€É•ÑÕÉ¸Á…Ñ¡Ì(()‘•˜Á…ÉÍ•}É½Ü¡É½Üè‘¥Ð¤€´ø5QY¥‘•¼è(€€€€ˆˆ‰	Õ¥±…¸5QY¥‘•¼™É½´½¹”…¹¹½Ñ…Ñ¥½¹ÌÉ½Ü°Í½ÉÑ¥¹œÍ•µ•¹ÑÌ‰äÑ¥µ”¸((€€€™•ÜÙ…±¥‘…Ñ¥½¸ÍÉ¥ÁÑÌ±¥ÍÐÍ•µ•¹ÑÌ½ÕÐ½˜½É‘•È°Í¼Í½ÉÑ¥¹œ¡•É”­••ÁÌ(€€€½¹”µÑ¼µ½¹”Ñ•µÁ½É…°µ…Ñ¡¥¹œ…¹…À½µÁÕÑ…Ñ¥½¹ÌÝ•±°‘•™¥¹•¸(€€€€ˆˆˆ(€€€…€ôÍ½ÉÑ• (€€€€€€€€¡%Ñ•´¡™±½…Ð¡Íl‰ÍÑ…ÉÑ}Í•½¹‘Ì‰t¤°Íl‰Ñ•áÐ‰t¹ÍÑÉ¥À ¤¤™½ÈÌ¥¸É½Ýl‰Ñ}…‘}Í•µ•¹ÑÌ‰t¤°(€€€€€€€­•äõ±…µ‰‘„¥Ñ•´è¥Ñ•´¹Ñ¥µ•ÍÑ…µÀ°(€€€€¤(€€€ÑÉ…¹ÍÉ¥ÁÐ€ôÍ½ÉÑ• (€€€€€€€€ (€€€€€€€€€€€MÕ‰Ñ¥Ñ±•%Ñ•´¡™±½…Ð¡Íl‰ÍÑ…ÉÑ}Í•½¹‘Ì‰t¤°™±½…Ð¡Íl‰•¹‘}Í•½¹‘Ì‰t¤°Íl‰Ñ•áÐ‰t¹ÍÑÉ¥À ¤¤(€€€€€€€€€€€™½ÈÌ¥¸É½Ü¹•Ð ‰ÑÉ…¹ÍÉ¥ÁÑ}Í•µ•¹ÑÌˆ¤½Èmt(€€€€€€€€¤°(€€€€€€€­•äõ±…µ‰‘„¥Ñ•´è¥Ñ•´¹ÍÑ…ÉÐ°(€€€€¤(€€€É•ÑÕÉ¸5QY¥‘•¼ (€€€€€€€Ù¥‘•½}¥õÉ½Ýl‰Ù¥‘•½}¥‰t°(€€€€€€€ÍÁ±¥ÐõÉ½Ýl‰ÍÁ±¥Ð‰t°(€€€€€€€…Ñ•½ÉäõÉ½Ýl‰…Ñ•½Éä‰t°(€€€€€€€‘ÕÉ…Ñ¥½¹}Í•½¹‘Ìõ™±½…Ð¡É½Ýl‰‘ÕÉ…Ñ¥½¹}Í•½¹‘Ì‰t¤°(€€€€€€€…õ…°(€€€€€€€ÑÉ…¹ÍÉ¥ÁÐõÑÉ…¹ÍÉ¥ÁÐ°(€€€€€€€Ù¥ÍÕ…±}¥¹™¼õÉ½Ü¹•Ð ‰Ù¥ÍÕ…±}¥¹™¼ˆ¤°(€€€€¤(()‘•˜±½…‘}ÍÁ±¥Ð¡‘…Ñ…}‘¥ÈèÍÑÈðA…Ñ °ÍÁ±¥ÐèÍÑÈ¤€´ø±¥ÍÑm5QY¥‘•½tè(€€€¥˜ÍÁ±¥Ð¹½Ð¥¸MA1%QLè(€€€€€€€É…¥Í”Y…±Õ•ÉÉ½È¡˜‰Õ¹­¹½Ý¸ÍÁ±¥ÐíÍÁ±¥Ð…Éôì•áÁ•Ñ•½¹”½˜íMA1%QMôˆ¤(€€€Ù¥‘•½Ì€ômt(€€€Ý¥Ñ €¡A…Ñ ¡‘…Ñ…}‘¥È¤€¼˜‰íÍÁ±¥Ñô¹©Í½¹°ˆ¤¹½Á•¸¡•¹½‘¥¹œô‰ÕÑ˜´àˆ¤…Ì¡…¹‘±”è(€€€€€€€™½È±¥¹•}¹Õµ‰•È°±¥¹”¥¸•¹Õµ•É…Ñ”¡¡…¹‘±”°€Ä¤è(€€€€€€€€€€€¥˜¹½Ð±¥¹”¹ÍÑÉ¥À ¤è(€€€€€€€€€€€€€€€½¹Ñ¥¹Õ”(€€€€€€€€€€€ÑÉäè(€€€€€€€€€€€€€€€Ù¥‘•½Ì¹…ÁÁ•¹¡Á…ÉÍ•}É½Ü¡©Í½¸¹±½…‘Ì¡±¥¹”¤¤¤(€€€€€€€€€€€•á•ÁÐ€¡-•åÉÉ½È°QåÁ•ÉÉ½È°Y…±Õ•ÉÉ½È¤…Ì•áŒè(€€€€€€€€€€€€€€€É…¥Í”Y…±Õ•ÉÉ½È¡˜‰íÍÁ±¥Ñô¹©Í½¹°±¥¹”í±¥¹•}¹Õµ‰•Éôèí•áôˆ¤™É½´•áŒ(€€€É•ÑÕÉ¸Ù¥‘•½Ì(()‘•˜}•á¥ÍÑ¥¹}Ù¥‘•½}¥Í}É•ÕÍ…‰±”¡Á…Ñ èA…Ñ ¤€´ø‰½½°è(€€€€ˆˆ‰­•ÁÐ‘½Ý¹±½…µÕÍÐÁÉ½‰”…Ì„Ù¥‘•¼¸U¹‘•½‘…‰±”™¥±•Ì…É”™•Ñ¡•……¥¸¸ˆˆˆ(€€€¥˜Í¡ÕÑ¥°¹Ý¡¥  ‰™™ÁÉ½‰”ˆ¤¥Ì9½¹”è(€€€€€€€É…¥Í”IÕ¹Ñ¥µ•ÉÉ½È ‰™™ÁÉ½‰”¹½Ð™½Õ¹½¸AQ ì¥¹ÍÑ…±°µÁ•œˆ¤(€€€ÑÉäè(€€€€€€€É•ÑÕÉ¸ÁÉ½‰”¡Á…Ñ ¤¹¡…Í}Ù¥‘•¼(€€€•á•ÁÐ€¡=MÉÉ½È°IÕ¹Ñ¥µ•ÉÉ½È°Y…±Õ•ÉÉ½È°©Í½¸¹)M=9•½‘•ÉÉ½È¤è(€€€€€€€É•ÑÕÉ¸…±Í”(()‘•˜‘½Ý¹±½…‘}Ù¥‘•¼ (€€€Ù¥‘•¼è5QY¥‘•¼°(€€€½ÕÑÁÕÑ}‘¥ÈèÍÑÈðA…Ñ °(€€€½Ù•ÉÝÉ¥Ñ”è‰½½°€ô…±Í”°(€€€½½­¥•ÌèÍÑÈðA…Ñ ð9½¹”€ô9½¹”°(€€€½½­¥•Í}™É½µ}‰É½ÝÍ•ÈèÍÑÈð9½¹”€ô9½¹”°(€€€•áÑÉ…Ñ½É}…ÉÌèÍÑÈð9½¹”€ô9½¹”°(¤€´øA…Ñ è(€€€€ˆˆ‰½Ý¹±½…½¹”Ù¥‘•¼Ý¥Ñ åÐµ‘±À…Ì€ñÙ¥‘•½}¥ø¹µÀÐ€¡É…¥Í•Ì¥˜Õ¹…Ù…¥±…‰±”¤¸ˆˆˆ(€€€¥˜½½­¥•Ì…¹½½­¥•Í}™É½µ}‰É½ÝÍ•Èè(€€€€€€€É…¥Í”Y…±Õ•ÉÉ½È ‰Á…ÍÌ•¥Ñ¡•È½½­¥•Ì½È½½­¥•Í}™É½µ}‰É½ÝÍ•È°¹½Ð‰½Ñ ˆ¤(€€€½ÕÑÁÕÑ}‘¥È€ôA…Ñ ¡½ÕÑÁÕÑ}‘¥È¤(€€€½ÕÑÁÕÑ}‘¥È¹µ­‘¥È¡Á…É•¹ÑÌõQÉÕ”°•á¥ÍÑ}½¬õQÉÕ”¤(€€€Ñ…É•Ð€ô½ÕÑÁÕÑ}‘¥È€¼Ù¥‘•¼¹Ù¥‘•½}™¥±•¹…µ”(€€€¥˜€ (€€€€€€€Ñ…É•Ð¹¥Í}™¥±” ¤(€€€€€€€…¹Ñ…É•Ð¹ÍÑ…Ð ¤¹ÍÑ}Í¥é”€ø€À(€€€€€€€…¹¹½Ð½Ù•ÉÝÉ¥Ñ”(€€€€€€€…¹}•á¥ÍÑ¥¹}Ù¥‘•½}¥Í}É•ÕÍ…‰±”¡Ñ…É•Ð¤(€€€€¤è(€€€€€€€É•ÑÕÉ¸Ñ…É•Ð(€€€Ñ…É•Ð¹Õ¹±¥¹¬¡µ¥ÍÍ¥¹}½¬õQÉÕ”¤(€€€åÑ‘±À€ôÍ¡ÕÑ¥°¹Ý¡¥  ‰åÐµ‘±Àˆ¤(€€€¥˜åÑ‘±À¥Ì9½¹”è(€€€€€€€É…¥Í”IÕ¹Ñ¥µ•ÉÉ½È ‰åÐµ‘±À¹½Ð™½Õ¹½¸AQ €¡Á¥À¥¹ÍÑ…±°åÐµ‘±À¤ˆ¤(€€€½µµ…¹€ôl(€€€€€€€åÑ‘±À°€ˆ´µ¹¼µÁÉ½É•ÍÌˆ°€ˆ´µ¹¼µÁ±…å±¥ÍÐˆ°€ˆ´µÉ•ÑÉ¥•Ìˆ°€ˆÌˆ°(€€€€€€€€ˆ´µ™É…µ•¹ÐµÉ•ÑÉ¥•Ìˆ°€ˆÌˆ°(€€€€€€€€ˆ´µÍ½­•ÐµÑ¥µ•½ÕÐˆ°ÍÑÈ¡eQ1A}M=-Q}Q%5=UQ}M=9L¤°(€€€€€€€€ˆµ˜ˆ°eQ1A}=I5P°(€€€€€€€€ˆ´µµ•É”µ½ÕÑÁÕÐµ™½Éµ…Ðˆ°€‰µÀÐˆ°€ˆ´µÉ•µÕàµÙ¥‘•¼ˆ°€‰µÀÐˆ°(€€€€€€€€ˆµ¼ˆ°ÍÑÈ¡½ÕÑÁÕÑ}‘¥È€¼€ˆ”¡¥¥Ì¸”¡•áÐ¥Ìˆ¤°(€€€t(€€€¥˜½½­¥•Ìè(€€€€€€€½µµ…¹¹•áÑ•¹  ˆ´µ½½­¥•Ìˆ°ÍÑÈ¡½½­¥•Ì¤¤¤(€€€•±¥˜½½­¥•Í}™É½µ}‰É½ÝÍ•Èè(€€€€€€€½µµ…¹¹•áÑ•¹  ˆ´µ½½­¥•Ìµ™É½´µ‰É½ÝÍ•Èˆ°½½­¥•Í}™É½µ}‰É½ÝÍ•È¤¤(€€€¥˜•áÑÉ…Ñ½É}…ÉÌè(€€€€€€€½µµ…¹¹•áÑ•¹  ˆ´µ•áÑÉ…Ñ½Èµ…ÉÌˆ°•áÑÉ…Ñ½É}…ÉÌ¤¤(€€€½µµ…¹¹…ÁÁ•¹¡Ù¥‘•¼¹å½ÕÑÕ‰•}ÕÉ°¤(€€€ÑÉäè(€€€€€€€É•ÍÕ±Ð€ôÍÕ‰ÁÉ½•ÍÌ¹ÉÕ¸ (€€€€€€€€€€€½µµ…¹°(€€€€€€€€€€€…ÁÑÕÉ•}½ÕÑÁÕÐõQÉÕ”°(€€€€€€€€€€€Ñ•áÐõQÉÕ”°(€€€€€€€€€€€Ñ¥µ•½ÕÐõeQ1A}=]91=}Q%5=UQ}M=9L°(€€€€€€€€¤(€€€•á•ÁÐÍÕ‰ÁÉ½•ÍÌ¹Q¥µ•½ÕÑáÁ¥É•…Ì•áŒè(€€€€€€€Ñ…É•Ð¹Õ¹±¥¹¬¡µ¥ÍÍ¥¹}½¬õQÉÕ”¤(€€€€€€€É…¥Í”IÕ¹Ñ¥µ•ÉÉ½È (€€€€€€€€€€€˜‰åÐµ‘±ÀÑ¥µ•½ÕÐ…™Ñ•ÈíeQ1A}=]91=}Q%5=UQ}M=9MõÌ™½ÈíÙ¥‘•¼¹Ù¥‘•½}¥‘ôˆ(€€€€€€€€¤™É½´•áŒ(€€€¥˜€ (€€€€€€€É•ÍÕ±Ð¹É•ÑÕÉ¹½‘”€„ô€À(€€€€€€€½È¹½ÐÑ…É•Ð¹¥Í}™¥±” ¤(€€€€€€€½ÈÑ…É•Ð¹ÍÑ…Ð ¤¹ÍÑ}Í¥é”€ôô€À(€€€€€€€½È¹½Ð}•á¥ÍÑ¥¹}Ù¥‘•½}¥Í}É•ÕÍ…‰±”¡Ñ…É•Ð¤(€€€€¤è(€€€€€€€Ñ…É•Ð¹Õ¹±¥¹¬¡µ¥ÍÍ¥¹}½¬õQÉÕ”¤(€€€€€€€É…¥Í”IÕ¹Ñ¥µ•ÉÉ½È¡˜‰åÐµ‘±À™…¥±•™½ÈíÙ¥‘•¼¹Ù¥‘•½}¥‘ôèíÉ•ÍÕ±Ð¹ÍÑ‘•ÉÈ¹ÍÑÉ¥À ¥l´ÔÀÀéuôˆ¤(€€€É•ÑÕÉ¸Ñ…É•Ð(()‘•˜}‰å}…Ñ•½Éä¡Ù¥‘•½Ìè%Ñ•É…‰±•m5QY¥‘•½t°Í••è¥¹Ð¤€´ø‘¥ÑmÍÑÈ°±¥ÍÑm5QY¥‘•½utè(€€€É½ÕÁÌè‘¥ÑmÍÑÈ°±¥ÍÑm5QY¥‘•½ut€ô‘•™…Õ±Ñ‘¥Ð¡±¥ÍÐ¤(€€€™½ÈÙ¥‘•¼¥¸Í½ÉÑ•¡Ù¥‘•½Ì°­•äõ±…µ‰‘„ØèØ¹Ù¥‘•½}¥¤è(€€€€€€€É½ÕÁÍmÙ¥‘•¼¹…Ñ•½Éåt¹…ÁÁ•¹¡Ù¥‘•¼¤(€€€É¹œ€ôÉ…¹‘½´¹I…¹‘½´¡Í••¤(€€€™½È…Ñ•½Éä¥¸Í½ÉÑ•¡É½ÕÁÌ¤è(€€€€€€€É¹œ¹Í¡Õ™™±”¡É½ÕÁÍm…Ñ•½Éåt¤(€€€É•ÑÕÉ¸É½ÕÁÌ(()‘•˜Í•±•Ñ}‘•Ø (€€€Ù¥‘•½Ìè%Ñ•É…‰±•m5QY¥‘•½t°(€€€¹Õµ}Ù¥‘•½Ìè¥¹Ð€ô€ÄÀ°(€€€µ¥¹}…‘}¥Ñ•µÌè¥¹Ð€ô€Ì°(€€€Í••è¥¹Ð€ô€À°(¤€´ø±¥ÍÑm5QY¥‘•½tè(€€€€ˆˆ‰•Ñ•Éµ¥¹¥ÍÑ¥Œ‘•Ø½Á¥±½ÐÍ•Ðè…Ñ•½ÉäµÍÑÉ…Ñ¥™¥•…µ½¹œÙ¥‘•½ÌÝ¥Ñ …Ð(€€€±•…ÍÐµ¥¹}…‘}¥Ñ•µÌÍ•µ•¹ÑÌ°Í¼Ñ¡”•¹É”µ¥àµ…Ñ¡•ÌÙ…±¥‘…Ñ¥½¸¸ˆˆˆ(€€€•±¥¥‰±”€ômØ™½ÈØ¥¸Ù¥‘•½Ì¥˜±•¸¡Ø¹…¤€øôµ¥¹}…‘}¥Ñ•µÍt(€€€É•ÑÕÉ¸Í•±•Ñ}ÍÑÉ…Ñ¥™¥•¡•±¥¥‰±”°¹Õµ}Ù¥‘•½Ì°Í••õÍ••¤(()‘•˜Í•±•Ñ}ÍÑÉ…Ñ¥™¥• (€€€Ù¥‘•½Ìè%Ñ•É…‰±•m5QY¥‘•½t°(€€€¹Õµ}Ù¥‘•½Ìè¥¹Ð°(€€€Í••è¥¹Ð€ô€À°(¤€´ø±¥ÍÑm5QY¥‘•½tè(€€€€ˆˆ‰M••‘•Í…µÁ±”Ý¡½Í”…Ñ•½Éäµ¥àµ…Ñ¡•ÌÑ¡”Á½ÁÕ±…Ñ¥½¸€¡±…É•ÍÐÉ•µ…¥¹‘•È¤¸ˆˆˆ(€€€É½ÕÁÌ€ô}‰å}…Ñ•½Éä¡Ù¥‘•½Ì°Í••¤(€€€Ñ½Ñ…°€ôÍÕ´¡±•¸¡œ¤™½Èœ¥¸É½ÕÁÌ¹Ù…±Õ•Ì ¤¤(€€€¥˜¹Õµ}Ù¥‘•½Ì€øôÑ½Ñ…°è(€€€€€€€É•ÑÕÉ¸Í½ÉÑ• ¡Ø™½Èœ¥¸É½ÕÁÌ¹Ù…±Õ•Ì ¤™½ÈØ¥¸œ¤°­•äõ±…µ‰‘„ØèØ¹Ù¥‘•½}¥¤(€€€ÅÕ½Ñ…Ì€ôíŒè¹Õµ}Ù¥‘•½Ì€¨±•¸¡œ¤€¼Ñ½Ñ…°™½ÈŒ°œ¥¸É½ÕÁÌ¹¥Ñ•µÌ ¥ô(€€€½Õ¹ÑÌ€ôíŒè¥¹Ð¡Ä¤™½ÈŒ°Ä¥¸ÅÕ½Ñ…Ì¹¥Ñ•µÌ ¥ô(€€€™½È…Ñ•½Éä¥¸Í½ÉÑ•¡ÅÕ½Ñ…Ì°­•äõ±…µ‰‘„Œè€¡½Õ¹ÑÍmt€´ÅÕ½Ñ…Ímt°Œ¤¥lè¹Õµ}Ù¥‘•½Ì€´ÍÕ´¡½Õ¹ÑÌ¹Ù…±Õ•Ì ¤¥tè(€€€€€€€½Õ¹ÑÍm…Ñ•½Éåt€¬ô€Ä(€€€¡½Í•¸€ômØ™½ÈŒ¥¸Í½ÉÑ•¡É½ÕÁÌ¤™½ÈØ¥¸É½ÕÁÍmulè½Õ¹ÑÍmuut(€€€É•ÑÕÉ¸Í½ÉÑ•¡¡½Í•¸°­•äõ±…µ‰‘„ØèØ¹Ù¥‘•½}¥¤(
+"""Mind the Gap (MTG-AD) inline-AD dataset: annotations, videos, fixed splits.
+
+Source: https://huggingface.co/datasets/google/mind-the-gap-inline-ad
+(CC BY 4.0), code at https://github.com/google/mtg-ad. 433 YouTube videos:
+332 validation (dev, exemplars) and 101 test. Ground-truth AD has start times
+only; transcripts are timestamped ASR segments. Videos are fetched from
+YouTube with yt-dlp and never committed.
+"""
+
+from collections import defaultdict
+from dataclasses import dataclass
+import json
+from pathlib import Path
+import random
+import shutil
+import subprocess
+from typing import Iterable
+import urllib.request
+
+from src.evaluation.parsing import ADItem
+from src.utils.media import probe
+
+from .srt import SubtitleItem
+
+HF_BASE_URL = "https://huggingface.co/datasets/google/mind-the-gap-inline-ad/resolve/main"
+SPLITS = ("validation", "test")
+EXPECTED_SPLIT_COUNTS = {"validation": 332, "test": 101}
+ANNOTATION_FILES = {
+    "validation.jsonl": "data/annotations/validation.jsonl",
+    "test.jsonl": "data/annotations/test.jsonl",
+    "validation_video_ids.txt": "validation_video_ids.txt",
+    "test_video_ids.txt": "test_video_ids.txt",
+}
+ANNOTATION_DOWNLOAD_TIMEOUT_SECONDS = 60
+# <=720p H.264 keeps frames sharp and decodable while bounding download size.
+# protocol=https is progressive HTTPS only: DASH (http_dash_segments) and HLS
+# (m3u8_native) can stall at 0 bytes. Prefer the original-language audio track.
+YTDLP_SOCKET_TIMEOUT_SECONDS = 20
+YTDLP_DOWNLOAD_TIMEOUT_SECONDS = 600
+YTDLP_FORMAT = (
+    "bv*[height<=720][vcodec^=avc1][protocol=https]+ba[ext=m4a][format_note*=original][protocol=https]"
+    "/bv*[height<=720][vcodec^=avc1][protocol=https]+ba[ext=m4a][protocol=https]"
+    "/b[height<=720][protocol=https]"
+)
+
+
+@dataclass(frozen=True)
+class MTGVideo:
+    """One MTG-AD video with time-sorted AD and transcript segments (seconds)."""
+
+    video_id: str
+    split: str
+    category: str
+    duration_seconds: float
+    ad: list[ADItem]
+    transcript: list[SubtitleItem]
+    visual_info: str | None
+
+    @property
+    def youtube_url(self) -> str:
+        return f"https://www.youtube.com/watch?v={self.video_id}"
+
+    @property
+    def video_filename(self) -> str:
+        return f"{self.video_id}.mp4"
+
+
+def annotation_file_is_valid(path: str | Path, name: str | None = None) -> bool:
+    """True when path is UTF-8 and a JSONL split has its official row count."""
+    path = Path(path)
+    name = name or path.name
+    try:
+        text = path.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError):
+        return False
+    if not name.endswith(".jsonl"):
+        return True
+    split = name.removesuffix(".jsonl")
+    expected = EXPECTED_SPLIT_COUNTS.get(split)
+    if expected is None:
+        return False
+    rows = [line for line in text.split("\n") if line.strip()]
+    if len(rows) != expected:
+        return False
+    for line in rows:
+        try:
+            json.loads(line)
+        except json.JSONDecodeError:
+            return False
+    return True
+
+
+def download_annotations(data_dir: str | Path, overwrite: bool = False) -> list[Path]:
+    """Fetch annotation JSONL and video-ID lists (~10 MB) into data_dir.
+
+    A file is replaced only after the downloaded bytes decode as UTF-8. JSONL
+    splits must also contain the official 332 validation and 101 test rows.
+    """
+    data_dir = Path(data_dir)
+    data_dir.mkdir(parents=True, exist_ok=True)
+    paths = []
+    for name, remote in ANNOTATION_FILES.items():
+        target = data_dir / name
+        if not overwrite and target.exists() and annotation_file_is_valid(target):
+            paths.append(target)
+            continue
+        temporary = target.with_suffix(target.suffix + ".tmp")
+        try:
+            with urllib.request.urlopen(
+                f"{HF_BASE_URL}/{remote}",
+                timeout=ANNOTATION_DOWNLOAD_TIMEOUT_SECONDS,
+            ) as response:
+                temporary.write_bytes(response.read())
+            if not annotation_file_is_valid(temporary, name):
+                raise RuntimeError(f"{name} is not complete UTF-8 annotation data")
+            temporary.replace(target)
+        finally:
+            temporary.unlink(missing_ok=True)
+        paths.append(target)
+    return paths
+
+
+def parse_row(row: dict) -> MTGVideo:
+    """Build an MTGVideo from one annotations row, sorting segments by time.
+
+    A few validation scripts list segments out of order, so sorting here keeps
+    one-to-one temporal matching and gap computations well defined.
+    """
+    ad = sorted(
+        (ADItem(float(s["start_seconds"]), s["text"].strip()) for s in row["gt_ad_segments"]),
+        key=lambda item: item.timestamp,
+    )
+    transcript = sorted(
+        (
+            SubtitleItem(float(s["start_seconds"]), float(s["end_seconds"]), s["text"].strip())
+            for s in row.get("transcript_segments") or []
+        ),
+        key=lambda item: item.start,
+    )
+    return MTGVideo(
+        video_id=row["video_id"],
+        split=row["split"],
+        category=row["category"],
+        duration_seconds=float(row["duration_seconds"]),
+        ad=ad,
+        transcript=transcript,
+        visual_info=row.get("visual_info"),
+    )
+
+
+def load_split(data_dir: str | Path, split: str) -> list[MTGVideo]:
+    if split not in SPLITS:
+        raise ValueError(f"unknown split {split!r}; expected one of {SPLITS}")
+    videos = []
+    with (Path(data_dir) / f"{split}.jsonl").open(encoding="utf-8") as handle:
+        for line_number, line in enumerate(handle, 1):
+            if not line.strip():
+                continue
+            try:
+                videos.append(parse_row(json.loads(line)))
+            except (KeyError, TypeError, ValueError) as exc:
+                raise ValueError(f"{split}.jsonl line {line_number}: {exc}") from exc
+    return videos
+
+
+def _existing_video_is_reusable(path: Path) -> bool:
+    """A kept download must probe as a video. Undecodable files are fetched again."""
+    if shutil.which("ffprobe") is None:
+        raise RuntimeError("ffprobe not found on PATH; install FFmpeg")
+    try:
+        return probe(path).has_video
+    except (OSError, RuntimeError, ValueError, json.JSONDecodeError):
+        return False
+
+
+def download_video(
+    video: MTGVideo,
+    output_dir: str | Path,
+    overwrite: bool = False,
+    cookies: str | Path | None = None,
+    cookies_from_browser: str | None = None,
+    extractor_args: str | None = None,
+) -> Path:
+    """Download one video with yt-dlp as <video_id>.mp4 (raises if unavailable)."""
+    if cookies and cookies_from_browser:
+        raise ValueError("pass either cookies or cookies_from_browser, not both")
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    target = output_dir / video.video_filename
+    if (
+        target.is_file()
+        and target.stat().st_size > 0
+        and not overwrite
+        and _existing_video_is_reusable(target)
+    ):
+        return target
+    target.unlink(missing_ok=True)
+    ytdlp = shutil.which("yt-dlp")
+    if ytdlp is None:
+        raise RuntimeError("yt-dlp not found on PATH (pip install yt-dlp)")
+    command = [
+        ytdlp, "--no-progress", "--no-playlist", "--retries", "3",
+        "--fragment-retries", "3",
+        "--socket-timeout", str(YTDLP_SOCKET_TIMEOUT_SECONDS),
+        "-f", YTDLP_FORMAT,
+        "--merge-output-format", "mp4", "--remux-video", "mp4",
+        "-o", str(output_dir / "%(id)s.%(ext)s"),
+    ]
+    if cookies:
+        command.extend(("--cookies", str(cookies)))
+    elif cookies_from_browser:
+        command.extend(("--cookies-from-browser", cookies_from_browser))
+    if extractor_args:
+        command.extend(("--extractor-args", extractor_args))
+    command.append(video.youtube_url)
+    try:
+        result = subprocess.run(
+            command,
+            capture_output=True,
+            text=True,
+            timeout=YTDLP_DOWNLOAD_TIMEOUT_SECONDS,
+        )
+    except subprocess.TimeoutExpired as exc:
+        target.unlink(missing_ok=True)
+        raise RuntimeError(
+            f"yt-dlp timed out after {YTDLP_DOWNLOAD_TIMEOUT_SECONDS}s for {video.video_id}"
+        ) from exc
+    if (
+        result.returncode != 0
+        or not target.is_file()
+        or target.stat().st_size == 0
+        or not _existing_video_is_reusable(target)
+    ):
+        target.unlink(missing_ok=True)
+        raise RuntimeError(f"yt-dlp failed for {video.video_id}: {result.stderr.strip()[-500:]}")
+    return target
+
+
+def _by_category(videos: Iterable[MTGVideo], seed: int) -> dict[str, list[MTGVideo]]:
+    groups: dict[str, list[MTGVideo]] = defaultdict(list)
+    for video in sorted(videos, key=lambda v: v.video_id):
+        groups[video.category].append(video)
+    rng = random.Random(seed)
+    for category in sorted(groups):
+        rng.shuffle(groups[category])
+    return groups
+
+
+def select_dev(
+    videos: Iterable[MTGVideo],
+    num_videos: int = 10,
+    min_ad_items: int = 3,
+    seed: int = 0,
+) -> list[MTGVideo]:
+    """Deterministic dev/pilot set: category-stratified among videos with at
+    least min_ad_items AD segments, so the genre mix matches validation."""
+    eligible = [v for v in videos if len(v.ad) >= min_ad_items]
+    return select_stratified(eligible, num_videos, seed=seed)
+
+
+def select_stratified(
+    videos: Iterable[MTGVideo],
+    num_videos: int,
+    seed: int = 0,
+) -> list[MTGVideo]:
+    """Seeded sample whose category mix matches the population (largest remainder)."""
+    groups = _by_category(videos, seed)
+    total = sum(len(g) for g in groups.values())
+    if num_videos >= total:
+        return sorted((v for g in groups.values() for v in g), key=lambda v: v.video_id)
+    quotas = {c: num_videos * len(g) / total for c, g in groups.items()}
+    counts = {c: int(q) for c, q in quotas.items()}
+    for category in sorted(quotas, key=lambda c: (counts[c] - quotas[c], c))[: num_videos - sum(counts.values())]:
+        counts[category] += 1
+    chosen = [v for c in sorted(groups) for v in groups[c][: counts[c]]]
+    return sorted(chosen, key=lambda v: v.video_id)
