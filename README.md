@@ -1,63 +1,1 @@
-# PYRO-KD: cue-driven keyframe selection for MLLM audio description
-
-This project compares uniform, video-only, audio-only, fused audio+video and oracle selection of the moments where a frozen VLM writes inline audio descriptions. It evaluates against professional AD in [Mind the Gap (MTG-AD)](https://github.com/google/mtg-ad) (primary), checks the findings on movie excerpts from REFRAMED, and tests downstream QA on EgoSchema. Week 1 decisions are in [docs/week1_spec.md](docs/week1_spec.md).
-
-## Local setup
-
-```bash
-uv sync                      # Python 3.12; torch from the cu126 index (Linux)
-python3 -m unittest discover -s tests
-```
-
-On macOS, the CUDA torch wheels don't install. The tests use only the standard library, Pillow and FFmpeg, so `python3` is enough to run them.
-
-## Data (never commit `data/`)
-
-```bash
-python scripts/prepare_mtg_ad.py                     # annotations + configs/mtg_ad_splits.json
-python scripts/prepare_mtg_ad.py --download-videos --preprocess   # dev videos (needs yt-dlp)
-python scripts/prepare_mtg_ad.py --download-videos --cookies-from-browser chrome  # run locally
-python scripts/prepare_mtg_ad.py --preprocess                     # reuse manually supplied videos
-python scripts/cache_audio_features.py                            # Silero VAD + librosa (HPC env)
-python scripts/build_moments.py --selector U --videos dev         # generation inputs (U or A)
-python scripts/prepare_reframed.py                   # REFRAMED metadata + configs/reframed_splits.json
-python scripts/build_moments.py --dataset reframed --videos dev
-python scripts/prepare_egoschema.py                  # EgoSchema annotations + QA pilot
-```
-
-MTG-AD preparation writes `data/mtg-ad/preprocess_report.json`, including
-download/preprocessing failures and whether each complete frame/audio cache was
-written or reused. A cache is rebuilt if its source changes or a recorded
-artifact is missing. On clusters where YouTube blocks downloads, place MP4s in
-`data/mtg-ad/videos/<video_id>.mp4` and use the second command above (or run
-`SKIP_DOWNLOAD=1 bash hpc/prepare_data.sh`). YouTube may require yt-dlp's
-[recommended PO-token provider setup](https://github.com/yt-dlp/yt-dlp/wiki/PO-Token-Guide);
-keep provider credentials/tokens outside the repository.
-
-If a cloud/datacenter IP is blocked even with a PO token, run the browser-cookie
-command on the same local machine and network where YouTube plays normally.
-Copy `data/mtg-ad/videos/` to the cluster, then use `--preprocess` or
-`SKIP_DOWNLOAD=1`. Cookie files and browser profiles are credentials: never copy
-them to the cluster or commit them. `--cookies /safe/path/cookies.txt` and
-`--yt-dlp-extractor-args` are also available for advanced local setups.
-
-## Models on NYU HPC
-
-See [hpc/README.md](hpc/README.md). In short:
-
-```bash
-bash hpc/setup_env.sh && bash hpc/download_models.sh && bash hpc/prepare_data.sh   # CPU node
-bash hpc/submit.sh qwen --limit 4                                                    # GPU smoke test
-```
-
-## Layout
-
-- `src/datasets/`: MTG-AD (primary), REFRAMED (movie check), and EgoSchema loaders.
-- `src/utils/media.py`: ffprobe, 16 kHz audio, timestamped frame cache, frame windows.
-- `src/utils/selection.py`: shared K rule, uniform selector (U), and top-K with minimum separation.
-- `src/utils/audio_features.py`, `audio_selector.py`: Silero VAD gaps, librosa gap features, and the audio-only selector (A).
-- `src/utils/visual_selector.py`: CLIP novelty scoring for V (in progress).
-- `src/generation/`: transformers VLM loader and generator, and the P0/P1 prompts.
-- `src/evaluation/`: temporal P/R/F1, BERTScore, sentence cosine, LLM-judge rubric.
-- `scripts/`: data preparation, moment building, and AD generation (`run_ad_vlm.py`).
-- `hpc/`: Cloud Bursting setup, model download, data prep, and job submission.
+Üã-ù©û:ó´jÿ®ûz-•ÍÊä€^tåÅAeI<µ-ËÅç’îµë…•Ÿï∏Å≠ïÂô…ÖµîÅÕï±ïç—•Ω∏ÅôΩ»Å5114ÅÖ’ë•ºÅëïÕç…•¡—•Ω∏()Q°•ÃÅ¡…Ω©ïç–ÅçΩµ¡Ö…ïÃÅ’π•ôΩ…¥∞ÅŸ•ëïºµΩπ±‰∞ÅÖ’ë•ºµΩπ±‰∞Åô’ÕïêÅÖ’ë•º≠Ÿ•ëïºÅÖπêÅΩ…Öç±îÅÕï±ïç—•Ω∏ÅΩòÅ—°îÅµΩµïπ—ÃÅ›°ï…îÅÑÅô…ΩÈï∏ÅY14Å›…•—ïÃÅ•π±•πîÅÖ’ë•ºÅëïÕç…•¡—•ΩπÃ∏Å%–ÅïŸÖ±’Ö—ïÃÅÖùÖ•πÕ–Å¡…ΩôïÕÕ•ΩπÖ∞ÅÅ•∏Åm5•πêÅ—°îÅÖ¿Ä°5Qµ•t°°——¡ÃËºΩù•—°’àπçΩ¥ΩùΩΩù±îΩµ—úµÖê§Ä°¡…•µÖ…‰§∞Åç°ïç≠ÃÅ—°îÅô•πë•πùÃÅΩ∏ÅµΩŸ•îÅï·çï…¡—ÃÅô…Ω¥ÅII5∞ÅÖπêÅ—ïÕ—ÃÅëΩ›πÕ—…ïÖ¥ÅEÅΩ∏ÅùΩMç°ïµÑ∏Å]ïï¨ÄƒÅëïç•Õ•ΩπÃÅÖ…îÅ•∏ÅmëΩçÃΩ›ïï¨≈}Õ¡ïåπµët°ëΩçÃΩ›ïï¨≈}Õ¡ïåπµê§∏((ååÅ1ΩçÖ∞ÅÕï—’¿()ÅÅÅâÖÕ†)’ÿÅÕÂπåÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄåÅAÂ—°Ω∏ÄÃ∏ƒ»ÏÅ…’π—•µîÄ¨Å¡Â—ïÕ–ÅëïŸï±Ω¡µïπ–ÅïπŸ•…Ωπµïπ–)’ÿÅ…’∏Å¡Â—°Ω∏Äµ¥Å¡Â—ïÕ–Äµƒ)ÅÅÄ()=∏ÅµÖç=L∞Å—°îÅUÅ—Ω…ç†Å›°ïï±ÃÅëΩ∏ù–Å•πÕ—Ö±∞∏ÅQ°îÅ—ïÕ—ÃÅ’ÕîÅΩπ±‰Å—°îÅÕ—ÖπëÖ…êÅ±•â…Ö…‰∞ÅA•±±Ω‹ÅÖπêÅµ¡ïú∞ÅÕºÅÅ¡Â—°Ω∏ÕÄÅ•ÃÅïπΩ’ù†Å—ºÅ…’∏Å—°ï¥∏((ååÅÖ—ÑÄ°πïŸï»ÅçΩµµ•–ÅÅëÖ—ÑΩÄ§()ÅÅÅâÖÕ†)¡Â—°Ω∏ÅÕç…•¡—ÃΩ¡…ï¡Ö…ï}µ—ù}Öêπ¡‰ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄåÅÖππΩ—Ö—•ΩπÃÄ¨ÅçΩπô•ùÃΩµ—ù}Öë}Õ¡±•—Ãπ©ÕΩ∏)¡Â—°Ω∏ÅÕç…•¡—ÃΩ¡…ï¡Ö…ï}µ—ù}Öêπ¡‰Ä¥µëΩ›π±ΩÖêµŸ•ëïΩÃÄ¥µ¡…ï¡…ΩçïÕÃÄÄÄåÅëïÿÅŸ•ëïΩÃÄ°πïïëÃÅÂ–µë±¿§)¡Â—°Ω∏ÅÕç…•¡—ÃΩ¡…ï¡Ö…ï}µ—ù}Öêπ¡‰Ä¥µëΩ›π±ΩÖêµŸ•ëïΩÃÄ¥µçΩΩ≠•ïÃµô…Ω¥µâ…Ω›Õï»Åç°…ΩµîÄÄåÅ…’∏Å±ΩçÖ±±‰)¡Â—°Ω∏ÅÕç…•¡—ÃΩ¡…ï¡Ö…ï}µ—ù}Öêπ¡‰Ä¥µ¡…ï¡…ΩçïÕÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄåÅ…ï’ÕîÅµÖπ’Ö±±‰ÅÕ’¡¡±•ïêÅŸ•ëïΩÃ)¡Â—°Ω∏ÅÕç…•¡—ÃΩçÖç°ï}Ö’ë•Ω}ôïÖ—’…ïÃπ¡‰ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄåÅM•±ï…ºÅYÄ¨Å±•â…ΩÕÑÄ°!AÅïπÿ§)¡Â—°Ω∏ÅÕç…•¡—ÃΩâ’•±ë}µΩµïπ—Ãπ¡‰Ä¥µÕï±ïç—Ω»ÅTÄ¥µŸ•ëïΩÃÅëïÿÄÄÄÄÄÄÄÄÄåÅùïπï…Ö—•Ω∏Å•π¡’—ÃÄ°TÅΩ»Å§)¡Â—°Ω∏ÅÕç…•¡—ÃΩ¡…ï¡Ö…ï}…ïô…Öµïêπ¡‰ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄåÅII5Åµï—ÖëÖ—ÑÄ¨ÅçΩπô•ùÃΩ…ïô…Öµïë}Õ¡±•—Ãπ©ÕΩ∏)¡Â—°Ω∏ÅÕç…•¡—ÃΩâ’•±ë}µΩµïπ—Ãπ¡‰Ä¥µëÖ—ÖÕï–Å…ïô…ÖµïêÄ¥µŸ•ëïΩÃÅëïÿ)¡Â—°Ω∏ÅÕç…•¡—ÃΩ¡…ï¡Ö…ï}ïùΩÕç°ïµÑπ¡‰ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄåÅùΩMç°ïµÑÅÖππΩ—Ö—•ΩπÃÄ¨ÅEÅ¡•±Ω–)ÅÅÄ()5QµÅ¡…ï¡Ö…Ö—•Ω∏Å›…•—ïÃÅÅëÖ—ÑΩµ—úµÖêΩ¡…ï¡…ΩçïÕÕ}…ï¡Ω…–π©ÕΩπÄ∞Å•πç±’ë•πú)ëΩ›π±ΩÖêΩ¡…ï¡…ΩçïÕÕ•πúÅôÖ•±’…ïÃÅÖπêÅ›°ï—°ï»ÅïÖç†ÅçΩµ¡±ï—îÅô…ÖµîΩÖ’ë•ºÅçÖç°îÅ›ÖÃ)›…•——ï∏ÅΩ»Å…ï’Õïê∏ÅÅçÖç°îÅ•ÃÅ…ïâ’•±–Å•òÅ•—ÃÅÕΩ’…çîÅç°ÖπùïÃÅΩ»ÅÑÅ…ïçΩ…ëïê)Ö…—•ôÖç–Å•ÃÅµ•ÕÕ•πúÅΩ»Åïµ¡—‰∏Å=∏Åç±’Õ—ï…ÃÅ›°ï…îÅeΩ’Q’âîÅâ±Ωç≠ÃÅëΩ›π±ΩÖëÃ∞Å¡±ÖçîÅ5@—ÃÅ•∏)ÅëÖ—ÑΩµ—úµÖêΩŸ•ëïΩÃºÒŸ•ëïΩ}•ê¯πµ¿—ÄÅÖπêÅ’ÕîÅ—°îÅÕïçΩπêÅçΩµµÖπêÅÖâΩŸîÄ°Ω»Å…’∏)ÅM-%A}=]91=ÙƒÅâÖÕ†Å°¡åΩ¡…ï¡Ö…ï}ëÖ—ÑπÕ°Ä§∏ÅeΩ’Q’âîÅµÖ‰Å…ï≈’•…îÅÂ–µë±¿ùÃ)m…ïçΩµµïπëïêÅA<µ—Ω≠ï∏Å¡…ΩŸ•ëï»ÅÕï—’¡t°°——¡ÃËºΩù•—°’àπçΩ¥ΩÂ–µë±¿ΩÂ–µë±¿Ω›•≠§ΩA<µQΩ≠ï∏µ’•ëî§Ï)≠ïï¿Å¡…ΩŸ•ëï»Åç…ïëïπ—•Ö±ÃΩ—Ω≠ïπÃÅΩ’—Õ•ëîÅ—°îÅ…ï¡ΩÕ•—Ω…‰∏()%òÅÑÅç±Ω’êΩëÖ—Öçïπ—ï»Å%@Å•ÃÅâ±Ωç≠ïêÅïŸï∏Å›•—†ÅÑÅA<Å—Ω≠ï∏∞Å…’∏Å—°îÅâ…Ω›Õï»µçΩΩ≠•î)çΩµµÖπêÅΩ∏Å—°îÅÕÖµîÅ±ΩçÖ∞ÅµÖç°•πîÅÖπêÅπï—›Ω…¨Å›°ï…îÅeΩ’Q’âîÅ¡±ÖÂÃÅπΩ…µÖ±±‰∏)Ω¡‰ÅÅëÖ—ÑΩµ—úµÖêΩŸ•ëïΩÃΩÄÅ—ºÅ—°îÅç±’Õ—ï»∞Å—°ï∏Å’ÕîÅÄ¥µ¡…ï¡…ΩçïÕÕÄÅΩ»)ÅM-%A}=]91=Ù≈Ä∏ÅΩΩ≠•îÅô•±ïÃÅÖπêÅâ…Ω›Õï»Å¡…Ωô•±ïÃÅÖ…îÅç…ïëïπ—•Ö±ÃËÅπïŸï»ÅçΩ¡‰)—°ï¥Å—ºÅ—°îÅç±’Õ—ï»ÅΩ»ÅçΩµµ•–Å—°ï¥∏ÅÄ¥µçΩΩ≠•ïÃÄΩÕÖôîΩ¡Ö—†ΩçΩΩ≠•ïÃπ—·—ÄÅÖπê)Ä¥µÂ–µë±¿µï·—…Öç—Ω»µÖ…ùÕÄÅÖ…îÅÖ±ÕºÅÖŸÖ•±Öâ±îÅôΩ»ÅÖëŸÖπçïêÅ±ΩçÖ∞ÅÕï—’¡Ã∏((ååÅ5Ωëï±ÃÅΩ∏Å9eTÅ!A()MïîÅm°¡åΩI5πµët°°¡åΩI5πµê§∏Å%∏ÅÕ°Ω…–Ë()ÅÅÅâÖÕ†)âÖÕ†Å°¡åΩÕï—’¡}ïπÿπÕ†ÄòòÅâÖÕ†Å°¡åΩëΩ›π±ΩÖë}µΩëï±ÃπÕ†ÄòòÅâÖÕ†Å°¡åΩ¡…ï¡Ö…ï}ëÖ—ÑπÕ†ÄÄÄåÅATÅπΩëî)âÖÕ†Å°¡åΩÕ’âµ•–πÕ†Å≈›ï∏Ä¥µ±•µ•–Ä–ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄåÅATÅÕµΩ≠îÅ—ïÕ–)ÅÅÄ((ååÅ1ÖÂΩ’–((¥ÅÅÕ…åΩëÖ—ÖÕï—ÃΩÄËÅ5QµÄ°¡…•µÖ…‰§∞ÅII5Ä°µΩŸ•îÅç°ïç¨§∞ÅÖπêÅùΩMç°ïµÑÅ±ΩÖëï…Ã∏(¥ÅÅÕ…åΩ’—•±ÃΩµïë•Ñπ¡ÂÄËÅôô¡…Ωâî∞ÄƒÿÅ≠!ËÅÖ’ë•º∞Å—•µïÕ—Öµ¡ïêÅô…ÖµîÅçÖç°î∞Åô…ÖµîÅ›•πëΩ›Ã∏(¥ÅÅÕ…åΩ’—•±ÃΩÕï±ïç—•Ω∏π¡ÂÄËÅÕ°Ö…ïêÅ,Å…’±î∞Å’π•ôΩ…¥ÅÕï±ïç—Ω»Ä°T§∞ÅÖπêÅ—Ω¿µ,Å›•—†Åµ•π•µ’¥ÅÕï¡Ö…Ö—•Ω∏∏(¥ÅÅÕ…åΩ’—•±ÃΩÖ’ë•Ω}ôïÖ—’…ïÃπ¡ÂÄ∞ÅÅÖ’ë•Ω}Õï±ïç—Ω»π¡ÂÄËÅM•±ï…ºÅYÅùÖ¡Ã∞Å±•â…ΩÕÑÅùÖ¿ÅôïÖ—’…ïÃ∞ÅÖπêÅ—°îÅÖ’ë•ºµΩπ±‰ÅÕï±ïç—Ω»Ä°§∏(¥ÅÅÕ…åΩ’—•±ÃΩŸ•Õ’Ö±}Õï±ïç—Ω»π¡ÂÄËÅ1%@ÅπΩŸï±—‰ÅÕçΩ…•πúÅôΩ»ÅXÄ°•∏Å¡…Ωù…ïÕÃ§∏(¥ÅÅÕ…åΩùïπï…Ö—•Ω∏ΩÄËÅ—…ÖπÕôΩ…µï…ÃÅY14Å±ΩÖëï»ÅÖπêÅùïπï…Ö—Ω»∞ÅÖπêÅ—°îÅ@¿Ω@ƒÅ¡…Ωµ¡—Ã∏(¥ÅÅÕ…åΩïŸÖ±’Ö—•Ω∏ΩÄËÅ—ïµ¡Ω…Ö∞Å@ΩHΩƒ∞Å	IQMçΩ…î∞ÅÕïπ—ïπçîÅçΩÕ•πî∞Å114µ©’ëùîÅ…’â…•å∏(¥ÅÅÕç…•¡—ÃΩÄËÅëÖ—ÑÅ¡…ï¡Ö…Ö—•Ω∏∞ÅµΩµïπ–Åâ’•±ë•πú∞ÅÖπêÅÅùïπï…Ö—•Ω∏Ä°Å…’π}Öë}Ÿ±¥π¡ÂÄ§∏(¥ÅÅ°¡åΩÄËÅ±Ω’êÅ	’…Õ—•πúÅÕï—’¿∞ÅµΩëï∞ÅëΩ›π±ΩÖê∞ÅëÖ—ÑÅ¡…ï¿∞ÅÖπêÅ©ΩàÅÕ’âµ•ÕÕ•Ω∏∏
