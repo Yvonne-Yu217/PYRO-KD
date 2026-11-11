@@ -114,6 +114,29 @@ class EvaluationIntegrationTests(unittest.TestCase):
         self.assertNotIn("Unmatched.", self.bert.call_args.args[0])
         self.assertNotIn("Unmatched.", self.encoder.encode.call_args.args[0])
 
+    def test_default_semantic_models_are_loaded_once_and_reused(self) -> None:
+        self.write_rows([row("a", 10), row("b", 30)])
+        with (
+            patch.object(
+                evaluation, "_load_bert_scorer",
+                return_value=(self.bert, "mock-resolved-model"),
+            ) as load_bert,
+            patch.object(
+                evaluation, "_load_sentence_encoder", return_value=self.encoder,
+            ) as load_encoder,
+        ):
+            result = evaluation.evaluate_ad(
+                self.path, Path(self.tmp.name, "dataset"), "validation",
+            )
+        load_bert.assert_called_once_with("en", None)
+        load_encoder.assert_called_once_with("sentence-transformers/all-mpnet-base-v2")
+        self.assertEqual(self.bert.call_count, 2)
+        self.assertEqual(self.encoder.encode.call_count, 2)
+        self.assertEqual(
+            [item["bertscore"]["model_type"] for item in result["videos"]],
+            ["mock-resolved-model", "mock-resolved-model"],
+        )
+
     def test_micro_counts_and_pair_weighted_semantic_aggregation(self) -> None:
         self.bert.side_effect = [
             (([0.2, 0.4], [0.3, 0.5], [0.1, 0.3]), "mock-configuration"),

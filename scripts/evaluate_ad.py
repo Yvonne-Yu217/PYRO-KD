@@ -99,6 +99,30 @@ def _score(call: Callable[[], dict[str, Any]], unavailable: dict[str, Any]) -> d
     return {**result, "status": "ok" if result["num_scored_pairs"] else "no_matches"}
 
 
+def _load_bert_scorer(lang: str, model_type: str | None) -> tuple[BERTScoreScorer, str]:
+    """Load one reusable official BERTScore model for an evaluation run."""
+    from bert_score import BERTScorer
+
+    model = BERTScorer(
+        lang=lang, model_type=model_type, idf=False,
+        rescale_with_baseline=False, use_fast_tokenizer=False,
+    )
+
+    def score(candidates: list[str], references: list[str], **kwargs: Any) -> Any:
+        return model.score(
+            candidates, references, return_hash=bool(kwargs.get("return_hash", False)),
+        )
+
+    return score, model.model_type
+
+
+def _load_sentence_encoder(model_name: str) -> SentenceEncoder:
+    """Load one reusable sentence encoder for an evaluation run."""
+    from sentence_transformers import SentenceTransformer
+
+    return SentenceTransformer(model_name)
+
+
 def evaluate_ad(
     generated_path: str | Path,
     data_dir: str | Path,
@@ -153,6 +177,33 @@ def evaluate_ad(
     results = []
     temporal_errors: list[float] = []
     semantic_errors = []
+    active_bert_scorer = bert_scorer
+    active_bert_model = bert_model
+    active_encoder = encoder
+
+    def score_bert(
+        generated: Sequence[GeneratedADItem], ground_truth: Sequence[Any], matches: Sequence[Any],
+    ) -> dict[str, Any]:
+        nonlocal active_bert_scorer, active_bert_model
+        # Preserve the semantic functions' no-match fast path: an empty run must
+        # not import dependencies or load models.
+        if matches and active_bert_scorer is None:
+            active_bert_scorer, active_bert_model = _load_bert_scorer(lang, bert_model)
+        return compute_bertscore(
+            generated, ground_truth, matches, lang=lang, model_type=active_bert_model,
+            scorer=active_bert_scorer,
+        )
+
+    def score_cosine(
+        generated: Sequence[GeneratedADItem], ground_truth: Sequence[Any], matches: Sequence[Any],
+    ) -> dict[str, Any]:
+        nonlocal active_encoder
+        if matches and active_encoder is None:
+            active_encoder = _load_sentence_encoder(cosine_model)
+        return compute_cosine_similarity(
+            generated, ground_truth, matches, model_name=cosine_model, encoder=active_encoder,
+        )
+
     for video_id in sorted(by_id if all_videos else input_ids):
         video = by_id[video_id]
         generated_rows = successful[video_id]
@@ -169,16 +220,12 @@ def evaluate_ad(
         )
         temporal["matches"] = [asdict(match) for match in matches]
         bert = _score(
-            lambda: compute_bertscore(
-                generated, video.ad, matches, lang=lang, model_type=bert_model, scorer=bert_scorer,
-            ),
+            lambda: score_bert(generated, video.ad, matches),
             {"precision_mean": None, "recall_mean": None, "f1_mean": None,
              "lang": lang, "model_type": bert_model, "configuration_hash": None},
         )
         cosine = _score(
-            lambda: compute_cosine_similarity(
-                generated, video.ad, matches, model_name=cosine_model, encoder=encoder,
-            ),
+            lambda: score_cosine(generated, video.ad, matches),
             {"cosine_similarity_mean": None, "cosine_similarity_median": None,
              "model_name": cosine_model},
         )
