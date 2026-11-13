@@ -11,11 +11,14 @@ inside a gap, which is why energy and onset features are kept per gap.
 """
 
 from dataclasses import asdict, dataclass
+import hashlib
 import json
 from pathlib import Path
 from typing import Sequence
 
 FEATURES_NAME = "audio_features.json"
+# Bump when the feature computation changes in a way the settings below miss.
+FEATURES_VERSION = 1
 SAMPLE_RATE = 16_000
 HOP_LENGTH = 512
 
@@ -135,11 +138,37 @@ def gap_features(waveform, sample_rate: int, gaps: Sequence[tuple[float, float]]
     ]
 
 
-def compute_audio_features(audio_path: str | Path, config: dict | None = None) -> dict:
+def features_config_hash(
+    audio_path: str | Path, config: dict | None = None, manifest_hash: str | None = None,
+) -> str:
+    """Hash of everything audio_features.json depends on.
+
+    Covers the VAD/gap config, sample rate, hop length, feature version, the
+    media manifest's extraction hash, and the WAV's identity (size, mtime), so
+    a changed config or a re-extracted WAV invalidates cached features.
+    Raises OSError if the WAV is missing.
+    """
+    stat = Path(audio_path).stat()
+    settings = {
+        "features_version": FEATURES_VERSION,
+        "config": {**DEFAULT_CONFIG, **(config or {})},
+        "sample_rate": SAMPLE_RATE,
+        "hop_length": HOP_LENGTH,
+        "manifest_hash": manifest_hash,
+        "audio": {"size": stat.st_size, "mtime_ns": stat.st_mtime_ns},
+    }
+    payload = json.dumps(settings, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:12]
+
+
+def compute_audio_features(
+    audio_path: str | Path, config: dict | None = None, manifest_hash: str | None = None,
+) -> dict:
     """Run VAD and gap analysis on one cached 16 kHz WAV; returns the JSON record."""
     from src.utils.media import load_audio
 
     cfg = {**DEFAULT_CONFIG, **(config or {})}
+    digest = features_config_hash(audio_path, cfg, manifest_hash)
     waveform, sample_rate = load_audio(audio_path, SAMPLE_RATE)
     duration = len(waveform) / sample_rate
     speech = detect_speech(waveform, sample_rate, cfg)
@@ -151,6 +180,7 @@ def compute_audio_features(audio_path: str | Path, config: dict | None = None) -
         "audio_path": str(audio_path),
         "duration": round(duration, 3),
         "config": cfg,
+        "config_hash": digest,
         "speech": [[round(s, 3), round(e, 3)] for s, e in speech],
         "speech_seconds": round(sum(e - s for s, e in speech), 3),
         "gaps": [asdict(g) for g in gaps],
@@ -158,9 +188,17 @@ def compute_audio_features(audio_path: str | Path, config: dict | None = None) -
 
 
 def write_features(cache_dir: str | Path, features: dict) -> Path:
+    """Write atomically, so an interrupted run never leaves truncated JSON."""
     path = Path(cache_dir) / FEATURES_NAME
-    path.write_text(json.dumps(features, indent=2))
+    temporary = path.with_suffix(".json.tmp")
+    temporary.write_text(json.dumps(features, indent=2))
+    temporary.replace(path)
     return path
+
+
+def features_are_current(features: dict | None, expected_hash: str) -> bool:
+    """True only for features stamped with the expected config hash."""
+    return bool(features) and features.get("config_hash") == expected_hash
 
 
 def load_features(cache_dir: str | Path) -> dict | None:
