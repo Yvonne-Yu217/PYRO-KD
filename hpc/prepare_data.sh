@@ -32,9 +32,15 @@ if [ "$PREP_STATUS" -ne 0 ]; then
   fi
 fi
 # Silero VAD + librosa gap features: needed by selector A and the gap-based word cap.
-in_env ro "python scripts/cache_audio_features.py --cache-dir data/cache/$DATASET"
+# A failed video is reported and skipped; moments are still built for the rest.
+AUDIO_STATUS=0
+in_env ro "python scripts/cache_audio_features.py --cache-dir data/cache/$DATASET" || AUDIO_STATUS=$?
+if [ "$AUDIO_STATUS" -ne 0 ]; then
+  echo "[prepare] audio features failed for some videos; see data/cache/$DATASET/audio_features_report.json" >&2
+fi
 for SEL in U A; do
   in_env ro "python scripts/build_moments.py --dataset '$DATASET' --selector $SEL --videos '$WHICH'"
 done
 echo "[prepare] done. Next: bash hpc/submit.sh qwen --limit 4 --input data/moments/${DATASET}_U_${WHICH}.jsonl"
-exit "$PREP_STATUS"
+if [ "$PREP_STATUS" -ne 0 ]; then exit "$PREP_STATUS"; fi
+exit "$AUDIO_STATUS"
