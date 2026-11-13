@@ -35,6 +35,8 @@ inject `bert_scorer` and `encoder` to avoid model loading. Annotations are loade
 through `mtg_ad.load_split`; its existing `MTGVideo.ad` items are used directly.
 Each video is matched once. Both semantic functions receive the identical
 `TemporalMatch` list/objects; only those pairs enter the semantic scorers.
+The default BERTScore model and sentence encoder are loaded lazily on the first
+matched pair and reused across every video in the run.
 
 The report contains `videos`, `aggregate`, input/model metadata, scope/coverage,
 and generation/semantic errors. Generated-item order and row metadata are
