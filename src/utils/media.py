@@ -13,6 +13,7 @@ import math
 from pathlib import Path
 import shutil
 import subprocess
+import tempfile
 from typing import Any, Sequence
 
 MANIFEST_NAME = "manifest.json"
@@ -206,6 +207,23 @@ def cache_is_complete(manifest: dict[str, Any]) -> bool:
     )
 
 
+def cache_is_current(manifest: dict[str, Any]) -> bool:
+    """Check source identity separately from cached-artifact completeness.
+
+    A failed rebuild can leave a complete cache for an older source. Missing
+    fingerprint metadata or an unavailable source cannot establish freshness.
+    Uses the same path/size/mtime fingerprint as preprocessing, without decoding.
+    """
+    source = manifest.get("source")
+    settings = manifest.get("settings")
+    if not isinstance(source, str) or not source or not isinstance(settings, dict):
+        return False
+    try:
+        return settings.get("source_fingerprint") == _source_fingerprint(Path(source))
+    except (OSError, ValueError):
+        return False
+
+
 def preprocess_video(
     video_path: str | Path,
     cache_dir: str | Path,
@@ -219,6 +237,10 @@ def preprocess_video(
     Re-running with the same settings reuses the cache. Videos without an
     audio stream still get frames; the manifest records audio_path = None so
     A/AV selectors can report the shortfall rather than silently skip.
+
+    Rebuilds stage a complete cache beside the destination before publishing
+    it with a directory swap and rollback. Derived features are not copied
+    into rebuilt caches; audio-feature validation belongs to its own step.
     """
     video_path = Path(video_path)
     cache_dir = Path(cache_dir)
@@ -244,30 +266,57 @@ def preprocess_video(
     info = probe(video_path)
     if not info.has_video:
         raise ValueError(f"{video_path} has no video stream")
-    frames = extract_frames(
-        video_path, cache_dir / "frames", fps=fps, max_side=max_side,
-    )
-    if not frames:
-        raise RuntimeError(f"FFmpeg extracted no frames from {video_path}")
-    audio_path = None
-    if info.has_audio:
-        audio_path = str(extract_audio(video_path, cache_dir / "audio_16k.wav", sample_rate))
-    else:
-        (cache_dir / "audio_16k.wav").unlink(missing_ok=True)
+    cache_dir.parent.mkdir(parents=True, exist_ok=True)
+    staging = Path(tempfile.mkdtemp(prefix=f".{cache_dir.name}.incoming-", dir=cache_dir.parent))
+    staged_cache = staging / "cache"
+    backup = staging / "previous"
+    published = False
+    try:
+        staged_cache.mkdir()
+        frames = extract_frames(
+            video_path, staged_cache / "frames", fps=fps, max_side=max_side,
+        )
+        if not frames:
+            raise RuntimeError(f"FFmpeg extracted no frames from {video_path}")
+        audio_path = None
+        if info.has_audio:
+            audio_path = str(extract_audio(video_path, staged_cache / "audio_16k.wav", sample_rate))
+        if not cache_is_complete({"frames": [asdict(f) for f in frames], "audio_path": audio_path}):
+            raise RuntimeError(f"Incomplete extracted media cache for {video_path}")
 
-    manifest = {
-        "video_id": video_path.stem,
-        "source": str(video_path.resolve()),
-        "media_info": asdict(info),
-        "settings": settings,
-        "config_hash": config_hash(settings),
-        "audio_path": audio_path,
-        "frames": [asdict(frame) for frame in frames],
-    }
-    cache_dir.mkdir(parents=True, exist_ok=True)
-    temporary_manifest = manifest_path.with_suffix(".json.tmp")
-    temporary_manifest.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
-    temporary_manifest.replace(manifest_path)
+        # Persist destination paths, not paths inside the temporary cache.
+        manifest = {
+            "video_id": video_path.stem,
+            "source": str(video_path.resolve()),
+            "media_info": asdict(info),
+            "settings": settings,
+            "config_hash": config_hash(settings),
+            "audio_path": str(cache_dir / "audio_16k.wav") if audio_path is not None else None,
+            "frames": [
+                asdict(FrameEntry(f.index, f.timestamp, str(cache_dir / "frames" / Path(f.path).name)))
+                for f in frames
+            ],
+        }
+        (staged_cache / MANIFEST_NAME).write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+
+        if cache_dir.exists():
+            cache_dir.replace(backup)
+        try:
+            staged_cache.replace(cache_dir)
+        except BaseException:
+            if backup.exists():
+                try:
+                    backup.replace(cache_dir)
+                except OSError as exc:
+                    raise RuntimeError(f"Cache rollback failed; previous cache retained at {backup}") from exc
+            raise
+        published = True
+    finally:
+        if published or not backup.exists():
+            shutil.rmtree(staging, ignore_errors=True)
+        else:
+            # Never delete the only previous cache if rollback itself fails.
+            shutil.rmtree(staged_cache, ignore_errors=True)
     return manifest
 
 

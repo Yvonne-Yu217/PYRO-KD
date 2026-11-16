@@ -14,6 +14,7 @@ from src.utils.audio_features import (
     merge_segments, speech_of, write_features,
 )
 from src.utils.audio_selector import AudioSelector
+from src.utils.media import FrameEntry, MediaInfo, cache_is_complete, load_manifest, preprocess_video
 from src.utils.selection import select_top_k
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
@@ -190,6 +191,86 @@ class BuildMomentsTests(unittest.TestCase):
         self.assertEqual(sorted(build_moments.SELECTORS), ["A", "U"])
         self.assertEqual(build_moments.SELECTORS["U"](10.0, 4, None), [2.0, 4.0, 6.0, 8.0])
 
+    def test_failed_changed_source_rebuild_is_not_used_for_moments(self):
+        def fake_frames(video_path, output_dir, **kwargs):
+            output_dir.mkdir()
+            frame = output_dir / "000001.jpg"
+            frame.write_bytes(video_path.read_bytes() + b" frame")
+            return [FrameEntry(0, 0.0, str(frame))]
+
+        def fake_audio(video_path, output_path, sample_rate):
+            output_path.write_bytes(video_path.read_bytes() + b" audio")
+            return output_path
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            cache_root = root / "cache"
+            source = root / "changed.mp4"
+            source.write_bytes(b"source A")
+            good_source = root / "good.mp4"
+            good_source.write_bytes(b"unchanged source")
+            cache = cache_root / "changed"
+            good_cache = cache_root / "good"
+            info = MediaInfo(str(source), 60.0, 0.0, True, True, 160, 120, 25.0, 44100, 2)
+            with (
+                patch("src.utils.media.probe", return_value=info),
+                patch("src.utils.media.extract_frames", side_effect=fake_frames),
+                patch("src.utils.media.extract_audio", side_effect=fake_audio) as audio,
+            ):
+                manifest = preprocess_video(source, cache)
+                preprocess_video(good_source, good_cache)
+                features = features_for([Gap(0, 60, 0, 0)])
+                write_features(cache, features)
+                write_features(good_cache, features)
+                before = {p.relative_to(cache): p.read_bytes() for p in cache.rglob("*") if p.is_file()}
+                source.write_bytes(b"different replacement source B")
+                audio.side_effect = RuntimeError("B audio extraction failed")
+                with self.assertRaisesRegex(RuntimeError, "B audio extraction failed"):
+                    preprocess_video(source, cache)
+            self.assertEqual(load_manifest(cache), manifest)
+            self.assertTrue(cache_is_complete(manifest))
+            self.assertEqual(
+                {p.relative_to(cache): p.read_bytes() for p in cache.rglob("*") if p.is_file()}, before,
+            )
+
+            splits = root / "splits.json"
+            splits.write_text(json.dumps({"k_rule": {"rate_per_minute": 3}}), encoding="utf-8")
+            for dataset in ("mtg-ad", "reframed"):
+                for selector_name in ("U", "A"):
+                    with self.subTest(dataset=dataset, selector=selector_name):
+                        output = root / f"{dataset}_{selector_name}.jsonl"
+                        stdout = io.StringIO()
+                        selector = Mock(wraps=build_moments.SELECTORS[selector_name])
+                        with (
+                            patch.object(sys, "argv", [
+                                "build_moments.py", "--dataset", dataset, "--selector", selector_name,
+                                "--splits", str(splits), "--cache-dir", str(cache_root),
+                                "--output", str(output),
+                            ]),
+                            patch.object(build_moments, "load_targets", return_value=[
+                                ("changed", 60, []), ("good", 60, []),
+                            ]),
+                            patch.object(build_moments, "load_features", wraps=load_features) as loader,
+                            patch.dict(build_moments.SELECTORS, {selector_name: selector}),
+                            redirect_stdout(stdout),
+                        ):
+                            build_moments.main()
+                        rows = [json.loads(line) for line in output.read_text(encoding="utf-8").splitlines()]
+                        self.assertEqual([r["video_id"] for r in rows], ["good"] * 3)
+                        self.assertTrue(all(set(r["frames"]) == {str(good_cache / "frames/000001.jpg")} for r in rows))
+                        selector.assert_called_once()
+                        loader.assert_called_once_with(good_cache)
+                        report = json.loads(output.with_suffix(".report.json").read_text(encoding="utf-8"))
+                        self.assertEqual(report["videos"][0], {
+                            "video_id": "changed", "k_requested": 3, "num_selected": 0,
+                            "num_written": 0, "selection_shortfall": 0, "k_shortfall": 3,
+                            "status": "stale_cache", "skipped_moments": [],
+                        })
+                        self.assertEqual(report["videos"][1]["status"], "ok")
+                        self.assertIn("stale cache for 1 videos", stdout.getvalue())
+                        self.assertIn("changed", stdout.getvalue())
+                        self.assertNotIn("fewer than K feasible moments", stdout.getvalue())
+
     def run_batch(self, selector, videos, features, no_audio=(), missing_cache=(), incomplete=()):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -208,8 +289,15 @@ class BuildMomentsTests(unittest.TestCase):
                 (cache / "manifest.json").write_text("{}", encoding="utf-8")
             manifests = {}
             for video_id, _, _ in videos:
+                source = root / f"{video_id}.mp4"
+                source.write_bytes(b"video")
+                stat = source.stat()
                 frame_path = str(root / "missing-frame.jpg") if video_id in incomplete else str(frame)
                 manifests[video_id] = {
+                    "source": str(source),
+                    "settings": {"source_fingerprint": {
+                        "path": str(source.resolve()), "size": stat.st_size, "mtime_ns": stat.st_mtime_ns,
+                    }},
                     "frames": [{"index": 0, "timestamp": 0.0, "path": frame_path}],
                     "audio_path": None if video_id in no_audio else str(audio),
                 }
