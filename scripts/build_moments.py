@@ -12,6 +12,8 @@ same way for every selector from the cached VAD segments.
 Zero-word moments are skipped and recorded as not safely speakable in a
 <output>.report.json sidecar; they are never sent to the VLM. Missing audio
 features produce zero A moments for that video, without aborting other videos.
+Complete caches whose source fingerprint no longer matches are skipped and
+reported as stale_cache; rerun preprocessing before generating their moments.
 
     python scripts/build_moments.py --selector U --videos dev                  # MTG-AD
     python scripts/build_moments.py --dataset reframed --videos dev            # REFRAMED
@@ -28,7 +30,7 @@ from src.datasets import mtg_ad, reframed  # noqa: E402
 from src.generation.prompts import transcript_context, word_limit_for_gap  # noqa: E402
 from src.utils.audio_features import available_gap, load_features, speech_of  # noqa: E402
 from src.utils.audio_selector import AudioSelector  # noqa: E402
-from src.utils.media import cache_is_complete, frame_window, load_manifest  # noqa: E402
+from src.utils.media import cache_is_complete, cache_is_current, frame_window, load_manifest  # noqa: E402
 from src.utils.selection import k_for_duration, uniform_timestamps  # noqa: E402
 
 
@@ -86,6 +88,7 @@ def main() -> None:
     output = args.output or Path(f"data/moments/{name}_{args.selector}_{args.videos}.jsonl")
     output.parent.mkdir(parents=True, exist_ok=True)
     rows, missing, shortfalls, no_audio, unsafe = 0, [], [], [], []
+    stale = []
     reports = []
     with output.open("w", encoding="utf-8") as handle:
         for video_id, duration, transcript in targets:
@@ -107,6 +110,10 @@ def main() -> None:
                 continue
             if not cache_is_complete(manifest):
                 missing.append(video_id)
+                continue
+            if not cache_is_current(manifest):
+                stale.append(video_id)
+                report["status"] = "stale_cache"
                 continue
             features = load_features(cache)
             if args.selector == "A" and "audio_path" in manifest and not manifest["audio_path"]:
@@ -165,6 +172,8 @@ def main() -> None:
         print(f"not safely speakable; skipped {len(unsafe)} zero-word moments; details: {report_path}")
     if missing:
         print(f"no cache for {len(missing)} videos (run the matching prepare script with --preprocess): {' '.join(missing)}")
+    if stale:
+        print(f"stale cache for {len(stale)} videos (run the matching prepare script with --preprocess): {' '.join(stale)}")
 
 
 if __name__ == "__main__":
