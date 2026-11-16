@@ -187,7 +187,7 @@ class BuildMomentsTests(unittest.TestCase):
         self.assertEqual(build_moments.SELECTORS["A"](100.0, 5, None), [])
 
     def test_registered_selectors(self):
-        self.assertEqual(sorted(build_moments.SELECTORS), ["A", "U"])
+        self.assertEqual(sorted(build_moments.SELECTORS), ["A", "U", "V"])
         self.assertEqual(build_moments.SELECTORS["U"](10.0, 4, None), [2.0, 4.0, 6.0, 8.0])
 
     def run_batch(self, selector, videos, features, no_audio=(), missing_cache=(), incomplete=()):

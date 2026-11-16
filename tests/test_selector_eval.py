@@ -4,8 +4,11 @@ import sys
 import tempfile
 import unittest
 
+import numpy as np
+
 from src.datasets.mtg_ad import parse_row
 from src.evaluation.stats import bootstrap_mean_ci, paired_bootstrap_diff
+from src.utils import visual_features as vf
 from src.utils.selection import oracle_timestamps
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
@@ -99,6 +102,48 @@ class EvaluateVideoTests(unittest.TestCase):
         self.assertEqual(ev.in_speech_rate([25.0, 50.0], features, 100.0), 0.5)
         self.assertIsNone(ev.in_speech_rate([25.0], None, 100.0))
         self.assertIsNone(ev.in_speech_rate([], features, 100.0))
+
+
+def make_visual(spikes, duration=100.0):
+    times = [i * 0.5 for i in range(int(duration / 0.5))]
+    novelty = [0.05] * len(times)
+    for t, value in spikes:
+        novelty[times.index(t)] = value
+    return {"frame_times": times, "novelty": novelty, "shots": []}
+
+
+class VisualSelectorEvalTests(unittest.TestCase):
+    def test_v_needs_visual_features_and_scores_its_peaks(self):
+        video = make_video(ad_times=(10.0, 50.0, 90.0))
+        self.assertIsNone(ev.evaluate_video("V", video, 3, None, 2.0))
+        visual = make_visual([(10.0, 1.0), (50.0, 0.9), (90.0, 0.8)])
+        row = ev.evaluate_video("V", video, 3, None, 2.0, visual=visual)
+        self.assertEqual(row["times"], [10.0, 50.0, 90.0])
+        self.assertEqual(row["f1"], 1.0)
+        self.assertIsNone(row["visual_redundancy"])  # no embeddings supplied
+
+    def test_redundancy_is_reported_when_embeddings_exist(self):
+        video = make_video(ad_times=(10.0, 50.0))
+        visual = make_visual([(10.0, 1.0), (50.0, 0.9)])
+        embeddings = np.tile([1.0, 0.0], (len(visual["frame_times"]), 1))
+        row = ev.evaluate_video("V", video, 2, None, 2.0, visual=visual, embeddings=embeddings)
+        self.assertAlmostEqual(row["visual_redundancy"], 1.0)
+
+    def test_run_loads_visual_cache_and_counts_skips(self):
+        videos = [make_video("a"), make_video("b")]
+        visual = make_visual([(10.0, 1.0), (50.0, 0.9), (90.0, 0.8)])
+        embeddings = np.eye(len(visual["frame_times"]))[:, :4]
+        with tempfile.TemporaryDirectory() as tmp:
+            cache = Path(tmp)
+            (cache / "a").mkdir()
+            vf.write_features(cache / "a", visual, embeddings)
+            result = ev.run(videos, 3.48, ["U", "V"], cache, 2.0, 200, 0)
+        result["set"] = "dev"
+        self.assertEqual(result["skipped"], {"V": 1})
+        self.assertEqual(result["selectors"]["V"]["n_videos"], 1)
+        self.assertEqual(result["selectors"]["V"]["n_with_embeddings"], 1)
+        self.assertIn("V: skipped 1 video(s) without visual features", ev.format_report(result))
+        json.dumps(result)
 
 
 class SummaryTests(unittest.TestCase):

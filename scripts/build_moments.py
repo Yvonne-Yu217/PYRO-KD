@@ -5,8 +5,10 @@ identical frame window, transcript-context rule, and word limit:
     {"id", "video_id", "selector", "time", "frames", "frame_times",
      "transcript", "word_limit"}
 
-Selectors so far: U (uniform) and A (audio-only). A needs audio_features.json
-(scripts/cache_audio_features.py). The word limit is floor(gap * 3), capped,
+Selectors so far: U (uniform), A (audio-only) and V (video-only). A needs
+audio_features.json (scripts/cache_audio_features.py); V needs
+visual_features.json (scripts/cache_visual_features.py). The word limit below
+always comes from the audio features, whichever selector chose the moment. The word limit is floor(gap * 3), capped,
 where gap is the time from the moment to the next speech onset, computed the
 same way for every selector from the cached VAD segments.
 Zero-word moments are skipped and recorded as not safely speakable in a
@@ -30,6 +32,7 @@ from src.utils.audio_features import available_gap, load_features, speech_of  # 
 from src.utils.audio_selector import AudioSelector  # noqa: E402
 from src.utils.media import cache_is_complete, frame_window, load_manifest  # noqa: E402
 from src.utils.selection import k_for_duration, uniform_timestamps  # noqa: E402
+from src.utils.visual_features import VisualCueSelector, load_features as load_visual_features  # noqa: E402
 
 
 def _select_audio(duration, k, features):
@@ -38,9 +41,18 @@ def _select_audio(duration, k, features):
     return [c.time for c in AudioSelector().select(features, k)]
 
 
+def _select_visual(duration, k, visual):
+    if visual is None:
+        return []
+    return [c.time for c in VisualCueSelector().select(visual, k)]
+
+
+# The third argument is the selector's own cached features: audio features for
+# U and A, visual features for V.
 SELECTORS = {
     "U": lambda duration, k, features: uniform_timestamps(duration, k),
     "A": _select_audio,
+    "V": _select_visual,
 }
 
 
@@ -85,7 +97,7 @@ def main() -> None:
 
     output = args.output or Path(f"data/moments/{name}_{args.selector}_{args.videos}.jsonl")
     output.parent.mkdir(parents=True, exist_ok=True)
-    rows, missing, shortfalls, no_audio, unsafe = 0, [], [], [], []
+    rows, missing, shortfalls, no_audio, no_visual, unsafe = 0, [], [], [], [], []
     reports = []
     with output.open("w", encoding="utf-8") as handle:
         for video_id, duration, transcript in targets:
@@ -112,15 +124,20 @@ def main() -> None:
             if args.selector == "A" and "audio_path" in manifest and not manifest["audio_path"]:
                 features = None
             speech = speech_of(features) if features else None
+            visual = load_visual_features(cache) if args.selector == "V" else None
             if args.selector == "A" and features is None:
                 no_audio.append(video_id)
                 report["status"] = "missing_audio_features"
+            elif args.selector == "V" and visual is None:
+                no_visual.append(video_id)
+                report["status"] = "missing_visual_features"
             else:
                 report["status"] = "ok"
-            times = SELECTORS[args.selector](duration, k, features)
+            times = SELECTORS[args.selector](duration, k, visual if args.selector == "V" else features)
             report["num_selected"] = len(times)
             report["selection_shortfall"] = (
-                0 if report["status"] == "missing_audio_features" else k - len(times)
+                0 if report["status"] in ("missing_audio_features", "missing_visual_features")
+                else k - len(times)
             )
             if report["selection_shortfall"]:
                 shortfalls.append((video_id, k - len(times)))
@@ -161,6 +178,8 @@ def main() -> None:
         print(f"selection shortfall (fewer than K feasible moments): {', '.join(f'{v} -{n}' for v, n in shortfalls)}")
     if no_audio:
         print(f"no audio/features; zero A moments: {' '.join(no_audio)} (run scripts/cache_audio_features.py)")
+    if no_visual:
+        print(f"no visual features; zero V moments: {' '.join(no_visual)} (run scripts/cache_visual_features.py)")
     if unsafe:
         print(f"not safely speakable; skipped {len(unsafe)} zero-word moments; details: {report_path}")
     if missing:
