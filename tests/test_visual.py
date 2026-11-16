@@ -14,7 +14,9 @@ import numpy as np
 from src.utils import visual_features as vf
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_moments  # noqa: E402
+import cache_fixtures as fx  # noqa: E402
 import cache_visual_features  # noqa: E402
 
 try:
@@ -348,38 +350,43 @@ class CacheScriptTests(unittest.TestCase):
 
 
 class BuildMomentsVisualTests(unittest.TestCase):
-    def run_v(self, videos, visual, audio=None):
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            splits = root / "splits.json"
-            splits.write_text(json.dumps({"k_rule": {"rate_per_minute": 3}}))
-            output = root / "moments.jsonl"
-            frame = root / "frame.jpg"
-            frame.write_bytes(b"jpg")
-            for video_id, _, _ in videos:
-                (root / video_id).mkdir()
-                (root / video_id / "manifest.json").write_text("{}", encoding="utf-8")
-            manifest = {"frames": [{"index": 0, "timestamp": 0.0, "path": str(frame)}], "audio_path": None}
-            stdout = io.StringIO()
-            with (
-                patch.object(sys, "argv", ["build_moments.py", "--selector", "V", "--splits", str(splits),
-                                          "--cache-dir", str(root), "--output", str(output)]),
-                patch.object(build_moments, "load_targets", return_value=videos),
-                patch.object(build_moments, "load_manifest", return_value=manifest),
-                patch.object(build_moments, "load_features", side_effect=lambda p: (audio or {}).get(p.name)),
-                patch.object(build_moments, "load_visual_features", side_effect=lambda p, m=None: visual.get(p.name)),
-                patch.object(build_moments, "frame_window", return_value=[]),
-                redirect_stdout(stdout),
-            ):
-                build_moments.main()
-            rows = [json.loads(line) for line in output.read_text().splitlines()]
-            report = json.loads(output.with_suffix(".report.json").read_text())
-            return rows, report, stdout.getvalue()
+    """build_moments --selector V against real (synthetic) media caches."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name)
+        splits = self.root / "splits.json"
+        splits.write_text(json.dumps({"k_rule": {"rate_per_minute": 3}}))
+        self.splits = splits
+
+    def make_cache(self, video_id, features=None):
+        paths = fx.make_media_cache(self.root, video_id, audio=False)
+        if features is not None:
+            stamped = {**features, "config": vf.DEFAULT_CONFIG,
+                       "config_hash": vf.features_hash(paths["manifest"], vf.DEFAULT_CONFIG)}
+            (paths["cache"] / vf.FEATURES_NAME).write_text(json.dumps(stamped), encoding="utf-8")
+        return paths
+
+    def run_v(self, videos):
+        output = self.root / "moments.jsonl"
+        stdout = io.StringIO()
+        with (
+            patch.object(sys, "argv", ["build_moments.py", "--selector", "V", "--splits", str(self.splits),
+                                      "--cache-dir", str(self.root), "--output", str(output)]),
+            patch.object(build_moments, "load_targets", return_value=videos),
+            patch.object(build_moments, "frame_window", return_value=[]),
+            redirect_stdout(stdout),
+        ):
+            build_moments.main()
+        rows = [json.loads(line) for line in output.read_text().splitlines()]
+        report = json.loads(output.with_suffix(".report.json").read_text())
+        return rows, report, stdout.getvalue()
 
     def test_v_moments_come_from_visual_features_and_missing_features_are_reported(self):
-        rows, report, stdout = self.run_v(
-            [("good", 60, []), ("nofeatures", 60, [])], {"good": spike_features()},
-        )
+        self.make_cache("good", spike_features())
+        self.make_cache("nofeatures")
+        rows, report, stdout = self.run_v([("good", 60, []), ("nofeatures", 60, [])])
         self.assertEqual([r["time"] for r in rows], [10.0, 30.0, 50.0])
         self.assertTrue(all(r["selector"] == "V" and r["video_id"] == "good" for r in rows))
         self.assertTrue(all(r["word_limit"] is None for r in rows))  # no audio features cached
@@ -390,42 +397,16 @@ class BuildMomentsVisualTests(unittest.TestCase):
         self.assertIn("no visual features; zero V moments: nofeatures", stdout)
 
     def test_stale_features_on_disk_are_treated_as_missing(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            cache = root / "vid"
-            (cache / "frames").mkdir(parents=True)
-            frame = cache / "frames" / "0.jpg"
-            frame.write_bytes(b"jpg")
-            manifest = {"source": "vid.mp4", "config_hash": "m1", "audio_path": None,
-                        "frames": [{"index": 0, "timestamp": 0.0, "path": str(frame)}]}
-            (cache / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
-            features = {**spike_features(), "config": vf.DEFAULT_CONFIG,
-                        "config_hash": vf.features_hash(manifest, vf.DEFAULT_CONFIG)}
-            (cache / vf.FEATURES_NAME).write_text(json.dumps(features), encoding="utf-8")
-            splits = root / "splits.json"
-            splits.write_text(json.dumps({"k_rule": {"rate_per_minute": 3}}))
-
-            def run():
-                output = root / "moments.jsonl"
-                with (
-                    patch.object(sys, "argv", ["build_moments.py", "--selector", "V", "--splits", str(splits),
-                                              "--cache-dir", str(root), "--output", str(output)]),
-                    patch.object(build_moments, "load_targets", return_value=[("vid", 60, [])]),
-                    patch.object(build_moments, "frame_window", return_value=[]),
-                    redirect_stdout(io.StringIO()),
-                ):
-                    build_moments.main()
-                return output.read_text().splitlines(), json.loads(output.with_suffix(".report.json").read_text())
-
-            rows, report = run()
-            self.assertEqual(len(rows), 3)
-            self.assertEqual(report["videos"][0]["status"], "ok")
-            # The frames are re-extracted (new manifest hash) but nobody reran the caching script.
-            manifest["config_hash"] = "m2"
-            (cache / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
-            rows, report = run()
-            self.assertEqual(rows, [])
-            self.assertEqual(report["videos"][0]["status"], "missing_visual_features")
+        paths = self.make_cache("vid", spike_features())
+        rows, report, _ = self.run_v([("vid", 60, [])])
+        self.assertEqual(len(rows), 3)
+        self.assertEqual(report["videos"][0]["status"], "ok")
+        # The frames are re-extracted (new manifest hash) but nobody reran the caching script.
+        manifest = {**paths["manifest"], "config_hash": "m2"}
+        (paths["cache"] / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+        rows, report, _ = self.run_v([("vid", 60, [])])
+        self.assertEqual(rows, [])
+        self.assertEqual(report["videos"][0]["status"], "missing_visual_features")
 
     def test_registered_selector_signature_is_unchanged(self):
         self.assertEqual(build_moments.SELECTORS["V"](60.0, 3, None), [])

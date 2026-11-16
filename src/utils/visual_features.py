@@ -27,6 +27,7 @@ import json
 from pathlib import Path
 from typing import Any, Callable, Sequence
 
+from src.utils import cache_checks
 from src.utils.media import config_hash
 from src.utils.selection import MIN_SEPARATION_SECONDS, select_top_k
 
@@ -211,6 +212,35 @@ def load_current_features(
         except (OSError, UnicodeDecodeError, json.JSONDecodeError):
             return None
     return features if is_fresh(features, manifest, config) else None
+
+
+NO_VISUAL_FEATURES = "no_visual_features"
+UNREADABLE_VISUAL_FEATURES = "unreadable_visual_features"
+STALE_VISUAL_FEATURES = "stale_visual_features"
+
+
+def load_validated_features(cache_dir: str | Path) -> tuple[dict | None, str | None]:
+    """Visual features for one cached video, validated; (None, reason) if unusable.
+
+    Same contract as cache_checks.load_audio_features: reading never raises, and a
+    reason code says why the features cannot be trusted. The media cache must be
+    complete and current (so a failed rebuild that left a complete cache for an older
+    source is caught), and the features readable and matching the manifest and config.
+    """
+    manifest, reason = cache_checks.read_manifest(cache_dir)
+    if manifest is None:
+        return None, reason
+    problem = cache_checks.media_cache_problem(manifest)
+    if problem:
+        return None, problem
+    if not (Path(cache_dir) / FEATURES_NAME).is_file():
+        return None, NO_VISUAL_FEATURES
+    features = load_features(cache_dir)
+    if features is None:
+        return None, UNREADABLE_VISUAL_FEATURES
+    if not is_fresh(features, manifest):
+        return None, STALE_VISUAL_FEATURES
+    return features, None
 
 
 def load_embeddings(cache_dir: str | Path):

@@ -3,15 +3,19 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 import numpy as np
 
 from src.datasets.mtg_ad import parse_row
 from src.evaluation.stats import bootstrap_mean_ci, paired_bootstrap_diff
+from src.utils import cache_checks as cc
 from src.utils import visual_features as vf
 from src.utils.selection import oracle_timestamps
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import cache_fixtures as fx  # noqa: E402
 import evaluate_selectors as ev  # noqa: E402
 
 
@@ -113,6 +117,27 @@ def make_visual(spikes, duration=100.0):
 
 
 class VisualSelectorEvalTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name)
+
+    def visual_cache(self, video_id, visual, embeddings=None):
+        """A complete, current media cache with visual features stamped for it."""
+        paths = fx.make_media_cache(self.root, video_id)
+        features = {**visual, "config": vf.DEFAULT_CONFIG,
+                    "config_hash": vf.features_hash(paths["manifest"], vf.DEFAULT_CONFIG)}
+        embeddings = np.eye(len(visual["frame_times"]))[:, :4] if embeddings is None else embeddings
+        vf.write_features(paths["cache"], features, embeddings)
+        return paths
+
+    def run_v(self, videos, selectors=("U", "V")):
+        with fx.patched_audio_helpers():
+            result = ev.run(list(videos), 3.48, list(selectors), self.root, 2.0, 200, 0)
+        result["set"] = "dev"
+        json.dumps(result)
+        return result
+
     def test_v_needs_visual_features_and_scores_its_peaks(self):
         video = make_video(ad_times=(10.0, 50.0, 90.0))
         self.assertIsNone(ev.evaluate_video("V", video, 3, None, 2.0))
@@ -129,41 +154,42 @@ class VisualSelectorEvalTests(unittest.TestCase):
         row = ev.evaluate_video("V", video, 2, None, 2.0, visual=visual, embeddings=embeddings)
         self.assertAlmostEqual(row["visual_redundancy"], 1.0)
 
-    @staticmethod
-    def cache_visual(cache_dir, visual, manifest_hash="m1", embeddings=None, stamped_hash="m1"):
-        """Write manifest.json and visual features stamped as computed from stamped_hash."""
-        cache_dir.mkdir(parents=True, exist_ok=True)
-        stamped = {"config_hash": stamped_hash}
-        features = {**visual, "config": vf.DEFAULT_CONFIG,
-                    "config_hash": vf.features_hash(stamped, vf.DEFAULT_CONFIG)}
-        (cache_dir / "manifest.json").write_text(json.dumps({"config_hash": manifest_hash}), encoding="utf-8")
-        embeddings = np.eye(len(visual["frame_times"]))[:, :4] if embeddings is None else embeddings
-        vf.write_features(cache_dir, features, embeddings)
-
-    def test_run_loads_visual_cache_and_counts_skips(self):
+    def test_run_loads_validated_visual_cache_and_counts_skips(self):
         videos = [make_video("a"), make_video("b")]
-        visual = make_visual([(10.0, 1.0), (50.0, 0.9), (90.0, 0.8)])
-        with tempfile.TemporaryDirectory() as tmp:
-            cache = Path(tmp)
-            self.cache_visual(cache / "a", visual)
-            result = ev.run(videos, 3.48, ["U", "V"], cache, 2.0, 200, 0)
-        result["set"] = "dev"
+        self.visual_cache("a", make_visual([(10.0, 1.0), (50.0, 0.9), (90.0, 0.8)]))
+        result = self.run_v(videos)
         self.assertEqual(result["skipped"], {"V": 1})
+        self.assertEqual(result["skipped_reasons"], {"V": {"no_manifest": 1}})
+        self.assertEqual(result["visual_features"], {"usable": 1, "unavailable": {"no_manifest": 1}})
         self.assertEqual(result["selectors"]["V"]["n_videos"], 1)
         self.assertEqual(result["selectors"]["V"]["n_with_embeddings"], 1)
-        self.assertIn("V: skipped 1 video(s) without visual features", ev.format_report(result))
-        json.dumps(result)
+        self.assertIn("V: skipped 1 video(s) without usable visual features (no_manifest x1)", ev.format_report(result))
 
     def test_stale_visual_features_are_skipped_not_scored(self):
-        videos = [make_video("a")]
-        visual = make_visual([(10.0, 1.0), (50.0, 0.9), (90.0, 0.8)])
-        with tempfile.TemporaryDirectory() as tmp:
-            cache = Path(tmp)
-            # Features were computed from frames with hash m1; the manifest now says m2.
-            self.cache_visual(cache / "a", visual, manifest_hash="m2", stamped_hash="m1")
-            result = ev.run(videos, 3.48, ["V"], cache, 2.0, 200, 0)
-        self.assertEqual(result["skipped"], {"V": 1})
+        paths = self.visual_cache("a", make_visual([(10.0, 1.0), (50.0, 0.9)]))
+        # The frames were re-extracted (new manifest hash) after the features were computed.
+        manifest = {**paths["manifest"], "config_hash": "m2"}
+        (paths["cache"] / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+        result = self.run_v([make_video("a")], ["V"])
+        self.assertEqual(result["skipped_reasons"], {"V": {"stale_visual_features": 1}})
         self.assertNotIn("V", result["selectors"])
+
+    # Review finding P1 applies to V too: a failed rebuild leaves a complete cache for an older source.
+    def test_stale_media_cache_is_never_scored_for_v_either(self):
+        paths = self.visual_cache("a", make_visual([(10.0, 1.0), (50.0, 0.9)]))
+        paths["source"].write_bytes(b"the replacement source video, which failed to preprocess")
+        result = self.run_v([make_video("a")], ["V"])
+        self.assertEqual(result["skipped_reasons"], {"V": {"media_cache_stale": 1}})
+        self.assertNotIn("V", result["selectors"])
+
+    # Review finding P2: an unrelated broken cache must not stop other selectors.
+    def test_corrupt_visual_json_does_not_stop_other_selectors(self):
+        paths = self.visual_cache("a", make_visual([(10.0, 1.0), (50.0, 0.9)]))
+        (paths["cache"] / "visual_features.json").write_text("{broken", encoding="utf-8")
+        result = self.run_v([make_video("a")], ["U", "O", "V"])
+        self.assertEqual(result["skipped_reasons"], {"V": {"unreadable_visual_features": 1}})
+        self.assertEqual(result["selectors"]["U"]["n_videos"], 1)
+        self.assertEqual(result["selectors"]["O"]["n_videos"], 1)
 
 
 class SummaryTests(unittest.TestCase):
@@ -197,24 +223,145 @@ class SummaryTests(unittest.TestCase):
 
 
 class RunTests(unittest.TestCase):
-    def test_end_to_end_counts_videos_without_audio_features(self):
-        videos = [make_video("a"), make_video("b")]
-        with tempfile.TemporaryDirectory() as tmp:
-            cache = Path(tmp)
-            (cache / "a").mkdir()
-            (cache / "a" / "audio_features.json").write_text(json.dumps(
-                make_features(speech=[(0.0, 40.0)], gaps=[(40.25, 100.0)])))
-            result = ev.run(videos, 3.48, ["U", "O", "A"], cache, 2.0, 200, 0)
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name)
+
+    def run_selectors(self, videos, selectors, **kwargs):
+        with fx.patched_audio_helpers():
+            result = ev.run(videos, 3.48, selectors, self.root, 2.0, 200, 0, **kwargs)
         result["set"] = "dev"
+        json.dumps(result)  # the whole result must be JSON serializable
+        return result
+
+    def valid_audio_cache(self, video_id):
+        paths = fx.make_media_cache(self.root, video_id)
+        fx.write_audio_features(
+            paths["cache"], paths["manifest"], speech=[(0.0, 40.0)], gaps=[(40.25, 100.0)])
+        return paths
+
+    def test_end_to_end_counts_videos_without_usable_audio_features(self):
+        videos = [make_video("a"), make_video("b")]
+        self.valid_audio_cache("a")
+        result = self.run_selectors(videos, ["U", "O", "A"])
         self.assertEqual(result["skipped"], {"A": 1})
+        self.assertEqual(result["skipped_reasons"], {"A": {"no_manifest": 1}})
+        self.assertEqual(result["unavailable"], [{"video_id": "b", "selector": "A", "reason": "no_manifest"}])
+        self.assertEqual(result["audio_features"], {"usable": 1, "unavailable": {"no_manifest": 1}})
         self.assertEqual(result["selectors"]["A"]["n_videos"], 1)
         self.assertEqual(result["selectors"]["U"]["n_videos"], 2)
         self.assertEqual(result["selectors"]["A"]["in_speech_rate"], 0.0)
         report = ev.format_report(result)
         self.assertIn("macro F1", report)
-        self.assertIn("A: skipped 1 video(s) without audio features", report)
+        self.assertIn("A: skipped 1 video(s) without usable audio features (no_manifest x1)", report)
         self.assertIn("O - U", report)
-        json.dumps(result)  # the whole result must be JSON serializable
+
+    # Finding P2: U/O must not depend on an unrelated optional audio cache.
+    def test_corrupt_audio_json_does_not_stop_u_and_o_scoring(self):
+        videos = [make_video("a")]
+        paths = self.valid_audio_cache("a")
+        (paths["cache"] / "audio_features.json").write_text("{broken", encoding="utf-8")
+        result = self.run_selectors(videos, ["U", "O"])
+        self.assertEqual(result["selectors"]["U"]["n_videos"], 1)
+        self.assertEqual(result["selectors"]["O"]["n_videos"], 1)
+        self.assertIsNone(result["selectors"]["U"]["in_speech_rate"])  # diagnostic unavailable
+        self.assertEqual(result["audio_features"]["unavailable"], {"unreadable_audio_features": 1})
+        with_a = self.run_selectors(videos, ["U", "A"])
+        self.assertEqual(with_a["skipped_reasons"], {"A": {"unreadable_audio_features": 1}})
+        self.assertEqual(with_a["selectors"]["U"]["n_videos"], 1)
+
+    # Finding P1, scenario 1: a rebuild failed and left a complete cache for an older source.
+    def test_stale_media_cache_is_never_scored_even_with_features_present(self):
+        videos = [make_video("a")]
+        paths = self.valid_audio_cache("a")
+        paths["source"].write_bytes(b"the replacement source video, which failed to preprocess")
+        result = self.run_selectors(videos, ["U", "A"])
+        self.assertNotIn("A", result["selectors"])
+        self.assertEqual(result["skipped_reasons"], {"A": {"media_cache_stale": 1}})
+        self.assertIsNone(result["selectors"]["U"]["in_speech_rate"])  # not even as a diagnostic
+
+    # Finding P1, scenario 2: the WAV was replaced while the manifest stayed current.
+    def test_replaced_wav_makes_features_stale_and_unscored(self):
+        videos = [make_video("a")]
+        paths = self.valid_audio_cache("a")
+        paths["wav"].write_bytes(b"RIFF....a replacement recording that is longer")
+        result = self.run_selectors(videos, ["A"])
+        self.assertEqual(result["skipped_reasons"], {"A": {"stale_audio_features": 1}})
+        self.assertEqual(result["selectors"], {})
+
+    def test_features_are_not_trusted_without_the_fingerprint_helpers(self):
+        videos = [make_video("a")]
+        self.valid_audio_cache("a")
+        with patch.object(cc, "features_config_hash", None), patch.object(cc, "features_are_current", None):
+            result = ev.run(videos, 3.48, ["U", "A"], self.root, 2.0, 200, 0)
+        self.assertEqual(result["skipped_reasons"], {"A": {"unverifiable_audio_features": 1}})
+
+    def test_incomplete_media_cache_is_reported(self):
+        videos = [make_video("a")]
+        paths = self.valid_audio_cache("a")
+        paths["frame"].unlink()
+        result = self.run_selectors(videos, ["A"])
+        self.assertEqual(result["skipped_reasons"], {"A": {"media_cache_incomplete": 1}})
+
+
+class BoundsPolicyTests(unittest.TestCase):
+    """AD starts beyond the declared duration: explicit policy, never silent."""
+
+    def video(self, duration=10.0, times=(1.0, 12.0)):
+        return make_video("v", duration, times)
+
+    def test_ground_truth_times_policies_and_slack(self):
+        video = self.video(times=(1.0, 10.9, 11.5))
+        self.assertEqual(ev.ground_truth_times(video, "exclude"), ([1.0, 10.9], [11.5]))
+        self.assertEqual(ev.ground_truth_times(video, "keep"), ([1.0, 10.9, 11.5], [11.5]))
+        self.assertEqual(ev.ground_truth_times(video, "exclude", slack=2.0)[1], [])
+        with self.assertRaises(ValueError):
+            ev.ground_truth_times(video, "clamp")
+
+    def test_default_excludes_impossible_starts_from_gt_for_every_selector(self):
+        video = self.video()
+        oracle = ev.evaluate_video("O", video, 2, None, 2.0)
+        self.assertEqual(oracle["times"], [1.0])  # not credited with the 12.0 outside the clip
+        self.assertEqual((oracle["num_gt"], oracle["num_gt_scored"], oracle["num_gt_out_of_bounds"]), (2, 1, 1))
+        self.assertEqual(oracle["out_of_bounds_gt_times"], [12.0])
+        self.assertEqual(oracle["num_selected_out_of_bounds"], 0)
+        uniform = ev.evaluate_video("U", video, 2, None, 2.0)
+        self.assertEqual(uniform["num_gt_scored"], 1)  # U is scored against the same ground truth
+        self.assertEqual(uniform["fn"] + uniform["tp"], 1)
+
+    def test_keep_policy_is_the_unrestricted_upper_bound_and_is_labelled(self):
+        video = self.video()
+        oracle = ev.evaluate_video("O", video, 2, None, 2.0, bounds="keep")
+        self.assertEqual(oracle["times"], [1.0, 12.0])
+        self.assertEqual(oracle["num_selected_out_of_bounds"], 1)
+        self.assertEqual(oracle["f1"], 1.0)
+        result = ev.run([video], 3.48, ["O"], Path("/nonexistent"), 2.0, 100, 0, bounds="keep")
+        self.assertTrue(result["bounds"]["unrestricted_annotation_upper_bound"])
+        self.assertEqual(result["bounds"]["selected_out_of_bounds"], {"O": 1})
+        result["set"] = "dev"
+        self.assertIn("INCLUDED: unrestricted annotation upper bound", ev.format_report(result))
+
+    def test_run_reports_affected_videos_and_counts_without_changing_k(self):
+        videos = [make_video("ok", 100.0, (10.0, 50.0)), make_video("bad", 10.0, (1.0, 12.0, 15.0))]
+        result = ev.run(videos, 3.48, ["U", "O"], Path("/nonexistent"), 2.0, 100, 0)
+        result["set"] = "dev"
+        bounds = result["bounds"]
+        self.assertEqual(bounds["policy"], "exclude")
+        self.assertEqual([v["video_id"] for v in bounds["videos"]], ["bad"])
+        self.assertEqual(bounds["videos"][0]["out_of_bounds_gt_times"], [12.0, 15.0])
+        self.assertEqual(bounds["total_gt_out_of_bounds"], 2)
+        self.assertEqual(result["selectors"]["O"]["total_gt"], 3)  # scored
+        self.assertEqual(result["selectors"]["O"]["total_gt_annotated"], 5)  # annotated
+        k_bad = next(r["k"] for r in result["videos"] if r["video_id"] == "bad" and r["selector"] == "U")
+        self.assertEqual(k_bad, 1)  # K still comes from the declared duration
+        report = ev.format_report(result)
+        self.assertIn("2 in 1 video(s) (bad) EXCLUDED from the ground truth for every selector", report)
+
+    def test_no_anomalies_is_stated(self):
+        result = ev.run([make_video("ok")], 3.48, ["U"], Path("/nonexistent"), 2.0, 100, 0)
+        result["set"] = "dev"
+        self.assertIn("Out-of-duration AD starts: none", ev.format_report(result))
 
 
 if __name__ == "__main__":
