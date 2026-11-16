@@ -20,6 +20,21 @@ comparison uses the same budget everywhere. Tune nothing on --set test.
 
 Each per-video value is one observation: confidence intervals are paired
 percentile bootstraps over videos, never over moments.
+
+Cached features are used only after validation (src/utils/cache_checks.py): the
+media cache must be complete and current, and audio features readable and
+matching the current WAV. A video whose features fail any check is skipped for
+A with an explicit reason, and counted in the report; reading never raises, so a
+broken audio cache cannot stop a U/O-only run.
+
+Out-of-duration annotations. Some MTG-AD videos list AD starts after their
+declared (whole-second) duration, which no selector working inside the clip can
+place. The default policy EXCLUDES such starts (later than the declared duration
+plus --duration-slack, default 1 s for second rounding) from the ground truth,
+for every selector including O, and reports the affected videos and counts.
+--keep-out-of-bounds instead scores against every annotated start, which is the
+unrestricted annotation upper bound: O may then place moments outside the clip,
+and the report says so. Starts are never clamped, and nothing is dropped silently.
 """
 
 from __future__ import annotations
@@ -36,24 +51,44 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from src.datasets import mtg_ad  # noqa: E402
 from src.evaluation.metrics import temporal_precision_recall_f1  # noqa: E402
 from src.evaluation.stats import DEFAULT_RESAMPLES, bootstrap_mean_ci, paired_bootstrap_diff  # noqa: E402
-from src.utils.audio_features import available_gap, load_features, speech_of  # noqa: E402
+from src.utils.audio_features import available_gap, speech_of  # noqa: E402
 from src.utils.audio_selector import AudioSelector  # noqa: E402
+from src.utils.cache_checks import load_audio_features  # noqa: E402
 from src.utils.selection import k_for_duration, oracle_timestamps, uniform_timestamps  # noqa: E402
 
 TOLERANCE_SWEEP = (0.0, 1.0, 2.0, 3.0, 5.0)
 # (selector, baseline) pairs reported as paired differences in F1.
 COMPARISONS = (("A", "U"), ("O", "U"), ("O", "A"))
+DURATION_SLACK_SECONDS = 1.0  # declared durations are whole seconds
+BOUNDS_POLICIES = ("exclude", "keep")
 
 
-def _times_u(video, k, features):
+def ground_truth_times(
+    video: mtg_ad.MTGVideo, policy: str = "exclude", slack: float = DURATION_SLACK_SECONDS,
+) -> tuple[list[float], list[float]]:
+    """(ground truth to score against, annotated starts beyond the declared duration).
+
+    policy "exclude" removes starts later than duration + slack from the scored
+    ground truth; "keep" scores against all of them. The second list is the same
+    either way, so the anomaly is always reported.
+    """
+    if policy not in BOUNDS_POLICIES:
+        raise ValueError(f"policy must be one of {BOUNDS_POLICIES}")
+    starts = sorted(float(item.timestamp) for item in video.ad)
+    limit = video.duration_seconds + slack
+    out_of_bounds = [t for t in starts if t > limit]
+    return (starts if policy == "keep" else [t for t in starts if t <= limit]), out_of_bounds
+
+
+def _times_u(video, k, features, truth):
     return uniform_timestamps(video.duration_seconds, k)
 
 
-def _times_o(video, k, features):
-    return oracle_timestamps([item.timestamp for item in video.ad], k)
+def _times_o(video, k, features, truth):
+    return oracle_timestamps(truth, k)
 
 
-def _times_a(video, k, features):
+def _times_a(video, k, features, truth):
     if features is None:
         return None
     return [candidate.time for candidate in AudioSelector().select(features, k)]
@@ -89,19 +124,31 @@ def evaluate_video(
     features: dict | None,
     tolerance: float,
     sweep: Sequence[float] = TOLERANCE_SWEEP,
+    *,
+    bounds: str = "exclude",
+    slack: float = DURATION_SLACK_SECONDS,
 ) -> dict[str, Any] | None:
-    """Score one selector on one video; None if the selector cannot run (no features for A)."""
-    times = SELECTORS[selector](video, k, features)
+    """Score one selector on one video; None if the selector cannot run (no features for A).
+
+    Ground truth follows the out-of-duration policy (see the module docstring);
+    both the annotated and the scored counts are recorded.
+    """
+    truth, out_of_bounds = ground_truth_times(video, bounds, slack)
+    times = SELECTORS[selector](video, k, features, truth)
     if times is None:
         return None
-    truth = [item.timestamp for item in video.ad]
+    limit = video.duration_seconds + slack
     primary = temporal_precision_recall_f1(times, truth, tolerance)
     return {
         "video_id": video.video_id,
         "selector": selector,
         "k": k,
-        "num_gt": len(truth),
+        "num_gt": len(video.ad),
+        "num_gt_scored": len(truth),
+        "num_gt_out_of_bounds": len(out_of_bounds),
+        "out_of_bounds_gt_times": out_of_bounds,
         "num_selected": len(times),
+        "num_selected_out_of_bounds": sum(t > limit for t in times),
         "shortfall": k - len(times),
         "tp": primary["tp"], "fp": primary["fp"], "fn": primary["fn"],
         "precision": primary["precision"],
@@ -139,7 +186,9 @@ def summarize(rows: Sequence[dict], resamples: int, seed: int) -> dict[str, Any]
         "micro_f1": 2 * tp / (2 * tp + fp + fn) if 2 * tp + fp + fn else None,
         "mean_temporal_error_seconds": matched_error / tp if tp else None,
         "total_selected": sum(r["num_selected"] for r in rows),
-        "total_gt": sum(r["num_gt"] for r in rows),
+        "total_gt": sum(r["num_gt_scored"] for r in rows),
+        "total_gt_annotated": sum(r["num_gt"] for r in rows),
+        "total_selected_out_of_bounds": sum(r["num_selected_out_of_bounds"] for r in rows),
         "videos_with_shortfall": sum(r["shortfall"] > 0 for r in rows),
         "total_shortfall": sum(max(r["shortfall"], 0) for r in rows),
         "macro_f1_by_tolerance": {
@@ -188,7 +237,33 @@ def format_report(result: dict) -> str:
             f"{s['videos_with_shortfall']:>7}{_fmt(s['in_speech_rate']):>11}"
         )
     for name, count in result["skipped"].items():
-        lines.append(f"{name}: skipped {count} video(s) without audio features")
+        reasons = ", ".join(
+            f"{reason} x{n}" for reason, n in sorted(result["skipped_reasons"].get(name, {}).items()))
+        lines.append(f"{name}: skipped {count} video(s) without usable audio features ({reasons})")
+    audio = result["audio_features"]
+    if audio["unavailable"]:
+        reasons = ", ".join(f"{r} x{n}" for r, n in sorted(audio["unavailable"].items()))
+        lines.append(
+            f"audio features usable for {audio['usable']} of {result['n_videos_in_set']} videos "
+            f"(not usable: {reasons}); in-speech is computed only where usable"
+        )
+    bounds = result["bounds"]
+    if bounds["videos"]:
+        ids = ", ".join(v["video_id"] for v in bounds["videos"])
+        if bounds["policy"] == "exclude":
+            lines.append(
+                f"Out-of-duration AD starts: {bounds['total_gt_out_of_bounds']} in "
+                f"{len(bounds['videos'])} video(s) ({ids}) EXCLUDED from the ground truth for every "
+                f"selector (declared duration + {bounds['slack_seconds']:g}s)"
+            )
+        else:
+            lines.append(
+                f"Out-of-duration AD starts: {bounds['total_gt_out_of_bounds']} in "
+                f"{len(bounds['videos'])} video(s) ({ids}) INCLUDED: unrestricted annotation upper "
+                f"bound; selected out of bounds: {bounds['selected_out_of_bounds']}"
+            )
+    else:
+        lines.append("Out-of-duration AD starts: none")
     if result["comparisons"]:
         lines += ["", "Paired F1 differences (selector minus baseline, per video):"]
         for c in result["comparisons"]:
@@ -212,20 +287,60 @@ def run(
     tolerance: float,
     resamples: int,
     seed: int,
+    *,
+    bounds: str = "exclude",
+    slack: float = DURATION_SLACK_SECONDS,
 ) -> dict[str, Any]:
     rows: dict[str, list[dict]] = {name: [] for name in selectors}
     skipped: dict[str, int] = {}
+    skipped_reasons: dict[str, dict[str, int]] = {}
+    unavailable: list[dict[str, str]] = []
+    audio_reasons: dict[str, int] = {}
+    anomalies: list[dict[str, Any]] = []
+    usable_audio = 0
     for video in videos:
         k = k_for_duration(video.duration_seconds, rate_per_minute)
-        features = load_features(cache_dir / video.video_id)
+        # Validated and best effort: a missing, stale, or unreadable cache is a reason,
+        # never an exception, so it cannot stop selectors that do not need it.
+        features, reason = load_audio_features(cache_dir / video.video_id)
+        if reason is None:
+            usable_audio += 1
+        else:
+            audio_reasons[reason] = audio_reasons.get(reason, 0) + 1
+        _, out_of_bounds = ground_truth_times(video, bounds, slack)
+        if out_of_bounds:
+            anomalies.append({
+                "video_id": video.video_id, "declared_duration_seconds": video.duration_seconds,
+                "num_gt": len(video.ad), "num_gt_out_of_bounds": len(out_of_bounds),
+                "out_of_bounds_gt_times": out_of_bounds,
+            })
         for name in selectors:
-            row = evaluate_video(name, video, k, features, tolerance)
+            row = evaluate_video(name, video, k, features, tolerance, bounds=bounds, slack=slack)
             if row is None:
                 skipped[name] = skipped.get(name, 0) + 1
+                why = reason or "unavailable"
+                skipped_reasons.setdefault(name, {})[why] = skipped_reasons.get(name, {}).get(why, 0) + 1
+                unavailable.append({"video_id": video.video_id, "selector": name, "reason": why})
             else:
                 rows[name].append(row)
     by_selector = {name: r for name, r in rows.items() if r}
     return {
+        "bounds": {
+            "policy": bounds,
+            "slack_seconds": slack,
+            "unrestricted_annotation_upper_bound": bounds == "keep",
+            "videos": anomalies,
+            "total_gt_out_of_bounds": sum(a["num_gt_out_of_bounds"] for a in anomalies),
+            "selected_out_of_bounds": {
+                name: sum(r["num_selected_out_of_bounds"] for r in rs) for name, rs in by_selector.items()
+            },
+        },
+        "audio_features": {
+            "usable": usable_audio,
+            "unavailable": audio_reasons,
+        },
+        "skipped_reasons": skipped_reasons,
+        "unavailable": unavailable,
         "tolerance": tolerance,
         "k_rate_per_minute": rate_per_minute,
         "resamples": resamples,
@@ -248,6 +363,11 @@ def main() -> None:
     parser.add_argument("--cache-dir", type=Path, default=Path("data/cache/mtg-ad"))
     parser.add_argument("--resamples", type=int, default=DEFAULT_RESAMPLES)
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--keep-out-of-bounds", action="store_true",
+                        help="score against AD starts beyond the declared duration too "
+                             "(unrestricted annotation upper bound); default excludes them")
+    parser.add_argument("--duration-slack", type=float, default=DURATION_SLACK_SECONDS,
+                        help="seconds past the declared duration still counted as inside the clip")
     parser.add_argument("--output", type=Path, default=None)
     args = parser.parse_args()
 
@@ -261,6 +381,7 @@ def main() -> None:
     result = run(
         videos, splits["k_rule"]["rate_per_minute"], args.selectors, args.cache_dir,
         args.tolerance, args.resamples, args.seed,
+        bounds="keep" if args.keep_out_of_bounds else "exclude", slack=args.duration_slack,
     )
     result["set"] = args.video_set
     output = args.output or Path(f"outputs/selector_eval_{args.video_set}.json")
