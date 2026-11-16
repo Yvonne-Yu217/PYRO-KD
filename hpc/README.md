@@ -52,7 +52,7 @@ changed sources or missing frame/audio artifacts are rebuilt.
 
 ```bash
 bash hpc/submit.sh qwen --limit 4        # smoke test: 4 moments
-bash hpc/submit.sh muse-4bit --limit 4
+bash hpc/submit.sh muse --limit 4
 
 bash hpc/submit.sh qwen-a100             # all U moments on the dev videos (~190)
 

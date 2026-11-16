@@ -54,6 +54,30 @@ def done_ids(path: Path) -> set[str]:
     return ids
 
 
+def finalize_generation(
+    text: str, raw: str, new_tokens: int, batch_size: int, latency: float, max_new_tokens: int,
+) -> dict:
+    """Result record for one generation.
+
+    A generation that reached max_new_tokens was cut off. For Muse that is usually
+    before its answer, so `output` still holds the scratchpad. It is recorded as an
+    error: evaluate_ad does not score it, a requeued job retries it (done_ids skips
+    only rows without an error), and the cut-off text stays in output/raw_output
+    for debugging.
+    """
+    hit_limit = new_tokens >= max_new_tokens
+    result = {
+        "output": text, "raw_output": raw, "new_tokens": new_tokens, "batch_size": batch_size,
+        "hit_token_limit": hit_limit, "batch_latency_s": round(latency, 3),
+    }
+    if hit_limit:
+        result["error"] = (
+            f"hit_token_limit: generation reached max_new_tokens={max_new_tokens} "
+            "before finishing (output is cut off and was not scored)"
+        )
+    return result
+
+
 def resize_max_side(image, max_side: int | None):
     from PIL import Image
 
@@ -134,7 +158,7 @@ def main():
         for device in range(torch.cuda.device_count()):
             torch.cuda.reset_peak_memory_stats(device)
 
-    gen_s, n_ok, n_err = 0.0, 0, 0
+    gen_s, n_ok, n_err, n_truncated = 0.0, 0, 0, 0
     with open(out_path, "a") as fout:
         for start in range(0, len(todo), args.batch_size):
             batch = todo[start: start + args.batch_size]
@@ -170,10 +194,8 @@ def main():
                     dt = time.time() - t
                     gen_s += dt
                     for j, i in enumerate(idx):
-                        results[i] = {"output": texts[j], "raw_output": raws[j],
-                                      "new_tokens": n_new[j], "batch_size": len(idx),
-                                      "hit_token_limit": n_new[j] >= args.max_new_tokens,
-                                      "batch_latency_s": round(dt, 3)}
+                        results[i] = finalize_generation(
+                            texts[j], raws[j], n_new[j], len(idx), dt, args.max_new_tokens)
                 except Exception as e:
                     if torch.cuda.is_available():
                         torch.cuda.empty_cache()
@@ -186,6 +208,7 @@ def main():
                 res = results[i]
                 n_ok += "error" not in res
                 n_err += "error" in res
+                n_truncated += bool(res.get("hit_token_limit"))
                 fout.write(json.dumps({**rec, **res}) + "\n")
             fout.flush()
             print(f"[run_ad] {start + len(batch)}/{len(todo)} done "
@@ -194,7 +217,8 @@ def main():
     meta = {
         "model_id": model_id, "model_class": cls_name, "quant": args.quant,
         "n_gpus": torch.cuda.device_count() if torch.cuda.is_available() else 0, "args": vars(args),
-        "n_ok": n_ok, "n_error": n_err, "load_s": round(load_s, 1),
+        "n_ok": n_ok, "n_error": n_err, "n_hit_token_limit": n_truncated,
+        "load_s": round(load_s, 1),
         "generate_s": round(gen_s, 1),
         "s_per_item": round(gen_s / n_ok, 3) if n_ok else None,
         # Summed over all visible GPUs: device_map="auto" splits big models across them.
