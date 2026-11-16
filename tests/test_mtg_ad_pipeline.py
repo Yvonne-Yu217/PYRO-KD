@@ -68,7 +68,10 @@ class MTGADTests(unittest.TestCase):
         row = make_row("a", num_ad=1)
         row["gt_ad_segments"][0]["text"] = "č"
         with tempfile.TemporaryDirectory() as tmp:
-            Path(tmp, "validation.jsonl").write_bytes((json.dumps(row) + "\n").encode("utf-8"))
+            path = Path(tmp, "validation.jsonl")
+            path.write_bytes((json.dumps(row, ensure_ascii=False) + "\n").encode("utf-8"))
+            self.assertIn(b"\xc4\x8d", path.read_bytes())
+            self.assertNotIn(b"\\u010d", path.read_bytes())
             self.assertEqual(load_split(tmp, "validation")[0].ad[0].text, "č")
 
     def test_stratified_sample_matches_category_mix(self):
