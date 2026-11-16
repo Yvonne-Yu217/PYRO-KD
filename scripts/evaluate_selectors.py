@@ -41,7 +41,8 @@ from src.utils.audio_features import available_gap, load_features, speech_of  # 
 from src.utils.audio_selector import AudioSelector  # noqa: E402
 from src.utils.selection import k_for_duration, oracle_timestamps, uniform_timestamps  # noqa: E402
 from src.utils.visual_features import (  # noqa: E402
-    VisualCueSelector, load_embeddings, load_features as load_visual_features, mean_pairwise_similarity,
+    VisualCueSelector, load_current_features as load_visual_features, load_embeddings,
+    mean_pairwise_similarity,
 )
 
 TOLERANCE_SWEEP = (0.0, 1.0, 2.0, 3.0, 5.0)

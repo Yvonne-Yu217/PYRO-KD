@@ -1,6 +1,6 @@
 import io
 import json
-from contextlib import redirect_stdout
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 import shutil
 import subprocess
@@ -171,59 +171,180 @@ class ShotDetectionTests(unittest.TestCase):
         self.assertAlmostEqual(shots[1], 8.0, delta=0.2)
 
 
+class LoadCurrentFeaturesTests(unittest.TestCase):
+    MANIFEST = FeatureCacheTests.MANIFEST
+
+    def write(self, root, manifest=None):
+        manifest = manifest or self.MANIFEST
+        features, embeddings = vf.compute_visual_features(
+            manifest, FeatureCacheTests.fake_embed, FeatureCacheTests.fake_detect)
+        vf.write_features(root, features, embeddings)
+        (Path(root) / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+        return features
+
+    def test_fresh_features_load_and_stale_ones_do_not(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            features = self.write(tmp)
+            self.assertEqual(vf.load_current_features(tmp), features)
+            self.assertEqual(vf.load_current_features(tmp, self.MANIFEST), features)
+            # Re-extracted frames (new manifest hash), a new config, or a new version: stale.
+            self.assertIsNone(vf.load_current_features(tmp, {**self.MANIFEST, "config_hash": "new"}))
+            self.assertIsNone(vf.load_current_features(tmp, self.MANIFEST, {"shot_threshold": 10.0}))
+            with patch.object(vf, "FEATURE_VERSION", vf.FEATURE_VERSION + 1):
+                self.assertIsNone(vf.load_current_features(tmp))
+
+    def test_unverifiable_features_count_as_missing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.write(tmp)
+            (Path(tmp) / "manifest.json").write_text("{not json", encoding="utf-8")
+            self.assertIsNone(vf.load_current_features(tmp))
+            (Path(tmp) / "manifest.json").unlink()
+            self.assertIsNone(vf.load_current_features(tmp))
+            self.assertIsNone(vf.load_current_features(Path(tmp) / "nowhere"))
+
+
 class CacheScriptTests(unittest.TestCase):
-    def make_cache(self, root, video_id, frames=4):
-        cache = root / video_id
-        cache.mkdir()
+    """Hardening of scripts/cache_visual_features.py (see its module docstring)."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name)
+
+    def make_cache(self, video_id, frames=4, manifest_hash="h"):
+        cache = self.root / video_id
+        (cache / "frames").mkdir(parents=True)
+        paths = []
+        for i in range(frames):
+            path = cache / "frames" / f"{i}.jpg"
+            path.write_bytes(b"jpg")
+            paths.append(str(path))
         manifest = {
-            "source": f"{video_id}.mp4", "config_hash": "h",
-            "frames": [{"index": i, "timestamp": i * 0.5, "path": f"{i}.jpg"} for i in range(frames)],
+            "source": f"{video_id}.mp4", "config_hash": manifest_hash, "audio_path": None,
+            "frames": [{"index": i, "timestamp": i * 0.5, "path": p} for i, p in enumerate(paths)],
         }
         (cache / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
         return cache
 
-    def run_script(self, root, *extra):
-        def embed_factory(**kwargs):
-            return FeatureCacheTests.fake_embed
+    def run_script(self, *extra, embed=None, embedder_error=None):
+        embed = embed or FeatureCacheTests.fake_embed
+        calls = {"embedder_built": 0}
 
-        real_compute = vf.compute_visual_features
-        stdout = io.StringIO()
+        def embed_factory(**kwargs):
+            calls["embedder_built"] += 1
+            if embedder_error:
+                raise embedder_error
+            return embed
+
+        stdout, stderr = io.StringIO(), io.StringIO()
         with (
-            patch.object(sys, "argv", ["cache_visual_features.py", "--cache-dir", str(root), *extra]),
             patch.object(vf, "clip_embedder", embed_factory),
             patch.object(vf, "detect_shots", FeatureCacheTests.fake_detect),
-            patch.object(vf, "compute_visual_features", side_effect=real_compute) as compute,
-            redirect_stdout(stdout),
+            redirect_stdout(stdout), redirect_stderr(stderr),
         ):
-            try:
-                cache_visual_features.main()
-                code = 0
-            except SystemExit as exc:
-                code = exc.code
-        return code, stdout.getvalue(), compute.call_count
+            code = cache_visual_features.main(["--cache-dir", str(self.root), *extra])
+        return code, stdout.getvalue() + stderr.getvalue(), calls["embedder_built"]
+
+    def report(self):
+        return json.loads((self.root / cache_visual_features.REPORT_NAME).read_text())
 
     def test_computes_reuses_and_survives_a_bad_video(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            good = self.make_cache(root, "good")
-            bad = self.make_cache(root, "bad", frames=0)
-            (bad / vf.FEATURES_NAME).write_text("{}", encoding="utf-8")  # stale leftovers
-            code, out, calls = self.run_script(root)
-            self.assertEqual(code, 1)  # one video failed
-            self.assertIn("FAILED bad", out)
-            self.assertEqual(calls, 2)
-            self.assertIsNotNone(vf.load_features(good))
-            self.assertFalse((bad / vf.FEATURES_NAME).exists())  # outdated features removed
-            report = json.loads((root / "visual_features_report.json").read_text())
-            self.assertEqual((report["computed"], report["reused"]), (1, 0))
-            self.assertIn("bad", report["failures"])
-            # A second run reuses the fresh features and only retries the failure.
-            code, out, calls = self.run_script(root)
-            self.assertEqual(calls, 1)
-            self.assertEqual(json.loads((root / "visual_features_report.json").read_text())["reused"], 1)
-            # --overwrite recomputes everything that can be computed.
-            _, _, calls = self.run_script(root, "--overwrite")
-            self.assertEqual(calls, 2)
+        good = self.make_cache("good")
+        bad = self.make_cache("bad", frames=0)
+        (bad / vf.FEATURES_NAME).write_text("{}", encoding="utf-8")  # unverifiable leftovers
+        code, out, _ = self.run_script()
+        self.assertEqual(code, 1)
+        self.assertIn("FAILED bad", out)
+        self.assertIsNotNone(vf.load_current_features(good))
+        self.assertFalse((bad / vf.FEATURES_NAME).exists())
+        self.assertEqual((self.report()["computed"], self.report()["reused"]), (1, 0))
+        self.assertIn("bad", self.report()["failures"])
+        # A second run reuses the fresh features and only retries the failure.
+        code, _, built = self.run_script()
+        self.assertEqual((code, self.report()["reused"], self.report()["computed"]), (1, 1, 0))
+
+    def test_a_failed_overwrite_keeps_features_that_are_still_current(self):
+        cache = self.make_cache("good")
+        self.run_script()
+        before = (cache / vf.FEATURES_NAME).read_bytes()
+
+        def explode(paths):
+            raise RuntimeError("CUDA out of memory")
+
+        code, out, _ = self.run_script("--overwrite", embed=explode)
+        self.assertEqual(code, 1)
+        self.assertIn("kept current features", out)
+        self.assertEqual((cache / vf.FEATURES_NAME).read_bytes(), before)
+        self.assertIsNotNone(vf.load_current_features(cache))
+
+    def test_unresolvable_frame_paths_do_not_delete_current_features(self):
+        # Running from another working directory: relative frame paths do not resolve.
+        cache = self.make_cache("good")
+        self.run_script()
+        manifest = json.loads((cache / "manifest.json").read_text())
+        for frame in manifest["frames"]:
+            frame["path"] = f"data/cache/good/frames/{frame['index']}.jpg"  # relative to repo root
+        (cache / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+        code, out, _ = self.run_script("--overwrite")
+        self.assertEqual(code, 1)
+        self.assertIn("do not resolve from this working directory", out)
+        # The manifest hash is unchanged, so the features are still current and kept.
+        self.assertIsNotNone(vf.load_current_features(cache))
+
+    def test_stale_features_are_removed_when_recompute_fails(self):
+        cache = self.make_cache("good")
+        self.run_script()
+        # Frames were re-extracted (new manifest hash) and one frame file is now missing.
+        manifest = json.loads((cache / "manifest.json").read_text())
+        manifest["config_hash"] = "re-extracted"
+        Path(manifest["frames"][1]["path"]).unlink()
+        (cache / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+        code, out, _ = self.run_script()
+        self.assertEqual(code, 1)
+        self.assertIn("removed stale features", out)
+        self.assertFalse((cache / vf.FEATURES_NAME).exists())
+        self.assertFalse((cache / vf.EMBEDDINGS_NAME).exists())
+
+    def test_missing_dependency_aborts_the_run_and_touches_nothing(self):
+        first = self.make_cache("a")
+        self.make_cache("b")
+        self.run_script()
+        before = (first / vf.FEATURES_NAME).read_bytes()
+        report_before = (self.root / cache_visual_features.REPORT_NAME).read_text()
+        code, out, built = self.run_script(
+            "--overwrite", embedder_error=ModuleNotFoundError("No module named 'open_clip'"))
+        self.assertEqual(code, 2)
+        self.assertEqual(built, 1)  # stopped at the first video, did not retry for every video
+        self.assertIn("missing dependency", out)
+        self.assertEqual((first / vf.FEATURES_NAME).read_bytes(), before)
+        self.assertEqual((self.root / cache_visual_features.REPORT_NAME).read_text(), report_before)
+
+    def test_missing_or_empty_cache_dir_is_not_success(self):
+        for target in (self.root / "nowhere", self.root):
+            stdout, stderr = io.StringIO(), io.StringIO()
+            with redirect_stdout(stdout), redirect_stderr(stderr):
+                code = cache_visual_features.main(["--cache-dir", str(target)])
+            self.assertEqual(code, 1)
+            self.assertIn("no cached videos found", stderr.getvalue())
+        self.assertFalse((self.root / cache_visual_features.REPORT_NAME).exists())
+
+    def test_frame_cache_changing_during_compute_is_discarded(self):
+        cache = self.make_cache("good")
+        self.run_script()
+        old = (cache / vf.FEATURES_NAME).read_bytes()
+
+        def reextract_midway(paths):
+            manifest = json.loads((cache / "manifest.json").read_text())
+            manifest["config_hash"] = "changed-by-another-job"
+            (cache / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+            return FeatureCacheTests.fake_embed(paths)
+
+        code, out, _ = self.run_script("--overwrite", embed=reextract_midway)
+        self.assertEqual(code, 1)
+        self.assertIn("changed while features were being computed", out)
+        # The old features no longer match the new manifest, so they were removed rather than reused.
+        self.assertFalse((cache / vf.FEATURES_NAME).exists())
+        self.assertNotEqual(old, b"")
 
 
 class BuildMomentsVisualTests(unittest.TestCase):
@@ -246,7 +367,7 @@ class BuildMomentsVisualTests(unittest.TestCase):
                 patch.object(build_moments, "load_targets", return_value=videos),
                 patch.object(build_moments, "load_manifest", return_value=manifest),
                 patch.object(build_moments, "load_features", side_effect=lambda p: (audio or {}).get(p.name)),
-                patch.object(build_moments, "load_visual_features", side_effect=lambda p: visual.get(p.name)),
+                patch.object(build_moments, "load_visual_features", side_effect=lambda p, m=None: visual.get(p.name)),
                 patch.object(build_moments, "frame_window", return_value=[]),
                 redirect_stdout(stdout),
             ):
@@ -267,6 +388,44 @@ class BuildMomentsVisualTests(unittest.TestCase):
         self.assertEqual(by_id["nofeatures"]["status"], "missing_visual_features")
         self.assertEqual(by_id["nofeatures"]["selection_shortfall"], 0)
         self.assertIn("no visual features; zero V moments: nofeatures", stdout)
+
+    def test_stale_features_on_disk_are_treated_as_missing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            cache = root / "vid"
+            (cache / "frames").mkdir(parents=True)
+            frame = cache / "frames" / "0.jpg"
+            frame.write_bytes(b"jpg")
+            manifest = {"source": "vid.mp4", "config_hash": "m1", "audio_path": None,
+                        "frames": [{"index": 0, "timestamp": 0.0, "path": str(frame)}]}
+            (cache / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+            features = {**spike_features(), "config": vf.DEFAULT_CONFIG,
+                        "config_hash": vf.features_hash(manifest, vf.DEFAULT_CONFIG)}
+            (cache / vf.FEATURES_NAME).write_text(json.dumps(features), encoding="utf-8")
+            splits = root / "splits.json"
+            splits.write_text(json.dumps({"k_rule": {"rate_per_minute": 3}}))
+
+            def run():
+                output = root / "moments.jsonl"
+                with (
+                    patch.object(sys, "argv", ["build_moments.py", "--selector", "V", "--splits", str(splits),
+                                              "--cache-dir", str(root), "--output", str(output)]),
+                    patch.object(build_moments, "load_targets", return_value=[("vid", 60, [])]),
+                    patch.object(build_moments, "frame_window", return_value=[]),
+                    redirect_stdout(io.StringIO()),
+                ):
+                    build_moments.main()
+                return output.read_text().splitlines(), json.loads(output.with_suffix(".report.json").read_text())
+
+            rows, report = run()
+            self.assertEqual(len(rows), 3)
+            self.assertEqual(report["videos"][0]["status"], "ok")
+            # The frames are re-extracted (new manifest hash) but nobody reran the caching script.
+            manifest["config_hash"] = "m2"
+            (cache / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+            rows, report = run()
+            self.assertEqual(rows, [])
+            self.assertEqual(report["videos"][0]["status"], "missing_visual_features")
 
     def test_registered_selector_signature_is_unchanged(self):
         self.assertEqual(build_moments.SELECTORS["V"](60.0, 3, None), [])

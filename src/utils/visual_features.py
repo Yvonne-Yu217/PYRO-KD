@@ -189,6 +189,30 @@ def load_features(cache_dir: str | Path) -> dict | None:
     return features
 
 
+def load_current_features(
+    cache_dir: str | Path,
+    manifest: dict[str, Any] | None = None,
+    config: dict[str, Any] | None = None,
+) -> dict | None:
+    """Cached features only if they still match this video's manifest and config.
+
+    This is what consumers (build_moments, evaluate_selectors) should call, so a
+    changed config, re-extracted frames, or a new feature version is treated as
+    missing instead of silently reusing stale values. With no manifest passed it
+    reads <cache_dir>/manifest.json; an unreadable manifest means the features
+    cannot be verified and count as missing.
+    """
+    features = load_features(cache_dir)
+    if features is None:
+        return None
+    if manifest is None:
+        try:
+            manifest = json.loads((Path(cache_dir) / "manifest.json").read_text(encoding="utf-8"))
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+            return None
+    return features if is_fresh(features, manifest, config) else None
+
+
 def load_embeddings(cache_dir: str | Path):
     """Cached unit-normalized embeddings as float32, or None."""
     import numpy as np

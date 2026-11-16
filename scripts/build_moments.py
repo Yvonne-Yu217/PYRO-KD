@@ -32,7 +32,7 @@ from src.utils.audio_features import available_gap, load_features, speech_of  # 
 from src.utils.audio_selector import AudioSelector  # noqa: E402
 from src.utils.media import cache_is_complete, frame_window, load_manifest  # noqa: E402
 from src.utils.selection import k_for_duration, uniform_timestamps  # noqa: E402
-from src.utils.visual_features import VisualCueSelector, load_features as load_visual_features  # noqa: E402
+from src.utils.visual_features import VisualCueSelector, load_current_features as load_visual_features  # noqa: E402
 
 
 def _select_audio(duration, k, features):
@@ -124,7 +124,7 @@ def main() -> None:
             if args.selector == "A" and "audio_path" in manifest and not manifest["audio_path"]:
                 features = None
             speech = speech_of(features) if features else None
-            visual = load_visual_features(cache) if args.selector == "V" else None
+            visual = load_visual_features(cache, manifest) if args.selector == "V" else None
             if args.selector == "A" and features is None:
                 no_audio.append(video_id)
                 report["status"] = "missing_audio_features"

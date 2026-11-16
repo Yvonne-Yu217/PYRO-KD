@@ -129,14 +129,23 @@ class VisualSelectorEvalTests(unittest.TestCase):
         row = ev.evaluate_video("V", video, 2, None, 2.0, visual=visual, embeddings=embeddings)
         self.assertAlmostEqual(row["visual_redundancy"], 1.0)
 
+    @staticmethod
+    def cache_visual(cache_dir, visual, manifest_hash="m1", embeddings=None, stamped_hash="m1"):
+        """Write manifest.json and visual features stamped as computed from stamped_hash."""
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        stamped = {"config_hash": stamped_hash}
+        features = {**visual, "config": vf.DEFAULT_CONFIG,
+                    "config_hash": vf.features_hash(stamped, vf.DEFAULT_CONFIG)}
+        (cache_dir / "manifest.json").write_text(json.dumps({"config_hash": manifest_hash}), encoding="utf-8")
+        embeddings = np.eye(len(visual["frame_times"]))[:, :4] if embeddings is None else embeddings
+        vf.write_features(cache_dir, features, embeddings)
+
     def test_run_loads_visual_cache_and_counts_skips(self):
         videos = [make_video("a"), make_video("b")]
         visual = make_visual([(10.0, 1.0), (50.0, 0.9), (90.0, 0.8)])
-        embeddings = np.eye(len(visual["frame_times"]))[:, :4]
         with tempfile.TemporaryDirectory() as tmp:
             cache = Path(tmp)
-            (cache / "a").mkdir()
-            vf.write_features(cache / "a", visual, embeddings)
+            self.cache_visual(cache / "a", visual)
             result = ev.run(videos, 3.48, ["U", "V"], cache, 2.0, 200, 0)
         result["set"] = "dev"
         self.assertEqual(result["skipped"], {"V": 1})
@@ -144,6 +153,17 @@ class VisualSelectorEvalTests(unittest.TestCase):
         self.assertEqual(result["selectors"]["V"]["n_with_embeddings"], 1)
         self.assertIn("V: skipped 1 video(s) without visual features", ev.format_report(result))
         json.dumps(result)
+
+    def test_stale_visual_features_are_skipped_not_scored(self):
+        videos = [make_video("a")]
+        visual = make_visual([(10.0, 1.0), (50.0, 0.9), (90.0, 0.8)])
+        with tempfile.TemporaryDirectory() as tmp:
+            cache = Path(tmp)
+            # Features were computed from frames with hash m1; the manifest now says m2.
+            self.cache_visual(cache / "a", visual, manifest_hash="m2", stamped_hash="m1")
+            result = ev.run(videos, 3.48, ["V"], cache, 2.0, 200, 0)
+        self.assertEqual(result["skipped"], {"V": 1})
+        self.assertNotIn("V", result["selectors"])
 
 
 class SummaryTests(unittest.TestCase):
