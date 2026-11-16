@@ -85,7 +85,7 @@ Every selector writes the same fields. That keeps the frame window, transcript c
 
 - **20-minute idle shutdown.** Instances with low GPU use for 20 minutes are shut down. Do setup, downloads and data prep on `n2c48m24`, and use real batch sizes. If a job dies early, check `logs/gpu-<jobid>.csv` first.
 - **Budget.** Each student has 300 GPU-hours. Smoke-test with `--limit`. The two-GPU `muse` preset uses hours twice as fast.
-- **Requeue.** Jobs use `#SBATCH --requeue`, and `run_ad_vlm.py` skips finished ids, so a requeued job resumes.
+- **Requeue.** Jobs use `#SBATCH --requeue`, and `run_ad_vlm.py` skips finished ids, so a requeued job resumes. A moment that hit `max_new_tokens` at temperature 0 is **not** retried with the same settings, because it would be cut off at the same place; raise `--max-new-tokens` (or sample with `--temperature`) to retry it. Other errors, such as out-of-memory, are retried. The output file is append-only, so a moment can appear more than once: `evaluate_ad.py` and the `.meta.json` counts use each moment's final state (a success supersedes earlier errors, repeated errors count once), and the evaluator reports the superseded error rows as history. The `.meta.json` is cumulative across attempts: it keeps each attempt under `attempts`, sums load and generation time, and reports the heaviest peak GPU memory.
 - **Offline jobs.** Jobs set `HF_HUB_OFFLINE=1`, so run `download_models.sh` first. YouTube downloads happen only in `prepare_data.sh`.
 
 ## Smoke-test findings (synthetic 4-moment clip, 2026-11-09)

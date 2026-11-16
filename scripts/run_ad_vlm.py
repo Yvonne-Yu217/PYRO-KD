@@ -23,6 +23,7 @@ import time
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.generation.hf_vlm import MODELS, generate_batch, load_model, resolve_model  # noqa: E402
+from src.generation.outputs import merge_meta, read_rows, settled_ids, status_counts  # noqa: E402
 from src.generation.prompts import PROMPTS, build_prompt, word_limit_for_gap  # noqa: E402
 
 
@@ -39,19 +40,16 @@ def read_jsonl(path: Path) -> list[dict]:
     return rows
 
 
-def done_ids(path: Path) -> set[str]:
-    if not path.exists():
-        return set()
-    ids = set()
-    with open(path) as handle:
-        for line in handle:
-            try:
-                row = json.loads(line)
-            except json.JSONDecodeError:
-                continue  # partial line from a killed job
-            if not row.get("error"):
-                ids.add(row["id"])
-    return ids
+def done_ids(path: Path, max_new_tokens: int | None = None, temperature: float = 0.0) -> set[str]:
+    """Moment ids that need no more work.
+
+    Successes always count. With max_new_tokens given, so do deterministic token-limit
+    failures (temperature 0 and at least this many tokens): retrying them would just
+    reproduce the cut-off and append another error. Raise --max-new-tokens to retry
+    them. All other errors, such as out-of-memory, are retried. See generation.outputs.
+    """
+    done, _ = settled_ids(read_rows(path), max_new_tokens, temperature)
+    return done
 
 
 def finalize_generation(
@@ -68,7 +66,8 @@ def finalize_generation(
     hit_limit = new_tokens >= max_new_tokens
     result = {
         "output": text, "raw_output": raw, "new_tokens": new_tokens, "batch_size": batch_size,
-        "hit_token_limit": hit_limit, "batch_latency_s": round(latency, 3),
+        "hit_token_limit": hit_limit, "max_new_tokens": max_new_tokens,
+        "batch_latency_s": round(latency, 3),
     }
     if hit_limit:
         result["error"] = (
@@ -135,9 +134,16 @@ def main():
     rows = read_jsonl(Path(args.input))
     if args.limit:
         rows = rows[: args.limit]
-    finished = done_ids(out_path)
+    rows_on_disk = read_rows(out_path)
+    finished, repeats = settled_ids(rows_on_disk, args.max_new_tokens, args.temperature)
+    finished &= {r["id"] for r in rows}
     todo = [r for r in rows if r["id"] not in finished]
     print(f"[run_ad] {len(rows)} moments, {len(finished)} already done, {len(todo)} to run", flush=True)
+    if repeats & finished:
+        print(
+            f"[run_ad] {len(repeats & finished)} of the finished moments are token-limit failures "
+            f"that would repeat at max_new_tokens={args.max_new_tokens}, temperature={args.temperature}; "
+            "raise --max-new-tokens to retry them", flush=True)
 
     if args.dry_run:
         for row in todo[:5]:
@@ -164,7 +170,7 @@ def main():
             batch = todo[start: start + args.batch_size]
             prepared, records = [], []
             for row in batch:
-                base = {"id": row["id"], "video_id": row.get("video_id"),
+                base = {"id": row["id"], "video_id": row.get("video_id"), "temperature": args.temperature,
                         "selector": row.get("selector"), "time": row["time"],
                         "frame_times": row.get("frame_times"), "model": args.model,
                         "model_id": model_id, "quant": args.quant, "prior": args.prior}
@@ -214,13 +220,12 @@ def main():
             print(f"[run_ad] {start + len(batch)}/{len(todo)} done "
                   f"({n_err} errors, {gen_s:.0f}s generating)", flush=True)
 
-    meta = {
+    attempt = {
         "model_id": model_id, "model_class": cls_name, "quant": args.quant,
         "n_gpus": torch.cuda.device_count() if torch.cuda.is_available() else 0, "args": vars(args),
         "n_ok": n_ok, "n_error": n_err, "n_hit_token_limit": n_truncated,
         "load_s": round(load_s, 1),
         "generate_s": round(gen_s, 1),
-        "s_per_item": round(gen_s / n_ok, 3) if n_ok else None,
         # Summed over all visible GPUs: device_map="auto" splits big models across them.
         "peak_gpu_mem_gb": (
             round(sum(torch.cuda.max_memory_allocated(i) for i in range(torch.cuda.device_count())) / 1e9, 2)
@@ -235,7 +240,15 @@ def main():
         "host": platform.node(), "slurm_job_id": os.environ.get("SLURM_JOB_ID"),
     }
     meta_path = out_path.with_suffix(".meta.json")
-    meta_path.write_text(json.dumps(meta, indent=2))
+    try:
+        previous = json.loads(meta_path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+        previous = None
+    # Cumulative across requeued attempts; counts describe the output file as it stands now.
+    meta = merge_meta(previous, attempt, status_counts(read_rows(out_path)))
+    temporary_meta = meta_path.with_suffix(".json.tmp")
+    temporary_meta.write_text(json.dumps(meta, indent=2), encoding="utf-8")
+    temporary_meta.replace(meta_path)
     print(f"[run_ad] wrote {out_path} and {meta_path}", flush=True)
     sys.exit(1 if n_ok == 0 and n_err else 0)
 

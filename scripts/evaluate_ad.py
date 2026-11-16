@@ -25,6 +25,7 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.datasets import mtg_ad  # noqa: E402
+from src.generation.outputs import split_rows  # noqa: E402
 from src.evaluation.bertscore import BERTScoreScorer, GeneratedADItem, compute_bertscore  # noqa: E402
 from src.evaluation.cosine_similarity import (  # noqa: E402
     DEFAULT_MODEL_NAME, SentenceEncoder, compute_cosine_similarity,
@@ -144,7 +145,9 @@ def evaluate_ad(
     metadata, and duplicate successful IDs fail before any model is loaded.
     Dataset semantic means/median pool scored pairs, excluding unavailable
     scores. The default scope is input video IDs; all_videos includes the split.
-    Rubric evaluation is omitted and no provider API is called.
+    Error rows that a later attempt superseded (a success for the same id, or a newer error)
+    are reported under superseded_error_rows and do not count as generation errors or make
+    the run "partial". Rubric evaluation is omitted and no provider API is called.
     """
     if (
         isinstance(tolerance_seconds, bool) or not isinstance(tolerance_seconds, (int, float))
@@ -152,7 +155,11 @@ def evaluate_ad(
     ):
         raise ValueError("tolerance_seconds must be finite nonnegative numeric seconds")
     tolerance_seconds = float(tolerance_seconds)
-    rows = read_generated_jsonl(generated_path)
+    all_rows = read_generated_jsonl(generated_path)
+    # A requeued run appends to the same file. Score and count the final state of each moment:
+    # a success supersedes earlier error rows for its id, and repeated errors count once. The
+    # superseded error rows stay in the report as history (src/generation/outputs.py).
+    rows, superseded_errors = split_rows(all_rows)
     videos = mtg_ad.load_split(data_dir, split)
     by_id = {video.video_id: video for video in videos}
     if len(by_id) != len(videos):
@@ -265,8 +272,10 @@ def evaluate_ad(
         },
         "coverage": {"num_split_videos": len(videos), "num_evaluated_videos": len(results),
                      "split_video_ids_without_input": sorted(by_id.keys() - input_ids)},
-        "num_input_rows": len(rows), "num_successful_rows": len(rows) - len(generation_errors),
+        "num_input_rows": len(all_rows), "num_successful_rows": len(rows) - len(generation_errors),
         "num_generation_errors": len(generation_errors), "generation_errors": generation_errors,
+        "num_superseded_error_rows": len(superseded_errors),
+        "superseded_error_rows": superseded_errors,
         "semantic_errors": semantic_errors,
         "videos": results,
         "aggregate": {
