@@ -57,14 +57,20 @@ def make_media_cache(root, video_id, audio=True, manifest_hash="m1"):
     return {"cache": cache, "source": source, "wav": wav, "frame": frame, "manifest": manifest}
 
 
-def write_audio_features(cache, manifest, speech=(), gaps=(), hash_override=None):
-    """Write audio_features.json stamped with the (fake) current hash of this cache."""
+def write_audio_features(
+    cache, manifest, speech=(), gaps=(), hash_override=None, raw_speech=None, raw_gaps=None,
+):
+    """Write audio_features.json stamped with the (fake) current hash of this cache.
+
+    raw_speech / raw_gaps replace the payload verbatim (for malformed-entry tests).
+    """
     stamped = hash_override or fake_features_config_hash(
         manifest["audio_path"], None, manifest.get("config_hash"))
     features = {
         "config_hash": stamped,
-        "speech": [list(s) for s in speech],
-        "gaps": [{"start": a, "end": b, "rms": 0.0, "onset": 0.0} for a, b in gaps],
+        "speech": raw_speech if raw_speech is not None else [list(s) for s in speech],
+        "gaps": raw_gaps if raw_gaps is not None else [
+            {"start": a, "end": b, "rms": 0.0, "onset": 0.0} for a, b in gaps],
     }
     (Path(cache) / "audio_features.json").write_text(json.dumps(features), encoding="utf-8")
     return features

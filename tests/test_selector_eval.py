@@ -184,6 +184,24 @@ class RunTests(unittest.TestCase):
         self.assertEqual(with_a["skipped_reasons"], {"A": {"unreadable_audio_features": 1}})
         self.assertEqual(with_a["selectors"]["U"]["n_videos"], 1)
 
+    # Review finding P2 (second round): a stamped, current cache whose payload would crash a consumer.
+    def test_malformed_speech_and_gap_entries_do_not_stop_u_and_o_and_skip_a(self):
+        for name, payload in (
+            ("speech pair", {"raw_speech": [[1.0]]}),
+            ("empty gap record", {"raw_gaps": [{}]}),
+        ):
+            with self.subTest(payload=name):
+                root = Path(tempfile.mkdtemp(dir=self.root))
+                paths = fx.make_media_cache(root, "a")
+                fx.write_audio_features(paths["cache"], paths["manifest"], **payload)
+                with fx.patched_audio_helpers():
+                    result = ev.run([make_video("a")], 3.48, ["U", "O", "A"], root, 2.0, 100, 0)
+                self.assertEqual(result["selectors"]["U"]["n_videos"], 1)
+                self.assertEqual(result["selectors"]["O"]["n_videos"], 1)
+                self.assertNotIn("A", result["selectors"])
+                self.assertEqual(result["skipped_reasons"], {"A": {"malformed_audio_features": 1}})
+                self.assertIsNone(result["selectors"]["U"]["in_speech_rate"])  # diagnostic unavailable
+
     # Finding P1, scenario 1: a rebuild failed and left a complete cache for an older source.
     def test_stale_media_cache_is_never_scored_even_with_features_present(self):
         videos = [make_video("a")]
