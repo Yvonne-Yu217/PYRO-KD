@@ -9,8 +9,11 @@ exceptions, so one broken cache cannot abort an unrelated evaluation.
 Order of checks for audio features: manifest readable, media cache complete and
 current (media.cache_is_complete / cache_is_current, which catch a rebuild that
 failed and left an older complete cache), an audio stream exists, the features
-file is readable and well-formed, and its fingerprint matches the current WAV
-and manifest.
+file is readable and every speech pair and gap record is well-formed, and only
+then its fingerprint matches the current WAV and manifest. Structure is checked
+before the fingerprint on purpose: a correctly stamped file can still carry a
+payload that would crash a consumer, and that must be reported whether or not
+the fingerprint helpers are available.
 
 The fingerprint helpers come from the audio-validation work (PR #16). Until
 that is merged they are missing and audio features are reported as
@@ -21,6 +24,7 @@ the same code verifies them with no change here.
 from __future__ import annotations
 
 import json
+import math
 from pathlib import Path
 from typing import Any
 
@@ -69,6 +73,44 @@ def media_cache_problem(manifest: dict[str, Any]) -> str | None:
     return None
 
 
+def _is_number(value: Any) -> bool:
+    return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
+
+
+_GAP_FIELDS = {"start", "end", "rms", "onset"}
+
+
+def malformed_audio_features(features: Any) -> str | None:
+    """A description of the first structural defect that would break a consumer, or None.
+
+    Every speech entry must be a [start, end] pair of finite numbers with
+    0 <= start <= end, and every gap a record with exactly the fields start, end,
+    rms and onset, finite, with 0 <= start <= end. (Gap(**record) is what
+    consumers do, so unknown or missing fields would raise there.)
+    """
+    if not isinstance(features, dict):
+        return "features are not an object"
+    speech, gaps = features.get("speech"), features.get("gaps")
+    if not isinstance(speech, list):
+        return "speech is not a list"
+    if not isinstance(gaps, list):
+        return "gaps is not a list"
+    for index, pair in enumerate(speech):
+        if not isinstance(pair, (list, tuple)) or len(pair) != 2:
+            return f"speech[{index}] is not a [start, end] pair"
+        start, end = pair
+        if not (_is_number(start) and _is_number(end)) or not 0 <= start <= end:
+            return f"speech[{index}] needs finite numbers with 0 <= start <= end"
+    for index, gap in enumerate(gaps):
+        if not isinstance(gap, dict) or set(gap) != _GAP_FIELDS:
+            return f"gaps[{index}] must be a record with exactly {sorted(_GAP_FIELDS)}"
+        if not all(_is_number(gap[name]) for name in _GAP_FIELDS):
+            return f"gaps[{index}] has a non-numeric or non-finite value"
+        if not 0 <= gap["start"] <= gap["end"]:
+            return f"gaps[{index}] needs 0 <= start <= end"
+    return None
+
+
 def load_audio_features(cache_dir: str | Path) -> tuple[dict[str, Any] | None, str | None]:
     """Audio features for one cached video, validated; (None, reason) if unusable."""
     manifest, reason = read_manifest(cache_dir)
@@ -87,11 +129,7 @@ def load_audio_features(cache_dir: str | Path) -> tuple[dict[str, Any] | None, s
         features = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError):
         return None, UNREADABLE_AUDIO_FEATURES
-    if (
-        not isinstance(features, dict)
-        or not isinstance(features.get("speech"), list)
-        or not isinstance(features.get("gaps"), list)
-    ):
+    if malformed_audio_features(features) is not None:
         return None, MALFORMED_AUDIO_FEATURES
     if features_config_hash is None or features_are_current is None:
         return None, UNVERIFIABLE_AUDIO_FEATURES
