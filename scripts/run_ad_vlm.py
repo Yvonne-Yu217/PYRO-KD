@@ -59,9 +59,12 @@ def finalize_generation(
 
     A generation that reached max_new_tokens was cut off. For Muse that is usually
     before its answer, so `output` still holds the scratchpad. It is recorded as an
-    error: evaluate_ad does not score it, a requeued job retries it (done_ids skips
-    only rows without an error), and the cut-off text stays in output/raw_output
-    for debugging.
+    error: evaluate_ad does not score it, and the cut-off text stays in
+    output/raw_output for debugging. The row also records max_new_tokens (temperature
+    is added by the caller) so a requeue can tell whether retrying could change the
+    result: done_ids treats a temperature-0 failure at the same or a larger
+    max_new_tokens as settled and does not retry it. Raising --max-new-tokens, or
+    sampling with --temperature, makes it eligible again (see generation.outputs).
     """
     hit_limit = new_tokens >= max_new_tokens
     result = {
