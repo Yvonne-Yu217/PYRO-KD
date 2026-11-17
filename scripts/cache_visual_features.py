@@ -1,10 +1,14 @@
 """Compute shot boundaries and CLIP novelty for every cached video.
 
-Writes visual_features.json and visual_embeddings.npy next to each video's
+Writes visual_features.json and a content-addressed visual_embeddings.<digest>.npy next to each video's
 manifest. Needs torch, open_clip and scenedetect (the HPC env).
 
-- Features computed from the current manifest and config are reused; stale or
-  missing ones are recomputed.
+- The media cache must be complete and current (the shared cache_checks test) before
+  anything is reused or computed. A replaced source with a retained old cache is a
+  per-video failure that needs a rebuild with the prepare script, not a cache hit.
+- Features computed from the current manifest and config, well-formed and aligned
+  with the cached frames, with their embeddings generation intact, are reused; stale
+  or missing ones are recomputed. Features and embeddings are published as one unit.
 - A failure on one video is recorded in <cache-dir>/visual_features_report.json
   and does not stop the others. On failure, features that are still current are
   kept (a failed --overwrite or an environment problem must not destroy them);
@@ -28,8 +32,7 @@ from typing import Callable
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from src.utils import visual_features as vf  # noqa: E402
-from src.utils.media import cache_is_complete  # noqa: E402
+from src.utils import cache_checks, visual_features as vf  # noqa: E402
 
 REPORT_NAME = "visual_features_report.json"
 
@@ -39,17 +42,25 @@ def _read_manifest(video_dir: Path) -> dict:
 
 
 def _still_current(video_dir: Path) -> bool:
-    """True if the cached features match the manifest on disk right now."""
+    """True if the cached features still describe this video, so a failure must not delete them.
+
+    A media cache that merely cannot be resolved from this working directory does not
+    make valid features stale; a replaced source (MEDIA_STALE) does.
+    """
     try:
-        return vf.load_current_features(video_dir, _read_manifest(video_dir)) is not None
-    except Exception:  # unreadable manifest: nothing can be verified
+        manifest, _ = cache_checks.read_manifest(video_dir)
+        if manifest is None or cache_checks.media_cache_problem(manifest) == cache_checks.MEDIA_STALE:
+            return False
+        return vf.load_current_features(video_dir, manifest) is not None
+    except Exception:  # nothing can be verified
         return False
 
 
 def _drop_cache(video_dir: Path) -> None:
-    for name in (vf.FEATURES_NAME, vf.EMBEDDINGS_NAME):
+    """Remove the features record and every embeddings generation."""
+    for path in [video_dir / vf.FEATURES_NAME, *video_dir.glob(f"{vf.EMBEDDINGS_PREFIX}.*.npy")]:
         try:
-            (video_dir / name).unlink(missing_ok=True)
+            path.unlink(missing_ok=True)
         except OSError:
             pass
 
@@ -61,13 +72,21 @@ def process_video(
 ) -> tuple[str, dict | None]:
     """Cache one video; returns ("computed" | "reused", features). Raises on failure."""
     manifest = _read_manifest(video_dir)
-    if not overwrite and vf.is_fresh(vf.load_features(video_dir), manifest):
-        return "reused", vf.load_features(video_dir)
-    if not cache_is_complete(manifest):
+    problem = cache_checks.media_cache_problem(manifest)
+    if problem == cache_checks.MEDIA_INCOMPLETE:
         raise RuntimeError(
             "frame cache is incomplete or its paths do not resolve from this working "
             "directory (run from the repo root, or re-run the prepare script)"
         )
+    if problem:
+        raise RuntimeError(
+            f"{problem}: the cached frames do not belong to the current source video; "
+            "rebuild the media cache with the prepare script before computing features"
+        )
+    if not overwrite:
+        current = vf.load_current_features(video_dir, manifest)
+        if current is not None and vf.load_embeddings(video_dir, current) is not None:
+            return "reused", current
     features, embeddings = vf.compute_visual_features(manifest, get_embedder())
     # The frames and manifest may have been re-extracted while CLIP was running.
     if _read_manifest(video_dir).get("config_hash") != manifest.get("config_hash"):

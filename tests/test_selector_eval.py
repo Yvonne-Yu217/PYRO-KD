@@ -124,12 +124,7 @@ class VisualSelectorEvalTests(unittest.TestCase):
 
     def visual_cache(self, video_id, visual, embeddings=None):
         """A complete, current media cache with visual features stamped for it."""
-        paths = fx.make_media_cache(self.root, video_id)
-        features = {**visual, "config": vf.DEFAULT_CONFIG,
-                    "config_hash": vf.features_hash(paths["manifest"], vf.DEFAULT_CONFIG)}
-        embeddings = np.eye(len(visual["frame_times"]))[:, :4] if embeddings is None else embeddings
-        vf.write_features(paths["cache"], features, embeddings)
-        return paths
+        return fx.make_visual_cache(self.root, video_id, visual, embeddings)
 
     def run_v(self, videos, selectors=("U", "V")):
         with fx.patched_audio_helpers():
@@ -190,6 +185,49 @@ class VisualSelectorEvalTests(unittest.TestCase):
         self.assertEqual(result["skipped_reasons"], {"V": {"unreadable_visual_features": 1}})
         self.assertEqual(result["selectors"]["U"]["n_videos"], 1)
         self.assertEqual(result["selectors"]["O"]["n_videos"], 1)
+
+
+    # Kiran, #19 P2: structurally malformed JSON must be a skip reason, not a crash.
+    def test_structurally_malformed_visual_json_is_skipped_not_fatal(self):
+        paths = self.visual_cache("a", make_visual([(10.0, 1.0), (50.0, 0.9)]))
+        record = json.loads((paths["cache"] / "visual_features.json").read_text())
+        for name, bad in (("novelty null", {"novelty": None}), ("times string", {"frame_times": "x"}),
+                          ("shots wrong", {"shots": {"a": 1}}), ("nan", {"novelty": [float("nan")] * 200})):
+            with self.subTest(defect=name):
+                (paths["cache"] / "visual_features.json").write_text(
+                    json.dumps({**record, **bad}), encoding="utf-8")
+                result = self.run_v([make_video("a")], ["U", "O", "V"])
+                self.assertEqual(result["skipped_reasons"], {"V": {"malformed_visual_features": 1}})
+                self.assertEqual(result["selectors"]["U"]["n_videos"], 1)
+
+    # Kiran, #19 P2: a record whose timeline disagrees with the cached frames is not scored.
+    def test_features_not_aligned_with_cached_frames_are_skipped(self):
+        paths = self.visual_cache("a", make_visual([(10.0, 1.0), (50.0, 0.9)]))
+        record = json.loads((paths["cache"] / "visual_features.json").read_text())
+        record["frame_times"] = [t + 7.0 for t in record["frame_times"]]  # hash unchanged
+        (paths["cache"] / "visual_features.json").write_text(json.dumps(record), encoding="utf-8")
+        result = self.run_v([make_video("a")], ["V"])
+        self.assertEqual(result["skipped_reasons"], {"V": {"inconsistent_visual_features": 1}})
+
+    # Kiran, #19 P2: a bad embeddings file only loses the optional diagnostic.
+    def test_malformed_embeddings_drop_redundancy_but_keep_the_score(self):
+        visual = make_visual([(10.0, 1.0), (50.0, 0.9), (90.0, 0.8)])
+        paths = self.visual_cache("a", visual)
+        record = json.loads((paths["cache"] / "visual_features.json").read_text())
+        (paths["cache"] / record["embeddings"]["file"]).write_bytes(b"not an npy file")
+        result = self.run_v([make_video("a", ad_times=(10.0, 50.0, 90.0))], ["V"])
+        self.assertEqual(result["selectors"]["V"]["n_videos"], 1)
+        self.assertEqual(result["selectors"]["V"]["n_with_embeddings"], 0)
+
+    def test_nonfinite_or_one_dimensional_embeddings_never_abort_evaluation(self):
+        visual = make_visual([(10.0, 1.0), (50.0, 0.9)])
+        video = make_video(ad_times=(10.0, 50.0))
+        for name, bad in (("1-D", np.ones(len(visual["frame_times"]))),
+                          ("nan", np.full((len(visual["frame_times"]), 2), np.nan))):
+            with self.subTest(embeddings=name):
+                row = ev.evaluate_video("V", video, 2, None, 2.0, visual=visual, embeddings=bad)
+                self.assertIsNone(row["visual_redundancy"])
+                self.assertEqual(row["f1"], 1.0)
 
 
 class SummaryTests(unittest.TestCase):

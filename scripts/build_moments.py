@@ -32,6 +32,7 @@ from src.datasets import mtg_ad, reframed  # noqa: E402
 from src.generation.prompts import transcript_context, word_limit_for_gap  # noqa: E402
 from src.utils.audio_features import available_gap, load_features, speech_of  # noqa: E402
 from src.utils.audio_selector import AudioSelector  # noqa: E402
+from src.utils.cache_checks import load_audio_features  # noqa: E402
 from src.utils.media import cache_is_complete, cache_is_current, frame_window, load_manifest  # noqa: E402
 from src.utils.selection import k_for_duration, uniform_timestamps  # noqa: E402
 from src.utils.visual_features import VisualCueSelector, load_current_features as load_visual_features  # noqa: E402
@@ -127,10 +128,19 @@ def main() -> None:
                 stale.append(video_id)
                 report["status"] = "stale_cache"
                 continue
-            features = load_features(cache)
-            if args.selector == "A" and "audio_path" in manifest and not manifest["audio_path"]:
+            if args.selector == "V":
+                # V's word budgets use validated audio features (complete/current media, matching
+                # fingerprint, well-formed payload), the same loader the evaluation uses. When they
+                # are unavailable the gap is unknown and the default word limit applies, rather
+                # than trusting stale speech intervals or aborting the batch.
                 features = None
-            speech = speech_of(features) if features else None
+                audio, _ = load_audio_features(cache)
+                speech = speech_of(audio) if audio else None
+            else:
+                features = load_features(cache)
+                if args.selector == "A" and "audio_path" in manifest and not manifest["audio_path"]:
+                    features = None
+                speech = speech_of(features) if features else None
             visual = load_visual_features(cache, manifest) if args.selector == "V" else None
             if args.selector == "A" and features is None:
                 no_audio.append(video_id)

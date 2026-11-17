@@ -341,7 +341,7 @@ def run(
             visual, visual_reason = load_validated_visual_features(cache_dir / video.video_id)
             if visual_reason is None:
                 usable_visual += 1
-                embeddings = load_embeddings(cache_dir / video.video_id)
+                embeddings = load_embeddings(cache_dir / video.video_id, visual)
             else:
                 visual_reasons[visual_reason] = visual_reasons.get(visual_reason, 0) + 1
         reason_for = {"A": audio_reason, "V": visual_reason}

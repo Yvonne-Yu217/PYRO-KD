@@ -6,8 +6,12 @@ For each cached video this stores, next to the manifest:
   (1 - cosine similarity to the previous frame's CLIP embedding), and shot
   boundary times from PySceneDetect run on the original video (dense decode,
   not the sparse cached frames).
-- visual_embeddings.npy: the unit-normalized frame embeddings (float16), kept
-  for the visual-redundancy diagnostic.
+- visual_embeddings.<digest>.npy: the unit-normalized frame embeddings (float16),
+  kept for the visual-redundancy diagnostic. The file name carries the content
+  digest and the JSON record names it (with its sha256), so the pair is
+  published together: the JSON is the commit record, a new embeddings
+  generation is written under a new name first, and the previous pair stays
+  valid until the commit succeeds. A mixed pair cannot pass validation.
 
 The V selector ranks frames by novelty plus a bonus for the frame at each shot
 boundary, then takes the top K with the shared minimum separation. Embedding
@@ -23,8 +27,14 @@ from __future__ import annotations
 
 import bisect
 from dataclasses import dataclass
+import hashlib
+import io
 import json
+import math
+import os
 from pathlib import Path
+import time
+import uuid
 from typing import Any, Callable, Sequence
 
 from src.utils import cache_checks
@@ -32,7 +42,9 @@ from src.utils.media import config_hash
 from src.utils.selection import MIN_SEPARATION_SECONDS, select_top_k
 
 FEATURES_NAME = "visual_features.json"
-EMBEDDINGS_NAME = "visual_embeddings.npy"
+EMBEDDINGS_PREFIX = "visual_embeddings"  # generation files: visual_embeddings.<digest16>.npy
+# Other writers may be mid-publish; only embeddings generations older than this are removed.
+GENERATION_GRACE_SECONDS = 300.0
 FEATURE_VERSION = 1
 
 DEFAULT_CONFIG: dict[str, Any] = {
@@ -159,35 +171,164 @@ def compute_visual_features(
     return features, embeddings
 
 
+def _is_number(value: Any) -> bool:
+    return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
+
+
+def malformed_visual_features(features: Any) -> str | None:
+    """A description of the first structural defect that would break a consumer, or None.
+
+    frame_times must be finite, non-negative and strictly increasing; novelty a list
+    of finite non-negative numbers of the same length; shots a list of finite
+    non-negative numbers. Wrong types (for example a null novelty) are defects.
+    """
+    if not isinstance(features, dict):
+        return "features are not an object"
+    for name in ("frame_times", "novelty", "shots"):
+        if not isinstance(features.get(name), list):
+            return f"{name} is not a list"
+    times, novelty, shots = features["frame_times"], features["novelty"], features["shots"]
+    if len(times) != len(novelty):
+        return "frame_times and novelty differ in length"
+    if not all(_is_number(t) and t >= 0 for t in times):
+        return "frame_times must be finite non-negative numbers"
+    if any(b <= a for a, b in zip(times, times[1:])):
+        return "frame_times must be strictly increasing"
+    if not all(_is_number(v) and v >= 0 for v in novelty):
+        return "novelty must be finite non-negative numbers"
+    if not all(_is_number(t) and t >= 0 for t in shots):
+        return "shots must be finite non-negative numbers"
+    return None
+
+
+def features_match_manifest(features: dict, manifest: dict[str, Any], tolerance: float = 1e-6) -> bool:
+    """True if the feature rows line up one-to-one with the manifest's cached frames.
+
+    A matching hash only says which inputs the features were computed from; this
+    checks the rows themselves, so a record whose timeline was edited, truncated or
+    swapped cannot change which frames a moment is built from.
+    """
+    frames = manifest.get("frames")
+    if not isinstance(frames, list) or len(frames) != len(features["frame_times"]):
+        return False
+    try:
+        return all(
+            abs(float(frame["timestamp"]) - t) <= tolerance
+            for frame, t in zip(frames, features["frame_times"])
+        )
+    except (KeyError, TypeError, ValueError):
+        return False
+
+
+def _unique_tmp(directory: Path, name: str) -> Path:
+    """A staging path no other writer will use (concurrent cache jobs are not hypothetical)."""
+    return directory / f".{name}.{os.getpid()}.{uuid.uuid4().hex}.tmp"
+
+
+def _generation_files(cache_dir: Path) -> list[Path]:
+    return [p for p in cache_dir.glob(f"{EMBEDDINGS_PREFIX}.*.npy") if p.is_file()]
+
+
 def write_features(cache_dir: str | Path, features: dict, embeddings) -> Path:
-    """Write embeddings, then the JSON record, each atomically (the JSON marks completion)."""
+    """Publish the features record and its embeddings as one unit.
+
+    1. Stage the embeddings under a unique temporary name, then publish them as a
+       new immutable generation named by content digest.
+    2. Stage the JSON record (which names that generation and its sha256), then
+       commit it with an atomic rename. Until this succeeds the previous JSON and
+       the previous embeddings generation are untouched and still a valid pair.
+    3. After the commit, remove older generations (best effort; recent ones are kept
+       in case another writer is mid-publish).
+    On any failure before the commit, staging files and a generation this call
+    created are removed and the previous pair stays valid. The input record is not
+    modified.
+    """
     import numpy as np
 
     cache_dir = Path(cache_dir)
     cache_dir.mkdir(parents=True, exist_ok=True)
-    embeddings_tmp = cache_dir / (EMBEDDINGS_NAME + ".tmp.npy")
-    np.save(embeddings_tmp, np.asarray(embeddings, dtype=np.float16))
-    embeddings_tmp.replace(cache_dir / EMBEDDINGS_NAME)
+    array = np.asarray(embeddings, dtype=np.float16)
+    problem = malformed_visual_features(features)
+    if problem:
+        raise ValueError(f"refusing to write malformed visual features: {problem}")
+    if array.ndim != 2 or len(array) != len(features["frame_times"]) or not np.isfinite(array).all():
+        raise ValueError(
+            f"embeddings must be a finite ({len(features['frame_times'])} frames x dims) matrix, "
+            f"got shape {array.shape}")
+    buffer = io.BytesIO()
+    np.save(buffer, array)
+    data = buffer.getvalue()
+    digest = hashlib.sha256(data).hexdigest()
+    name = f"{EMBEDDINGS_PREFIX}.{digest[:16]}.npy"
+    generation = cache_dir / name
+    record = {**features, "embeddings": {"file": name, "sha256": digest, "shape": list(array.shape)}}
     path = cache_dir / FEATURES_NAME
-    temporary = path.with_suffix(".json.tmp")
-    temporary.write_text(json.dumps(features, indent=2), encoding="utf-8")
-    temporary.replace(path)
+    staged: list[Path] = []
+    created_generation = False
+    try:
+        if not generation.exists():
+            staging = _unique_tmp(cache_dir, name)
+            staged.append(staging)
+            staging.write_bytes(data)
+            staging.replace(generation)
+            created_generation = True
+        record_tmp = _unique_tmp(cache_dir, FEATURES_NAME)
+        staged.append(record_tmp)
+        record_tmp.write_text(json.dumps(record, indent=2), encoding="utf-8")
+        record_tmp.replace(path)  # the commit
+    except BaseException:
+        for leftover in staged:
+            leftover.unlink(missing_ok=True)
+        if created_generation:
+            generation.unlink(missing_ok=True)
+        raise
+    cutoff = time.time() - GENERATION_GRACE_SECONDS
+    for other in _generation_files(cache_dir):
+        try:
+            if other != generation and other.stat().st_mtime <= cutoff:
+                other.unlink()
+        except OSError:
+            pass
     return path
 
 
-def load_features(cache_dir: str | Path) -> dict | None:
-    """Cached features, or None if absent or unreadable (treated as missing)."""
+NO_VISUAL_FEATURES = "no_visual_features"
+UNREADABLE_VISUAL_FEATURES = "unreadable_visual_features"
+MALFORMED_VISUAL_FEATURES = "malformed_visual_features"
+STALE_VISUAL_FEATURES = "stale_visual_features"
+INCONSISTENT_VISUAL_FEATURES = "inconsistent_visual_features"
+
+
+def _read_features(cache_dir: str | Path) -> tuple[dict | None, str | None]:
+    """The features record, or (None, reason): absent, unreadable, or structurally malformed."""
     path = Path(cache_dir) / FEATURES_NAME
+    if not path.is_file():
+        return None, NO_VISUAL_FEATURES
     try:
         features = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError):
-        return None
-    required = ("frame_times", "novelty", "shots")
-    if not isinstance(features, dict) or any(key not in features for key in required):
-        return None
-    if len(features["frame_times"]) != len(features["novelty"]):
-        return None
-    return features
+        return None, UNREADABLE_VISUAL_FEATURES
+    if malformed_visual_features(features) is not None:
+        return None, MALFORMED_VISUAL_FEATURES
+    return features, None
+
+
+def load_features(cache_dir: str | Path) -> dict | None:
+    """Cached features, or None if absent, unreadable, or structurally malformed (never raises)."""
+    return _read_features(cache_dir)[0]
+
+
+def _check_current(
+    cache_dir: str | Path, manifest: dict[str, Any], config: dict[str, Any] | None,
+) -> tuple[dict | None, str | None]:
+    features, reason = _read_features(cache_dir)
+    if reason:
+        return None, reason
+    if not is_fresh(features, manifest, config):
+        return None, STALE_VISUAL_FEATURES
+    if not features_match_manifest(features, manifest):
+        return None, INCONSISTENT_VISUAL_FEATURES
+    return features, None
 
 
 def load_current_features(
@@ -195,28 +336,23 @@ def load_current_features(
     manifest: dict[str, Any] | None = None,
     config: dict[str, Any] | None = None,
 ) -> dict | None:
-    """Cached features only if they still match this video's manifest and config.
+    """Cached features only if they are well-formed and still match this video.
 
-    This is what consumers (build_moments, evaluate_selectors) should call, so a
-    changed config, re-extracted frames, or a new feature version is treated as
-    missing instead of silently reusing stale values. With no manifest passed it
-    reads <cache_dir>/manifest.json; an unreadable manifest means the features
-    cannot be verified and count as missing.
+    Valid means: structurally well-formed, computed from this manifest and config,
+    and one row per cached frame at the manifest's timestamps. A changed config,
+    re-extracted frames, a new version, or an edited timeline is treated as missing
+    instead of silently reused. With no manifest passed it reads
+    <cache_dir>/manifest.json; an unreadable manifest means the features cannot be
+    verified and count as missing. Never raises.
     """
-    features = load_features(cache_dir)
-    if features is None:
-        return None
     if manifest is None:
         try:
             manifest = json.loads((Path(cache_dir) / "manifest.json").read_text(encoding="utf-8"))
         except (OSError, UnicodeDecodeError, json.JSONDecodeError):
             return None
-    return features if is_fresh(features, manifest, config) else None
-
-
-NO_VISUAL_FEATURES = "no_visual_features"
-UNREADABLE_VISUAL_FEATURES = "unreadable_visual_features"
-STALE_VISUAL_FEATURES = "stale_visual_features"
+    if not isinstance(manifest, dict):
+        return None
+    return _check_current(cache_dir, manifest, config)[0]
 
 
 def load_validated_features(cache_dir: str | Path) -> tuple[dict | None, str | None]:
@@ -225,7 +361,8 @@ def load_validated_features(cache_dir: str | Path) -> tuple[dict | None, str | N
     Same contract as cache_checks.load_audio_features: reading never raises, and a
     reason code says why the features cannot be trusted. The media cache must be
     complete and current (so a failed rebuild that left a complete cache for an older
-    source is caught), and the features readable and matching the manifest and config.
+    source is caught), and the features well-formed, computed from this manifest and
+    config, and aligned with the cached frames.
     """
     manifest, reason = cache_checks.read_manifest(cache_dir)
     if manifest is None:
@@ -233,43 +370,70 @@ def load_validated_features(cache_dir: str | Path) -> tuple[dict | None, str | N
     problem = cache_checks.media_cache_problem(manifest)
     if problem:
         return None, problem
-    if not (Path(cache_dir) / FEATURES_NAME).is_file():
-        return None, NO_VISUAL_FEATURES
-    features = load_features(cache_dir)
-    if features is None:
-        return None, UNREADABLE_VISUAL_FEATURES
-    if not is_fresh(features, manifest):
-        return None, STALE_VISUAL_FEATURES
-    return features, None
+    return _check_current(cache_dir, manifest, None)
 
 
-def load_embeddings(cache_dir: str | Path):
-    """Cached unit-normalized embeddings as float32, or None."""
+def load_embeddings(cache_dir: str | Path, features: dict | None = None):
+    """The embeddings generation the features record commits to, as float32, or None.
+
+    Pass the already-validated features record when you have one, so the matrix
+    returned is the one that record names. None (never an exception) if the record
+    names no embeddings, the file is missing or its digest does not match, or the
+    array is not a finite (frames x dims) matrix with one row per frame.
+    """
     import numpy as np
 
-    path = Path(cache_dir) / EMBEDDINGS_NAME
+    if features is None:
+        features = load_features(cache_dir)
+        if features is None:
+            return None
+    reference = features.get("embeddings")
+    if not isinstance(reference, dict):
+        return None
+    name, digest = reference.get("file"), reference.get("sha256")
+    if (
+        not isinstance(name, str) or not isinstance(digest, str)
+        or name != Path(name).name or not name.startswith(f"{EMBEDDINGS_PREFIX}.")
+    ):
+        return None
     try:
-        return np.load(path).astype(np.float32)
+        data = (Path(cache_dir) / name).read_bytes()
+        if hashlib.sha256(data).hexdigest() != digest:
+            return None
+        array = np.load(io.BytesIO(data), allow_pickle=False)
     except (OSError, ValueError):
         return None
+    if (
+        array.ndim != 2 or array.shape[1] < 1 or len(array) != len(features["frame_times"])
+        or not np.issubdtype(array.dtype, np.number) or not np.isfinite(array).all()
+    ):
+        return None
+    return array.astype(np.float32)
 
 
 def mean_pairwise_similarity(embeddings, frame_times: Sequence[float], times: Sequence[float]) -> float | None:
     """Mean pairwise cosine similarity of the frames nearest to the selected times.
 
     Higher means more redundant selections. None for fewer than two selections or
-    when the embeddings do not line up with the frame timestamps.
+    when the embeddings are not a finite 2-D matrix lining up with the frame
+    timestamps (an optional diagnostic never raises).
     """
     import numpy as np
 
-    if embeddings is None or len(times) < 2 or len(embeddings) != len(frame_times):
+    if embeddings is None or len(times) < 2:
+        return None
+    try:
+        vectors = np.asarray(embeddings, dtype=np.float64)
+    except (TypeError, ValueError):
+        return None
+    if vectors.ndim != 2 or len(vectors) != len(frame_times) or not np.isfinite(vectors).all():
         return None
     chosen = []
     for t in times:
         i = bisect.bisect_left(frame_times, t)
         candidates = [j for j in (i - 1, i) if 0 <= j < len(frame_times)]
         chosen.append(min(candidates, key=lambda j: abs(frame_times[j] - t)))
-    vectors = np.asarray(embeddings, dtype=np.float64)[chosen]
+    vectors = vectors[chosen]
     norms = np.linalg.norm(vectors, axis=1, keepdims=True)
     vectors = vectors / np.where(norms == 0.0, 1.0, norms)
     similarity = vectors @ vectors.T
