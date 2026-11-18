@@ -236,6 +236,9 @@ MALFORMED_RECORDS = {
     "unsorted times": {"frame_times": [0.0, 1.0, 0.5, 1.5]},
     "duplicate times": {"frame_times": [0.0, 0.5, 0.5, 1.5]},
     "negative shot": {"shots": [-1.0]},
+    "time integer too large for a float": {"frame_times": [0.0, 0.5, 10**400, 1.5]},
+    "novelty integer too large for a float": {"novelty": [0.0, 10**400, 0.1, 0.1]},
+    "shot integer too large for a float": {"shots": [10**400]},
 }
 
 
@@ -331,21 +334,65 @@ class TransactionalPublishTests(unittest.TestCase):
         self.new_embeddings = self.embeddings[::-1].copy()  # a different matrix, so a different generation
         self.old_files = sorted(p.name for p in self.dir.iterdir())
 
-    def test_failure_after_embeddings_are_published_leaves_the_old_pair_intact(self):
+    def fail_json_commit(self, before_failure=None):
+        """Patch Path.replace so the first rename onto the JSON record fails (after running before_failure)."""
         real_replace = Path.replace
+        state = {"armed": True}
 
-        def fail_on_json(source, target):
-            if Path(target).name == vf.FEATURES_NAME:
+        def replace(source, target):
+            if Path(target).name == vf.FEATURES_NAME and state["armed"]:
+                state["armed"] = False
+                if before_failure:
+                    before_failure()
                 raise OSError("disk full")
             return real_replace(source, target)
 
-        with patch.object(Path, "replace", fail_on_json):
+        return patch.object(Path, "replace", replace)
+
+    def test_failure_after_embeddings_are_published_leaves_the_old_pair_intact(self):
+        with self.fail_json_commit():
             with self.assertRaises(OSError):
                 vf.write_features(self.dir, self.features, self.new_embeddings)
         self.assertEqual((self.dir / vf.FEATURES_NAME).read_bytes(), self.old_json)
         np.testing.assert_array_equal(vf.load_embeddings(self.dir), self.old_embeddings)
-        self.assertEqual(sorted(p.name for p in self.dir.iterdir()), self.old_files)  # no orphans or temps
         self.assertIsNotNone(vf.load_current_features(self.dir, FeatureCacheTests.MANIFEST))
+        leftovers = sorted(set(p.name for p in self.dir.iterdir()) - set(self.old_files))
+        self.assertEqual(len(leftovers), 1)  # the immutable generation stays; no staging files remain
+        self.assertTrue(leftovers[0].startswith(vf.EMBEDDINGS_PREFIX))
+        # An unreferenced generation is collected after a later commit once it is past the grace period.
+        with patch.object(vf, "GENERATION_GRACE_SECONDS", -1.0):
+            vf.write_features(self.dir, self.features, self.embeddings)
+        self.assertEqual(sorted(p.name for p in self.dir.iterdir()), self.old_files)
+
+    # Kiran, #19 P2: another writer commits the same content-named generation before our commit fails.
+    def test_a_failed_writer_does_not_delete_a_generation_another_writer_committed(self):
+        def other_writer_commits():
+            vf.write_features(self.dir, self.features, self.new_embeddings)  # identical embeddings
+
+        with self.fail_json_commit(before_failure=other_writer_commits):
+            with self.assertRaises(OSError):
+                vf.write_features(self.dir, self.features, self.new_embeddings)
+        np.testing.assert_allclose(vf.load_embeddings(self.dir), self.new_embeddings, atol=1e-3)
+        self.assertIsNotNone(vf.load_current_features(self.dir, FeatureCacheTests.MANIFEST))
+
+    def test_collection_never_removes_the_generation_the_committed_record_names(self):
+        record = vf.load_features(self.dir)
+        with patch.object(vf, "GENERATION_GRACE_SECONDS", -1.0):
+            # A writer whose own generation differs must not collect the one now committed on disk.
+            real = vf._read_features
+            with patch.object(vf, "_read_features", side_effect=lambda d: (record, None)):
+                vf.write_features(self.dir, self.features, self.new_embeddings)
+            self.assertTrue((self.dir / record["embeddings"]["file"]).exists())
+            self.assertIs(vf._read_features, real)
+
+    # Kiran, #19 P2: an existing digest-named file with the wrong bytes must be repaired, not adopted.
+    def test_a_corrupt_file_under_the_expected_name_is_repaired_by_the_next_write(self):
+        record = vf.load_features(self.dir)
+        generation = self.dir / record["embeddings"]["file"]
+        generation.write_bytes(b"corrupt")
+        self.assertIsNone(vf.load_embeddings(self.dir))
+        vf.write_features(self.dir, self.features, self.embeddings)
+        np.testing.assert_array_equal(vf.load_embeddings(self.dir), self.old_embeddings)
 
     def test_failure_while_writing_the_embeddings_leaves_the_old_pair_intact(self):
         with patch.object(Path, "write_bytes", side_effect=OSError("quota")):
@@ -414,6 +461,30 @@ class EmbeddingValidationTests(unittest.TestCase):
         name = f"{vf.EMBEDDINGS_PREFIX}.{digest[:16]}.npy"
         (self.dir / name).write_bytes(data)
         return {**self.features, "embeddings": {"file": name, "sha256": digest}}
+
+    def stage_bytes(self, data):
+        import hashlib
+        digest = hashlib.sha256(data).hexdigest()
+        name = f"{vf.EMBEDDINGS_PREFIX}.{digest[:16]}.npy"
+        (self.dir / name).write_bytes(data)
+        return {**self.features, "embeddings": {"file": name, "sha256": digest}}
+
+    # Kiran, #19 P2: a correctly hashed file can still be something np.load does not decode to an array.
+    def test_empty_truncated_and_archive_payloads_are_unusable_not_exceptions(self):
+        import io as _io
+        archive = _io.BytesIO()
+        np.savez(archive, matrix=np.eye(3))
+        good = _io.BytesIO()
+        np.save(good, np.eye(3, dtype=np.float32))
+        for name, data in (
+            ("empty", b""),
+            ("npz archive", archive.getvalue()),
+            ("truncated npy", good.getvalue()[:-20]),
+            ("garbage", b"\x93NUMPY nonsense"),
+            ("zip header only", b"PK\x03\x04"),
+        ):
+            with self.subTest(payload=name):
+                self.assertIsNone(vf.load_embeddings(self.dir, self.stage_bytes(data)))
 
     def test_only_a_finite_matrix_with_one_row_per_frame_loads(self):
         self.assertIsNotNone(vf.load_embeddings(self.dir, self.stage(np.eye(3, dtype=np.float32))))
@@ -516,6 +587,21 @@ class CacheScriptTests(unittest.TestCase):
         code, _, _ = self.run_script()
         self.assertEqual((code, self.report()["computed"], self.report()["reused"]), (0, 1, 0))
         self.assertIsNotNone(vf.load_embeddings(good))
+
+    # Kiran, #19 P2: recomputing identical embeddings over a corrupt generation must repair it.
+    def test_a_corrupt_embeddings_generation_is_repaired_by_rerunning(self):
+        cache = self.make_cache("good")
+        self.run_script()
+        record = json.loads((cache / vf.FEATURES_NAME).read_text())
+        (cache / record["embeddings"]["file"]).write_bytes(b"corrupt")
+        self.assertIsNone(vf.load_embeddings(cache))
+        for extra in ((), ("--overwrite",)):
+            with self.subTest(extra=extra):
+                (cache / record["embeddings"]["file"]).write_bytes(b"corrupt")
+                code, _, _ = self.run_script(*extra)
+                self.assertEqual((code, self.report()["computed"]), (0, 1))  # recomputed, not "reused"
+                self.assertIsNotNone(vf.load_current_features(cache))
+                self.assertIsNotNone(vf.load_embeddings(cache))
 
     def test_a_failed_overwrite_keeps_features_that_are_still_current(self):
         cache = self.make_cache("good")

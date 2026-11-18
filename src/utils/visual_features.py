@@ -172,7 +172,12 @@ def compute_visual_features(
 
 
 def _is_number(value: Any) -> bool:
-    return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return False
+    try:
+        return math.isfinite(value)
+    except OverflowError:  # a JSON integer too large for a float, e.g. 10**400
+        return False
 
 
 def malformed_visual_features(features: Any) -> str | None:
@@ -229,6 +234,14 @@ def _generation_files(cache_dir: Path) -> list[Path]:
     return [p for p in cache_dir.glob(f"{EMBEDDINGS_PREFIX}.*.npy") if p.is_file()]
 
 
+def _generation_intact(path: Path, digest: str) -> bool:
+    """True if the file exists and its bytes hash to the digest it is named for."""
+    try:
+        return hashlib.sha256(path.read_bytes()).hexdigest() == digest
+    except OSError:
+        return False
+
+
 def write_features(cache_dir: str | Path, features: dict, embeddings) -> Path:
     """Publish the features record and its embeddings as one unit.
 
@@ -239,8 +252,11 @@ def write_features(cache_dir: str | Path, features: dict, embeddings) -> Path:
        the previous embeddings generation are untouched and still a valid pair.
     3. After the commit, remove older generations (best effort; recent ones are kept
        in case another writer is mid-publish).
-    On any failure before the commit, staging files and a generation this call
-    created are removed and the previous pair stays valid. The input record is not
+    On any failure before the commit, staging files are removed and the previous pair
+    stays valid; the published generation is kept (another writer may have committed
+    a record that references the same content-named file) and collected later.
+    An existing file of that name is verified against the digest and rewritten if its
+    bytes are wrong, so repeating a failed run repairs the cache. The input record is not
     modified.
     """
     import numpy as np
@@ -264,28 +280,36 @@ def write_features(cache_dir: str | Path, features: dict, embeddings) -> Path:
     record = {**features, "embeddings": {"file": name, "sha256": digest, "shape": list(array.shape)}}
     path = cache_dir / FEATURES_NAME
     staged: list[Path] = []
-    created_generation = False
     try:
-        if not generation.exists():
+        if not _generation_intact(generation, digest):
+            # Absent, or present with different bytes (a corrupt or truncated earlier
+            # write): publish the correct bytes atomically over it.
             staging = _unique_tmp(cache_dir, name)
             staged.append(staging)
             staging.write_bytes(data)
             staging.replace(generation)
-            created_generation = True
         record_tmp = _unique_tmp(cache_dir, FEATURES_NAME)
         staged.append(record_tmp)
         record_tmp.write_text(json.dumps(record, indent=2), encoding="utf-8")
         record_tmp.replace(path)  # the commit
     except BaseException:
+        # Only staging files are removed. A published generation is immutable and named by
+        # its content, so another writer may have committed a record that references it
+        # (identical embeddings give an identical name); deleting it here could destroy
+        # that writer's valid cache. An unreferenced one is collected after a later commit.
         for leftover in staged:
             leftover.unlink(missing_ok=True)
-        if created_generation:
-            generation.unlink(missing_ok=True)
         raise
     cutoff = time.time() - GENERATION_GRACE_SECONDS
+    # Keep whatever the record now on disk names (it may be another writer's), plus this one.
+    keep = {generation.name}
+    committed, _ = _read_features(cache_dir)
+    reference = committed.get("embeddings") if committed else None
+    if isinstance(reference, dict) and isinstance(reference.get("file"), str):
+        keep.add(reference["file"])
     for other in _generation_files(cache_dir):
         try:
-            if other != generation and other.stat().st_mtime <= cutoff:
+            if other.name not in keep and other.stat().st_mtime <= cutoff:
                 other.unlink()
         except OSError:
             pass
@@ -401,7 +425,12 @@ def load_embeddings(cache_dir: str | Path, features: dict | None = None):
         if hashlib.sha256(data).hexdigest() != digest:
             return None
         array = np.load(io.BytesIO(data), allow_pickle=False)
-    except (OSError, ValueError):
+    except Exception:  # EOF, BadZipFile, ValueError, ...: any undecodable payload is unusable
+        return None
+    if not isinstance(array, np.ndarray):  # np.load also returns an NpzFile archive handle
+        close = getattr(array, "close", None)
+        if callable(close):
+            close()
         return None
     if (
         array.ndim != 2 or array.shape[1] < 1 or len(array) != len(features["frame_times"])

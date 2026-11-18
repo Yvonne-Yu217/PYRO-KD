@@ -219,6 +219,32 @@ class VisualSelectorEvalTests(unittest.TestCase):
         self.assertEqual(result["selectors"]["V"]["n_videos"], 1)
         self.assertEqual(result["selectors"]["V"]["n_with_embeddings"], 0)
 
+    # Kiran, #19 P2: empty and .npz payloads with a matching digest must not abort the run.
+    def test_empty_and_archive_embeddings_do_not_abort_the_whole_run(self):
+        import hashlib
+        import io as _io
+        archive = _io.BytesIO()
+        np.savez(archive, matrix=np.eye(3))
+        for name, data in (("empty", b""), ("npz", archive.getvalue())):
+            with self.subTest(payload=name):
+                root = Path(tempfile.mkdtemp(dir=self.root))
+                self.root_for_run = root
+                visual = make_visual([(10.0, 1.0), (50.0, 0.9), (90.0, 0.8)])
+                bad = fx.make_visual_cache(root, "bad", visual)
+                fx.make_visual_cache(root, "good", visual)
+                digest = hashlib.sha256(data).hexdigest()
+                reference = f"visual_embeddings.{digest[:16]}.npy"
+                (bad["cache"] / reference).write_bytes(data)
+                record_path = bad["cache"] / "visual_features.json"
+                record = json.loads(record_path.read_text())
+                record["embeddings"] = {"file": reference, "sha256": digest}
+                record_path.write_text(json.dumps(record), encoding="utf-8")
+                with fx.patched_audio_helpers():
+                    result = ev.run([make_video("bad"), make_video("good")], 3.48, ["U", "O", "V"], root, 2.0, 200, 0)
+                self.assertEqual(result["selectors"]["V"]["n_videos"], 2)  # both still scored
+                self.assertEqual(result["selectors"]["V"]["n_with_embeddings"], 1)
+                self.assertEqual(result["selectors"]["U"]["n_videos"], 2)
+
     def test_nonfinite_or_one_dimensional_embeddings_never_abort_evaluation(self):
         visual = make_visual([(10.0, 1.0), (50.0, 0.9)])
         video = make_video(ad_times=(10.0, 50.0))
