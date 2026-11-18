@@ -25,7 +25,7 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.datasets import mtg_ad  # noqa: E402
-from src.generation.outputs import split_rows  # noqa: E402
+from src.generation.outputs import is_failure, split_rows  # noqa: E402
 from src.evaluation.bertscore import BERTScoreScorer, GeneratedADItem, compute_bertscore  # noqa: E402
 from src.evaluation.cosine_similarity import (  # noqa: E402
     DEFAULT_MODEL_NAME, SentenceEncoder, compute_cosine_similarity,
@@ -60,7 +60,7 @@ def read_generated_jsonl(path: str | Path) -> list[dict[str, Any]]:
                     or time < 0 or not math.isfinite(float(time))
                 ):
                     raise ValueError("time must be finite nonnegative numeric seconds")
-                if "error" not in row:
+                if not is_failure(row):
                     if not isinstance(row.get("output"), str) or not row["output"].strip():
                         raise ValueError("successful output must be a nonempty string")
                     if "id" in row:
@@ -178,7 +178,7 @@ def evaluate_ad(
                 if field in metadata and metadata[field] != row[field]:
                     raise ValueError(f"Mixed {field} values; evaluate each experiment separately")
                 metadata[field] = row[field]
-        target = failed if "error" in row else successful
+        target = failed if is_failure(row) else successful
         target[row["video_id"]].append(row)
 
     results = []
@@ -259,7 +259,7 @@ def evaluate_ad(
     totals = {key: sum(video["temporal"][key] for video in results) for key in ("tp", "fp", "fn")}
     bert_pairs = [pair for video in results for pair in video["bertscore"]["pairs"]]
     cosine_values = [pair["cosine_similarity"] for video in results for pair in video["cosine"]["pairs"]]
-    generation_errors = [row for row in rows if "error" in row]
+    generation_errors = [row for row in rows if is_failure(row)]
     return {
         "status": "partial" if generation_errors or semantic_errors else "ok" if rows else "empty_input",
         "input": str(generated_path), "data_dir": str(data_dir), "split": split,

@@ -11,7 +11,7 @@ from scripts import evaluate_ad as evaluation
 from src.datasets.mtg_ad import MTGVideo
 from src.evaluation.parsing import ADItem
 from src.generation.hf_vlm import clean
-from src.generation.outputs import final_rows, merge_meta, read_rows, settled_ids, split_rows, status_counts
+from src.generation.outputs import final_rows, is_success, merge_meta, read_rows, settled_ids, split_rows, status_counts
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 from run_ad_vlm import done_ids, finalize_generation  # noqa: E402
@@ -97,6 +97,78 @@ class EvaluationTests(unittest.TestCase):
         self.assertTrue(result["generation_errors"][0]["error"].startswith("hit_token_limit"))
         candidates = [c for call in bert.call_args_list for c in call.args[0]]
         self.assertEqual(candidates, ["A dog runs."])  # the scratchpad never reached the scorer
+
+
+def legacy_cut(moment_id):
+    """A token-limit row as written before cut-offs were recorded as errors: no "error" field."""
+    return {"id": moment_id, "video_id": "a", "time": float(moment_id[-2:]), "output": SCRATCHPAD,
+            "raw_output": "r", "new_tokens": 64, "batch_size": 1, "hit_token_limit": True,
+            "batch_latency_s": 0.1}
+
+
+class LegacyTruncationTests(unittest.TestCase):
+    """Historical rows with hit_token_limit=true and no error are failures in every reader."""
+
+    def evaluate(self, rows):
+        bert = Mock(side_effect=lambda candidates, references, **kwargs: (
+            ([0.8] * len(candidates), [0.6] * len(candidates), [0.7] * len(candidates)), "mock"))
+        encoder = Mock()
+        encoder.encode.side_effect = lambda texts, **kwargs: [[1.0, 0.0] for _ in texts]
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp, "generated.jsonl")
+            path.write_text("\n".join(json.dumps(r) for r in rows) + "\n", encoding="utf-8")
+            with patch.object(evaluation.mtg_ad, "load_split", return_value=[video("a", (10.0, 20.0))]):
+                result = evaluation.evaluate_ad(
+                    path, Path(tmp, "dataset"), "validation", bert_scorer=bert, encoder=encoder)
+        return result, [c for call in bert.call_args_list for c in call.args[0]]
+
+    def test_a_legacy_truncated_row_is_a_failure_and_never_scored(self):
+        result, scored = self.evaluate([ok("a_U_11"), legacy_cut("a_U_21")])
+        self.assertEqual((result["num_successful_rows"], result["num_generation_errors"]), (1, 1))
+        self.assertEqual(scored, ["A dog runs."])
+
+    def test_legacy_truncation_then_success_is_history_not_a_duplicate_success(self):
+        result, scored = self.evaluate([legacy_cut("a_U_11"), ok("a_U_11")])
+        self.assertEqual((result["num_successful_rows"], result["num_generation_errors"]), (1, 0))
+        self.assertEqual(result["num_superseded_error_rows"], 1)
+        self.assertEqual(scored, ["A dog runs."])
+
+    def test_legacy_truncation_then_oom_leaves_the_real_failure_standing(self):
+        result, scored = self.evaluate([legacy_cut("a_U_21"), oom("a_U_21")])
+        self.assertEqual(result["generation_errors"], [oom("a_U_21")])
+        self.assertEqual(result["superseded_error_rows"], [legacy_cut("a_U_21")])
+        self.assertEqual(scored, [])
+
+    def test_repeated_legacy_truncations_count_once(self):
+        result, _ = self.evaluate([legacy_cut("a_U_21"), legacy_cut("a_U_21")])
+        self.assertEqual((result["num_successful_rows"], result["num_generation_errors"]), (0, 1))
+        self.assertEqual(result["num_superseded_error_rows"], 1)
+
+    def test_a_current_success_with_hit_limit_false_is_still_a_success(self):
+        self.assertTrue(is_success(ok("a_U_11")))
+        self.assertFalse(is_success(legacy_cut("a_U_11")))
+        self.assertFalse(is_success(cut("a_U_11")))
+
+    def test_requeue_retries_legacy_rows_at_any_budget_and_does_not_call_them_done(self):
+        rows = [legacy_cut("a_U_21")]
+        for tokens in (32, 64, 128):
+            self.assertEqual(settled_ids(rows, tokens, 0.0), (set(), set()))
+        self.assertEqual(settled_ids(rows)[0], set())
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp, "out.jsonl")
+            path.write_text(json.dumps(legacy_cut("a_U_21")) + "\n", encoding="utf-8")
+            self.assertEqual(done_ids(path), set())
+            self.assertEqual(done_ids(path, 128, 0.0), set())
+
+    def test_meta_counts_standing_legacy_truncations_as_errors(self):
+        self.assertEqual(
+            status_counts([legacy_cut("a_U_21")]), {"n_ok": 0, "n_error": 1, "n_hit_token_limit": 1})
+        self.assertEqual(
+            status_counts([legacy_cut("a_U_11"), ok("a_U_11")]),
+            {"n_ok": 1, "n_error": 0, "n_hit_token_limit": 0})
+        self.assertEqual(
+            status_counts([legacy_cut("a_U_21"), oom("a_U_21")]),
+            {"n_ok": 0, "n_error": 1, "n_hit_token_limit": 0})
 
 
 class FinalRowsTests(unittest.TestCase):

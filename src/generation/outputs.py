@@ -9,6 +9,8 @@ definition lives here:
 - A success supersedes any error rows for the same id.
 - Otherwise the latest error row stands, so repeated failures count once.
 - Rows without an id pass through unchanged.
+- A legacy row with hit_token_limit=true and no error field counts as an error row
+  (see is_failure).
 
 Retry policy: a token-limit failure is deterministic when it was produced at
 temperature 0 with at least the current max_new_tokens. Running it again would
@@ -41,8 +43,21 @@ def read_rows(path: str | Path) -> list[dict[str, Any]]:
     return rows
 
 
+def is_failure(row: dict[str, Any]) -> bool:
+    """True for an error row, including a legacy truncated row.
+
+    Before token-limit cut-offs were recorded as errors, a row that hit max_new_tokens
+    was written with hit_token_limit=true and no "error" field. Those rows are still on
+    disk, and their text is cut off (for Muse, still the scratchpad), so they are
+    failures here: never scored, never counted as successes, and retried when the
+    token budget is raised. Every reader (runner, meta, evaluator) goes through this
+    one definition.
+    """
+    return "error" in row or row.get("hit_token_limit") is True
+
+
 def is_success(row: dict[str, Any]) -> bool:
-    return not row.get("error")
+    return not is_failure(row)
 
 
 def split_rows(rows: Iterable[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
