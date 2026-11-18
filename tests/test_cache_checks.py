@@ -112,6 +112,8 @@ MALFORMED_PAYLOADS = {
     "speech negative": {"raw_speech": [[-1.0, 2.0]]},
     "speech not finite": {"raw_speech": [[1.0, float("inf")]]},
     "speech nan": {"raw_speech": [[float("nan"), 2.0]]},
+    "speech integer too large for a float": {"raw_speech": [[0, 10**400]]},
+    "gap integer too large for a float": {"raw_gaps": [{**GOOD_GAP, "rms": 10**400}]},
     "empty gap record": {"raw_gaps": [{}]},
     "gap missing fields": {"raw_gaps": [{"start": 1.0, "end": 2.0}]},
     "gap with an extra field": {"raw_gaps": [{**GOOD_GAP, "extra": 1}]},

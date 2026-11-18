@@ -74,7 +74,12 @@ def media_cache_problem(manifest: dict[str, Any]) -> str | None:
 
 
 def _is_number(value: Any) -> bool:
-    return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return False
+    try:
+        return math.isfinite(value)
+    except OverflowError:  # a JSON integer too large for a float, e.g. 10**400
+        return False
 
 
 _GAP_FIELDS = {"start", "end", "rms", "onset"}

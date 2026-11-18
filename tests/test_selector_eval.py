@@ -314,6 +314,7 @@ class RunTests(unittest.TestCase):
         for name, payload in (
             ("speech pair", {"raw_speech": [[1.0]]}),
             ("empty gap record", {"raw_gaps": [{}]}),
+            ("integer too large for a float", {"raw_speech": [[0, 10**400]]}),
         ):
             with self.subTest(payload=name):
                 root = Path(tempfile.mkdtemp(dir=self.root))
