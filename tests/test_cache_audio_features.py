@@ -16,7 +16,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from src.utils import audio_features
+from src.utils import audio_features, cache_checks
 from src.utils.audio_features import (
     FEATURES_NAME, compute_audio_features, features_are_current, features_config_hash,
     load_current_features, load_features, resolve_audio_path, write_features,
@@ -562,6 +562,184 @@ class BuildMomentsStalenessTests(unittest.TestCase):
         rows, report, _ = self.build("A")
         self.assertEqual({r["video_id"] for r in rows}, {"fresh"})
         self.assertEqual(report["changed"]["status"], "missing_audio_features")
+
+
+def open_descriptor_count():
+    for listing in ("/dev/fd", "/proc/self/fd"):
+        try:
+            return len(os.listdir(listing))
+        except OSError:
+            continue
+    return None
+
+
+@unittest.skipIf(open_descriptor_count() is None, "cannot count open descriptors here")
+class SnapshotDescriptorTests(unittest.TestCase):
+    """Kiran (#16 re-review): a failed source open must not leak the staging descriptor."""
+
+    def assert_no_leak(self, audio_path, error):
+        before = open_descriptor_count()
+        temp_before = set(Path(tempfile.gettempdir()).glob("audio_snapshot_*"))
+        for _ in range(25):
+            with self.assertRaises(error):
+                audio_features._snapshot_wav(audio_path)
+        self.assertEqual(open_descriptor_count(), before)
+        self.assertEqual(set(Path(tempfile.gettempdir()).glob("audio_snapshot_*")), temp_before)
+
+    def test_missing_wav_leaks_nothing(self):
+        self.assert_no_leak("/absent/video/audio_16k.wav", FileNotFoundError)
+
+    @unittest.skipIf(hasattr(os, "geteuid") and os.geteuid() == 0, "root can read anything")
+    def test_unreadable_wav_leaks_nothing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            wav = Path(tmp, "audio_16k.wav")
+            wav.write_bytes(b"RIFF")
+            wav.chmod(0)
+            try:
+                self.assert_no_leak(wav, PermissionError)
+            finally:
+                wav.chmod(0o600)
+
+    def test_failing_descriptor_wrap_closes_descriptor(self):
+        before = open_descriptor_count()
+        with tempfile.TemporaryDirectory() as tmp:
+            wav = Path(tmp, "audio_16k.wav")
+            wav.write_bytes(b"RIFF")
+            for _ in range(10):
+                with (patch.object(audio_features.os, "fdopen", side_effect=OSError("no wrap")),
+                      self.assertRaises(OSError)):
+                    audio_features._snapshot_wav(wav)
+                with (patch.object(audio_features.os, "fdopen", side_effect=OSError("no wrap")),
+                      self.assertRaises(OSError)):
+                    write_features(tmp, {"config_hash": "x", "speech": [], "gaps": []})
+            self.assertEqual(sorted(p.name for p in Path(tmp).iterdir()), ["audio_16k.wav"])
+        self.assertEqual(open_descriptor_count(), before)
+
+
+@unittest.skipUnless(sys.platform != "win32", "needs RLIMIT_NOFILE")
+class LowDescriptorLimitBatchTests(unittest.TestCase):
+    """Kiran (#16 re-review): many broken videos before a healthy one, under a low FD limit.
+
+    Runs the real cache_audio_features.main (real snapshotting, injected
+    decode/VAD) in a child process with RLIMIT_NOFILE=64 and 70 missing WAVs.
+    """
+
+    CHILD = r"""
+import json, resource, sys
+from unittest.mock import patch
+sys.path.insert(0, sys.argv[1]); sys.path.insert(0, sys.argv[1] + "/scripts")
+resource.setrlimit(resource.RLIMIT_NOFILE, (64, 64))
+from src.utils import audio_features
+import cache_audio_features
+with (patch("src.utils.media.load_audio", return_value=([0.0] * 32, 16000)),
+      patch.object(audio_features, "detect_speech", return_value=[]),
+      patch.object(audio_features, "gap_features", return_value=[])):
+    sys.exit(cache_audio_features.main(["--cache-dir", sys.argv[2]]))
+"""
+
+    def test_healthy_video_after_70_missing_wavs_is_cached_and_reported(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for i in range(70):
+                video = root / f"broken_{i:03d}"
+                video.mkdir()
+                (video / "manifest.json").write_text(json.dumps({"audio_path": str(video / "audio_16k.wav")}))
+            healthy = root / "zz_healthy"
+            healthy.mkdir()
+            (healthy / "audio_16k.wav").write_bytes(b"RIFF healthy")
+            (healthy / "manifest.json").write_text(json.dumps({"audio_path": str(healthy / "audio_16k.wav")}))
+            result = subprocess.run(
+                [sys.executable, "-c", self.CHILD, str(REPO), str(root)],
+                capture_output=True, text=True, timeout=120,
+            )
+            self.assertEqual(result.returncode, 1, result.stderr[-2000:])
+            self.assertNotIn("Too many open files", result.stderr)
+            report = json.loads((root / cache_audio_features.REPORT_NAME).read_text())
+            self.assertEqual(len(report["failed"]), 70)
+            self.assertEqual(report["computed"], 1)
+            self.assertIsNotNone(load_features(healthy))
+
+
+class CrossConsumerOwnershipTests(unittest.TestCase):
+    """Kiran (#16 re-review): build_moments' loader and the selector evaluation agree.
+
+    The owning cache has WAV A; its manifest records a relative path; a foreign
+    working directory holds a different WAV B at that relative path. Both
+    consumers must reject a B-stamped record and accept an A-stamped one.
+    """
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        root = Path(self.tmp.name)
+        source = root / "changed.mp4"
+        source.write_bytes(b"source video")
+        self.cache = root / "cache" / "changed"
+
+        def fake_frames(video_path, output_dir, **kwargs):
+            output_dir.mkdir()
+            frame = output_dir / "000001.jpg"
+            frame.write_bytes(b"frame")
+            return [FrameEntry(0, 0.0, str(frame))]
+
+        def fake_audio(video_path, output_path, sample_rate):
+            output_path.write_bytes(b"RIFF owning A")
+            return output_path
+
+        info = MediaInfo(str(source), 60.0, 0.0, True, True, 160, 120, 25.0, 44100, 2)
+        with (patch("src.utils.media.probe", return_value=info),
+              patch("src.utils.media.extract_frames", side_effect=fake_frames),
+              patch("src.utils.media.extract_audio", side_effect=fake_audio)):
+            preprocess_video(source, self.cache)
+        self.manifest = json.loads((self.cache / "manifest.json").read_text())
+        self.relative = "data/cache/mtg-ad/changed/audio_16k.wav"  # historical relative format
+        self.manifest["audio_path"] = self.relative
+        (self.cache / "manifest.json").write_text(json.dumps(self.manifest))
+        self.wav_a = self.cache / "audio_16k.wav"
+        foreign = root / "foreign"
+        self.wav_b = foreign / self.relative
+        self.wav_b.parent.mkdir(parents=True)
+        self.wav_b.write_bytes(b"RIFF another video B")
+        cwd = os.getcwd()
+        os.chdir(foreign)
+        self.addCleanup(os.chdir, cwd)
+        self.assertTrue(Path(self.relative).exists())  # both candidates exist
+
+    def stamp(self, wav):
+        write_features(self.cache, {"config_hash": features_config_hash(wav),
+                                    "speech": [[0.0, 60.0]], "gaps": []})
+
+    def both(self):
+        return (load_current_features(self.cache, self.manifest),
+                cache_checks.load_audio_features(self.cache))
+
+    def test_b_stamped_record_is_rejected_by_both_consumers(self):
+        self.stamp(self.wav_b)
+        moments, evaluation = self.both()
+        self.assertEqual(moments, (None, "stale_audio_features"))
+        self.assertEqual(evaluation, (None, cache_checks.STALE_AUDIO_FEATURES))
+
+    def test_a_stamped_record_is_accepted_by_both_consumers(self):
+        self.stamp(self.wav_a)
+        (features_m, reason_m), (features_e, reason_e) = self.both()
+        self.assertEqual((reason_m, reason_e), (None, None))
+        self.assertEqual(features_m, features_e)
+
+    def test_both_consumers_reject_the_same_malformed_payloads(self):
+        for payload in ({"speech": [[1.0]], "gaps": []}, {"speech": [], "gaps": [{}]},
+                        {"speech": None, "gaps": []}):
+            with self.subTest(payload=payload):
+                write_features(self.cache, {**payload, "config_hash": features_config_hash(self.wav_a)})
+                moments, evaluation = self.both()
+                self.assertEqual(moments, (None, "malformed_audio_features"))
+                self.assertEqual(evaluation, (None, cache_checks.MALFORMED_AUDIO_FEATURES))
+
+    def test_missing_owned_wav_is_not_replaced_by_the_foreign_one(self):
+        self.stamp(self.wav_b)
+        self.wav_a.unlink()
+        moments, evaluation = self.both()
+        self.assertIsNone(moments[0])
+        self.assertIsNone(evaluation[0])
 
 
 @unittest.skipUnless(shutil.which("bash"), "needs bash")

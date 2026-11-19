@@ -184,6 +184,24 @@ def features_config_hash(
     return _settings_hash(wav_digest(audio_path), config)
 
 
+def _private_file(mode: str, **mkstemp_args):
+    """Create a unique temporary file and return (path, open file object).
+
+    The raw mkstemp descriptor is owned by the returned file object; if wrapping
+    it fails, the descriptor is closed and the file removed, so no path leaks
+    an open descriptor or a stray file.
+    """
+    descriptor, name = tempfile.mkstemp(**mkstemp_args)
+    path = Path(name)
+    try:
+        handle = os.fdopen(descriptor, mode, **({"encoding": "utf-8"} if "b" not in mode else {}))
+    except BaseException:
+        os.close(descriptor)
+        path.unlink(missing_ok=True)
+        raise
+    return path, handle
+
+
 def _snapshot_wav(audio_path: str | Path) -> tuple[Path, str]:
     """Copy the WAV to a private temporary file while hashing the copied bytes.
 
@@ -193,16 +211,18 @@ def _snapshot_wav(audio_path: str | Path) -> tuple[Path, str]:
     The caller deletes the returned file.
     """
     digest = hashlib.sha256()
-    descriptor, name = tempfile.mkstemp(prefix="audio_snapshot_", suffix=".wav")
-    snapshot = Path(name)
-    try:
-        with Path(audio_path).open("rb") as source, os.fdopen(descriptor, "wb") as target:
-            for block in iter(lambda: source.read(1 << 20), b""):
-                digest.update(block)
-                target.write(block)
-    except BaseException:
-        snapshot.unlink(missing_ok=True)
-        raise
+    # Open the source first: a missing or unreadable WAV then fails before any
+    # temporary file or descriptor exists, so nothing can leak across a batch.
+    with Path(audio_path).open("rb") as source:
+        snapshot, target = _private_file(prefix="audio_snapshot_", suffix=".wav", mode="wb")
+        try:
+            with target:
+                for block in iter(lambda: source.read(1 << 20), b""):
+                    digest.update(block)
+                    target.write(block)
+        except BaseException:
+            snapshot.unlink(missing_ok=True)
+            raise
     return snapshot, digest.hexdigest()
 
 
@@ -251,12 +271,11 @@ def write_features(cache_dir: str | Path, features: dict) -> Path:
     a writer can never modify a file another writer already published.
     """
     path = Path(cache_dir) / FEATURES_NAME
-    descriptor, name = tempfile.mkstemp(
-        prefix=f".{FEATURES_NAME}.", suffix=".tmp", dir=path.parent,
+    staging, handle = _private_file(
+        prefix=f".{FEATURES_NAME}.", suffix=".tmp", dir=path.parent, mode="w",
     )
-    staging = Path(name)
     try:
-        with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
+        with handle:
             handle.write(json.dumps(features, indent=2))
         staging.replace(path)
     except BaseException:

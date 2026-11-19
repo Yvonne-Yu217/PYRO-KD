@@ -15,25 +15,28 @@ before the fingerprint on purpose: a correctly stamped file can still carry a
 payload that would crash a consumer, and that must be reported whether or not
 the fingerprint helpers are available.
 
-The fingerprint helpers come from the audio-validation work (PR #16). Until
-that is merged they are missing and audio features are reported as
-"unverifiable_audio_features" rather than trusted on faith; once it is merged
-the same code verifies them with no change here.
+The WAV, its fingerprint and the structural rules come from
+src/utils/audio_features.py, the same helpers build_moments uses, so the
+selector evaluation and the moment builder accept and reject the same caches.
+In particular the WAV is the one the video's cache dir owns
+(audio_features.resolve_audio_path), never a recorded relative path resolved
+against the current working directory, and that same resolved WAV is used for
+the completeness check and the fingerprint. If the fingerprint helpers are
+unavailable, features are reported as "unverifiable_audio_features" rather
+than trusted on faith.
 """
 
 from __future__ import annotations
 
 import json
-import math
 from pathlib import Path
 from typing import Any
 
 from src.utils.media import MANIFEST_NAME, cache_is_complete, cache_is_current
 
-try:  # provided by the audio-validation change (#16)
-    from src.utils.audio_features import features_are_current, features_config_hash
-except ImportError:  # pragma: no cover - exercised by patching in tests
-    features_are_current = features_config_hash = None
+from src.utils.audio_features import (
+    features_are_current, features_config_hash, malformed_features, resolve_audio_path,
+)
 
 AUDIO_FEATURES_NAME = "audio_features.json"
 
@@ -73,47 +76,13 @@ def media_cache_problem(manifest: dict[str, Any]) -> str | None:
     return None
 
 
-def _is_number(value: Any) -> bool:
-    if isinstance(value, bool) or not isinstance(value, (int, float)):
-        return False
-    try:
-        return math.isfinite(value)
-    except OverflowError:  # a JSON integer too large for a float, e.g. 10**400
-        return False
-
-
-_GAP_FIELDS = {"start", "end", "rms", "onset"}
-
-
 def malformed_audio_features(features: Any) -> str | None:
     """A description of the first structural defect that would break a consumer, or None.
 
-    Every speech entry must be a [start, end] pair of finite numbers with
-    0 <= start <= end, and every gap a record with exactly the fields start, end,
-    rms and onset, finite, with 0 <= start <= end. (Gap(**record) is what
-    consumers do, so unknown or missing fields would raise there.)
+    Delegates to audio_features.malformed_features (speech [start, end] pairs and
+    exact Gap records, finite, 0 <= start <= end), so there is one validator.
     """
-    if not isinstance(features, dict):
-        return "features are not an object"
-    speech, gaps = features.get("speech"), features.get("gaps")
-    if not isinstance(speech, list):
-        return "speech is not a list"
-    if not isinstance(gaps, list):
-        return "gaps is not a list"
-    for index, pair in enumerate(speech):
-        if not isinstance(pair, (list, tuple)) or len(pair) != 2:
-            return f"speech[{index}] is not a [start, end] pair"
-        start, end = pair
-        if not (_is_number(start) and _is_number(end)) or not 0 <= start <= end:
-            return f"speech[{index}] needs finite numbers with 0 <= start <= end"
-    for index, gap in enumerate(gaps):
-        if not isinstance(gap, dict) or set(gap) != _GAP_FIELDS:
-            return f"gaps[{index}] must be a record with exactly {sorted(_GAP_FIELDS)}"
-        if not all(_is_number(gap[name]) for name in _GAP_FIELDS):
-            return f"gaps[{index}] has a non-numeric or non-finite value"
-        if not 0 <= gap["start"] <= gap["end"]:
-            return f"gaps[{index}] needs 0 <= start <= end"
-    return None
+    return malformed_features(features)
 
 
 def load_audio_features(cache_dir: str | Path) -> tuple[dict[str, Any] | None, str | None]:
@@ -121,11 +90,15 @@ def load_audio_features(cache_dir: str | Path) -> tuple[dict[str, Any] | None, s
     manifest, reason = read_manifest(cache_dir)
     if manifest is None:
         return None, reason
-    problem = media_cache_problem(manifest)
+    # Check completeness against the WAV this cache owns, the same file that is
+    # fingerprinted below; the frame and source checks are unchanged.
+    audio_path = resolve_audio_path(manifest, cache_dir)
+    problem = media_cache_problem(
+        {**manifest, "audio_path": str(audio_path) if audio_path is not None else None},
+    )
     if problem:
         return None, problem
-    audio_path = manifest.get("audio_path")
-    if not audio_path:
+    if audio_path is None:
         return None, NO_AUDIO_STREAM
     path = Path(cache_dir) / AUDIO_FEATURES_NAME
     if not path.is_file():
