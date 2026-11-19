@@ -30,7 +30,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.datasets import mtg_ad, reframed  # noqa: E402
 from src.generation.prompts import transcript_context, word_limit_for_gap  # noqa: E402
-from src.utils.audio_features import available_gap, load_current_features, speech_of  # noqa: E402
+from src.utils.audio_features import (  # noqa: E402
+    InvalidAudioPath, available_gap, load_current_features, owned_media_manifest, speech_of,
+)
 from src.utils.audio_selector import AudioSelector  # noqa: E402
 from src.utils.media import cache_is_complete, cache_is_current, frame_window, load_manifest  # noqa: E402
 from src.utils.selection import k_for_duration, uniform_timestamps  # noqa: E402
@@ -111,7 +113,13 @@ def main() -> None:
             except (OSError, UnicodeDecodeError, json.JSONDecodeError):
                 missing.append(video_id)
                 continue
-            if not cache_is_complete(manifest):
+            # Completeness is judged on the WAV this cache owns (the one the
+            # feature loader fingerprints), not a path relative to the cwd.
+            try:
+                complete = cache_is_complete(owned_media_manifest(manifest, cache))
+            except InvalidAudioPath:
+                complete = False
+            if not complete:
                 missing.append(video_id)
                 continue
             if not cache_is_current(manifest):

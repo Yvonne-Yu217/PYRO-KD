@@ -348,6 +348,10 @@ def malformed_features(features) -> str | None:
     return None
 
 
+class InvalidAudioPath(ValueError):
+    """The manifest's audio_path is neither null/empty nor a string."""
+
+
 def resolve_audio_path(manifest: dict, cache_dir: str | Path) -> Path | None:
     """The video's WAV, or None for a video without an audio stream.
 
@@ -357,10 +361,15 @@ def resolve_audio_path(manifest: dict, cache_dir: str | Path) -> Path | None:
     path could name another video's WAV. Only an absolute recorded path (a
     custom location) is used when the local file is absent; otherwise the
     local path is returned and callers report it as missing.
+
+    Raises InvalidAudioPath for a non-string audio_path (list, number, object,
+    boolean), which callers report per video instead of aborting a batch.
     """
     audio_path = manifest.get("audio_path")
-    if not audio_path:
+    if audio_path is None or audio_path == "":
         return None
+    if not isinstance(audio_path, str):
+        raise InvalidAudioPath(f"audio_path must be a string or null, got {type(audio_path).__name__}")
     recorded = Path(audio_path)
     local = Path(cache_dir) / (recorded.name or "audio_16k.wav")
     if local.exists():
@@ -370,19 +379,33 @@ def resolve_audio_path(manifest: dict, cache_dir: str | Path) -> Path | None:
     return local
 
 
+def owned_media_manifest(manifest: dict, cache_dir: str | Path) -> dict:
+    """The manifest with audio_path replaced by the WAV this cache dir owns.
+
+    Pass this to media.cache_is_complete so the completeness check looks at the
+    same WAV that is fingerprinted and analysed, independent of the working
+    directory. Frames and source fields are untouched. Raises InvalidAudioPath.
+    """
+    audio_path = resolve_audio_path(manifest, cache_dir)
+    return {**manifest, "audio_path": str(audio_path) if audio_path is not None else None}
+
+
 def load_current_features(
     cache_dir: str | Path, manifest: dict, config: dict | None = None,
 ) -> tuple[dict | None, str | None]:
     """(features, None) only if readable, well-formed and current for this WAV.
 
-    Otherwise (None, reason) with reason one of "no_audio_stream",
-    "no_audio_features", "unreadable_audio_features",
+    Otherwise (None, reason) with reason one of "invalid_audio_path",
+    "no_audio_stream", "no_audio_features", "unreadable_audio_features",
     "malformed_audio_features", "missing_wav" or "stale_audio_features", so
     callers can report why instead of using outdated or broken gaps. Structure
     is checked before the hash: a correctly stamped file can still carry a
     payload that would crash a consumer.
     """
-    audio_path = resolve_audio_path(manifest, cache_dir)
+    try:
+        audio_path = resolve_audio_path(manifest, cache_dir)
+    except InvalidAudioPath:
+        return None, "invalid_audio_path"
     if audio_path is None:
         return None, "no_audio_stream"
     if not (Path(cache_dir) / FEATURES_NAME).exists():

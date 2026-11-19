@@ -24,8 +24,12 @@ from src.utils.audio_features import (
 from src.utils.media import FrameEntry, MediaInfo, config_hash, preprocess_video
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_moments  # noqa: E402
 import cache_audio_features  # noqa: E402
+import cache_fixtures as fx  # noqa: E402
+import evaluate_selectors as ev  # noqa: E402
+from src.datasets.mtg_ad import parse_row  # noqa: E402
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -734,12 +738,128 @@ class CrossConsumerOwnershipTests(unittest.TestCase):
                 self.assertEqual(moments, (None, "malformed_audio_features"))
                 self.assertEqual(evaluation, (None, cache_checks.MALFORMED_AUDIO_FEATURES))
 
+    def build(self, selector):
+        out = Path(self.tmp.name) / f"{selector}.jsonl"
+        splits = Path(self.tmp.name) / "splits.json"
+        splits.write_text(json.dumps({"k_rule": {"rate_per_minute": 3}}))
+        with (patch.object(sys, "argv", ["build_moments.py", "--selector", selector,
+                                         "--splits", str(splits),
+                                         "--cache-dir", str(self.cache.parent), "--output", str(out)]),
+              patch.object(build_moments, "load_targets", return_value=[("changed", 60, [])])):
+            quiet(build_moments.main)
+        rows = [json.loads(line) for line in out.read_text().splitlines()]
+        status = json.loads(out.with_suffix(".report.json").read_text())["videos"][0]["status"]
+        return len(rows), status
+
+    def test_build_moments_gives_the_same_result_from_any_working_directory(self):
+        """Kiran (#16 re-re-review): completeness must use the owned WAV, not the cwd."""
+        write_features(self.cache, {"config_hash": features_config_hash(self.wav_a), "speech": [],
+                                    "gaps": [{"start": 0.0, "end": 60.0, "rms": 0.0, "onset": 0.0}]})
+        with_decoy = {sel: self.build(sel) for sel in ("U", "A")}
+        elsewhere = Path(self.tmp.name) / "empty-cwd"
+        elsewhere.mkdir()
+        os.chdir(elsewhere)
+        self.assertFalse(Path(self.relative).exists())
+        without_decoy = {sel: self.build(sel) for sel in ("U", "A")}
+        self.assertEqual(with_decoy, without_decoy)
+        self.assertEqual(with_decoy, {"U": (3, "ok"), "A": (3, "ok")})
+
     def test_missing_owned_wav_is_not_replaced_by_the_foreign_one(self):
         self.stamp(self.wav_b)
         self.wav_a.unlink()
         moments, evaluation = self.both()
         self.assertIsNone(moments[0])
         self.assertIsNone(evaluation[0])
+
+
+INVALID_AUDIO_PATHS = (["a.wav"], 7, 1.5, {"path": "a.wav"}, True, False)
+
+
+class InvalidAudioPathTests(unittest.TestCase):
+    """Kiran (#16 re-re-review): a non-string audio_path is a per-video problem, never a crash."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name)
+
+    def bad_then_good_caches(self, root, bad_value):
+        bad = fx.make_media_cache(root, "a_bad")
+        manifest = {**bad["manifest"], "audio_path": bad_value}
+        (bad["cache"] / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+        good = fx.make_media_cache(root, "b_good")
+        good["features"] = fx.write_audio_features(
+            good["cache"], good["manifest"], speech=[(0.0, 40.0)], gaps=[(40.25, 100.0)])
+        return bad, good
+
+    def test_loaders_return_reasons(self):
+        for value in INVALID_AUDIO_PATHS:
+            with self.subTest(audio_path=value):
+                with self.assertRaises(audio_features.InvalidAudioPath):
+                    resolve_audio_path({"audio_path": value}, self.root)
+                self.assertEqual(load_current_features(self.root, {"audio_path": value}),
+                                 (None, "invalid_audio_path"))
+        for value in (None, ""):
+            self.assertIsNone(resolve_audio_path({"audio_path": value}, self.root))
+
+    def test_selector_evaluation_scores_u_and_o_for_every_video(self):
+        videos = [parse_row({
+            "video_id": vid, "split": "validation", "category": "Vlog", "duration_seconds": 100.0,
+            "gt_ad_segments": [{"start_seconds": t, "text": "ad"} for t in (10.0, 50.0, 90.0)],
+            "transcript_segments": [], "visual_info": None,
+        }) for vid in ("a_bad", "b_good")]
+        for value in INVALID_AUDIO_PATHS:
+            for selectors in (["U", "O"], ["U", "O", "A"]):
+                with self.subTest(audio_path=value, selectors=selectors):
+                    root = Path(tempfile.mkdtemp(dir=self.root))
+                    self.bad_then_good_caches(root, value)
+                    self.assertEqual(cache_checks.load_audio_features(root / "a_bad"),
+                                     (None, cache_checks.MEDIA_INCOMPLETE))
+                    with fx.patched_audio_helpers():
+                        result = ev.run(videos, 3.48, selectors, root, 2.0, 50, 0)
+                    self.assertEqual(result["selectors"]["U"]["n_videos"], 2)
+                    self.assertEqual(result["selectors"]["O"]["n_videos"], 2)
+                    if "A" in selectors:
+                        self.assertEqual(result["selectors"]["A"]["n_videos"], 1)
+                        self.assertEqual(result["skipped_reasons"],
+                                         {"A": {cache_checks.MEDIA_INCOMPLETE: 1}})
+
+    def test_build_moments_skips_only_the_bad_video(self):
+        splits = self.root / "splits.json"
+        splits.write_text(json.dumps({"k_rule": {"rate_per_minute": 3}}))
+        for value in INVALID_AUDIO_PATHS:
+            for selector in ("U", "A"):
+                with self.subTest(audio_path=value, selector=selector):
+                    root = Path(tempfile.mkdtemp(dir=self.root))
+                    _, good = self.bad_then_good_caches(root, value)
+                    # Real fingerprint for the healthy cache so A can use it.
+                    write_features(good["cache"], {
+                        "config_hash": features_config_hash(good["wav"]), "speech": [],
+                        "gaps": [{"start": 0.0, "end": 60.0, "rms": 0.0, "onset": 0.0}]})
+                    out = root / "out.jsonl"
+                    with (patch.object(sys, "argv", ["build_moments.py", "--selector", selector,
+                                                     "--splits", str(splits), "--cache-dir", str(root),
+                                                     "--output", str(out)]),
+                          patch.object(build_moments, "load_targets",
+                                       return_value=[("a_bad", 60, []), ("b_good", 60, [])])):
+                        quiet(build_moments.main)
+                    rows = [json.loads(line) for line in out.read_text().splitlines()]
+                    report = {v["video_id"]: v["status"] for v in
+                              json.loads(out.with_suffix(".report.json").read_text())["videos"]}
+                    self.assertEqual({r["video_id"] for r in rows}, {"b_good"})
+                    self.assertEqual(report, {"a_bad": "missing_cache", "b_good": "ok"})
+
+    def test_cache_script_records_the_bad_video_and_continues(self):
+        root = self.root / "batch"
+        root.mkdir()
+        bad, good = self.bad_then_good_caches(root, ["a.wav"])
+        with patch.object(cache_audio_features, "compute_audio_features", side_effect=fake_compute):
+            code, _ = quiet(cache_audio_features.main, ["--cache-dir", str(root), "--overwrite"])
+        report = json.loads((root / cache_audio_features.REPORT_NAME).read_text())
+        self.assertEqual(code, 1)
+        self.assertEqual([f["video_id"] for f in report["failed"]], ["a_bad"])
+        self.assertIn("InvalidAudioPath", report["failed"][0]["error"])
+        self.assertEqual(report["computed"], 1)
 
 
 @unittest.skipUnless(shutil.which("bash"), "needs bash")

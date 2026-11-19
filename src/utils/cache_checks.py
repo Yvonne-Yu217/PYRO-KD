@@ -35,7 +35,8 @@ from typing import Any
 from src.utils.media import MANIFEST_NAME, cache_is_complete, cache_is_current
 
 from src.utils.audio_features import (
-    features_are_current, features_config_hash, malformed_features, resolve_audio_path,
+    InvalidAudioPath, features_are_current, features_config_hash, malformed_features,
+    owned_media_manifest,
 )
 
 AUDIO_FEATURES_NAME = "audio_features.json"
@@ -91,13 +92,16 @@ def load_audio_features(cache_dir: str | Path) -> tuple[dict[str, Any] | None, s
     if manifest is None:
         return None, reason
     # Check completeness against the WAV this cache owns, the same file that is
-    # fingerprinted below; the frame and source checks are unchanged.
-    audio_path = resolve_audio_path(manifest, cache_dir)
-    problem = media_cache_problem(
-        {**manifest, "audio_path": str(audio_path) if audio_path is not None else None},
-    )
+    # fingerprinted below; the frame and source checks are unchanged. A
+    # non-string audio_path cannot describe a complete cache.
+    try:
+        owned = owned_media_manifest(manifest, cache_dir)
+    except InvalidAudioPath:
+        return None, MEDIA_INCOMPLETE
+    problem = media_cache_problem(owned)
     if problem:
         return None, problem
+    audio_path = owned["audio_path"]
     if audio_path is None:
         return None, NO_AUDIO_STREAM
     path = Path(cache_dir) / AUDIO_FEATURES_NAME
