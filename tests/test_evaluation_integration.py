@@ -68,19 +68,47 @@ class EvaluationIntegrationTests(unittest.TestCase):
         self.loader.assert_called_once_with(Path(self.tmp.name, "dataset"), "validation")
 
     def test_generation_errors_are_skipped_counted_and_preserved(self) -> None:
-        failed = {"video_id": "a", "time": 20, "id": "retry", "error": "OOM", "prior": "P0"}
-        # The same ID may fail and then succeed on a later generation attempt.
-        result = self.evaluate([failed, row("a", 10, id="retry", prior="P0")])
+        # An error that no later attempt resolved still stands: skipped as a prediction,
+        # counted, preserved, and the run is partial.
+        failed = {"video_id": "a", "time": 20, "id": "never-fixed", "error": "OOM", "prior": "P0"}
+        result = self.evaluate([failed, row("a", 10, id="fine", prior="P0")])
         self.assertEqual(result["num_input_rows"], 2)
         self.assertEqual(result["num_successful_rows"], 1)
         self.assertEqual(result["num_generation_errors"], 1)
         self.assertEqual(result["generation_errors"], [failed])
+        self.assertEqual(result["num_superseded_error_rows"], 0)
         self.assertEqual(result["status"], "partial")
         per_video = result["videos"][0]
         self.assertEqual(per_video["num_generation_errors"], 1)
         self.assertEqual(per_video["generation_errors"], [failed])
         self.assertEqual((per_video["temporal"]["tp"], per_video["temporal"]["fn"]), (1, 1))
         self.assertEqual(self.bert.call_args.args[0], ["A description."])
+
+    def test_error_superseded_by_a_later_success_is_history_not_a_standing_error(self) -> None:
+        # The same ID may fail and then succeed on a later (requeued) attempt. The earlier
+        # error stays visible as history but no longer counts, so the run is not "partial".
+        failed = {"video_id": "a", "time": 20, "id": "retry", "error": "OOM", "prior": "P0"}
+        result = self.evaluate([failed, row("a", 10, id="retry", prior="P0")])
+        self.assertEqual(result["num_input_rows"], 2)
+        self.assertEqual(result["num_successful_rows"], 1)
+        self.assertEqual(result["num_generation_errors"], 0)
+        self.assertEqual(result["generation_errors"], [])
+        self.assertEqual(result["num_superseded_error_rows"], 1)
+        self.assertEqual(result["superseded_error_rows"], [failed])
+        self.assertEqual(result["status"], "ok")
+        self.assertEqual(result["videos"][0]["num_generation_errors"], 0)
+        self.assertEqual(self.bert.call_args.args[0], ["A description."])
+
+    def test_repeated_errors_for_one_id_count_once(self) -> None:
+        first = {"video_id": "a", "time": 20, "id": "cut", "error": "hit_token_limit: attempt 1"}
+        second = {**first, "error": "hit_token_limit: attempt 2"}
+        third = {**first, "error": "hit_token_limit: attempt 3"}
+        result = self.evaluate([first, row("a", 10, id="fine"), second, third])
+        self.assertEqual(result["num_input_rows"], 4)
+        self.assertEqual(result["num_generation_errors"], 1)
+        self.assertEqual(result["generation_errors"], [third])  # the latest error stands
+        self.assertEqual(result["superseded_error_rows"], [first, second])
+        self.assertEqual(result["status"], "partial")
 
     def test_any_error_key_marks_a_failed_row_even_with_output(self) -> None:
         result = self.evaluate([row("a", 10, error=None)])
