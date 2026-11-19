@@ -26,6 +26,7 @@ selection logic and its tests run without them.
 from __future__ import annotations
 
 import bisect
+import contextlib
 from dataclasses import dataclass
 import hashlib
 import io
@@ -36,6 +37,11 @@ from pathlib import Path
 import time
 import uuid
 from typing import Any, Callable, Sequence
+
+try:
+    import fcntl
+except ImportError:  # pragma: no cover - non-POSIX
+    fcntl = None
 
 from src.utils import cache_checks
 from src.utils.media import config_hash
@@ -234,6 +240,29 @@ def _generation_files(cache_dir: Path) -> list[Path]:
     return [p for p in cache_dir.glob(f"{EMBEDDINGS_PREFIX}.*.npy") if p.is_file()]
 
 
+LOCK_NAME = ".visual_features.lock"
+
+
+@contextlib.contextmanager
+def _cache_lock(cache_dir: Path):
+    """Exclusive advisory lock on one video's visual cache (blocks until it is free).
+
+    flock is released when the descriptor closes, including if the process dies, so a
+    killed job cannot leave the cache locked. The lock file itself is left in place:
+    removing it would let two writers lock different files. Where flock is unavailable
+    (non-POSIX) this does nothing and concurrent writers are not serialized.
+    """
+    if fcntl is None:
+        yield
+        return
+    with open(cache_dir / LOCK_NAME, "a+b") as handle:
+        fcntl.flock(handle, fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(handle, fcntl.LOCK_UN)
+
+
 def _generation_intact(path: Path, digest: str) -> bool:
     """True if the file exists and its bytes hash to the digest it is named for."""
     try:
@@ -250,8 +279,10 @@ def write_features(cache_dir: str | Path, features: dict, embeddings) -> Path:
     2. Stage the JSON record (which names that generation and its sha256), then
        commit it with an atomic rename. Until this succeeds the previous JSON and
        the previous embeddings generation are untouched and still a valid pair.
-    3. After the commit, remove older generations (best effort; recent ones are kept
-       in case another writer is mid-publish).
+    3. After the commit, remove older generations past a grace period, never the one the
+       committed record names.
+    Steps 1-3 run under a per-cache lock (see _cache_lock), so writers and collection
+    are serialized.
     On any failure before the commit, staging files are removed and the previous pair
     stays valid; the published generation is kept (another writer may have committed
     a record that references the same content-named file) and collected later.
@@ -279,40 +310,43 @@ def write_features(cache_dir: str | Path, features: dict, embeddings) -> Path:
     generation = cache_dir / name
     record = {**features, "embeddings": {"file": name, "sha256": digest, "shape": list(array.shape)}}
     path = cache_dir / FEATURES_NAME
-    staged: list[Path] = []
-    try:
-        if not _generation_intact(generation, digest):
-            # Absent, or present with different bytes (a corrupt or truncated earlier
-            # write): publish the correct bytes atomically over it.
-            staging = _unique_tmp(cache_dir, name)
-            staged.append(staging)
-            staging.write_bytes(data)
-            staging.replace(generation)
-        record_tmp = _unique_tmp(cache_dir, FEATURES_NAME)
-        staged.append(record_tmp)
-        record_tmp.write_text(json.dumps(record, indent=2), encoding="utf-8")
-        record_tmp.replace(path)  # the commit
-    except BaseException:
-        # Only staging files are removed. A published generation is immutable and named by
-        # its content, so another writer may have committed a record that references it
-        # (identical embeddings give an identical name); deleting it here could destroy
-        # that writer's valid cache. An unreferenced one is collected after a later commit.
-        for leftover in staged:
-            leftover.unlink(missing_ok=True)
-        raise
-    cutoff = time.time() - GENERATION_GRACE_SECONDS
-    # Keep whatever the record now on disk names (it may be another writer's), plus this one.
-    keep = {generation.name}
-    committed, _ = _read_features(cache_dir)
-    reference = committed.get("embeddings") if committed else None
-    if isinstance(reference, dict) and isinstance(reference.get("file"), str):
-        keep.add(reference["file"])
-    for other in _generation_files(cache_dir):
+    with _cache_lock(cache_dir):
+        # Verification/adoption of the generation, the JSON commit and collection all run
+        # under one per-cache lock, so no writer can collect a generation that another is
+        # adopting or has just committed (a file's age says nothing about that).
+        staged: list[Path] = []
         try:
-            if other.name not in keep and other.stat().st_mtime <= cutoff:
-                other.unlink()
-        except OSError:
-            pass
+            if not _generation_intact(generation, digest):
+                # Absent, or present with different bytes (a corrupt or truncated earlier
+                # write): publish the correct bytes atomically over it.
+                staging = _unique_tmp(cache_dir, name)
+                staged.append(staging)
+                staging.write_bytes(data)
+                staging.replace(generation)
+            record_tmp = _unique_tmp(cache_dir, FEATURES_NAME)
+            staged.append(record_tmp)
+            record_tmp.write_text(json.dumps(record, indent=2), encoding="utf-8")
+            record_tmp.replace(path)  # the commit
+        except BaseException:
+            # Only staging files are removed; the immutable generation stays and an
+            # unreferenced one is collected after a later commit.
+            for leftover in staged:
+                leftover.unlink(missing_ok=True)
+            raise
+        cutoff = time.time() - GENERATION_GRACE_SECONDS
+        # Keep what the committed record names (re-read under the lock, so it is current)
+        # and this call's generation; remove other generations past the grace period.
+        keep = {generation.name}
+        committed, _ = _read_features(cache_dir)
+        reference = committed.get("embeddings") if committed else None
+        if isinstance(reference, dict) and isinstance(reference.get("file"), str):
+            keep.add(reference["file"])
+        for other in _generation_files(cache_dir):
+            try:
+                if other.name not in keep and other.stat().st_mtime <= cutoff:
+                    other.unlink()
+            except OSError:
+                pass
     return path
 
 

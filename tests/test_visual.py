@@ -6,6 +6,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
 from unittest.mock import patch
 
@@ -334,6 +335,11 @@ class TransactionalPublishTests(unittest.TestCase):
         self.new_embeddings = self.embeddings[::-1].copy()  # a different matrix, so a different generation
         self.old_files = sorted(p.name for p in self.dir.iterdir())
 
+    @staticmethod
+    def save_matrix(path, matrix):
+        with path.open("wb") as handle:
+            np.save(handle, matrix)
+
     def fail_json_commit(self, before_failure=None):
         """Patch Path.replace so the first rename onto the JSON record fails (after running before_failure)."""
         real_replace = Path.replace
@@ -364,26 +370,107 @@ class TransactionalPublishTests(unittest.TestCase):
             vf.write_features(self.dir, self.features, self.embeddings)
         self.assertEqual(sorted(p.name for p in self.dir.iterdir()), self.old_files)
 
-    # Kiran, #19 P2: another writer commits the same content-named generation before our commit fails.
-    def test_a_failed_writer_does_not_delete_a_generation_another_writer_committed(self):
-        def other_writer_commits():
-            vf.write_features(self.dir, self.features, self.new_embeddings)  # identical embeddings
+    def interleave(self, paused_writes, other_writes, pause_at, fail_paused=False, age_existing=True):
+        """Run two writers so `other` starts while `paused` is stopped at a chosen point.
 
-        with self.fail_json_commit(before_failure=other_writer_commits):
+        pause_at is "commit" (just before the paused writer's JSON rename) or "keep_read"
+        (just after it re-read the committed record to decide what to keep). `other` is
+        released as soon as the paused writer is stopped; if the cache lock serializes the
+        two, `other` simply waits until the paused writer is done (the pause times out).
+        Returns the exceptions raised, keyed by writer.
+        """
+        import os
+        import threading
+
+        if age_existing:  # older than the default grace period, so collectable by age alone
+            old = self.dir / vf.load_features(self.dir)["embeddings"]["file"]
+            aged = time.time() - vf.GENERATION_GRACE_SECONDS - 60
+            os.utime(old, (aged, aged))
+        at_pause, other_done = threading.Event(), threading.Event()
+        armed, errors = [True], {}
+        real_replace, real_read = Path.replace, vf._read_features
+
+        def pause():
+            if threading.current_thread().name == "paused" and armed[0]:
+                armed[0] = False
+                at_pause.set()
+                other_done.wait(0.5)
+                return True
+            return False
+
+        def replace(source, target):
+            if pause_at == "commit" and Path(target).name == vf.FEATURES_NAME and pause() and fail_paused:
+                raise OSError("disk full")
+            return real_replace(source, target)
+
+        def read(directory):
+            result = real_read(directory)
+            if pause_at == "keep_read":
+                pause()
+            return result
+
+        def run(name, embeddings, done=None):
+            try:
+                vf.write_features(self.dir, self.features, embeddings)
+            except BaseException as exc:  # noqa: BLE001 - reported to the test
+                errors[name] = exc
+            finally:
+                if done:
+                    done.set()
+
+        with patch.object(Path, "replace", replace), patch.object(vf, "_read_features", read):
+            first = threading.Thread(target=run, args=("paused", paused_writes), name="paused")
+            first.start()
+            self.assertTrue(at_pause.wait(10))
+            second = threading.Thread(target=run, args=("other", other_writes, other_done), name="other")
+            second.start()
+            first.join(30)
+            second.join(30)
+        self.assertFalse(first.is_alive() or second.is_alive(), "writers deadlocked")
+        return errors
+
+    def assert_committed_pair_is_usable(self):
+        record = vf.load_features(self.dir)
+        self.assertIsNotNone(record)
+        self.assertTrue((self.dir / record["embeddings"]["file"]).exists(), "committed record names a missing file")
+        self.assertIsNotNone(vf.load_embeddings(self.dir))
+
+    # Kiran, #19 P2 (round 2): another writer commits the same content-named generation before our commit fails.
+    def test_a_failed_writer_does_not_delete_a_generation_another_writer_committed(self):
+        errors = self.interleave(self.new_embeddings, self.new_embeddings, "commit", fail_paused=True)
+        self.assertEqual(set(errors), {"paused"})
+        self.assertIsInstance(errors["paused"], OSError)
+        self.assert_committed_pair_is_usable()
+        np.testing.assert_allclose(vf.load_embeddings(self.dir), self.new_embeddings, atol=1e-3)
+
+    # Kiran, #19 P2 (round 3), interleaving 1: B adopts an aged generation and stages its JSON; A
+    # publishes different embeddings and collects the aged one before B's rename.
+    def test_collection_cannot_remove_an_aged_generation_another_writer_is_adopting(self):
+        errors = self.interleave(self.embeddings, self.new_embeddings, "commit")
+        self.assertEqual(errors, {})
+        self.assert_committed_pair_is_usable()
+
+    # Interleaving 2: A re-reads the committed record for its keep set, then B commits the aged
+    # generation before A lists and deletes.
+    def test_collection_cannot_remove_a_generation_committed_after_its_keep_set_was_read(self):
+        errors = self.interleave(self.new_embeddings, self.embeddings, "keep_read")
+        self.assertEqual(errors, {})
+        self.assert_committed_pair_is_usable()
+
+    def test_the_lock_is_released_after_a_failed_write_and_never_blocks_a_later_one(self):
+        with self.fail_json_commit():
             with self.assertRaises(OSError):
                 vf.write_features(self.dir, self.features, self.new_embeddings)
-        np.testing.assert_allclose(vf.load_embeddings(self.dir), self.new_embeddings, atol=1e-3)
-        self.assertIsNotNone(vf.load_current_features(self.dir, FeatureCacheTests.MANIFEST))
+        vf.write_features(self.dir, self.features, self.new_embeddings)  # would hang if still locked
+        self.assert_committed_pair_is_usable()
+        self.assertTrue((self.dir / vf.LOCK_NAME).exists())  # kept: removing it would split the lock
 
-    def test_collection_never_removes_the_generation_the_committed_record_names(self):
-        record = vf.load_features(self.dir)
-        with patch.object(vf, "GENERATION_GRACE_SECONDS", -1.0):
-            # A writer whose own generation differs must not collect the one now committed on disk.
-            real = vf._read_features
-            with patch.object(vf, "_read_features", side_effect=lambda d: (record, None)):
-                vf.write_features(self.dir, self.features, self.new_embeddings)
-            self.assertTrue((self.dir / record["embeddings"]["file"]).exists())
-            self.assertIs(vf._read_features, real)
+    def test_collection_still_removes_unreferenced_aged_generations(self):
+        errors = self.interleave(self.new_embeddings, self.new_embeddings, "commit", age_existing=True)
+        self.assertEqual(errors, {})
+        generations = [p.name for p in self.dir.iterdir() if p.name.startswith(vf.EMBEDDINGS_PREFIX)]
+        self.assertEqual(len(generations), 1)  # the aged, now-unreferenced one was collected
+        self.assert_committed_pair_is_usable()
 
     # Kiran, #19 P2: an existing digest-named file with the wrong bytes must be repaired, not adopted.
     def test_a_corrupt_file_under_the_expected_name_is_repaired_by_the_next_write(self):
@@ -421,7 +508,7 @@ class TransactionalPublishTests(unittest.TestCase):
         record = json.loads(self.old_json)
         generation = self.dir / record["embeddings"]["file"]
         cases = {
-            "digest mismatch": lambda: np.save(generation.open("wb"), self.embeddings[::-1] + 1.0),
+            "digest mismatch": lambda: self.save_matrix(generation, self.embeddings[::-1] + 1.0),
             "unreadable bytes": lambda: generation.write_bytes(b"corrupt"),
             "missing generation": lambda: generation.unlink(),
         }
