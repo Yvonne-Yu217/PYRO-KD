@@ -299,12 +299,12 @@ def malformed_cues(record: Any) -> str | None:
     return None
 
 
-def write_cues(cache_dir: str | Path, record: dict) -> Path:
+def write_cues(cache_dir: str | Path, record: dict, name: str = CUES_NAME) -> Path:
     """Atomic write through a private staging file (same pattern as audio features)."""
     from src.utils.audio_features import _private_file
 
-    path = Path(cache_dir) / CUES_NAME
-    staging, handle = _private_file(prefix=f".{CUES_NAME}.", suffix=".tmp", dir=path.parent, mode="w")
+    path = Path(cache_dir) / name
+    staging, handle = _private_file(prefix=f".{name}.", suffix=".tmp", dir=path.parent, mode="w")
     try:
         with handle:
             handle.write(json.dumps(record))
@@ -315,9 +315,9 @@ def write_cues(cache_dir: str | Path, record: dict) -> Path:
     return path
 
 
-def read_cues(cache_dir: str | Path) -> tuple[dict | None, str | None]:
+def read_cues(cache_dir: str | Path, name: str = CUES_NAME) -> tuple[dict | None, str | None]:
     """(record, None) if readable and well-formed; otherwise (None, reason). Never raises."""
-    path = Path(cache_dir) / CUES_NAME
+    path = Path(cache_dir) / name
     if not path.is_file():
         return None, NO_CUES
     try:
@@ -330,14 +330,14 @@ def read_cues(cache_dir: str | Path) -> tuple[dict | None, str | None]:
 
 
 def load_cues_for_selection(
-    cache_dir: str | Path, audio_path: str | Path | None, vad_features: dict | None,
+    cache_dir: str | Path, audio_path: str | Path | None, vad_features: dict | None, name: str = CUES_NAME,
 ) -> tuple[dict | None, str | None]:
     """Consumer-side check (selectors): well-formed and computed from this exact WAV
     and VAD result. Backend identity is recorded in the file and reported, not
     re-derived, because selectors do not construct backends."""
     from src.utils.audio_features import wav_digest
 
-    record, reason = read_cues(cache_dir)
+    record, reason = read_cues(cache_dir, name)
     if record is None:
         return None, reason
     if audio_path is None or vad_features is None:
@@ -353,11 +353,12 @@ def load_cues_for_selection(
 
 def load_current_cues(
     cache_dir: str | Path, audio_path: str | Path, vad_features: dict, backends: CueBackends, config: dict | None = None,
+    name: str = CUES_NAME,
 ) -> tuple[dict | None, str | None]:
     """Cues only if well-formed and stamped for this WAV, VAD result, config and backends."""
     from src.utils.audio_features import wav_digest
 
-    record, reason = read_cues(cache_dir)
+    record, reason = read_cues(cache_dir, name)
     if record is None:
         return None, reason
     try:

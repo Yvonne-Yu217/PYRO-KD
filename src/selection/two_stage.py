@@ -16,9 +16,13 @@
    MMR (score - lambda * max similarity to the selected set), where similarity
    is CLIP cosine when embeddings exist and a temporal kernel otherwise.
 
-VN can be "local" (change to the previous frame, as in V) or "memory"
-(1 - max cosine to the moments already selected: the running context memory
-of §3.3/§5.5; ablation 8). Ties in score go to the candidate farthest from
+VN can be "local" (change to the previous frame, as in V) or "memory": a
+blend (1 - b) * local + b * memory novelty, where memory novelty is
+1 - max cosine to the moments already selected (the running context memory of
+§3.3/§5.5; ablation 8), normalized over the remaining candidates, and 1 for
+everything while the memory is empty. b = 1 is the proposal's pure definition;
+it lets an undescribed static frame outrank a shot cut, so the default keeps
+half of the local change signal (untuned, like every weight here). Ties in score go to the candidate farthest from
 everything selected (and from the clip ends), then earlier time, so equal-score
 candidates spread over the video instead of packing at its start.
 
@@ -61,6 +65,7 @@ DEFAULT_CONFIG: dict[str, Any] = {
     "tts_words_per_second": 2.5,  # base TTS rate; rendered at tts_speed (1.2x -> 3 words/s)
     "tts_speed": 1.2,
     "novelty_mode": "local",      # local | memory
+    "memory_blend": 0.5,          # memory mode: VN = (1 - b) * local + b * memory novelty; b = 1 is pure memory
     "diversity": "tmin",          # tmin | mmr
     "mmr_lambda": 0.3,
     "min_separation": MIN_SEPARATION_SECONDS,
@@ -290,6 +295,9 @@ def greedy_select(
     audio_change = bundle.audio_change()
     use_memory = cfg["novelty_mode"] == "memory" and bundle.embeddings is not None
     use_mmr = cfg["diversity"] == "mmr"
+    blend = float(cfg["memory_blend"])
+    if not 0.0 <= blend <= 1.0:
+        raise ValueError("memory_blend must be in [0, 1]")
 
     emb = None
     if bundle.embeddings is not None and (use_memory or use_mmr):
@@ -330,16 +338,19 @@ def greedy_select(
             break
         any_taken = bool(state.times or chosen)
         memory_vn = None
-        if use_memory and (state.memory or chosen):
-            raw = {i: max(0.0, 1.0 - float(max_sim[i])) for i in eligible}
-            peak = max(raw.values()) or 1.0
-            memory_vn = {i: raw[i] / peak for i in eligible}
+        if use_memory:
+            if state.memory or chosen:
+                raw = {i: max(0.0, 1.0 - float(max_sim[i])) for i in eligible}
+                peak = max(raw.values()) or 1.0
+                memory_vn = {i: raw[i] / peak for i in eligible}
+            else:
+                memory_vn = {i: 1.0 for i in eligible}
 
         def key(i):
             c = candidates[i]
             score = c.score
             if memory_vn is not None:
-                vn = memory_vn[i]
+                vn = (1.0 - blend) * c.vn + blend * memory_vn[i]
                 avd = vn * (1.0 - audio_change[bundle.index(c.event_time)])
                 score += a * (vn - c.vn) + e_w * (avd - c.avd)
             if use_mmr and any_taken:
