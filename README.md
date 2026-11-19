@@ -50,6 +50,19 @@ bash hpc/setup_env.sh && bash hpc/download_models.sh && bash hpc/prepare_data.sh
 bash hpc/submit.sh qwen --limit 4                                                    # GPU smoke test
 ```
 
+## Selector-only evaluation (no GPU, no videos for U and O)
+
+```bash
+python scripts/evaluate_selectors.py --set dev                        # the 10 dev videos
+python scripts/evaluate_selectors.py --set validation --selectors U O # all 332 validation videos
+```
+
+Scores where each selector places its K moments against the professional AD start times (temporal precision, recall and F1 within ±2 s, one-to-one matching), with paired bootstrap 95% intervals over videos and an F1-by-tolerance sweep. A is included when `audio_features.json` exists for a video and skipped otherwise. This is the zero-model-cost result for RQ1(a), and the oracle row gives the RQ4 headroom. Do not tune on `--set test`.
+
+Cached features are validated before use (`src/utils/cache_checks.py`): the media cache must be complete and current, and audio features readable and matching the current WAV and manifest (this uses the fingerprint helpers from #16; until that merges, audio features are reported as `unverifiable_audio_features`). A video that fails a check is skipped for A with an explicit reason in the report, and a broken audio cache never stops U and O.
+
+Some MTG-AD videos list AD starts after their declared duration (10 starts in 2 of the 332 validation videos, none in dev or test). By default those starts are **excluded from the ground truth for every selector** and reported with the affected video IDs and counts. `--keep-out-of-bounds` scores against every annotated start instead and labels the result an unrestricted annotation upper bound, since O may then place moments outside the clip. Nothing is clamped or dropped silently.
+
 ## Layout
 
 - `src/datasets/`: MTG-AD (primary), REFRAMED (movie check), and EgoSchema loaders.
@@ -59,5 +72,5 @@ bash hpc/submit.sh qwen --limit 4                                               
 - `src/utils/visual_selector.py`: CLIP novelty scoring for V (in progress).
 - `src/generation/`: transformers VLM loader and generator, and the P0/P1 prompts.
 - `src/evaluation/`: temporal P/R/F1, BERTScore, sentence cosine, LLM-judge rubric.
-- `scripts/`: data preparation, moment building, and AD generation (`run_ad_vlm.py`).
+- `scripts/`: data preparation, moment building, AD generation (`run_ad_vlm.py`), scoring of generated AD (`evaluate_ad.py`), and selector-only timing evaluation (`evaluate_selectors.py`).
 - `hpc/`: Cloud Bursting setup, model download, data prep, and job submission.
