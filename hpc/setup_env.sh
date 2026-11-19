@@ -44,6 +44,8 @@ pip install -q --upgrade torch torchvision
 pip install -q --upgrade tqdm torchmetrics opencv-python-headless librosa silero-vad \
   scenedetect open-clip-torch bert-score sentence-transformers cryptography
 pip install -q --upgrade transformers accelerate pillow "huggingface_hub[cli]" hf_transfer torchcodec bitsandbytes yt-dlp
+# Audio-cue streams (VAD-gated Whisper; AST/CLAP come with transformers) and audio I/O.
+pip install -q --upgrade faster-whisper soundfile scipy
 python - <<PY
 import torch, transformers
 print("torch", torch.__version__, "| transformers", transformers.__version__)

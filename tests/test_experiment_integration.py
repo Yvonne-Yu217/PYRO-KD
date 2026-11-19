@@ -267,6 +267,62 @@ audio_native_model = "m2"
         self.assertTrue(qa["timeline_comparisons"])
 
 
+    def test_06_tuning_is_dev_only_and_cross_validated(self):
+        from src.experiments.data import load_records
+        from src.experiments.tuning import tune
+
+        cfg = cfgmod.load_config(self.config)
+        result = tune(cfg, load_records(cfg), "AV", {"weights.nse": [-0.5, 0.5], "memory_blend": [0.5, 1.0]}, folds=2)
+        self.assertEqual(len(result["all_points"]), 4)
+        self.assertEqual(result["n_videos_scored"], 2)  # noaudio has no VAD, so AV cannot run there
+        self.assertEqual(len(result["cv"]), 2)
+        self.assertIsNotNone(result["cv_held_out_mean_f1"])
+        test_cfg = cfgmod.apply_overrides(cfg, ['dataset.split="test"'])
+        with self.assertRaises(ConfigError):
+            tune(test_cfg, [], "AV")
+
+    def test_07_cpu_cue_caching_script_resumes(self):
+        import cache_audio_cues
+
+        argv = ["--cache-dir", str(self.cache_root), "--no-asr", "--no-tagger", "--no-clap", "--text-encoder", "lexical",
+                "--dataset-transcripts", str(self.data), "--output-name", "audio_cues.cpu.json"]
+        self.assertEqual(cache_audio_cues.main(argv), 0)
+        report = json.loads((self.cache_root / "audio_cues_report.json").read_text())
+        self.assertEqual(sorted(report["computed"]), ["silent", "talky"])
+        self.assertEqual(report["skipped"], {"noaudio": "no_audio_stream"})
+        record = json.loads((self.cache_root / "talky" / "audio_cues.cpu.json").read_text())
+        self.assertEqual(record["asr"]["source"], "dataset")
+        self.assertTrue(any(c["kind"] == "deictic" for c in record["speech_cues"]))
+        self.assertTrue(record["streams"]["acoustic"].startswith("ok"))
+        self.assertEqual(cache_audio_cues.main(argv), 0)
+        report = json.loads((self.cache_root / "audio_cues_report.json").read_text())
+        self.assertEqual(sorted(report["current"]), ["silent", "talky"])  # resume: nothing recomputed
+
+    def test_08_exemplars_and_precommit(self):
+        import build_p1_exemplars
+        import precommit_checks
+
+        from src.generation.priors import MissingAsset
+
+        splits = Path(self.tmp.name) / "splits.json"
+        out = Path(self.tmp.name) / "ex.json"
+        argv = ["--data-dir", str(self.data), "--splits", str(splits), "--output", str(out), "--max-words", "8"]
+        splits.write_text(json.dumps({"dev": {"videos": [{"video_id": "talky"}]}, "test": {"video_ids": []}}))
+        with self.assertRaises(MissingAsset):  # only 2 eligible videos left: refuse, never reuse or invent
+            build_p1_exemplars.main(argv)
+        splits.write_text(json.dumps({"dev": {"videos": []}, "test": {"video_ids": []}}))
+        self.assertEqual(build_p1_exemplars.main(argv), 0)
+        record = json.loads(out.read_text())
+        self.assertEqual(len({e["video_id"] for e in record["exemplars"]}), 3)
+        texts = {a for r in map(json.loads, (self.data / "validation.jsonl").read_text().splitlines())
+                 for a in (g["text"] for g in r["gt_ad_segments"])}
+        self.assertTrue(all(e["text"] in texts for e in record["exemplars"]))  # real annotation lines only
+        report_path = Path(self.tmp.name) / "pre.json"
+        self.assertEqual(precommit_checks.main(["--output", str(report_path)]), 0)
+        statuses = {r["check"]: r["status"] for r in json.loads(report_path.read_text())}
+        self.assertEqual(set(statuses.values()), {"blocked"})
+
+
 class ConfigTests(unittest.TestCase):
     def write(self, text):
         handle = tempfile.NamedTemporaryFile("w", suffix=".toml", delete=False)
