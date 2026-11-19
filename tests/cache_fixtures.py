@@ -12,7 +12,10 @@ import json
 from pathlib import Path
 from unittest.mock import patch
 
+import numpy as np
+
 from src.utils import cache_checks
+from src.utils import visual_features as vf
 from src.utils.media import _source_fingerprint
 
 
@@ -33,16 +36,25 @@ def patched_audio_helpers():
         yield
 
 
-def make_media_cache(root, video_id, audio=True, manifest_hash="m1"):
-    """Create <root>/<video_id>/ with a complete, current media cache; returns its paths."""
+def make_media_cache(root, video_id, audio=True, manifest_hash="m1", frame_times=(0.0,)):
+    """Create <root>/<video_id>/ with a complete, current media cache; returns its paths.
+
+    One frame file is written per entry of frame_times, and the manifest records them
+    at those timestamps, so feature timelines can be aligned with (or deliberately
+    different from) the cached frames.
+    """
     root = Path(root)
     source = root / "sources" / f"{video_id}.mp4"
     source.parent.mkdir(parents=True, exist_ok=True)
     source.write_bytes(b"source video bytes " + video_id.encode())
     cache = root / video_id
     (cache / "frames").mkdir(parents=True, exist_ok=True)
+    frames = []
+    for index, timestamp in enumerate(frame_times):
+        frame_path = cache / "frames" / f"{index:06d}.jpg"
+        frame_path.write_bytes(b"jpg")
+        frames.append({"index": index, "timestamp": float(timestamp), "path": str(frame_path)})
     frame = cache / "frames" / "000000.jpg"
-    frame.write_bytes(b"jpg")
     wav = cache / "audio_16k.wav"
     if audio:
         wav.write_bytes(b"RIFF....audio")
@@ -51,10 +63,26 @@ def make_media_cache(root, video_id, audio=True, manifest_hash="m1"):
         "settings": {"source_fingerprint": _source_fingerprint(source)},
         "config_hash": manifest_hash,
         "audio_path": str(wav) if audio else None,
-        "frames": [{"index": 0, "timestamp": 0.0, "path": str(frame)}],
+        "frames": frames,
     }
     (cache / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
     return {"cache": cache, "source": source, "wav": wav, "frame": frame, "manifest": manifest}
+
+
+def make_visual_cache(root, video_id, visual, embeddings=None, audio=False, manifest_hash="m1"):
+    """A complete, current media cache plus visual features published as a pair.
+
+    visual is {"frame_times", "novelty", "shots"}; the manifest's frames sit at the same
+    timestamps, and the record is stamped for this manifest, as the caching script would.
+    """
+    paths = make_media_cache(
+        root, video_id, audio=audio, manifest_hash=manifest_hash, frame_times=visual["frame_times"])
+    features = {**visual, "config": vf.DEFAULT_CONFIG,
+                "config_hash": vf.features_hash(paths["manifest"], vf.DEFAULT_CONFIG)}
+    count = len(visual["frame_times"])
+    embeddings = np.eye(count)[:, :4] if embeddings is None else embeddings
+    vf.write_features(paths["cache"], features, embeddings)
+    return paths
 
 
 def write_audio_features(
