@@ -6,11 +6,12 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import ANY, Mock, patch
 
 from src.generation.prompts import MAX_WORDS, word_limit_for_gap
 from src.utils.audio_features import (
-    Gap, available_gap, gaps_of, invert_to_gaps, load_features, mean_in_window,
+    Gap, available_gap, features_config_hash, gaps_of, invert_to_gaps, load_current_features,
+    load_features, mean_in_window,
     merge_segments, speech_of, write_features,
 )
 from src.utils.audio_selector import AudioSelector
@@ -221,7 +222,10 @@ class BuildMomentsTests(unittest.TestCase):
                 preprocess_video(good_source, good_cache)
                 features = features_for([Gap(0, 60, 0, 0)])
                 write_features(cache, features)
-                write_features(good_cache, features)
+                good_features = {
+                    **features, "config_hash": features_config_hash(good_cache / "audio_16k.wav"),
+                }
+                write_features(good_cache, good_features)
                 before = {p.relative_to(cache): p.read_bytes() for p in cache.rglob("*") if p.is_file()}
                 source.write_bytes(b"different replacement source B")
                 audio.side_effect = RuntimeError("B audio extraction failed")
@@ -250,7 +254,7 @@ class BuildMomentsTests(unittest.TestCase):
                             patch.object(build_moments, "load_targets", return_value=[
                                 ("changed", 60, []), ("good", 60, []),
                             ]),
-                            patch.object(build_moments, "load_features", wraps=load_features) as loader,
+                            patch.object(build_moments, "load_current_features", wraps=load_current_features) as loader,
                             patch.dict(build_moments.SELECTORS, {selector_name: selector}),
                             redirect_stdout(stdout),
                         ):
@@ -259,7 +263,7 @@ class BuildMomentsTests(unittest.TestCase):
                         self.assertEqual([r["video_id"] for r in rows], ["good"] * 3)
                         self.assertTrue(all(set(r["frames"]) == {str(good_cache / "frames/000001.jpg")} for r in rows))
                         selector.assert_called_once()
-                        loader.assert_called_once_with(good_cache)
+                        loader.assert_called_once_with(good_cache, ANY)
                         report = json.loads(output.with_suffix(".report.json").read_text(encoding="utf-8"))
                         self.assertEqual(report["videos"][0], {
                             "video_id": "changed", "k_requested": 3, "num_selected": 0,
@@ -308,7 +312,11 @@ class BuildMomentsTests(unittest.TestCase):
                                           "--output", str(output)]),
                 patch.object(build_moments, "load_targets", return_value=videos),
                 patch.object(build_moments, "load_manifest", side_effect=lambda p: manifests[p.name]),
-                patch.object(build_moments, "load_features", side_effect=lambda p: features.get(p.name)),
+                patch.object(build_moments, "load_current_features", side_effect=lambda p, m: (
+                    (None, "no_audio_stream") if not m["audio_path"]
+                    else (features[p.name], None) if p.name in features
+                    else (None, "no_audio_features")
+                )),
                 patch.object(build_moments, "frame_window", return_value=[]),
                 redirect_stdout(stdout),
             ):

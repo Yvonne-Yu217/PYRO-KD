@@ -18,7 +18,7 @@ from typing import Sequence
 
 FEATURES_NAME = "audio_features.json"
 # Bump when the feature computation changes in a way the settings below miss.
-FEATURES_VERSION = 1
+FEATURES_VERSION = 2
 SAMPLE_RATE = 16_000
 HOP_LENGTH = 512
 
@@ -138,38 +138,68 @@ def gap_features(waveform, sample_rate: int, gaps: Sequence[tuple[float, float]]
     ]
 
 
+def wav_digest(audio_path: str | Path) -> str:
+    """SHA-256 of the WAV's bytes (~10 MB per 5-minute video; cheap next to VAD).
+
+    Content, not size/mtime, so copying or restoring a cache keeps features
+    valid, while any re-extraction that changes the audio invalidates them.
+    Raises OSError if the WAV is missing or unreadable.
+    """
+    digest = hashlib.sha256()
+    with Path(audio_path).open("rb") as handle:
+        for block in iter(lambda: handle.read(1 << 20), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def _settings_hash(audio_digest: str, config: dict | None) -> str:
+    from src.utils.media import config_hash
+
+    return config_hash({
+        "features_version": FEATURES_VERSION,
+        "config": {**DEFAULT_CONFIG, **(config or {})},
+        "sample_rate": SAMPLE_RATE,
+        "hop_length": HOP_LENGTH,
+        "audio_sha256": audio_digest,
+    })
+
+
 def features_config_hash(
     audio_path: str | Path, config: dict | None = None, manifest_hash: str | None = None,
 ) -> str:
     """Hash of everything audio_features.json depends on.
 
-    Covers the VAD/gap config, sample rate, hop length, feature version, the
-    media manifest's extraction hash, and the WAV's identity (size, mtime), so
-    a changed config or a re-extracted WAV invalidates cached features.
-    Raises OSError if the WAV is missing.
+    Covers the VAD/gap config, sample rate, hop length, feature version, and
+    the WAV's contents, so a changed config or changed audio invalidates
+    cached features. Raises OSError if the WAV is missing.
+
+    manifest_hash is accepted for callers written against the first version of
+    this function and is ignored: the WAV's bytes already identify the audio,
+    and the manifest hash also changes with frame-only settings (fps, max_side).
     """
-    stat = Path(audio_path).stat()
-    settings = {
-        "features_version": FEATURES_VERSION,
-        "config": {**DEFAULT_CONFIG, **(config or {})},
-        "sample_rate": SAMPLE_RATE,
-        "hop_length": HOP_LENGTH,
-        "manifest_hash": manifest_hash,
-        "audio": {"size": stat.st_size, "mtime_ns": stat.st_mtime_ns},
-    }
-    payload = json.dumps(settings, sort_keys=True, separators=(",", ":"))
-    return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:12]
+    del manifest_hash
+    return _settings_hash(wav_digest(audio_path), config)
 
 
 def compute_audio_features(
     audio_path: str | Path, config: dict | None = None, manifest_hash: str | None = None,
 ) -> dict:
-    """Run VAD and gap analysis on one cached 16 kHz WAV; returns the JSON record."""
+    """Run VAD and gap analysis on one cached 16 kHz WAV; returns the JSON record.
+
+    The WAV is hashed before and after decoding; if it changed in between (a
+    concurrent re-extraction), this raises instead of stamping gaps computed
+    from one file with the hash of another. manifest_hash is ignored (see
+    features_config_hash).
+    """
     from src.utils.media import load_audio
 
+    del manifest_hash
     cfg = {**DEFAULT_CONFIG, **(config or {})}
-    digest = features_config_hash(audio_path, cfg, manifest_hash)
+    before = wav_digest(audio_path)
     waveform, sample_rate = load_audio(audio_path, SAMPLE_RATE)
+    if wav_digest(audio_path) != before:
+        raise RuntimeError(f"{audio_path} changed while it was being read; rerun this video")
+    digest = _settings_hash(before, cfg)
     duration = len(waveform) / sample_rate
     speech = detect_speech(waveform, sample_rate, cfg)
     gaps = gap_features(
@@ -202,9 +232,63 @@ def features_are_current(features: dict | None, expected_hash: str) -> bool:
 
 
 def load_features(cache_dir: str | Path) -> dict | None:
-    """Read cached features, or None if this video has none (e.g. no audio stream)."""
+    """Read cached features, or None if absent or unreadable.
+
+    A truncated or corrupt file reads as missing rather than raising, so one
+    broken cache cannot abort a batch. This does not check staleness; use
+    load_current_features for anything that builds moments or word limits.
+    """
     path = Path(cache_dir) / FEATURES_NAME
-    return json.loads(path.read_text()) if path.exists() else None
+    try:
+        features = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+        return None
+    return features if isinstance(features, dict) else None
+
+
+def resolve_audio_path(manifest: dict, cache_dir: str | Path) -> Path | None:
+    """The manifest's WAV, or None for a video without an audio stream.
+
+    Manifests store audio_path as given at preprocessing time, which may be
+    relative to a different working directory. If it does not exist as
+    written, fall back to the same file name inside this video's cache dir,
+    where preprocessing always writes it.
+    """
+    audio_path = manifest.get("audio_path")
+    if not audio_path:
+        return None
+    path = Path(audio_path)
+    if path.exists():
+        return path
+    local = Path(cache_dir) / path.name
+    return local if local.exists() else path
+
+
+def load_current_features(
+    cache_dir: str | Path, manifest: dict, config: dict | None = None,
+) -> tuple[dict | None, str | None]:
+    """(features, None) only if readable and current for this video's WAV.
+
+    Otherwise (None, reason) with reason one of "no_audio_stream",
+    "no_audio_features", "unreadable_audio_features", "missing_wav" or
+    "stale_audio_features", so callers can report why instead of silently
+    using outdated gaps.
+    """
+    audio_path = resolve_audio_path(manifest, cache_dir)
+    if audio_path is None:
+        return None, "no_audio_stream"
+    if not (Path(cache_dir) / FEATURES_NAME).exists():
+        return None, "no_audio_features"
+    features = load_features(cache_dir)
+    if features is None:
+        return None, "unreadable_audio_features"
+    try:
+        expected = features_config_hash(audio_path, config)
+    except OSError:
+        return None, "missing_wav"
+    if not features_are_current(features, expected):
+        return None, "stale_audio_features"
+    return features, None
 
 
 def speech_of(features: dict) -> list[tuple[float, float]]:
