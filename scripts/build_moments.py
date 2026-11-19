@@ -6,7 +6,9 @@ identical frame window, transcript-context rule, and word limit:
      "transcript", "word_limit"}
 
 Selectors so far: U (uniform) and A (audio-only). A needs audio_features.json
-(scripts/cache_audio_features.py). The word limit is floor(gap * 3), capped,
+(scripts/cache_audio_features.py), used only while its config_hash matches the
+current WAV and VAD config; stale or unreadable features count as missing and
+are listed with the reason, for every selector. The word limit is floor(gap * 3), capped,
 where gap is the time from the moment to the next speech onset, computed the
 same way for every selector from the cached VAD segments.
 Zero-word moments are skipped and recorded as not safely speakable in a
@@ -28,7 +30,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.datasets import mtg_ad, reframed  # noqa: E402
 from src.generation.prompts import transcript_context, word_limit_for_gap  # noqa: E402
-from src.utils.audio_features import available_gap, load_features, speech_of  # noqa: E402
+from src.utils.audio_features import (  # noqa: E402
+    InvalidAudioPath, available_gap, load_current_features, owned_media_manifest, speech_of,
+)
 from src.utils.audio_selector import AudioSelector  # noqa: E402
 from src.utils.media import cache_is_complete, cache_is_current, frame_window, load_manifest  # noqa: E402
 from src.utils.selection import k_for_duration, uniform_timestamps  # noqa: E402
@@ -89,6 +93,7 @@ def main() -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
     rows, missing, shortfalls, no_audio, unsafe = 0, [], [], [], []
     stale = []
+    unusable_features = []
     reports = []
     with output.open("w", encoding="utf-8") as handle:
         for video_id, duration, transcript in targets:
@@ -108,16 +113,22 @@ def main() -> None:
             except (OSError, UnicodeDecodeError, json.JSONDecodeError):
                 missing.append(video_id)
                 continue
-            if not cache_is_complete(manifest):
+            # Completeness is judged on the WAV this cache owns (the one the
+            # feature loader fingerprints), not a path relative to the cwd.
+            try:
+                complete = cache_is_complete(owned_media_manifest(manifest, cache))
+            except InvalidAudioPath:
+                complete = False
+            if not complete:
                 missing.append(video_id)
                 continue
             if not cache_is_current(manifest):
                 stale.append(video_id)
                 report["status"] = "stale_cache"
                 continue
-            features = load_features(cache)
-            if args.selector == "A" and "audio_path" in manifest and not manifest["audio_path"]:
-                features = None
+            features, feature_problem = load_current_features(cache, manifest)
+            if feature_problem not in (None, "no_audio_stream", "no_audio_features"):
+                unusable_features.append(f"{video_id} ({feature_problem})")
             speech = speech_of(features) if features else None
             if args.selector == "A" and features is None:
                 no_audio.append(video_id)
@@ -172,6 +183,9 @@ def main() -> None:
         print(f"not safely speakable; skipped {len(unsafe)} zero-word moments; details: {report_path}")
     if missing:
         print(f"no cache for {len(missing)} videos (run the matching prepare script with --preprocess): {' '.join(missing)}")
+    if unusable_features:
+        print(f"audio features not used for {len(unusable_features)} videos (rerun"
+              f" scripts/cache_audio_features.py): {' '.join(unusable_features)}")
     if stale:
         print(f"stale cache for {len(stale)} videos (run the matching prepare script with --preprocess): {' '.join(stale)}")
 
