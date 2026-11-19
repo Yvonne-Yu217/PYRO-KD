@@ -10,10 +10,13 @@ VAD marks absence of speech, not silence: music, alarms, and laughter can sit
 inside a gap, which is why energy and onset features are kept per gap.
 """
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, fields
 import hashlib
 import json
+import math
+import os
 from pathlib import Path
+import tempfile
 from typing import Sequence
 
 FEATURES_NAME = "audio_features.json"
@@ -181,25 +184,48 @@ def features_config_hash(
     return _settings_hash(wav_digest(audio_path), config)
 
 
+def _snapshot_wav(audio_path: str | Path) -> tuple[Path, str]:
+    """Copy the WAV to a private temporary file while hashing the copied bytes.
+
+    Decoding that private copy means the digest always describes exactly the
+    bytes analysed, whatever happens to the cached WAV meanwhile (including an
+    A->B->A replacement, which before/after hashes of the path cannot detect).
+    The caller deletes the returned file.
+    """
+    digest = hashlib.sha256()
+    descriptor, name = tempfile.mkstemp(prefix="audio_snapshot_", suffix=".wav")
+    snapshot = Path(name)
+    try:
+        with Path(audio_path).open("rb") as source, os.fdopen(descriptor, "wb") as target:
+            for block in iter(lambda: source.read(1 << 20), b""):
+                digest.update(block)
+                target.write(block)
+    except BaseException:
+        snapshot.unlink(missing_ok=True)
+        raise
+    return snapshot, digest.hexdigest()
+
+
 def compute_audio_features(
     audio_path: str | Path, config: dict | None = None, manifest_hash: str | None = None,
 ) -> dict:
     """Run VAD and gap analysis on one cached 16 kHz WAV; returns the JSON record.
 
-    The WAV is hashed before and after decoding; if it changed in between (a
-    concurrent re-extraction), this raises instead of stamping gaps computed
-    from one file with the hash of another. manifest_hash is ignored (see
+    The WAV is snapshotted to a private file and the snapshot is both hashed
+    and decoded, so config_hash always matches the analysed audio even if the
+    cached WAV is replaced concurrently. manifest_hash is ignored (see
     features_config_hash).
     """
     from src.utils.media import load_audio
 
     del manifest_hash
     cfg = {**DEFAULT_CONFIG, **(config or {})}
-    before = wav_digest(audio_path)
-    waveform, sample_rate = load_audio(audio_path, SAMPLE_RATE)
-    if wav_digest(audio_path) != before:
-        raise RuntimeError(f"{audio_path} changed while it was being read; rerun this video")
-    digest = _settings_hash(before, cfg)
+    snapshot, audio_digest = _snapshot_wav(audio_path)
+    try:
+        waveform, sample_rate = load_audio(snapshot, SAMPLE_RATE)
+    finally:
+        snapshot.unlink(missing_ok=True)
+    digest = _settings_hash(audio_digest, cfg)
     duration = len(waveform) / sample_rate
     speech = detect_speech(waveform, sample_rate, cfg)
     gaps = gap_features(
@@ -218,11 +244,24 @@ def compute_audio_features(
 
 
 def write_features(cache_dir: str | Path, features: dict) -> Path:
-    """Write atomically, so an interrupted run never leaves truncated JSON."""
+    """Write atomically through a staging file unique to this call.
+
+    Concurrent writers each stage their own file and publish it with one
+    rename, so the published file is always one writer's complete record and
+    a writer can never modify a file another writer already published.
+    """
     path = Path(cache_dir) / FEATURES_NAME
-    temporary = path.with_suffix(".json.tmp")
-    temporary.write_text(json.dumps(features, indent=2))
-    temporary.replace(path)
+    descriptor, name = tempfile.mkstemp(
+        prefix=f".{FEATURES_NAME}.", suffix=".tmp", dir=path.parent,
+    )
+    staging = Path(name)
+    try:
+        with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
+            handle.write(json.dumps(features, indent=2))
+        staging.replace(path)
+    except BaseException:
+        staging.unlink(missing_ok=True)
+        raise
     return path
 
 
@@ -235,8 +274,9 @@ def load_features(cache_dir: str | Path) -> dict | None:
     """Read cached features, or None if absent or unreadable.
 
     A truncated or corrupt file reads as missing rather than raising, so one
-    broken cache cannot abort a batch. This does not check staleness; use
-    load_current_features for anything that builds moments or word limits.
+    broken cache cannot abort a batch. This does not check staleness or
+    structure; use load_current_features for anything that builds moments or
+    word limits.
     """
     path = Path(cache_dir) / FEATURES_NAME
     try:
@@ -246,33 +286,82 @@ def load_features(cache_dir: str | Path) -> dict | None:
     return features if isinstance(features, dict) else None
 
 
-def resolve_audio_path(manifest: dict, cache_dir: str | Path) -> Path | None:
-    """The manifest's WAV, or None for a video without an audio stream.
+def _is_finite_number(value) -> bool:
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return False
+    try:
+        return math.isfinite(value)
+    except OverflowError:  # a JSON integer too large for a float
+        return False
 
-    Manifests store audio_path as given at preprocessing time, which may be
-    relative to a different working directory. If it does not exist as
-    written, fall back to the same file name inside this video's cache dir,
-    where preprocessing always writes it.
+
+_GAP_FIELDS = frozenset(f.name for f in fields(Gap))
+
+
+def malformed_features(features) -> str | None:
+    """The first structural defect that would break a consumer, or None.
+
+    speech must be a list of [start, end] pairs and gaps a list of records
+    with exactly Gap's fields, all finite numbers with 0 <= start <= end.
+    Same rules as cache_checks.malformed_audio_features (#18), so the moment
+    builder and the selector evaluation reject the same files.
+    """
+    if not isinstance(features, dict):
+        return "features are not an object"
+    speech, gaps = features.get("speech"), features.get("gaps")
+    if not isinstance(speech, list):
+        return "speech is not a list"
+    if not isinstance(gaps, list):
+        return "gaps is not a list"
+    for index, pair in enumerate(speech):
+        if not isinstance(pair, (list, tuple)) or len(pair) != 2:
+            return f"speech[{index}] is not a [start, end] pair"
+        start, end = pair
+        if not (_is_finite_number(start) and _is_finite_number(end)) or not 0 <= start <= end:
+            return f"speech[{index}] needs finite numbers with 0 <= start <= end"
+    for index, gap in enumerate(gaps):
+        if not isinstance(gap, dict) or set(gap) != _GAP_FIELDS:
+            return f"gaps[{index}] must be a record with exactly {sorted(_GAP_FIELDS)}"
+        if not all(_is_finite_number(gap[name]) for name in _GAP_FIELDS):
+            return f"gaps[{index}] has a non-numeric or non-finite value"
+        if not 0 <= gap["start"] <= gap["end"]:
+            return f"gaps[{index}] needs 0 <= start <= end"
+    return None
+
+
+def resolve_audio_path(manifest: dict, cache_dir: str | Path) -> Path | None:
+    """The video's WAV, or None for a video without an audio stream.
+
+    The cache dir owns its WAV: preprocessing always writes it there as
+    audio_16k.wav, so that file is used whenever it exists. A recorded path is
+    never resolved against the current working directory, where a relative
+    path could name another video's WAV. Only an absolute recorded path (a
+    custom location) is used when the local file is absent; otherwise the
+    local path is returned and callers report it as missing.
     """
     audio_path = manifest.get("audio_path")
     if not audio_path:
         return None
-    path = Path(audio_path)
-    if path.exists():
-        return path
-    local = Path(cache_dir) / path.name
-    return local if local.exists() else path
+    recorded = Path(audio_path)
+    local = Path(cache_dir) / (recorded.name or "audio_16k.wav")
+    if local.exists():
+        return local
+    if recorded.is_absolute() and recorded.exists():
+        return recorded
+    return local
 
 
 def load_current_features(
     cache_dir: str | Path, manifest: dict, config: dict | None = None,
 ) -> tuple[dict | None, str | None]:
-    """(features, None) only if readable and current for this video's WAV.
+    """(features, None) only if readable, well-formed and current for this WAV.
 
     Otherwise (None, reason) with reason one of "no_audio_stream",
-    "no_audio_features", "unreadable_audio_features", "missing_wav" or
-    "stale_audio_features", so callers can report why instead of silently
-    using outdated gaps.
+    "no_audio_features", "unreadable_audio_features",
+    "malformed_audio_features", "missing_wav" or "stale_audio_features", so
+    callers can report why instead of using outdated or broken gaps. Structure
+    is checked before the hash: a correctly stamped file can still carry a
+    payload that would crash a consumer.
     """
     audio_path = resolve_audio_path(manifest, cache_dir)
     if audio_path is None:
@@ -282,6 +371,8 @@ def load_current_features(
     features = load_features(cache_dir)
     if features is None:
         return None, "unreadable_audio_features"
+    if malformed_features(features) is not None:
+        return None, "malformed_audio_features"
     try:
         expected = features_config_hash(audio_path, config)
     except OSError:

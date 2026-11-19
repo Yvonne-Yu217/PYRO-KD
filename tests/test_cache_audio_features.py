@@ -115,6 +115,47 @@ class CacheAudioFeaturesTests(unittest.TestCase):
         self.assertEqual({v: load_features(self.root / v) for v in ("a", "b")}, before)
         self.assertIn("missing dependency", output)
 
+    def test_foreign_cwd_wav_is_never_used_even_when_it_exists(self):
+        """Kiran (#16 review): a relative path must not pick another video's WAV."""
+        video = self.add_video("a", wav=b"RIFF owning A",
+                               audio_path="data/cache/mtg-ad/a/audio_16k.wav")
+        foreign = self.root.parent / f"{self.root.name}-foreign"
+        decoy = foreign / "data/cache/mtg-ad/a/audio_16k.wav"
+        decoy.parent.mkdir(parents=True)
+        decoy.write_bytes(b"RIFF another video B")
+        self.addCleanup(lambda: __import__("shutil").rmtree(foreign, ignore_errors=True))
+        cwd = os.getcwd()
+        os.chdir(foreign)
+        self.addCleanup(os.chdir, cwd)
+        self.assertTrue(Path("data/cache/mtg-ad/a/audio_16k.wav").exists())
+        manifest = json.loads((video / "manifest.json").read_text())
+        self.assertEqual(resolve_audio_path(manifest, video), video / "audio_16k.wav")
+        code, _, _ = self.run_script("--overwrite")
+        self.assertEqual(code, 0)
+        self.assertEqual(Path(self.compute.call_args.args[0]), video / "audio_16k.wav")
+        features, reason = load_current_features(video, manifest)
+        self.assertIsNone(reason)
+        self.assertEqual(features["config_hash"], features_config_hash(video / "audio_16k.wav"))
+        self.assertNotEqual(features["config_hash"], features_config_hash(decoy))
+
+    def test_absolute_custom_path_is_used_only_without_a_local_wav(self):
+        custom = self.root / "elsewhere.wav"
+        custom.write_bytes(b"RIFF custom")
+        video = self.add_video("a", audio=False)
+        manifest = {"audio_path": str(custom)}
+        self.assertEqual(resolve_audio_path(manifest, video), custom)
+        (video / "elsewhere.wav").write_bytes(b"RIFF local")
+        self.assertEqual(resolve_audio_path(manifest, video), video / "elsewhere.wav")
+        self.assertEqual(resolve_audio_path({"audio_path": "rel/missing.wav"}, video),
+                         video / "missing.wav")
+
+    def test_malformed_but_stamped_features_are_recomputed(self):
+        video = self.add_video("a")
+        wav = video / "audio_16k.wav"
+        write_features(video, {"config_hash": features_config_hash(wav), "speech": [[1.0]], "gaps": []})
+        code, report, _ = self.run_script()
+        self.assertEqual((code, report["computed"], report["reused"]), (0, 1, 0))
+
     def test_relative_audio_path_from_another_directory_still_resolves(self):
         """Review item 1: manifests may record audio_path relative to another cwd."""
         video = self.add_video("a", audio_path="data/cache/mtg-ad/a/audio_16k.wav")
@@ -266,19 +307,59 @@ class FeatureHashAndLoaderTests(unittest.TestCase):
         with self.assertRaises(OSError):
             features_config_hash("/nonexistent/a.wav")
 
-    def test_wav_replaced_while_reading_is_an_error(self):
-        """Review item 5: never stamp gaps from one file with another file's hash."""
+    def run_compute(self, wav, load_audio):
+        with (patch("src.utils.media.load_audio", side_effect=load_audio),
+              patch.object(audio_features, "detect_speech", return_value=[(0.0, 1.0)]),
+              patch.object(audio_features, "gap_features", return_value=[])):
+            return compute_audio_features(wav)
+
+    def test_a_b_a_replacement_cannot_mislabel_features(self):
+        """Kiran (#16 review): the digest must describe exactly the bytes decoded."""
         with tempfile.TemporaryDirectory() as tmp:
-            wav = Path(tmp, "a.wav")
-            wav.write_bytes(b"RIFF old")
+            wav = Path(tmp, "audio_16k.wav")
+            wav.write_bytes(b"RIFF A silent")
+            decoded = []
 
-            def load_then_replace(path, sample_rate):
-                Path(path).write_bytes(b"RIFF new, re-extracted")
-                return [0.0] * 16, sample_rate
+            def swap_b_then_restore_a(path, sample_rate):
+                wav.write_bytes(b"RIFF B speech")       # concurrent publisher
+                decoded.append(Path(path).read_bytes())  # what the decoder sees
+                wav.write_bytes(b"RIFF A silent")       # restored before any re-hash
+                return [0.0] * 32, sample_rate
 
-            with (patch("src.utils.media.load_audio", side_effect=load_then_replace),
-                  self.assertRaisesRegex(RuntimeError, "changed while it was being read")):
-                compute_audio_features(wav)
+            features = self.run_compute(wav, swap_b_then_restore_a)
+            self.assertEqual(decoded, [b"RIFF A silent"])  # decoder never saw B
+            self.assertEqual(features["config_hash"], features_config_hash(wav))
+
+    def test_stamp_matches_decoded_bytes_when_wav_changes_for_good(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            wav = Path(tmp, "audio_16k.wav")
+            wav.write_bytes(b"RIFF A")
+            seen = {}
+
+            def replace_permanently(path, sample_rate):
+                seen["digest"] = audio_features.wav_digest(path)
+                wav.write_bytes(b"RIFF B, re-extracted")
+                return [0.0] * 32, sample_rate
+
+            features = self.run_compute(wav, replace_permanently)
+            self.assertEqual(features["config_hash"], audio_features._settings_hash(seen["digest"], None))
+            # The features describe A, so they are (correctly) stale for B.
+            self.assertNotEqual(features["config_hash"], features_config_hash(wav))
+
+    def test_snapshot_is_removed_even_when_decoding_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            wav = Path(tmp, "audio_16k.wav")
+            wav.write_bytes(b"RIFF")
+            paths = []
+
+            def fail(path, sample_rate):
+                paths.append(Path(path))
+                raise RuntimeError("decode failed")
+
+            with self.assertRaisesRegex(RuntimeError, "decode failed"):
+                self.run_compute(wav, fail)
+            self.assertNotEqual(paths[0], wav)
+            self.assertFalse(paths[0].exists())
 
     def test_features_are_current(self):
         self.assertFalse(features_are_current(None, "abc"))
@@ -307,6 +388,8 @@ class FeatureHashAndLoaderTests(unittest.TestCase):
             self.assertEqual(load_current_features(cache, manifest), (None, "no_audio_features"))
             (cache / FEATURES_NAME).write_text("{bad")
             self.assertEqual(load_current_features(cache, manifest), (None, "unreadable_audio_features"))
+            write_features(cache, {"config_hash": features_config_hash(wav), "speech": [[1.0]], "gaps": []})
+            self.assertEqual(load_current_features(cache, manifest), (None, "malformed_audio_features"))
             write_features(cache, {"config_hash": "old", "speech": [], "gaps": []})
             self.assertEqual(load_current_features(cache, manifest), (None, "stale_audio_features"))
             current = {"config_hash": features_config_hash(wav), "speech": [], "gaps": []}
@@ -314,6 +397,60 @@ class FeatureHashAndLoaderTests(unittest.TestCase):
             self.assertEqual(load_current_features(cache, manifest), (current, None))
             wav.unlink()
             self.assertEqual(load_current_features(cache, manifest), (None, "missing_wav"))
+
+    def test_concurrent_writers_never_share_a_staging_file(self):
+        """Kiran (#16 review): B publishes while A still holds its staging file.
+
+        With one shared .tmp name, B rewrites and publishes A's staging inode, so
+        A can then modify (or fail to publish) a file B already published.
+        Each writer must stage privately; the last rename wins with a complete record.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            record_a = {"config_hash": "a", "speech": [[1.0, 2.0]], "gaps": []}
+            record_b = {"config_hash": "b", "speech": [[float(i), i + 0.5] for i in range(50)],
+                        "gaps": []}
+            real_replace = Path.replace
+            staged = []
+
+            def replace(self_path, target):
+                staged.append(self_path)
+                if len(staged) == 1:  # A is about to publish: let B run start to finish
+                    write_features(tmp, record_b)
+                    self.assertEqual(load_features(tmp), record_b)
+                    self.assertTrue(self_path.exists(), "B consumed A's staging file")
+                return real_replace(self_path, target)
+
+            with patch.object(Path, "replace", replace):
+                write_features(tmp, record_a)
+            self.assertNotEqual(staged[0], staged[1])
+            self.assertEqual(load_features(tmp), record_a)
+            self.assertEqual(sorted(p.name for p in Path(tmp).iterdir()), [FEATURES_NAME])
+
+    def test_failed_writer_leaves_the_published_record_intact(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            good = {"config_hash": "good", "speech": [], "gaps": []}
+            write_features(tmp, good)
+            with (patch.object(Path, "replace", side_effect=OSError("disk full")),
+                  self.assertRaises(OSError)):
+                write_features(tmp, {"config_hash": "other", "speech": [], "gaps": []})
+            self.assertEqual(load_features(tmp), good)
+            self.assertEqual(sorted(p.name for p in Path(tmp).iterdir()), [FEATURES_NAME])
+
+    def test_malformed_features_validator(self):
+        ok = {"speech": [[0.0, 1.0]], "gaps": [{"start": 1.0, "end": 2.0, "rms": 0.0, "onset": 0.0}]}
+        self.assertIsNone(audio_features.malformed_features(ok))
+        bad = [
+            [], {"speech": None, "gaps": []}, {"speech": [], "gaps": None},
+            {"speech": [[1.0]], "gaps": []}, {"speech": [[2.0, 1.0]], "gaps": []},
+            {"speech": [[float("nan"), 1.0]], "gaps": []}, {"speech": [[True, 1.0]], "gaps": []},
+            {"speech": [[0, 10**400]], "gaps": []}, {"speech": [], "gaps": [{}]},
+            {"speech": [], "gaps": [{**ok["gaps"][0], "extra": 1}]},
+            {"speech": [], "gaps": [{**ok["gaps"][0], "rms": "loud"}]},
+            {"speech": [], "gaps": [{**ok["gaps"][0], "start": 3.0}]},
+        ]
+        for payload in bad:
+            with self.subTest(payload=payload):
+                self.assertIsNotNone(audio_features.malformed_features(payload))
 
     def test_write_features_leaves_no_temporary_file(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -386,6 +523,29 @@ class BuildMomentsStalenessTests(unittest.TestCase):
             rows, _, stdout = self.build("A")
         self.assertEqual(rows, [])
         self.assertIn("stale_audio_features", stdout)
+
+    def test_stamped_malformed_payloads_do_not_abort_u_or_a_batches(self):
+        wav = self.cache_root / "changed" / "audio_16k.wav"
+        payloads = {
+            "short speech pair": {"speech": [[1.0]], "gaps": []},
+            "empty gap record": {"speech": [], "gaps": [{}]},
+            "null speech": {"speech": None, "gaps": []},
+            "null gaps": {"speech": [], "gaps": None},
+        }
+        for label, payload in payloads.items():
+            write_features(self.cache_root / "changed",
+                           {**payload, "config_hash": features_config_hash(wav)})
+            for selector in ("U", "A"):
+                with self.subTest(payload=label, selector=selector):
+                    rows, report, stdout = self.build(selector)
+                    self.assertIn("fresh", {r["video_id"] for r in rows})
+                    self.assertEqual(report["fresh"]["status"], "ok")
+                    self.assertIn("changed (malformed_audio_features)", stdout)
+                    if selector == "A":
+                        self.assertNotIn("changed", {r["video_id"] for r in rows})
+                    else:
+                        self.assertTrue(all(r["word_limit"] is None
+                                            for r in rows if r["video_id"] == "changed"))
 
     def test_corrupt_features_file_does_not_abort_batch(self):
         (self.cache_root / "changed" / FEATURES_NAME).write_text("{truncated")
