@@ -10,10 +10,11 @@ oracle, RQ4 (headroom) before any model is run.
     python scripts/evaluate_selectors.py --set validation --selectors U O
     python scripts/evaluate_selectors.py --set test --output outputs/selector_eval_test.json
 
-Selectors: U (uniform), O (oracle: human start times capped at K) and A
-(audio-only; needs data/cache/mtg-ad/<video_id>/audio_features.json, built by
-scripts/cache_audio_features.py, so videos without it are skipped and counted).
-V and AV are added to SELECTORS as they are implemented. U and O need only the
+Selectors: U (uniform), O (oracle: human start times capped at K), A (audio-only;
+needs audio_features.json from scripts/cache_audio_features.py) and V (video-only;
+needs visual_features.json from scripts/cache_visual_features.py). Videos without
+a selector's features are skipped for that selector and counted. AV is added to
+SELECTORS when it is implemented. U and O need only the
 annotations, so they can be scored on all 332 validation videos. K comes from
 the same duration rule as generation (configs/mtg_ad_splits.json), so the
 comparison uses the same budget everywhere. Tune nothing on --set test.
@@ -55,10 +56,14 @@ from src.utils.audio_features import available_gap, speech_of  # noqa: E402
 from src.utils.audio_selector import AudioSelector  # noqa: E402
 from src.utils.cache_checks import load_audio_features  # noqa: E402
 from src.utils.selection import k_for_duration, oracle_timestamps, uniform_timestamps  # noqa: E402
+from src.utils.visual_features import (  # noqa: E402
+    VisualCueSelector, load_embeddings, load_validated_features as load_validated_visual_features,
+    mean_pairwise_similarity,
+)
 
 TOLERANCE_SWEEP = (0.0, 1.0, 2.0, 3.0, 5.0)
 # (selector, baseline) pairs reported as paired differences in F1.
-COMPARISONS = (("A", "U"), ("O", "U"), ("O", "A"))
+COMPARISONS = (("A", "U"), ("V", "U"), ("O", "U"), ("V", "A"), ("O", "A"), ("O", "V"))
 DURATION_SLACK_SECONDS = 1.0  # declared durations are whole seconds
 BOUNDS_POLICIES = ("exclude", "keep")
 
@@ -80,21 +85,29 @@ def ground_truth_times(
     return (starts if policy == "keep" else [t for t in starts if t <= limit]), out_of_bounds
 
 
-def _times_u(video, k, features, truth):
+def _times_u(video, k, features, truth, visual=None):
     return uniform_timestamps(video.duration_seconds, k)
 
 
-def _times_o(video, k, features, truth):
+def _times_o(video, k, features, truth, visual=None):
     return oracle_timestamps(truth, k)
 
 
-def _times_a(video, k, features, truth):
+def _times_a(video, k, features, truth, visual=None):
     if features is None:
         return None
     return [candidate.time for candidate in AudioSelector().select(features, k)]
 
 
-SELECTORS: dict[str, Callable[..., list[float] | None]] = {"U": _times_u, "O": _times_o, "A": _times_a}
+def _times_v(video, k, features, truth, visual=None):
+    if visual is None:
+        return None
+    return [candidate.time for candidate in VisualCueSelector().select(visual, k)]
+
+
+SELECTORS: dict[str, Callable[..., list[float] | None]] = {
+    "U": _times_u, "O": _times_o, "A": _times_a, "V": _times_v,
+}
 
 
 def load_video_set(name: str, splits: dict, data_dir: Path) -> list[mtg_ad.MTGVideo]:
@@ -124,17 +137,21 @@ def evaluate_video(
     features: dict | None,
     tolerance: float,
     sweep: Sequence[float] = TOLERANCE_SWEEP,
+    visual: dict | None = None,
+    embeddings=None,
     *,
     bounds: str = "exclude",
     slack: float = DURATION_SLACK_SECONDS,
 ) -> dict[str, Any] | None:
-    """Score one selector on one video; None if the selector cannot run (no features for A).
+    """Score one selector on one video; None if it cannot run (no features for A or V).
 
+    features are the audio features (also used for the in-speech rate); visual are
+    the visual features; embeddings enable the visual-redundancy diagnostic.
     Ground truth follows the out-of-duration policy (see the module docstring);
     both the annotated and the scored counts are recorded.
     """
     truth, out_of_bounds = ground_truth_times(video, bounds, slack)
-    times = SELECTORS[selector](video, k, features, truth)
+    times = SELECTORS[selector](video, k, features, truth, visual)
     if times is None:
         return None
     limit = video.duration_seconds + slack
@@ -159,6 +176,10 @@ def evaluate_video(
             str(tau): temporal_precision_recall_f1(times, truth, tau)["f1"] for tau in sweep
         },
         "in_speech_rate": in_speech_rate(times, features, video.duration_seconds),
+        "visual_redundancy": (
+            mean_pairwise_similarity(embeddings, visual["frame_times"], times)
+            if embeddings is not None and visual is not None else None
+        ),
         "times": times,
     }
 
@@ -197,6 +218,8 @@ def summarize(rows: Sequence[dict], resamples: int, seed: int) -> dict[str, Any]
         },
         "in_speech_rate": _mean([r["in_speech_rate"] for r in rows]),
         "n_with_audio_features": sum(r["in_speech_rate"] is not None for r in rows),
+        "visual_redundancy": _mean([r["visual_redundancy"] for r in rows]),
+        "n_with_embeddings": sum(r["visual_redundancy"] is not None for r in rows),
     }
 
 
@@ -226,7 +249,7 @@ def format_report(result: dict) -> str:
         f"K = round({result['k_rate_per_minute']} x minutes), {result['n_videos_in_set']} videos)",
         "",
         f"{'sel':<4}{'n':>5}  {'macro F1 [95% CI]':<24}{'P':>7}{'R':>7}{'mean err s':>12}"
-        f"{'short':>7}{'in-speech':>11}",
+        f"{'short':>7}{'in-speech':>11}{'redund.':>9}",
     ]
     for name, s in result["selectors"].items():
         f1 = s["macro_f1"]
@@ -234,19 +257,23 @@ def format_report(result: dict) -> str:
         lines.append(
             f"{name:<4}{s['n_videos']:>5}  {ci:<24}{_fmt(s['macro_precision']['mean']):>7}"
             f"{_fmt(s['macro_recall']['mean']):>7}{_fmt(s['mean_temporal_error_seconds'], 2):>12}"
-            f"{s['videos_with_shortfall']:>7}{_fmt(s['in_speech_rate']):>11}"
+            f"{s['videos_with_shortfall']:>7}{_fmt(s['in_speech_rate']):>11}{_fmt(s['visual_redundancy']):>9}"
         )
     for name, count in result["skipped"].items():
+        kind = "visual" if name == "V" else "audio"
         reasons = ", ".join(
             f"{reason} x{n}" for reason, n in sorted(result["skipped_reasons"].get(name, {}).items()))
-        lines.append(f"{name}: skipped {count} video(s) without usable audio features ({reasons})")
-    audio = result["audio_features"]
-    if audio["unavailable"]:
-        reasons = ", ".join(f"{r} x{n}" for r, n in sorted(audio["unavailable"].items()))
-        lines.append(
-            f"audio features usable for {audio['usable']} of {result['n_videos_in_set']} videos "
-            f"(not usable: {reasons}); in-speech is computed only where usable"
-        )
+        lines.append(f"{name}: skipped {count} video(s) without usable {kind} features ({reasons})")
+    for kind in ("audio", "visual"):
+        status = result.get(f"{kind}_features")
+        if status and status["unavailable"]:
+            reasons = ", ".join(f"{r} x{n}" for r, n in sorted(status["unavailable"].items()))
+            note = "in-speech is computed only where usable" if kind == "audio" else \
+                "redundancy is computed only where usable"
+            lines.append(
+                f"{kind} features usable for {status['usable']} of {result['n_videos_in_set']} videos "
+                f"(not usable: {reasons}); {note}"
+            )
     bounds = result["bounds"]
     if bounds["videos"]:
         ids = ", ".join(v["video_id"] for v in bounds["videos"])
@@ -298,15 +325,26 @@ def run(
     audio_reasons: dict[str, int] = {}
     anomalies: list[dict[str, Any]] = []
     usable_audio = 0
+    usable_visual = 0
+    visual_reasons: dict[str, int] = {}
     for video in videos:
         k = k_for_duration(video.duration_seconds, rate_per_minute)
         # Validated and best effort: a missing, stale, or unreadable cache is a reason,
         # never an exception, so it cannot stop selectors that do not need it.
-        features, reason = load_audio_features(cache_dir / video.video_id)
-        if reason is None:
+        features, audio_reason = load_audio_features(cache_dir / video.video_id)
+        if audio_reason is None:
             usable_audio += 1
         else:
-            audio_reasons[reason] = audio_reasons.get(reason, 0) + 1
+            audio_reasons[audio_reason] = audio_reasons.get(audio_reason, 0) + 1
+        visual, visual_reason, embeddings = None, None, None
+        if "V" in selectors:
+            visual, visual_reason = load_validated_visual_features(cache_dir / video.video_id)
+            if visual_reason is None:
+                usable_visual += 1
+                embeddings = load_embeddings(cache_dir / video.video_id, visual)
+            else:
+                visual_reasons[visual_reason] = visual_reasons.get(visual_reason, 0) + 1
+        reason_for = {"A": audio_reason, "V": visual_reason}
         _, out_of_bounds = ground_truth_times(video, bounds, slack)
         if out_of_bounds:
             anomalies.append({
@@ -315,10 +353,13 @@ def run(
                 "out_of_bounds_gt_times": out_of_bounds,
             })
         for name in selectors:
-            row = evaluate_video(name, video, k, features, tolerance, bounds=bounds, slack=slack)
+            row = evaluate_video(
+                name, video, k, features, tolerance, visual=visual, embeddings=embeddings,
+                bounds=bounds, slack=slack,
+            )
             if row is None:
                 skipped[name] = skipped.get(name, 0) + 1
-                why = reason or "unavailable"
+                why = reason_for.get(name) or "unavailable"
                 skipped_reasons.setdefault(name, {})[why] = skipped_reasons.get(name, {}).get(why, 0) + 1
                 unavailable.append({"video_id": video.video_id, "selector": name, "reason": why})
             else:
@@ -339,6 +380,9 @@ def run(
             "usable": usable_audio,
             "unavailable": audio_reasons,
         },
+        "visual_features": (
+            {"usable": usable_visual, "unavailable": visual_reasons} if "V" in selectors else None
+        ),
         "skipped_reasons": skipped_reasons,
         "unavailable": unavailable,
         "tolerance": tolerance,
@@ -356,7 +400,7 @@ def run(
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--set", dest="video_set", choices=["dev", "test", "validation"], default="dev")
-    parser.add_argument("--selectors", nargs="+", choices=sorted(SELECTORS), default=["U", "O", "A"])
+    parser.add_argument("--selectors", nargs="+", choices=sorted(SELECTORS), default=["U", "O", "A", "V"])
     parser.add_argument("--tolerance", type=float, default=2.0)
     parser.add_argument("--splits", type=Path, default=Path("configs/mtg_ad_splits.json"))
     parser.add_argument("--data-dir", type=Path, default=Path("data/mtg-ad"))

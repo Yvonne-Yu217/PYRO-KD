@@ -19,7 +19,8 @@ python scripts/prepare_mtg_ad.py --download-videos --preprocess   # dev videos (
 python scripts/prepare_mtg_ad.py --download-videos --cookies-from-browser chrome  # run locally
 python scripts/prepare_mtg_ad.py --preprocess                     # reuse manually supplied videos
 python scripts/cache_audio_features.py                            # Silero VAD + librosa (HPC env)
-python scripts/build_moments.py --selector U --videos dev         # generation inputs (U or A)
+python scripts/cache_visual_features.py                           # shot cuts + CLIP novelty (HPC env)
+python scripts/build_moments.py --selector U --videos dev         # generation inputs (U, A or V)
 python scripts/prepare_reframed.py                   # REFRAMED metadata + configs/reframed_splits.json
 python scripts/build_moments.py --dataset reframed --videos dev
 python scripts/prepare_egoschema.py                  # EgoSchema annotations + QA pilot
@@ -57,9 +58,9 @@ python scripts/evaluate_selectors.py --set dev                        # the 10 d
 python scripts/evaluate_selectors.py --set validation --selectors U O # all 332 validation videos
 ```
 
-Scores where each selector places its K moments against the professional AD start times (temporal precision, recall and F1 within ±2 s, one-to-one matching), with paired bootstrap 95% intervals over videos and an F1-by-tolerance sweep. A is included when `audio_features.json` exists for a video and skipped otherwise. This is the zero-model-cost result for RQ1(a), and the oracle row gives the RQ4 headroom. Do not tune on `--set test`.
+Scores where each selector places its K moments against the professional AD start times (temporal precision, recall and F1 within ±2 s, one-to-one matching), with paired bootstrap 95% intervals over videos and an F1-by-tolerance sweep. A and V are included when `audio_features.json` / `visual_features.json` exist for a video and skipped otherwise (the report says how many). This is the zero-model-cost result for RQ1(a), and the oracle row gives the RQ4 headroom. Do not tune on `--set test`.
 
-Cached features are validated before use (`src/utils/cache_checks.py`): the media cache must be complete and current, and audio features readable and matching the current WAV and manifest (this uses the fingerprint helpers from #16; until that merges, audio features are reported as `unverifiable_audio_features`). A video that fails a check is skipped for A with an explicit reason in the report, and a broken audio cache never stops U and O.
+Cached features are validated before use. The media cache must be complete and current, audio features must match the owned WAV and extraction settings, and visual feature timestamps must align with the manifest. The report gives a reason when A or V is unavailable. U and O timing can still run from the annotations.
 
 Some MTG-AD videos list AD starts after their declared duration (10 starts in 2 of the 332 validation videos, none in dev or test). By default those starts are **excluded from the ground truth for every selector** and reported with the affected video IDs and counts. `--keep-out-of-bounds` scores against every annotated start instead and labels the result an unrestricted annotation upper bound, since O may then place moments outside the clip. Nothing is clamped or dropped silently.
 
@@ -69,7 +70,7 @@ Some MTG-AD videos list AD starts after their declared duration (10 starts in 2 
 - `src/utils/media.py`: ffprobe, 16 kHz audio, timestamped frame cache, frame windows.
 - `src/utils/selection.py`: shared K rule, uniform selector (U), and top-K with minimum separation.
 - `src/utils/audio_features.py`, `audio_selector.py`: Silero VAD gaps, librosa gap features, and the audio-only selector (A).
-- `src/utils/visual_selector.py`: CLIP novelty scoring for V (in progress).
+- `src/utils/visual_features.py`: shot boundaries (PySceneDetect), CLIP frame novelty, cache, and the video-only selector (V). `visual_selector.py` holds the OpenCLIP wrapper it uses.
 - `src/generation/`: transformers VLM loader and generator, and the P0/P1 prompts.
 - `src/evaluation/`: temporal P/R/F1, BERTScore, sentence cosine, LLM-judge rubric.
 - `scripts/`: data preparation, moment building, AD generation (`run_ad_vlm.py`), scoring of generated AD (`evaluate_ad.py`), and selector-only timing evaluation (`evaluate_selectors.py`).

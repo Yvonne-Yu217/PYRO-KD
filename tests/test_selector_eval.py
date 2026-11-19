@@ -5,9 +5,12 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
+import numpy as np
+
 from src.datasets.mtg_ad import parse_row
 from src.evaluation.stats import bootstrap_mean_ci, paired_bootstrap_diff
 from src.utils import cache_checks as cc
+from src.utils import visual_features as vf
 from src.utils.selection import oracle_timestamps
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
@@ -103,6 +106,154 @@ class EvaluateVideoTests(unittest.TestCase):
         self.assertEqual(ev.in_speech_rate([25.0, 50.0], features, 100.0), 0.5)
         self.assertIsNone(ev.in_speech_rate([25.0], None, 100.0))
         self.assertIsNone(ev.in_speech_rate([], features, 100.0))
+
+
+def make_visual(spikes, duration=100.0):
+    times = [i * 0.5 for i in range(int(duration / 0.5))]
+    novelty = [0.05] * len(times)
+    for t, value in spikes:
+        novelty[times.index(t)] = value
+    return {"frame_times": times, "novelty": novelty, "shots": []}
+
+
+class VisualSelectorEvalTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name)
+
+    def visual_cache(self, video_id, visual, embeddings=None):
+        """A complete, current media cache with visual features stamped for it."""
+        return fx.make_visual_cache(self.root, video_id, visual, embeddings)
+
+    def run_v(self, videos, selectors=("U", "V")):
+        with fx.patched_audio_helpers():
+            result = ev.run(list(videos), 3.48, list(selectors), self.root, 2.0, 200, 0)
+        result["set"] = "dev"
+        json.dumps(result)
+        return result
+
+    def test_v_needs_visual_features_and_scores_its_peaks(self):
+        video = make_video(ad_times=(10.0, 50.0, 90.0))
+        self.assertIsNone(ev.evaluate_video("V", video, 3, None, 2.0))
+        visual = make_visual([(10.0, 1.0), (50.0, 0.9), (90.0, 0.8)])
+        row = ev.evaluate_video("V", video, 3, None, 2.0, visual=visual)
+        self.assertEqual(row["times"], [10.0, 50.0, 90.0])
+        self.assertEqual(row["f1"], 1.0)
+        self.assertIsNone(row["visual_redundancy"])  # no embeddings supplied
+
+    def test_redundancy_is_reported_when_embeddings_exist(self):
+        video = make_video(ad_times=(10.0, 50.0))
+        visual = make_visual([(10.0, 1.0), (50.0, 0.9)])
+        embeddings = np.tile([1.0, 0.0], (len(visual["frame_times"]), 1))
+        row = ev.evaluate_video("V", video, 2, None, 2.0, visual=visual, embeddings=embeddings)
+        self.assertAlmostEqual(row["visual_redundancy"], 1.0)
+
+    def test_run_loads_validated_visual_cache_and_counts_skips(self):
+        videos = [make_video("a"), make_video("b")]
+        self.visual_cache("a", make_visual([(10.0, 1.0), (50.0, 0.9), (90.0, 0.8)]))
+        result = self.run_v(videos)
+        self.assertEqual(result["skipped"], {"V": 1})
+        self.assertEqual(result["skipped_reasons"], {"V": {"no_manifest": 1}})
+        self.assertEqual(result["visual_features"], {"usable": 1, "unavailable": {"no_manifest": 1}})
+        self.assertEqual(result["selectors"]["V"]["n_videos"], 1)
+        self.assertEqual(result["selectors"]["V"]["n_with_embeddings"], 1)
+        self.assertIn("V: skipped 1 video(s) without usable visual features (no_manifest x1)", ev.format_report(result))
+
+    def test_stale_visual_features_are_skipped_not_scored(self):
+        paths = self.visual_cache("a", make_visual([(10.0, 1.0), (50.0, 0.9)]))
+        # The frames were re-extracted (new manifest hash) after the features were computed.
+        manifest = {**paths["manifest"], "config_hash": "m2"}
+        (paths["cache"] / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+        result = self.run_v([make_video("a")], ["V"])
+        self.assertEqual(result["skipped_reasons"], {"V": {"stale_visual_features": 1}})
+        self.assertNotIn("V", result["selectors"])
+
+    # Review finding P1 applies to V too: a failed rebuild leaves a complete cache for an older source.
+    def test_stale_media_cache_is_never_scored_for_v_either(self):
+        paths = self.visual_cache("a", make_visual([(10.0, 1.0), (50.0, 0.9)]))
+        paths["source"].write_bytes(b"the replacement source video, which failed to preprocess")
+        result = self.run_v([make_video("a")], ["V"])
+        self.assertEqual(result["skipped_reasons"], {"V": {"media_cache_stale": 1}})
+        self.assertNotIn("V", result["selectors"])
+
+    # Review finding P2: an unrelated broken cache must not stop other selectors.
+    def test_corrupt_visual_json_does_not_stop_other_selectors(self):
+        paths = self.visual_cache("a", make_visual([(10.0, 1.0), (50.0, 0.9)]))
+        (paths["cache"] / "visual_features.json").write_text("{broken", encoding="utf-8")
+        result = self.run_v([make_video("a")], ["U", "O", "V"])
+        self.assertEqual(result["skipped_reasons"], {"V": {"unreadable_visual_features": 1}})
+        self.assertEqual(result["selectors"]["U"]["n_videos"], 1)
+        self.assertEqual(result["selectors"]["O"]["n_videos"], 1)
+
+
+    # Kiran, #19 P2: structurally malformed JSON must be a skip reason, not a crash.
+    def test_structurally_malformed_visual_json_is_skipped_not_fatal(self):
+        paths = self.visual_cache("a", make_visual([(10.0, 1.0), (50.0, 0.9)]))
+        record = json.loads((paths["cache"] / "visual_features.json").read_text())
+        for name, bad in (("novelty null", {"novelty": None}), ("times string", {"frame_times": "x"}),
+                          ("shots wrong", {"shots": {"a": 1}}), ("nan", {"novelty": [float("nan")] * 200})):
+            with self.subTest(defect=name):
+                (paths["cache"] / "visual_features.json").write_text(
+                    json.dumps({**record, **bad}), encoding="utf-8")
+                result = self.run_v([make_video("a")], ["U", "O", "V"])
+                self.assertEqual(result["skipped_reasons"], {"V": {"malformed_visual_features": 1}})
+                self.assertEqual(result["selectors"]["U"]["n_videos"], 1)
+
+    # Kiran, #19 P2: a record whose timeline disagrees with the cached frames is not scored.
+    def test_features_not_aligned_with_cached_frames_are_skipped(self):
+        paths = self.visual_cache("a", make_visual([(10.0, 1.0), (50.0, 0.9)]))
+        record = json.loads((paths["cache"] / "visual_features.json").read_text())
+        record["frame_times"] = [t + 7.0 for t in record["frame_times"]]  # hash unchanged
+        (paths["cache"] / "visual_features.json").write_text(json.dumps(record), encoding="utf-8")
+        result = self.run_v([make_video("a")], ["V"])
+        self.assertEqual(result["skipped_reasons"], {"V": {"inconsistent_visual_features": 1}})
+
+    # Kiran, #19 P2: a bad embeddings file only loses the optional diagnostic.
+    def test_malformed_embeddings_drop_redundancy_but_keep_the_score(self):
+        visual = make_visual([(10.0, 1.0), (50.0, 0.9), (90.0, 0.8)])
+        paths = self.visual_cache("a", visual)
+        record = json.loads((paths["cache"] / "visual_features.json").read_text())
+        (paths["cache"] / record["embeddings"]["file"]).write_bytes(b"not an npy file")
+        result = self.run_v([make_video("a", ad_times=(10.0, 50.0, 90.0))], ["V"])
+        self.assertEqual(result["selectors"]["V"]["n_videos"], 1)
+        self.assertEqual(result["selectors"]["V"]["n_with_embeddings"], 0)
+
+    # Kiran, #19 P2: empty and .npz payloads with a matching digest must not abort the run.
+    def test_empty_and_archive_embeddings_do_not_abort_the_whole_run(self):
+        import hashlib
+        import io as _io
+        archive = _io.BytesIO()
+        np.savez(archive, matrix=np.eye(3))
+        for name, data in (("empty", b""), ("npz", archive.getvalue())):
+            with self.subTest(payload=name):
+                root = Path(tempfile.mkdtemp(dir=self.root))
+                self.root_for_run = root
+                visual = make_visual([(10.0, 1.0), (50.0, 0.9), (90.0, 0.8)])
+                bad = fx.make_visual_cache(root, "bad", visual)
+                fx.make_visual_cache(root, "good", visual)
+                digest = hashlib.sha256(data).hexdigest()
+                reference = f"visual_embeddings.{digest[:16]}.npy"
+                (bad["cache"] / reference).write_bytes(data)
+                record_path = bad["cache"] / "visual_features.json"
+                record = json.loads(record_path.read_text())
+                record["embeddings"] = {"file": reference, "sha256": digest}
+                record_path.write_text(json.dumps(record), encoding="utf-8")
+                with fx.patched_audio_helpers():
+                    result = ev.run([make_video("bad"), make_video("good")], 3.48, ["U", "O", "V"], root, 2.0, 200, 0)
+                self.assertEqual(result["selectors"]["V"]["n_videos"], 2)  # both still scored
+                self.assertEqual(result["selectors"]["V"]["n_with_embeddings"], 1)
+                self.assertEqual(result["selectors"]["U"]["n_videos"], 2)
+
+    def test_nonfinite_or_one_dimensional_embeddings_never_abort_evaluation(self):
+        visual = make_visual([(10.0, 1.0), (50.0, 0.9)])
+        video = make_video(ad_times=(10.0, 50.0))
+        for name, bad in (("1-D", np.ones(len(visual["frame_times"]))),
+                          ("nan", np.full((len(visual["frame_times"]), 2), np.nan))):
+            with self.subTest(embeddings=name):
+                row = ev.evaluate_video("V", video, 2, None, 2.0, visual=visual, embeddings=bad)
+                self.assertIsNone(row["visual_redundancy"])
+                self.assertEqual(row["f1"], 1.0)
 
 
 class SummaryTests(unittest.TestCase):
