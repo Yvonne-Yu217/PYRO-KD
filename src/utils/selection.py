@@ -1,4 +1,4 @@
-"""Shared selection budget and the uniform (U) baseline selector."""
+"""Shared selection budget, the uniform (U) and oracle (O) selectors, and top-K."""
 
 import math
 from typing import Callable, Sequence, TypeVar
@@ -24,6 +24,26 @@ def uniform_timestamps(duration_seconds: float, k: int) -> list[float]:
         raise ValueError("k must be at least 1")
     step = duration_seconds / (k + 1)
     return [round(i * step, 3) for i in range(1, k + 1)]
+
+
+def oracle_timestamps(human_times: Sequence[float], k: int) -> list[float]:
+    """O selector: the human AD start times, capped at the shared budget K.
+
+    This is an upper bound for placement, not a deployable method. With at most K
+    human segments, all are used. With more, K are taken evenly spaced by order
+    (first and last included), so the budget is the same as for every other
+    selector and no part of the video is favored. Times are returned sorted;
+    the 2 s minimum separation is deliberately not applied to the oracle.
+    """
+    if k < 1:
+        raise ValueError("k must be at least 1")
+    ordered = sorted(float(t) for t in human_times)
+    if len(ordered) <= k:
+        return ordered
+    if k == 1:
+        return [ordered[len(ordered) // 2]]
+    last = len(ordered) - 1
+    return [ordered[round(i * last / (k - 1))] for i in range(k)]
 
 
 def select_top_k(
