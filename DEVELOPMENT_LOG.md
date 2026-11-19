@@ -104,3 +104,35 @@ Duplicates / inconsistencies found:
   ground rules.
 - **V stays as is** (default local novelty). Running-memory novelty is an
   option of the new two-stage selector and of `V_mem`.
+
+### Implementation (commits a3a206a, 5ae6319, 0ef0977 and the docs commit)
+
+- **Audio cues** (`src/audio/`): taxonomy (hand-set superclasses, speech/silence excluded), NSE salience, speech cues, VAD-gated ASR with word timestamps (Whisper ungated only for ablation 3's tag baseline), AST/CLAP windowed backends at 1 s hop, prompt timeline, `audio_cues.json` stamped with the WAV SHA-256 and the VAD hash.
+- **Selection** (`src/selection/`): cue bundle on a 0.5 s grid, two-stage selector, hierarchical budgets, registry. Team A and V are called unchanged.
+- **Generation**: P1 (guidelines are our paraphrase; exemplars only from real exemplar-pool lines), timeline in AD/QA prompts (P0 text byte-identical without a timeline), word-cap enforcement, API backends with a spend ledger, Qwen2.5-Omni, echo.
+- **Datasets**: adapter interface + validators; `prepare_mtg_ad.py --offline/--video-dir`; §6 checks.
+- **Experiments**: TOML config, run IDs, matrix and ablations, resumable stages, tuning, report.
+- **Evaluation**: placement metrics and diagnostics (also folded into `scripts/evaluate_selectors.py`, replacing the separate `validate_selectors.py` on the unpushed branch), audio diagnostics, Wilcoxon/Holm/McNemar, QA, 5-criterion judge, CLIP text.
+- **HPC**: `hpc/env.example.sh`, profiles, `hpc/slurm/stage.sbatch`, `hpc/submit_stage.sh`; `hpc/config.sh` sources `hpc/env.sh` and lets `CPU_PARTITION` be overridden; `setup_env.sh` installs faster-whisper.
+
+### Bugs found and fixed during this session
+
+1. 99th-percentile normalization saturated sparse tracks (one novelty peak made every frame 1.0) -> max normalization.
+2. NSE/SC as weighted means diluted a single event by the number of cached streams -> signed sum scaled by the largest weight, clipped to [-1, 1].
+3. Pure memory novelty replaced the local change signal, so an undescribed static frame outranked a shot cut -> `memory_blend` (default 0.5; 1.0 kept as ablation variant `AV-memory-pure`).
+4. The API spend cap could be exceeded when the pre-call estimate was low -> estimates scaled by the worst observed actual/estimate ratio; residual overshoot bounded by one call and documented.
+5. Selector summary rows were computed on different video sets (A/AV skip videos without audio) -> added `summary_common` on the videos every core selector scored, used for the main table and plot.
+6. Tuning folds with no scorable video reported F1 = -1 -> None, excluded from the CV mean.
+7. Selector-only scoring of QA-only datasets would score against an empty ground truth -> skipped as `no_ad_annotations`.
+
+### Evidence on the open A findings (synthetic only)
+
+`tests/test_selector_eval.py::PlacementDiagnosticsTests` reproduces both: A puts more picks in its busiest gap and densest tenth than U on a talky clip, and on a speech-free clip all A picks fall in the first quarter (span < 0.25). On synthetic data the two-stage `A_cue` spreads picks over > 60 % of a speech-free clip (`test_selection_core`). Real dev-set numbers are still needed before proposing any change to `audio_selector.py`.
+
+### Tests
+
+Project venv: 482 tests, OK, 8 skipped (ffmpeg x7, PySceneDetect x1); baseline was 394. Nothing GPU-, model-, API- or dataset-dependent was run.
+
+### Blockers and deviations
+
+See `docs/readiness_report.md` (deviations 1-10) and `PROJECT_STATUS.md`. Open question for the team: Cloud Bursting vs Torch.

@@ -152,6 +152,9 @@ def evaluate_selections(cfg: dict, runs: Sequence[SelectionRun], records, exp_di
         for video_id, row in rows.items():
             if video_id not in by_id:
                 continue
+            if by_id[video_id].ad is None:  # e.g. a QA-only dataset: no placement ground truth
+                not_run["no_ad_annotations"] = not_run.get("no_ad_annotations", 0) + 1
+                continue
             metrics = _video_metrics(row, by_id[video_id], cfg)
             if metrics is None:
                 not_run[row["status"]] = not_run.get(row["status"], 0) + 1
