@@ -717,6 +717,77 @@ class CacheScriptTests(unittest.TestCase):
         self.assertIn("kept current features", out)
         self.assertIsNotNone(vf.load_current_features(cache))
 
+    # Kiran, #19 P2 (round 4): failure cleanup must not delete a generation another writer just committed.
+    def test_failure_cleanup_is_serialized_with_a_concurrent_writers_publication(self):
+        import os
+        import threading
+
+        cache = self.make_cache("good")
+        self.run_script()  # computes features and generation X
+        manifest = json.loads((cache / "manifest.json").read_text())
+        manifest["config_hash"] = "re-extracted"  # the stored features are now stale
+        (cache / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+        other_features, other_embeddings = vf.compute_visual_features(
+            manifest, FeatureCacheTests.fake_embed, FeatureCacheTests.fake_detect)  # same matrix => same X
+
+        at_pause, other_done = threading.Event(), threading.Event()
+        armed, errors = [True], []
+        real_unlink = Path.unlink
+
+        def unlink(path, *args, **kwargs):
+            # The cleanup has built its deletion list and is about to remove the first file.
+            if threading.current_thread().name == "cleanup" and armed[0]:
+                armed[0] = False
+                at_pause.set()
+                other_done.wait(0.5)
+            return real_unlink(path, *args, **kwargs)
+
+        def explode(paths):
+            raise OSError("disk error during recompute")
+
+        def cleanup():
+            self.run_script(embed=explode)
+
+        def writer():
+            try:
+                vf.write_features(cache, other_features, other_embeddings)
+            except BaseException as exc:  # noqa: BLE001
+                errors.append(exc)
+            finally:
+                other_done.set()
+
+        with patch.object(Path, "unlink", unlink):
+            first = threading.Thread(target=cleanup, name="cleanup")
+            first.start()
+            self.assertTrue(at_pause.wait(10))
+            second = threading.Thread(target=writer, name="writer")
+            second.start()
+            first.join(30)
+            second.join(30)
+        self.assertFalse(first.is_alive() or second.is_alive(), "deadlocked")
+        self.assertEqual(errors, [])
+        record = vf.load_features(cache)
+        self.assertIsNotNone(record)  # the writer's commit survived the cleanup
+        self.assertTrue((cache / record["embeddings"]["file"]).exists(), "committed record names a missing file")
+        self.assertIsNotNone(vf.load_embeddings(cache))
+
+    def test_an_unlockable_cache_keeps_its_files_instead_of_aborting_the_batch(self):
+        good = self.make_cache("a")
+        other = self.make_cache("b")
+        self.run_script()
+        manifest = json.loads((good / "manifest.json").read_text())
+        manifest["config_hash"] = "re-extracted"
+        (good / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+
+        def explode(paths):
+            raise RuntimeError("boom")
+
+        with patch.object(vf, "cache_lock", side_effect=OSError("flock unsupported")):
+            code, out, _ = self.run_script("--overwrite", embed=explode)
+        self.assertEqual(code, 1)
+        self.assertIn("FAILED a", out)
+        self.assertIn("FAILED b", out)  # the second video was still attempted
+
     def test_stale_features_are_removed_when_recompute_fails(self):
         cache = self.make_cache("good")
         self.run_script()

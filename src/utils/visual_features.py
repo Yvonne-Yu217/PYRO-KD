@@ -244,7 +244,7 @@ LOCK_NAME = ".visual_features.lock"
 
 
 @contextlib.contextmanager
-def _cache_lock(cache_dir: Path):
+def cache_lock(cache_dir: Path):
     """Exclusive advisory lock on one video's visual cache (blocks until it is free).
 
     flock is released when the descriptor closes, including if the process dies, so a
@@ -281,7 +281,7 @@ def write_features(cache_dir: str | Path, features: dict, embeddings) -> Path:
        the previous embeddings generation are untouched and still a valid pair.
     3. After the commit, remove older generations past a grace period, never the one the
        committed record names.
-    Steps 1-3 run under a per-cache lock (see _cache_lock), so writers and collection
+    Steps 1-3 run under a per-cache lock (see cache_lock), so writers and collection
     are serialized.
     On any failure before the commit, staging files are removed and the previous pair
     stays valid; the published generation is kept (another writer may have committed
@@ -310,7 +310,7 @@ def write_features(cache_dir: str | Path, features: dict, embeddings) -> Path:
     generation = cache_dir / name
     record = {**features, "embeddings": {"file": name, "sha256": digest, "shape": list(array.shape)}}
     path = cache_dir / FEATURES_NAME
-    with _cache_lock(cache_dir):
+    with cache_lock(cache_dir):
         # Verification/adoption of the generation, the JSON commit and collection all run
         # under one per-cache lock, so no writer can collect a generation that another is
         # adopting or has just committed (a file's age says nothing about that).

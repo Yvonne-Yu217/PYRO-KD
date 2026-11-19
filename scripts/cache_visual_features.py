@@ -57,7 +57,7 @@ def _still_current(video_dir: Path) -> bool:
 
 
 def _drop_cache(video_dir: Path) -> None:
-    """Remove the features record and every embeddings generation."""
+    """Remove the features record and every embeddings generation (caller holds vf.cache_lock)."""
     for path in [video_dir / vf.FEATURES_NAME, *video_dir.glob(f"{vf.EMBEDDINGS_PREFIX}.*.npy")]:
         try:
             path.unlink(missing_ok=True)
@@ -131,9 +131,15 @@ def main(argv: list[str] | None = None) -> int:
                 raise  # missing dependency: systematic, not this video's fault
             except Exception as exc:  # one bad video must not stop the rest
                 failures[video_dir.name] = f"{type(exc).__name__}: {exc}"
-                kept = _still_current(video_dir)
-                if not kept:
-                    _drop_cache(video_dir)
+                # Decide and delete under the same per-cache lock writers use to publish, so a
+                # concurrent writer's freshly committed pair cannot be deleted from under it.
+                try:
+                    with vf.cache_lock(video_dir):
+                        kept = _still_current(video_dir)
+                        if not kept:
+                            _drop_cache(video_dir)
+                except OSError:
+                    kept = True  # cannot lock: leave files alone; validated consumers reject bad ones
                 print(
                     f"FAILED {video_dir.name}: {failures[video_dir.name]}"
                     f" ({'kept current features' if kept else 'removed stale features'})",
