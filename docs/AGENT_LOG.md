@@ -12,3 +12,5 @@ Existing container Python also lacked pytest. Created an isolated venv with syst
 NYU official connection documentation identified login.torch.hpc.nyu.edu (earlier guessed hostname was incorrect). Correct hostname responds, but SSH rejects a changed host key. Did not delete or bypass existing trusted keys; requested authenticated Torch access. User dataset counts remain unverified.
 Audited implementation against proposal and wrote PROPOSAL_1_5_AUDIT.md; identified absent AV, P1 and QA inference plus statistical/rendered-timing gaps rather than treating existing baseline code as proposal completion.
 Baseline suite exited 0: 394 tests and 5911 subtests passed in 22.93s. Verified persisted log. This does not establish real-data GPU smoke success.
+
+Implemented paired JSONL analysis with movie aggregation, exclusions and provenance. Consulted official SciPy Wilcoxon documentation for ties/zeros and permutation method. Four tests passed, including analytically known 2/32 two-sided probability and unequal cluster-size weighting. No real metrics analyzed. User subsequently directed retrying SSH using NYU instructions and NetID yy5919.
