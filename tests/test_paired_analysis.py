@@ -42,3 +42,22 @@ def test_invalid_and_duplicate_records_rejected():
     data[0]['cluster_id'] = 'b'
     with pytest.raises(ValueError, match='cluster'):
         analyze(data, 'A', 'B', 'score', 'cluster')
+
+
+def test_holm_keeps_unavailable_hypotheses_in_family():
+    from src.evaluation.stats import holm_adjust
+    assert holm_adjust([0.04, 0.01, None, 0.03]) == pytest.approx([0.09, 0.04, None, 0.09])
+    assert holm_adjust([None]) == [None]
+    with pytest.raises(ValueError):
+        holm_adjust([1.1])
+
+
+def test_family_rejects_reverse_duplicates_and_reports_correction():
+    from scripts.analyze_family import analyze_family
+    data = rows([(i, 0, str(i)) for i in range(1, 6)])
+    family = [{'a': 'A', 'b': 'B', 'metric': 'score'}, {'a': 'A', 'b': 'C', 'metric': 'score'}]
+    result = analyze_family(data, family, 'example', 100)
+    assert result['comparisons'][0]['wilcoxon']['holm_pvalue'] == pytest.approx(0.125)
+    assert result['comparisons'][1]['wilcoxon']['holm_pvalue'] is None
+    with pytest.raises(ValueError, match='duplicate'):
+        analyze_family(data, [family[0], dict(a='B', b='A', metric='score')], 'example', 100)

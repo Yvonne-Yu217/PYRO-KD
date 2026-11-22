@@ -14,3 +14,7 @@ Audited implementation against proposal and wrote PROPOSAL_1_5_AUDIT.md; identif
 Baseline suite exited 0: 394 tests and 5911 subtests passed in 22.93s. Verified persisted log. This does not establish real-data GPU smoke success.
 
 Implemented paired JSONL analysis with movie aggregation, exclusions and provenance. Consulted official SciPy Wilcoxon documentation for ties/zeros and permutation method. Four tests passed, including analytically known 2/32 two-sided probability and unequal cluster-size weighting. No real metrics analyzed. User subsequently directed retrying SSH using NYU instructions and NetID yy5919.
+
+## 2026-11-22 — SSH authentication and comparison families
+Read NYU's official connection instructions in full after the user's direction. Their documented host-key handling is for multiple login nodes. Retried using per-command options (no persistent SSH configuration changes). One node offered only GSSAPI; another attempt reached keyboard-interactive Microsoft device authentication. Session 70487 is awaiting human MFA; no credentials saved in logs. Previous assertion that host-key mismatch necessarily blocked further progress was overly conservative given the official instructions.
+Added scripts/analyze_family.py and Holm correction to preserve declared family size even when comparisons lack data. Distinguishes pointwise confidence intervals from family-corrected p-values. Verification: 41 tests and 11 subtests passed in 3.94s, outputs/verification/pytest-statistics.log. These are software checks, not experiment results.
