@@ -1,5 +1,26 @@
 # Experiment status
 
+## Current checkpoint — 2026-11-22 23:16 UTC
+
+Data preparation is running on Cloud Bursting CPU node b-10-63, user allocation
+40036 (RUNNING; scheduled end 2026-11-23 04:22:47 UTC). GPU submissions remain
+on hold per the user's instruction until data is ready and they obtain a GPU session.
+
+- Authoritative proposal: Revision 1.5, tab `t.ickd261ntenp`; requirements in
+  `docs/REVISION_1_5_REQUIREMENTS.md`.
+- Source baseline: `3139be9be2ef52f498b5db5fecfdfa5618da03b0`.
+- MTG: all 413 source-available videos copied and SHA256 verified; 20 source failures remain.
+- EgoSchema: all 5031 videos copied and manifest/ffprobe verified; all lack audio.
+- REFRAMED: copy active, approximately 11% at this checkpoint. Transfer supervisor
+  PID 10131 and rsync PID 20258 confirmed live. Verification watcher PID 11171
+  waits for transfer completion before checking all 1983 available videos.
+- Evidence: `outputs/verification/mtg-transfer-final.json`, `mtg-sha256.log`,
+  `egoschema-transfer-final.json`; live log `outputs/transfers/pull_torch_datasets.log`.
+- No real GPU inference or scientific comparison results yet. All experiment scope
+  remains outstanding except the documented infrastructure and CPU preparation.
+
+## Historical updates (chronological; superseded statements retained for provenance)
+
 Source baseline: 3139be9be2ef52f498b5db5fecfdfa5618da03b0 (fetched origin/main 2026-11-22).
 Proposal source: Google Doc 1dYGXJJ-MJxmJtZV02U4IrkQVXLPTdev9soelen7Ltyw, tab t.1uocwcl7xqhl.
 
