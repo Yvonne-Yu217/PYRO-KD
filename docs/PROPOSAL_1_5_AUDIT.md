@@ -1,4 +1,4 @@
-# Proposal 1.5 implementation and verification audit
+# Historical audit of the linked older proposal tab
 
 Audited 2026-11-22 against the user-linked Google Docs tab and main
 3139be9be2ef52f498b5db5fecfdfa5618da03b0. This is a requirements inventory,
@@ -34,3 +34,6 @@ Course Agent Track requirements were read from
 https://www.sainingxie.com/cv-fall2026/project/ (curl retrieval after web tool
 failure): log tooling/contributions, agent failures, human diagnosis and
 verification. Agent Log is an appendix deliverable.
+
+
+CORRECTION: This audit initially read the URL-selected older tab, not the tab titled Revision 1.5. It is retained as an agent-error record. The authoritative text is docs/PROPOSAL_REVISION_1_5.txt, tab t.ickd261ntenp; use docs/REVISION_1_5_REQUIREMENTS.md for current scope.

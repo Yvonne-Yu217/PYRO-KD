@@ -1,0 +1,182 @@
+Cue-Driven Keyframe Selection for Long-Video Audio Description & QA
+Revised 6-Week Project Plan | NYU Graduate Computer Vision
+Revision notes: this version (1) retargets the project to long videos, (2) replaces the Whisper-only audio stack with a three-stream speech / non-speech / gap design, (3) separates "what is worth describing" from "where it can legally go," (4) adds a trigger-vs-suppress hypothesis for audio events, (5) feeds an audio timeline to the MLLM, and (6) adds explicit pre-commitment checks on datasets and detectors.
+1. Project Overview & Scope
+Audio Description (AD) narrates key visual events for blind and low-vision (BLV) viewers. Inline AD must fit into natural silences without overlapping dialogue. This project builds and benchmarks a cue-driven keyframe selection and captioning method for long videos that serves two goals: (a) producing well-placed, concise descriptions, and (b) supporting downstream long-video QA.
+The core idea is to drive moment selection with both spoken content and non-speech audio (music, applause, honking, laughter, impacts), combined with visual change, at a fixed keyframe budget K. We also test whether prompt-level human priors (AD guidelines and professional exemplars) improve concision and quality.
+A central design principle: separate the event cue from the gap constraint.
+Salience: what moment is worth describing? (audio events, speech cues, visual novelty)
+Feasibility: where can a description legally go? (VAD-defined gaps and word budget)
+Benchmarks
+Primary evaluation (REFRAMED): movie AD benchmark with dialogue subtitles, scene cuts, and professional AD reference tracks. Measures AD placement recall/precision, speech overlap, and description quality.
+Baseline comparison (Cue2Narrate): audio description dataset used to compare against established baselines for automated AD generation and placement. Access and comparability must be verified in Week 1 (see Section 6).
+Downstream QA, short form (EgoSchema): 3-minute egocentric QA diagnostic. Only used for audio-aware claims if the distributed clips contain audio (verified in Week 1).
+Downstream QA, long form (new): one long-video QA benchmark with an audio track and videos well beyond 5 minutes (candidates: the long split of Video-MME or a comparable benchmark; final choice depends on audio availability and license). This is what supports the long-video claim.
+Scope Limits
+In scope: videos from 3 minutes up to roughly 30 to 60 minutes for the long-form subset (a small evaluation subset, with hierarchical processing); frozen MLLMs (no fine-tuning); 5 core selectors plus ablation variants; a three-stream audio stack (VAD, Whisper ASR, audio-event tagging); 2 prompt priors; 2 core models plus 1 audio-native ablation model; reference-based, rubric-based, and downstream QA evaluations.
+Out of scope: closed captioning for D/HH users; gaze/saliency priors; end-to-end training; BLV human participant studies; legal ADA compliance claims.
+2. Audio Stack: Three Streams
+The original plan used Whisper for both speech and non-speech audio events. Whisper is only reliable for speech; on music, applause, and noise it tends to hallucinate text, and its bracketed tags (e.g., [MUSIC]) are inconsistent. The audio stack is therefore split into three streams.
+Stream
+Tool
+Output
+Speech presence
+Silero VAD
+Speech / non-speech intervals. These define the legal gaps.
+Speech content
+Whisper via faster-whisper or WhisperX, run only on VAD-positive regions
+Word-level timestamps and transcript
+Non-speech events
+AudioSet tagger (BEATs, PANNs, or AST) plus CLAP embeddings
+Frame-level class posteriors (music, applause, honk, laughter, door slam, etc.) and an open-vocabulary embedding track
+Gating Whisper with VAD reduces hallucinations and compute. Optional: pyannote diarization for speaker-change cues.
+3. Cue Scores
+3.1 Non-speech event salience (NSE)
+Take frame-level class posteriors at roughly a 1 s hop, and drop speech and silence classes.
+Detect onsets as sharp rises in a class's probability (music starts, applause begins).
+Detect embedding change in CLAP against a running window. This catches transitions with no AudioSet label, such as a genre or tempo shift.
+Add cheap salience features: loudness deltas (RMS or LUFS jump) and librosa onset strength.
+3.2 Speech cues (SC)
+Speaker change (diarization).
+Topic or semantic shift in transcript embeddings.
+Deictic or visually referential phrases ("look at this," "over there," "watch"), which signal a visual event the dialogue does not fully explain.
+Long speech-free stretches, where visual changes need narration.
+3.3 Visual novelty (VN)
+Camera transitions (PySceneDetect) plus OpenCLIP frame-embedding novelty, measured against a running memory of already-selected moments (not just the neighboring window).
+3.4 Gap feasibility (GF)
+From Silero VAD: the length of the non-speech gap nearest the candidate, relative to the word budget (Words = floor(Delta_t x 3)).
+Overlap penalty (OP) for candidates whose rendered AD would collide with speech.
+4. Research Questions & Hypotheses
+RQ1 (Selection accuracy and gap fit). At a fixed budget of K moments per video, how do Video-only (V), Audio-only (A), and Fused Audio+Video (AV) selectors compare against Uniform (U) on REFRAMED and Cue2Narrate in (a) agreement with human AD placement and (b) speech overlap?
+H1: AV matches V's temporal placement accuracy while matching A's near-zero speech overlap.
+RQ2 (Audio event role: trigger vs. suppress). Should non-speech audio events raise or lower a moment's priority?
+H2a (Trigger): audio events correlate with visual change, so they raise priority.
+H2b (Suppress): events already conveyed by sound are partly redundant for BLV viewers, so visual changes that occur in silence or under unchanging audio deserve higher priority.
+Tested via signed and per-class weights on NSE and via an audio-visual disagreement feature (high visual novelty with low audio change). We expect a class-dependent answer (e.g., music onsets may trigger, impulsive sounds like claps may suppress).
+RQ3 (Human-prior prompting). Does supplementing plain prompts (P0) with AD guidelines and 3 exemplars (P1) improve rubric scores?
+H3: P1 improves objectivity, concision, and gap fit more than overall visual coverage.
+RQ4 (Downstream QA utility, short and long). Does audio-aware selection (A/AV), plus an audio-event timeline in the prompt, improve zero-shot multiple-choice QA over visual-only selection (V)?
+H4: AV selects keyframes with higher narrative-event density and yields higher QA accuracy, with the largest gain on the long-video benchmark.
+RQ5 (Audio context in the MLLM). Does giving the MLLM a compact audio timeline help beyond using audio only for selection? How does this compare to an audio-native model?
+H5: the timeline gives a cheap, model-agnostic gain for both captioning and QA.
+RQ6 (Baseline and oracle headroom). How far does each deployable selector fall from Cue2Narrate baselines and from an Oracle (O) using human AD timestamps?
+5. Experimental Design
+5.1 Two-stage selector (core method)
+Candidate generation. Propose candidate moments from non-speech audio events, speech cues, and visual novelty.
+Gap snapping. Snap each candidate to the nearest valid VAD gap that is long enough for the word budget, with a small lag allowance for events that occur mid-speech.
+Selection. Score candidates and choose K with diversity (MMR, or the t_min separation).
+AV score:
+Score(t) = a*VN(t) + b*NSE(t) + g*SC(t) + d*GF(t) - l*OP(t)
+Weights (a, b, g, d, l) are tuned on a dev split. b may be signed or per-class (hand-set or learned per AudioSet superclass) to test RQ2.
+5.2 Core factors (20-run matrix preserved)
+Selectors (5):
+U: uniform timestamps, t_i = i x Duration / (K+1).
+V: PySceneDetect transitions plus OpenCLIP novelty.
+A: speech cues plus non-speech event salience, snapped to VAD gaps (no visual input).
+AV: the full two-stage fused score above.
+O: human ground-truth AD timestamps (oracle upper bound).
+Priors (2): P0 (plain prompt) vs. P1 (guideline summary plus 3 professional exemplars).
+Models (2): one open-weights VLM (Qwen2.5-VL 7B/8B class) and one API model (Gemini Flash or GPT-4o-mini).
+Core matrix: 5 selectors x 2 priors x 2 models = 20 runs.
+5.3 Ablations (selector-only or single-model, to control cost)
+Speech cues only vs. non-speech events only vs. both.
+Trigger vs. suppress sign for b (global and per class).
+Whisper-only audio events vs. the BEATs/CLAP tagger (justifies the stack change).
+Event-time placement vs. snap-to-gap placement.
+Audio timeline in prompt: absent vs. present vs. an audio-native model (Qwen2.5-Omni or Qwen2-Audio) that hears the audio directly.
+Per-class breakdown: music vs. impulsive sounds (claps, honks) vs. ambient.
+Flat vs. hierarchical budget allocation on long videos.
+Running novelty memory vs. local-window novelty.
+Ablations 1 to 4, 6, 7, and 8 are selector-level (zero or low MLLM cost). Ablation 5 is run on one model with the top-performing selector.
+5.4 Prompt audio context
+For both captioning and QA, the prompt includes a compact audio timeline, e.g.:
+[0:42 music starts] [0:55 applause] [1:03 speech: "..."]
+For long videos, the global timeline also serves as a summary for the QA stage.
+5.5 Scaling to long videos
+Hierarchical chunking: segment by scene, long silence, or music boundaries.
+Budget allocation: distribute K across segments in proportion to event density, with a floor so quiet segments are not starved.
+Running context memory: embeddings of already-selected moments, so novelty is measured against what has already been described.
+5.6 Held-constant controls
+Across configurations, the following are identical: K (or K per minute for long videos), minimum temporal separation t_min = 2.0 s, visual window per moment (4 frames across 2 s), the audio timeline format, the word limit per gap (floor(Delta_t x 3)), and temperature (0.0). Whisper is always VAD-gated.
+6. Pre-Commitment Checks (Week 1 Gate)
+These checks decide whether parts of the design stand as written.
+Check
+Why it matters
+If it fails
+EgoSchema audio. Confirm the distributed clips contain audio.
+The original RQ3 assumed audio-aware selection on EgoSchema. Clips may be video-only, in which case A/AV has no input.
+Treat EgoSchema as a visual-only diagnostic (V vs. U) and rely on the long-form audio benchmark for RQ4.
+Cue2Narrate access. Confirm the data and baseline numbers are accessible and comparable.
+RQ6 depends on it.
+Replace baseline comparison with REFRAMED-only plus re-implemented baselines; drop the Cue2Narrate claims.
+Long-form QA benchmark. Confirm audio, license, and download size.
+Supports the long-video claim.
+Fall back to concatenated REFRAMED clips for captioning, and report QA on EgoSchema only.
+Event detector sanity check. Hand-label about 10 clips (about 10 minutes each of movie audio) and measure tagger precision/recall.
+Movie audio (mixed music, effects, dialogue) differs from AudioSet's training distribution.
+Raise detection thresholds, restrict to reliable classes (music, applause, laughter), or rely more on CLAP embedding change.
+7. Evaluation Suite
+A. Selection quality and timing (REFRAMED, Cue2Narrate)
+Temporal precision and recall: proportion of selected moments within a window of 2.0 s of human AD timestamps.
+Cue2Narrate baseline comparison: against official benchmark scores for placement precision and narrative alignment (subject to verification).
+Speech overlap: seconds of collision between rendered AD (at 1.2x speed) and speech detected via Silero VAD and Whisper timestamps.
+Silence utilization: ratio of description duration to available gap length.
+B. Audio-cue diagnostics (new)
+Event detector quality: precision/recall on the hand-labeled subset.
+Trigger/suppress analysis: correlation of audio-event onsets with human AD placement, per class; effect of signed b on placement recall.
+Silent-visual-event coverage: fraction of human AD moments that occur with no audio change, and how well each selector covers them.
+C. Description quality and guideline rubric
+Text similarity: OpenCLIP cosine and BERTScore versus professional references.
+LLM judge rubric (1 to 5): objectivity, concision/gap fit, non-redundancy, specificity, grounding. Non-redundancy includes not narrating information already conveyed by audio.
+D. Downstream utility
+Zero-shot QA accuracy (%) on EgoSchema (visual-only unless audio is confirmed) and on the long-form benchmark, with audio-timeline prompt on and off.
+Accuracy vs. video length to show whether gains grow on longer videos.
+8. Week-by-Week Plan
+Week 1: Environment, data ingestion, and verification gate
+Set up uv environment (Python 3.12), shared GitHub repository, GPU allocations.
+Ingest REFRAMED, Cue2Narrate, EgoSchema, and the chosen long-form QA benchmark.
+Run the Section 6 checks (EgoSchema audio, Cue2Narrate access, long-form benchmark, begin hand-labeling).
+Build frame loader and audio conversion utilities; stand up Silero VAD and VAD-gated Whisper.
+Week 2: Audio event stack, feature caching, and end-to-end skeleton
+Run the BEATs/PANNs/AST tagger and CLAP embeddings; cache class posteriors and embeddings.
+Cache OpenCLIP frame embeddings, VAD intervals, and Whisper transcripts keyed by content hash.
+Finish detector sanity check on the 10 hand-labeled clips.
+Implement U with P0 on 10 dev videos; build evaluation v0 (BERTScore plus speech overlap).
+Week 3: Selectors, two-stage pipeline, and timing benchmark
+Build V, A, and AV (candidate generation, gap snapping, MMR selection); tune weights on the dev split.
+Implement trigger/suppress variants and the audio-visual disagreement feature.
+Implement hierarchical chunking and running-memory novelty.
+Run selector-only evaluation on REFRAMED and Cue2Narrate (RQ1, RQ2, RQ6 baselines; zero MLLM cost) plus selector-level ablations.
+Design P1 with exemplars; calibrate the 5-criterion LLM judge; define the audio-timeline prompt format.
+Week 4: Full matrix and downstream QA
+Execute the 20-configuration grid (open-weights and API models).
+Run EgoSchema and long-form QA across selectors, with timeline on/off.
+Run the audio-native model ablation on one model with the top selector.
+Collect blinded peer pairwise ratings (60 comparisons).
+Week 5: Statistics, error analysis, code freeze
+Wilcoxon signed-rank tests and 95% bootstrap confidence intervals.
+Analyze failure cases: speech collisions, hallucinated audio descriptions, missed silent visual events, tagger false positives, mid-speech event handling.
+Freeze codebase and artifacts.
+Week 6: Reporting and deliverables
+Conference-style report, final figures, slides, and a README enabling one-step table reproduction.
+9. Risks, Mitigation & Cut List
+Risk 1: Speech collisions from incorrect gap estimation. Mitigation: strict word cap of floor(Delta_t x 3), using VAD speech bounds with Whisper timestamps as a cross-check.
+Risk 2: API cost or runtime overruns. Mitigation: cache all intermediates keyed by content hash; enforce a hard spend cap in code.
+Risk 3: Non-speech tagger underperforms on movie audio. Mitigation: Week 2 sanity check; restrict to reliable classes; fall back on CLAP embedding change and loudness/onset features.
+Risk 4: Audio unavailable in a benchmark. Mitigation: Week 1 gate; use the audio-bearing benchmarks for audio claims and treat the rest as visual-only diagnostics.
+Risk 5: Scope growth from long videos and added ablations. Mitigation: most ablations are selector-only; long-form evaluation uses a small subset; hierarchical processing relies on cached features.
+Risk 6: Signed or per-class weights overfit the dev split. Mitigation: few parameters (per superclass, not per label), cross-validate on dev, report on held-out test only once.
+Ordered cut list (applied if behind schedule)
+Drop the audio-native model ablation.
+Drop the API model and run the 10 open-weights configurations.
+Evaluate P1 only on U and the top selector.
+Reduce the long-form QA subset size.
+Reduce REFRAMED/Cue2Narrate test subset from 50 to 30 videos.
+Shrink the peer pairwise study to 30 items.
+Reduce per-class trigger/suppress analysis to music vs. impulsive vs. other.
+10. Deliverables
+Final written report: the 20-configuration results table; REFRAMED and Cue2Narrate timing and quality breakdowns; trigger-vs-suppress findings; audio-timeline and audio-native ablations; EgoSchema and long-form QA results; qualitative error analysis.
+Open-source codebase: modular selectors (visual_selector.py; audio_selector.py with VAD, Whisper, and event-tagger integration; gap-snapping and hierarchical-budget modules), Slurm scripts, and cached feature pipelines.
+Reproducible experiment data: raw generations, evaluation scores against Cue2Narrate baselines, the hand-labeled audio-event subset, and anonymized peer preference logs.
+
+
