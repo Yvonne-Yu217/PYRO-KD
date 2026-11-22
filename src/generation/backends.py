@@ -29,6 +29,7 @@ import os
 from pathlib import Path
 import time
 from typing import Any, Protocol
+import http.client
 import urllib.error
 import urllib.request
 
@@ -171,7 +172,13 @@ def _ledger(config: dict) -> SpendLedger:
     cap = config.get("spend_cap_usd", os.environ.get("PYRO_API_SPEND_CAP_USD"))
     if cap is None:
         raise ValueError("API backends need spend_cap_usd in the config or PYRO_API_SPEND_CAP_USD; refusing without a cap")
-    path = config.get("ledger_path") or os.environ.get("PYRO_API_LEDGER", "outputs/api_spend_ledger.json")
+    path = config.get("ledger_path") or os.environ.get("PYRO_API_LEDGER")
+    if not path or not Path(path).is_absolute():
+        # A relative path would resolve against whatever directory the job started in, giving each
+        # job its own ledger at $0 and defeating the shared cap. run_experiment supplies a per-experiment path.
+        raise ValueError(
+            "API backends need an absolute ledger_path (config) or PYRO_API_LEDGER so every job shares one spend ledger"
+        )
     return SpendLedger(path, float(cap))
 
 
@@ -215,7 +222,7 @@ class _APIBackend:
             reserved = self.ledger.reserve(estimate)
         except SpendCapExceeded as exc:
             return GenResult(request.id, error=f"spend_cap: {exc}")
-        started, actual = time.time(), 0.0
+        started, actual, maybe_billed = time.time(), 0.0, False
         try:
             for attempt in range(self.max_retries + 1):
                 try:
@@ -224,19 +231,30 @@ class _APIBackend:
                     return GenResult(request.id, text=text.strip(), raw=raw, new_tokens=out_tok, cost_usd=round(actual, 6),
                                      latency_s=round(time.time() - started, 3), hit_token_limit=not finished,
                                      error=None if finished else f"hit_token_limit: max_new_tokens={request.max_new_tokens}")
-                except urllib.error.HTTPError as exc:
+                except urllib.error.HTTPError as exc:  # before URLError: HTTPError is a subclass of it
                     if exc.code in (429, 500, 502, 503) and attempt < self.max_retries:
                         time.sleep(min(30, 2 ** attempt))
                         continue
                     return GenResult(request.id, error=f"http {exc.code}: {exc.reason}")
-                except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, KeyError, IndexError) as exc:
+                except FileNotFoundError as exc:  # a frame file is gone: retrying cannot help, nothing was sent
+                    return GenResult(request.id, error=f"request: frame unreadable: {exc!r}")
+                except (TimeoutError, ConnectionError, http.client.HTTPException, json.JSONDecodeError) as exc:
+                    maybe_billed = True  # the request reached the provider; the reply was lost or unreadable
+                    if attempt < self.max_retries:
+                        time.sleep(min(30, 2 ** attempt))
+                        continue
+                    return GenResult(request.id, error=f"request: {exc!r}")
+                except (urllib.error.URLError, OSError, KeyError, IndexError, ValueError, TypeError) as exc:
                     if attempt < self.max_retries:
                         time.sleep(min(30, 2 ** attempt))
                         continue
                     return GenResult(request.id, error=f"request: {exc!r}")
             return GenResult(request.id, error="request: retries exhausted")
+        except Exception as exc:  # never let one request take down the batch
+            return GenResult(request.id, error=f"request: {exc!r}")
         finally:
-            self.ledger.settle(reserved, actual, estimate)
+            # A reply that never arrived may still have been billed: charge the reserved worst case rather than $0.
+            self.ledger.settle(reserved, actual if actual or not maybe_billed else reserved, estimate)
 
 
 class OpenAIBackend(_APIBackend):

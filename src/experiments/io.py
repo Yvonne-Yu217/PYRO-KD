@@ -12,11 +12,17 @@
 
 from __future__ import annotations
 
+import contextlib
 import json
 import os
 from pathlib import Path
 import tempfile
 from typing import Any, Iterable
+
+try:
+    import fcntl
+except ImportError:  # pragma: no cover - non-POSIX
+    fcntl = None
 
 from src.experiments.config import get
 
@@ -74,11 +80,28 @@ def latest_by_key(rows: Iterable[dict], key: str) -> dict[str, dict]:
     return out
 
 
+@contextlib.contextmanager
+def _locked(path: Path):
+    """Exclusive advisory lock beside a shared file (released if the process dies)."""
+    if fcntl is None:
+        yield
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path.with_name(f".{path.name}.lock"), "a+b") as handle:
+        fcntl.flock(handle, fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(handle, fcntl.LOCK_UN)
+
+
 def update_status(exp_dir: Path, stage: str, run_id: str, info: dict) -> None:
+    """Record one run's state. Sharded or parallel jobs share status.json, so the read-modify-write is locked."""
     path = exp_dir / "status.json"
-    try:
-        status = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        status = {}
-    status.setdefault(stage, {})[run_id] = info
-    write_json(path, status)
+    with _locked(path):
+        try:
+            status = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            status = {}
+        status.setdefault(stage, {})[run_id] = info
+        write_json(path, status)

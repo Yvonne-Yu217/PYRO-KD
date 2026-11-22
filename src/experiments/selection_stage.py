@@ -30,7 +30,7 @@ from src.experiments.config import get
 from src.experiments.data import ground_truth, k_for, load_context
 from src.experiments.io import append_jsonl, latest_by_key, read_jsonl, update_status, write_json
 from src.experiments.matrix import SelectionRun
-from src.selection.registry import run_selector
+from src.selection.registry import run_selector, spec_uses_visual
 
 TOLERANCE_SWEEP = (0.0, 1.0, 2.0, 3.0, 5.0)
 
@@ -39,16 +39,28 @@ def selections_path(exp_dir: Path, run: SelectionRun) -> Path:
     return exp_dir / "selections" / f"{run.run_id}.jsonl"
 
 
+def _recompute(status: str, retry_failed: bool) -> bool:
+    """Whether a previous selection row should be recomputed on this run.
+
+    "error" rows only with --retry-failed. "missing_*" rows (inputs were not cached yet) and
+    "ok_degraded" rows (ran without the audio cues) are recomputed every run, because the caches
+    may have been built since; an unchanged result is not appended again.
+    """
+    if status == "error":
+        return retry_failed
+    return status.startswith("missing_") or status == "ok_degraded"
+
+
 def run_selection(cfg: dict, run: SelectionRun, records, exp_dir: Path, retry_failed: bool = False) -> Path:
     path = selections_path(exp_dir, run)
     done = latest_by_key(read_jsonl(path), "video_id")
     spec = run.spec
     cue_set = spec.get("cue_set", "audio_cues.json")
-    needs_visual = spec["kind"] in ("V", "two_stage")
+    needs_visual = spec_uses_visual(spec)
     counts = {"written": 0, "skipped": 0, "errors": 0}
     for record in records:
         previous = done.get(record.video_id)
-        if previous and (previous["status"] != "error" or not retry_failed):
+        if previous and not _recompute(previous["status"], retry_failed):
             counts["skipped"] += 1
             continue
         try:
@@ -67,6 +79,9 @@ def run_selection(cfg: dict, run: SelectionRun, records, exp_dir: Path, retry_fa
                    "error": f"{exc!r}", "traceback": traceback.format_exc(limit=3)}
             counts["errors"] += 1
         row.update(selector=run.name, run_id=run.run_id, oracle=run.is_oracle, ablation=run.ablation)
+        if previous and previous["status"] == row["status"] and previous.get("times") == row.get("times"):
+            counts["skipped"] += 1  # a retried row that came out the same adds nothing to the file
+            continue
         append_jsonl(path, [row])
         counts["written"] += 1
     update_status(exp_dir, "select", run.run_id, {"selector": run.name, **counts})
@@ -105,7 +120,7 @@ def _video_metrics(row: dict, record, cfg: dict) -> dict | None:
         out["silence_utilization"] = placement.silence_utilization(placements, speech, duration, wps, speed)["mean"]
         out["zero_budget_picks"] = sum(1 for _, n in placements if n == 0)
     if context.audio_cues is not None:
-        bundle = context.bundle()
+        bundle = context.bundle(use_visual=False)  # audio change only
         silent = audio_diagnostics.silent_gt_times(truth, bundle.grid, bundle.audio_change())
         out["n_silent_gt"] = len(silent)
         out["recall_on_silent_gt"] = (temporal_precision_recall_f1(times, silent, tol)["recall"] if silent else None)

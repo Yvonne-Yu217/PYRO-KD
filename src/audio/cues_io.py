@@ -248,7 +248,12 @@ def compute_audio_cues(
 
 
 def _finite(v) -> bool:
-    return isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v)
+    if isinstance(v, bool) or not isinstance(v, (int, float)):
+        return False
+    try:
+        return math.isfinite(v)
+    except OverflowError:  # a JSON integer too large for a float, e.g. 10**400
+        return False
 
 
 def malformed_cues(record: Any) -> str | None:
@@ -270,6 +275,11 @@ def malformed_cues(record: Any) -> str | None:
                 return f"{name}[{i}] needs finite time and strength"
             if row["time"] < 0:
                 return f"{name}[{i}] has a negative time"
+            # Fields consumers index directly (cues["kind"], the timeline's label/superclass).
+            required = ("kind",) if name == "speech_cues" else ("label", "superclass")
+            for key in required:
+                if not isinstance(row.get(key), str) or not row[key]:
+                    return f"{name}[{i}] needs a non-empty string {key!r}"
     for name, keys in (("tagger", ("times",)), ("clap", ("times", "change")), ("acoustic", ("times", "loudness_jump", "onset_strength"))):
         block = record.get(name)
         if block is None:
@@ -296,6 +306,17 @@ def malformed_cues(record: Any) -> str | None:
     if asr is not None:
         if not isinstance(asr, dict) or not isinstance(asr.get("segments"), list):
             return "asr.segments is not a list"
+        for i, segment in enumerate(asr["segments"]):
+            if (
+                not isinstance(segment, dict) or not _finite(segment.get("start")) or not _finite(segment.get("end"))
+                or segment["start"] < 0 or segment["end"] < segment["start"] or not isinstance(segment.get("text"), str)
+            ):
+                return f"asr.segments[{i}] needs finite 0 <= start <= end and a string text"
+            words = segment.get("words")
+            if words is not None and (not isinstance(words, list) or any(
+                not isinstance(w, dict) or not _finite(w.get("start")) or not _finite(w.get("end")) for w in words
+            )):
+                return f"asr.segments[{i}].words need finite start and end"
     return None
 
 

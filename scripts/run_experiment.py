@@ -17,7 +17,7 @@ Stages (each resumable; rerunning skips finished work):
     python scripts/run_experiment.py --config configs/experiments/mtg_ad_dev.toml --stage selector-only
     python scripts/run_experiment.py --config configs/experiments/mtg_ad_dev.toml --stage generate \\
         --runs "ad-U-P0-qwen*" --set models.qwen.batch_size=8
-    python scripts/run_experiment.py --config ... --stage generate --dry-run   # echo backend, no model
+    python scripts/run_experiment.py --config ... --stage generate --dry-run   # echo backend, no model; output goes to generations/dry_run/ (never resumed by a real run)
 
 Selector-only stages never import a generation backend.
 """
@@ -49,12 +49,14 @@ def _filter(runs, patterns):
                                    for p in patterns)]
 
 
-def _backend_factory(dry_run: bool):
+def _backend_factory(dry_run: bool, ledger_path: Path | None = None):
     def factory(spec: dict):
         from src.generation.backends import EchoBackend, build_backend
 
         if dry_run:
             return EchoBackend("echo", {"reply": "DRY RUN: no model was called."})
+        if ledger_path is not None and spec.get("backend") in ("openai", "gemini") and not spec.get("ledger_path"):
+            spec = {**spec, "ledger_path": str(ledger_path)}  # one ledger per experiment, whatever the cwd
         return build_backend(spec)
     return factory
 
@@ -86,6 +88,7 @@ def main(argv: list[str] | None = None) -> int:
     write_json(exp / "config.resolved.json", {k: v for k, v in cfg.items()})
     clear_context_cache()
 
+    ledger = exp / "api_spend_ledger.json"
     selection_runs = _filter(matrix.all_selection_runs(cfg), args.runs)
     core = matrix.core_selections(cfg)
     task = get(cfg, "experiment.task", "ad")
@@ -145,7 +148,7 @@ def main(argv: list[str] | None = None) -> int:
 
         runs = matrix.core_generation_runs(cfg, "ad") if args.stage == "generate" else matrix.ablation5_runs(cfg, "ad")
         for run in _filter(runs, args.runs):
-            path = run_generation(cfg, run, exp, _backend_factory(args.dry_run), records, args.limit)
+            path = run_generation(cfg, run, exp, _backend_factory(args.dry_run, ledger), records, args.limit, args.dry_run)
             print(f"[generate] {run.run_id} -> {path}")
     if args.stage == "evaluate-generation":
         from src.experiments.generation_stage import evaluate_generation, generations_path
@@ -165,8 +168,8 @@ def main(argv: list[str] | None = None) -> int:
                                                     "qa", None, run.generation_json))
         qa_runs = [r for r in _filter(qa_runs, args.runs) if r.prior == "P0"]  # priors are an AD factor
         for run in qa_runs:
-            print(f"[qa] {run.run_id} -> {run_qa(cfg, run, records, exp, _backend_factory(args.dry_run))}")
-        evaluate_qa(cfg, qa_runs, exp)
+            print(f"[qa] {run.run_id} -> {run_qa(cfg, run, records, exp, _backend_factory(args.dry_run, ledger), args.dry_run)}")
+        evaluate_qa(cfg, qa_runs, exp, args.dry_run)
     if args.stage == "report":
         from src.experiments.report import make_report
 

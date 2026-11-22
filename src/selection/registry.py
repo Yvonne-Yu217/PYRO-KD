@@ -76,15 +76,18 @@ class SelectionContext:
     ground_truth: list[float] | None = None  # O only
     missing: dict[str, str] = field(default_factory=dict)
     bundle_config: dict | None = None
-    _bundle: CueBundle | None = None
+    _bundles: dict = field(default_factory=dict)
 
-    def bundle(self) -> CueBundle:
-        if self._bundle is None:
-            self._bundle = build_cue_bundle(
-                self.duration, self.audio_features, self.audio_cues, self.visual_features,
-                self.embeddings, self.bundle_config, self.missing,
+    def bundle(self, use_visual: bool = True) -> CueBundle:
+        """The cue bundle; use_visual=False builds it from audio inputs only, so a selector that is
+        defined as audio-only cannot pick up CLIP novelty, shots or embeddings from a visual cache."""
+        if use_visual not in self._bundles:
+            self._bundles[use_visual] = build_cue_bundle(
+                self.duration, self.audio_features, self.audio_cues,
+                self.visual_features if use_visual else None, self.embeddings if use_visual else None,
+                self.bundle_config, self.missing,
             )
-        return self._bundle
+        return self._bundles[use_visual]
 
 
 @dataclass
@@ -126,6 +129,17 @@ def resolve_spec(spec: str | dict) -> dict:
     return merged
 
 
+def spec_uses_visual(spec: str | dict) -> bool:
+    """True if the selector reads visual features: V, or a two-stage spec with a visual score term."""
+    spec = resolve_spec(spec)
+    if spec["kind"] == "V":
+        return True
+    if spec["kind"] != "two_stage":
+        return False
+    weights = two_stage.merge_config(spec.get("options"))["weights"]
+    return weights.get("vn", 0) != 0 or weights.get("av_disagreement", 0) != 0
+
+
 def run_selector(spec: str | dict, context: SelectionContext, k: int) -> Selection:
     """Select up to K moments for one video. Missing inputs give an explicit status."""
     spec = resolve_spec(spec)
@@ -154,10 +168,10 @@ def run_selector(spec: str | dict, context: SelectionContext, k: int) -> Selecti
                          [{"time": c.time, "score": c.score, "novelty": c.novelty, "shot_boundary": c.shot_boundary} for c in picks])
     options = spec.get("options", {})
     cfg = two_stage.merge_config(options)
-    uses_visual = cfg["weights"].get("vn", 0) != 0 or cfg["weights"].get("av_disagreement", 0) != 0
+    uses_visual = spec_uses_visual(spec)
     if uses_visual and context.visual_features is None:
         return Selection(name, [], "missing_visual_features", k, diagnostics={"reason": context.missing.get("visual")})
-    bundle = context.bundle()
+    bundle = context.bundle(use_visual=uses_visual)
     if spec.get("budget", "flat") == "hierarchical":
         result = select_hierarchical(bundle, k, options, spec.get("hierarchy"))
     else:

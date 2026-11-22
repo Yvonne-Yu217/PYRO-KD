@@ -105,8 +105,10 @@ def build_moments(cfg: dict, run: SelectionRun, records, exp_dir: Path) -> Path:
     return path
 
 
-def generations_path(exp_dir: Path, run: GenerationRun) -> Path:
-    return exp_dir / "generations" / f"{run.run_id}.jsonl"
+def generations_path(exp_dir: Path, run: GenerationRun, dry_run: bool = False) -> Path:
+    """Where a run's generations live. Dry runs (echo backend) get their own directory so their
+    placeholder rows can never be mistaken for model output by a later real run's resume."""
+    return exp_dir / "generations" / ("dry_run" if dry_run else "") / f"{run.run_id}.jsonl"
 
 
 def check_exemplar_leakage(exemplars: dict, video_ids: set[str]) -> None:
@@ -117,13 +119,14 @@ def check_exemplar_leakage(exemplars: dict, video_ids: set[str]) -> None:
 
 def run_generation(
     cfg: dict, run: GenerationRun, exp_dir: Path, backend_factory: Callable[[dict], Any], records=None,
-    limit: int | None = None,
+    limit: int | None = None, dry_run: bool = False,
 ) -> Path:
     """Generate AD for every moment of the run's selection; resumes from the output file."""
     moments = read_jsonl(moments_path(exp_dir, run.selection))
     if limit:
         moments = moments[:limit]
-    out_path = generations_path(exp_dir, run)
+    out_path = generations_path(exp_dir, run, dry_run)
+    stage = "generate_dry_run" if dry_run else "generate"
     max_new = int(get(cfg, "generation.max_new_tokens", 64))
     done, _ = settled_ids(read_jsonl(out_path), max_new, 0.0)
     todo = [m for m in moments if m["id"] not in done]
@@ -135,7 +138,7 @@ def run_generation(
         check_exemplar_leakage(exemplars, {m["video_id"] for m in moments} | {r.video_id for r in records or []})
     policy = get(cfg, "generation.word_limit_policy", "truncate")
     if not todo:
-        update_status(exp_dir, "generate", run.run_id, {"todo": 0, "done": len(done)})
+        update_status(exp_dir, stage, run.run_id, {"todo": 0, "done": len(done)})
         return out_path
     backend = backend_factory(run.model)
     batch_size = int(run.model.get("request_batch", 8))
@@ -169,7 +172,7 @@ def run_generation(
                 n_err += 1
             rows.append(row)
         append_jsonl(out_path, rows)
-    update_status(exp_dir, "generate", run.run_id, {"ok": n_ok, "errors": n_err, "previously_done": len(done)})
+    update_status(exp_dir, stage, run.run_id, {"ok": n_ok, "errors": n_err, "previously_done": len(done)})
     return out_path
 
 
@@ -282,12 +285,15 @@ def qa_frames(times: Sequence[float], duration: float, max_frames: int) -> list[
     return [times[round(i * (len(times) - 1) / (max_frames - 1))] for i in range(max_frames)]
 
 
-def run_qa(cfg: dict, run: GenerationRun, records, exp_dir: Path, backend_factory: Callable[[dict], Any]) -> Path:
+def run_qa(
+    cfg: dict, run: GenerationRun, records, exp_dir: Path, backend_factory: Callable[[dict], Any],
+    dry_run: bool = False,
+) -> Path:
     """Zero-shot multiple-choice QA over the run's selected keyframes."""
     from src.evaluation.qa import parse_choice
 
     selections = latest_by_key(read_jsonl(selections_path(exp_dir, run.selection)), "video_id")
-    out_path = generations_path(exp_dir, run)
+    out_path = generations_path(exp_dir, run, dry_run)
     done = {r["question_id"] for r in read_jsonl(out_path) if r.get("status") == "answered"}
     max_frames = int(get(cfg, "qa.max_frames", 32))
     todo = []
@@ -307,20 +313,28 @@ def run_qa(cfg: dict, run: GenerationRun, records, exp_dir: Path, backend_factor
             append_jsonl(out_path, [{**base, "status": "no_selection", "prediction": None,
                                      "selection_status": sel["status"] if sel else "not_selected"}])
             continue
-        cache = Path(get(cfg, "paths.cache_root")) / record.video_id
-        manifest, _ = read_manifest(cache)
-        times = qa_frames(sel["times"], sel["duration"], max_frames)
-        frames = [frame_window(manifest, t, 1, 0.0)[0] for t in times]
-        timeline = ""
-        if run.timeline:
-            context, _ = load_context(record, cfg, need_visual=False)
-            if context.audio_cues is not None:
-                timeline = format_timeline(context.audio_cues.get("events", []),
-                                           (context.audio_cues.get("asr") or {}).get("segments", []),
-                                           config={"max_items": int(get(cfg, "qa.timeline_max_items", 40))})
-        prompt = build_qa_prompt(item.question, item.options, [f.timestamp for f in frames], timeline)
-        result = backend.generate([GenRequest(item.question_id, prompt, [f.path for f in frames], None,
-                                              int(get(cfg, "qa.max_new_tokens", 8)))])[0]
+        # One unusable video or one failed request must not stop the questions that follow.
+        try:
+            cache = Path(get(cfg, "paths.cache_root")) / record.video_id
+            manifest, reason = read_manifest(cache)
+            if manifest is None:
+                append_jsonl(out_path, [{**base, "status": "no_frames", "prediction": None, "reason": reason}])
+                continue
+            times = qa_frames(sel["times"], sel["duration"], max_frames)
+            frames = [frame_window(manifest, t, 1, 0.0)[0] for t in times]
+            timeline = ""
+            if run.timeline:
+                context, _ = load_context(record, cfg, need_visual=False)
+                if context.audio_cues is not None:
+                    timeline = format_timeline(context.audio_cues.get("events", []),
+                                               (context.audio_cues.get("asr") or {}).get("segments", []),
+                                               config={"max_items": int(get(cfg, "qa.timeline_max_items", 40))})
+            prompt = build_qa_prompt(item.question, item.options, [f.timestamp for f in frames], timeline)
+            result = backend.generate([GenRequest(item.question_id, prompt, [f.path for f in frames], None,
+                                                  int(get(cfg, "qa.max_new_tokens", 8)))])[0]
+        except Exception as exc:  # recorded; the batch continues
+            append_jsonl(out_path, [{**base, "status": "error", "prediction": None, "error": f"{type(exc).__name__}: {exc}"}])
+            continue
         row = {**base, "duration": sel["duration"], "frame_times": [f.timestamp for f in frames],
                "prompt": prompt, "reply": result.text, "error": result.error}
         row["prediction"] = None if result.error else parse_choice(result.text, item.options)
@@ -329,13 +343,13 @@ def run_qa(cfg: dict, run: GenerationRun, records, exp_dir: Path, backend_factor
     return out_path
 
 
-def evaluate_qa(cfg: dict, runs: Sequence[GenerationRun], exp_dir: Path) -> dict:
+def evaluate_qa(cfg: dict, runs: Sequence[GenerationRun], exp_dir: Path, dry_run: bool = False) -> dict:
     from src.evaluation.qa import accuracy_by_length, paired_condition_comparison, score_items
 
     results: dict[str, Any] = {}
     final: dict[str, list[dict]] = {}
     for run in runs:
-        rows = list(latest_by_key(read_jsonl(generations_path(exp_dir, run)), "question_id").values())
+        rows = list(latest_by_key(read_jsonl(generations_path(exp_dir, run, dry_run)), "question_id").values())
         scored = [r for r in rows if r.get("answer") is not None]
         final[run.run_id] = scored
         results[run.run_id] = {"selector": run.selection.name, "model": run.model_label, "timeline": run.timeline,
@@ -348,5 +362,5 @@ def evaluate_qa(cfg: dict, runs: Sequence[GenerationRun], exp_dir: Path) -> dict
                 pairs.append({"selector": a.selection.name, "model": a.model_label,
                               "timeline_on_minus_off": paired_condition_comparison(final[a.run_id], final[b.run_id])})
     out = {"runs": results, "timeline_comparisons": pairs}
-    write_json(exp_dir / "eval" / "qa_metrics.json", out)
+    write_json(exp_dir / "eval" / ("qa_metrics.dry_run.json" if dry_run else "qa_metrics.json"), out)
     return out

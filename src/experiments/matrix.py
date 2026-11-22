@@ -22,6 +22,13 @@ from src.selection.registry import resolve_spec
 
 ORACLE_KINDS = {"O"}
 
+# Model-spec keys that change cost, throughput or credentials but not what a model returns. They are
+# left out of run_id so raising the spend cap or changing a batch size resumes the same run instead of
+# regenerating (and re-paying for) every moment under a new id.
+NON_RESULT_MODEL_KEYS = frozenset({
+    "spend_cap_usd", "ledger_path", "prices", "timeout_s", "max_retries", "request_batch", "batch_size",
+})
+
 
 @dataclass(frozen=True)
 class SelectionRun:
@@ -59,7 +66,7 @@ class GenerationRun:
 
     @property
     def run_id(self) -> str:
-        public = {k: v for k, v in self.model.items() if not k.endswith("_env")}
+        public = {k: v for k, v in self.model.items() if not k.endswith("_env") and k not in NON_RESULT_MODEL_KEYS}
         h = stable_hash([self.selection.run_id, self.prior, public, self.timeline, self.task,
                          json.loads(self.generation_json)], 8)
         return f"{self.task}-{self.selection.name}-{self.prior}-{self.model_label}-tl{int(self.timeline)}-{h}"

@@ -104,6 +104,7 @@ class Candidate:
     nse: float = 0.0
     sc: float = 0.0
     avd: float = 0.0
+    audio_change: float = 0.0  # audio change at the bin where vn was read (what avd was computed from)
     gf: float = 0.0
     op: float = 0.0
     salience: float = 0.0  # a*VN + b*NSE + g*SC + e*AVD (with local VN)
@@ -248,7 +249,8 @@ def generate_candidates(bundle: CueBundle, cfg: dict) -> tuple[list[Candidate], 
             j = max(range(i_lo, i_hi + 1), key=lambda j: abs(sc_track[j]))
             c.sc, parts = _weighted(bundle.sc, sc_w, j)
             c.components["sc"] = parts
-        c.avd = c.vn * (1.0 - audio_change[best_i])
+        c.audio_change = audio_change[best_i]
+        c.avd = c.vn * (1.0 - c.audio_change)
         if have_vad:
             gap = available_gap(p, bundle.speech or [], bundle.duration)
             c.gf = min(1.0, word_limit_for_gap(gap) / cfg["gf_target_words"])
@@ -292,7 +294,6 @@ def greedy_select(
     weights = cfg["weights"]
     a = weights.get("vn", 0.0)
     e_w = weights.get("av_disagreement", 0.0)
-    audio_change = bundle.audio_change()
     use_memory = cfg["novelty_mode"] == "memory" and bundle.embeddings is not None
     use_mmr = cfg["diversity"] == "mmr"
     blend = float(cfg["memory_blend"])
@@ -351,7 +352,7 @@ def greedy_select(
             score = c.score
             if memory_vn is not None:
                 vn = (1.0 - blend) * c.vn + blend * memory_vn[i]
-                avd = vn * (1.0 - audio_change[bundle.index(c.event_time)])
+                avd = vn * (1.0 - c.audio_change)
                 score += a * (vn - c.vn) + e_w * (avd - c.avd)
             if use_mmr and any_taken:
                 similarity = float(max_sim[i]) if emb is not None and np.isfinite(max_sim[i]) else temporal_sim[i]
