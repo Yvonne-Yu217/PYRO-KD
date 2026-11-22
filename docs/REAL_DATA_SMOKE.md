@@ -18,6 +18,12 @@ obtains their GPU session. No GPU inference has run during this CPU preparation.
   `outputs/verification/qwen25-offline-processor.log`.
   Presence is not a full weight integrity or GPU loading test.
 
+CPU multimodal encoding also passed for the same four real inputs in batches
+of two, using the generation path's `apply_chat_template` options and left
+padding. Report: `outputs/verification/mtg-real-processor.json`; reproducer:
+`outputs/verification/check_real_mtg_processor.py`. This checks image encoding,
+chat formatting and padded tensors, but does not exercise model generation.
+
 ## Prepared command for the later GPU session
 
 Run from the repository root on an allocated GPU compute node after the hold
