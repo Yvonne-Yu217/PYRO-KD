@@ -728,3 +728,18 @@ remains3/12. ASR is atomic pervideo, so its in-progress video may need repeating
 No duplicate writer or job restart.40036ends04:22:47UTC regardless ofactivity;
 40363and40408remain dependency-pending withclean immutable worktrees. They still
 require observed completion/full audits. GPUhold remains; finalexperimentsnotdone.
+
+
+Core matrix input inventory now explicitly enumerates all20U/V/A/AV/OxP0/P1xopen/API
+cells while retaining8exploratory selector variants without choosing finalVmemory
+or event signs. Script scripts/audit_core_matrix_inputs.py validates frozen dev
+membership, unique moments, four existing frames/timestamps, positive word budgets
+and within-video requestedK consistency; records input/split hashes and perclipcounts.
+Actual run passed:U76moments/9videos,O85/10,Vlocal/Vmemory/Atrigger/Asuppress/
+AVtrigger/AVsuppress97/10each. Current files are inventoried by hash; they need not
+represent newer exploratory recipes elsewhere. This confirms unequal coverage and
+no final equal-K protocol, including one absent Uclip. No generated output scored.
+Evidence outputs/verification/core-matrix-development-inputs-v2.json. Earlier
+inventory version hardcoded zero completed experiments; revised tool explicitly
+does not inspect execution outputs, avoiding a future stale completion claim.
+NativeOmni remains ablation, not API substitution. GPUhold/APIcap/humangates remain.
