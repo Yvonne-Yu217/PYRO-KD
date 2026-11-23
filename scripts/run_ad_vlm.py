@@ -27,6 +27,7 @@ from src.generation.outputs import merge_meta, read_rows, settled_ids, status_co
 from src.generation.prompts import PROMPTS, build_prompt, word_limit_for_gap  # noqa: E402
 from src.generation.exemplars import check_resume_prior, load_exemplars  # noqa: E402
 from src.generation.audio_timeline import check_audio_resume, render_timeline, timeline_hash  # noqa: E402
+from src.generation.provenance import capture_provenance, check_resume_fingerprint  # noqa: E402
 
 
 def read_jsonl(path: Path) -> list[dict]:
@@ -150,9 +151,17 @@ def main():
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     rows = read_jsonl(Path(args.input))
+    provenance = capture_provenance(Path(__file__).resolve().parents[1], Path(args.input), rows, {
+        "model_id": model_id, "quant": args.quant, "attn_impl": args.attn_impl,
+        "prior": args.prior, "exemplar_sha256": args.exemplar_sha256,
+        "audio_context": args.audio_context, "span": args.span, "max_side": args.max_side,
+        "temperature": args.temperature, "top_p": args.top_p,
+        "reasoning_strength": args.reasoning_strength,
+    })
     if args.limit:
         rows = rows[: args.limit]
     rows_on_disk = read_rows(out_path)
+    check_resume_fingerprint(rows_on_disk, provenance["run_fingerprint"])
     check_resume_prior(rows_on_disk, args.prior, args.exemplar_sha256)
     check_audio_resume(rows_on_disk, rows, args.audio_context)
     if args.audio_context == "timeline":
@@ -175,6 +184,16 @@ def main():
             print(f"--- {row['id']} ({len(images)} frames, sizes={sizes})\n{prompt}\n")
         print("[run_ad] dry run: no model loaded")
         return
+
+    if not todo:
+        print("[run_ad] no pending moments; no model loaded")
+        return
+
+    # Save before model loading so an interrupted attempt still has source evidence.
+    provenance_path = out_path.with_suffix(out_path.suffix + ".provenance.json")
+    temporary = provenance_path.with_suffix(".json.tmp")
+    temporary.write_text(json.dumps(provenance, indent=2) + "\n")
+    temporary.replace(provenance_path)
 
     import torch
     import transformers
@@ -201,6 +220,7 @@ def main():
                         "gap_seconds": row.get("gap_seconds"),
                         "word_budget_rule": row.get("word_budget_rule"),
                         "audio_context": args.audio_context,
+                        "run_fingerprint": provenance["run_fingerprint"],
                         "audio_timeline_sha256": timeline_hash(row["audio_timeline"]) if args.audio_context == "timeline" else None}
                 try:
                     images, prompt, word_limit = prepare(row, args)
@@ -249,6 +269,7 @@ def main():
                   f"({n_err} errors, {gen_s:.0f}s generating)", flush=True)
 
     attempt = {
+        "provenance": provenance,
         "model_id": model_id, "model_class": cls_name, "quant": args.quant,
         "n_gpus": torch.cuda.device_count() if torch.cuda.is_available() else 0, "args": vars(args),
         "n_ok": n_ok, "n_error": n_err, "n_hit_token_limit": n_truncated,

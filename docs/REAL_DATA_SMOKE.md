@@ -66,3 +66,8 @@ in_env ro 'python scripts/build_moments.py --dataset reframed --selector U --vid
 Ten frozen validation clips yield2663 frames and current basic audio features.
 The current U builder yields66 inputs and45 zero-budget exclusions. These are
 smoke inputs; full fixed-K comparison readiness has not been established.
+
+Generation provenance checkpoint:
+`run_ad_vlm.py` hashes the full input JSONL, every referenced frame, runtime Python/JSON files under src/scripts/configs, and generation settings. Each prediction carries `run_fingerprint`; `<output>.jsonl.provenance.json` is atomically saved before model loading, and completed attempt metadata includes the record and Git SHA/dirty status. Documentation-only commits do not invalidate matching runtime bytes. Resume rejects mismatched or missing fingerprints, so historical output files require a separate new output path. This does not hash model weights or freeze a moving remote model alias: use the documented pinned snapshot for actual runs. Batch size, limit and token cap remain attempt settings to support OOM recovery and truncation retries; row-level token limits must still be checked when reporting comparisons. All input frames are hashed even for a limited run so expanding the limit remains compatible.
+
+CPU validation: 32 tests passed across test_generation_provenance.py and test_generation_truncation.py. Four real REFRAMED timeline inputs passed dry-run (outputs/verification/provenance-dry-run.log). No inference or GPU smoke claim.
