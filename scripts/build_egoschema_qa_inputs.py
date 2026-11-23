@@ -1,4 +1,4 @@
-"""Prepare label-free U/V QA inputs for the frozen silent EgoSchema pilot only."""
+"""Prepare label-free U/V QA inputs for the frozen silent EgoSchema pilot or heldout split."""
 import argparse
 import hashlib
 import json
@@ -6,6 +6,7 @@ from pathlib import Path
 import sys
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from src.generation.qa import build_qa_prompt
+from src.datasets.frozen_membership import egoschema_ids
 from src.utils.media import load_manifest,cache_is_current,cache_is_complete,frame_window
 from src.utils.selection import k_for_duration,uniform_timestamps
 from src.utils.visual_features import load_validated_features,load_embeddings,VisualCueSelector
@@ -18,17 +19,17 @@ def main():
     p.add_argument('--budget-config',type=Path,default=Path('configs/reframed_splits.json'))
     p.add_argument('--cache-dir',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--split',choices=('pilot','heldout'),default='pilot')
     p.add_argument('--selector',choices=('U','V_local','V_memory'),default='U')
     args=p.parse_args()
     if args.output.exists(): raise FileExistsError('preserve prior generation inputs')
-    pilot=json.loads(args.pilot_config.read_text());ids=pilot['pilot_q_uids']
-    if len(ids)!=10 or len(set(ids))!=10 or set(ids)&set(pilot['heldout_q_uids']): raise ValueError('invalid frozen pilot')
+    pilot=json.loads(args.pilot_config.read_text());ids=egoschema_ids(pilot,args.split)
     questions={}
     for row in json.loads(args.questions.read_text()):
         if row['q_uid'] in ids:
-            if row['q_uid'] in questions: raise ValueError('duplicate pilot question')
+            if row['q_uid'] in questions: raise ValueError('duplicate selected question')
             questions[row['q_uid']]=row
-    if set(questions)!=set(ids): raise ValueError('missing pilot questions')
+    if set(questions)!=set(ids): raise ValueError('missing selected questions')
     rate=json.loads(args.budget_config.read_text())['k_rule']['rate_per_minute']
     hashes={name:hashlib.sha256(path.read_bytes()).hexdigest() for name,path in
             [('questions',args.questions),('pilot',args.pilot_config),('budget',args.budget_config)]}
@@ -57,9 +58,9 @@ def main():
         frames=[f for time in times for f in frame_window(manifest,time,4,2.)]
         if len(frames)!=4*len(times): raise ValueError('four frames per moment required')
         source=questions[ident]
-        record={'id':ident,'video_id':ident,'dataset':'egoschema','split':'pilot','selector':args.selector.split('_')[0],
+        record={'id':ident,'video_id':ident,'dataset':'egoschema','split':args.split,'selector':args.selector.split('_')[0],
                 'selection_condition':args.selector,'visual_features_sha256':feature_hash,
-                'protocol_status':'exploratory; GPU smoke pending','question':source['question'],
+                'protocol_status':('exploratory; GPU smoke pending' if args.split=='pilot' else 'fixed heldout membership; no outcome-based tuning'),'question':source['question'],
                 'options':[source[f'option {i}'] for i in range(5)],
                 'frames':[f.path for f in frames],'frame_times':[f.timestamp for f in frames],
                 'selected_times':times,'k_requested':k,'k_realized':len(times),'k_shortfall':k-len(times),'rate_per_minute':rate,
@@ -71,7 +72,7 @@ def main():
     with args.output.open('x') as handle:
         for row in records: handle.write(json.dumps(row,allow_nan=False)+'\n')
     print(json.dumps({'questions':len(records),'frames_per_question':[len(r['frames']) for r in records],
-                      'scope':'pilot only; no answer labels loaded; no model inference'}))
+                      'scope':args.split+' only; no answer labels loaded; no model inference'}))
 
 
 if __name__=='__main__':main()
