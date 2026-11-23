@@ -1090,3 +1090,12 @@ novelty. Versioned v2 driver reloads committed features; resume test forbade mod
 loading and verified unchanged files. Follow-up array41038 afterany41027 reuses
 all caches and produces fresh valid reports; original false failures preserved.
 No live source was edited. Detailed diagnosis /scratch/yy5919/pyro-egoschema-validation-repair.md.
+
+Frozen long audio-aware protocol before correctness scoring:
+configs/long_audio_qa_frozen.json. Six conditions x36questions: U/Vlocal/A/AV
+with timeline, plus hierarchical A/AV. Same224px, K=5/min,4frames/2seconds and
+pinned Qwen16tokens; exact dev-frozen cue weights. Timeline compression20speech+
+20events fixed before heldout scoring, no question-conditioned selection.
+Estimated45–75GPUminutes total,45-minute watchdog per condition,$0API. Inputs
+are prepared onCPU before their GPU lock request; each input hash is captured
+before inference. Human detector validation remains explicitly unavailable.
