@@ -1,0 +1,17 @@
+{
+  "status": "draft with explicit pending formal results and human attribution",
+  "engine": "existing read-only container /usr/bin/pdflatex",
+  "compile_passes": 2,
+  "total_pages": 7,
+  "appendix_start_page": 6,
+  "pre_appendix_pages": 5,
+  "overfull_boxes": 0,
+  "undefined_references": 0,
+  "visual_inspection": [
+    "page1 title/method layout",
+    "page4 pending-result/limitation layout"
+  ],
+  "main_tex_sha256": "2059f7e116996b358b0791614c71a2d5203dee89395f47481a242ec6d4ec8c13",
+  "pdf_sha256": "9071147228baa3d86a3e4351eafac51243ca6f6dbe942b669835def30f6a4d57",
+  "no_new_software_installation": true
+}

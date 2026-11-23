@@ -1274,3 +1274,26 @@ Validated on all3existingdevelopmentcells: Qwenno-context76/95valid,
 Qwentimeline85/95,Omninative62/95; allvalidactualTTSreports andOpenCLIPpresent.
 The native condition changes both model and inputmodality; it is not a clean
 within-model audioeffect. Generated derivedfiles in scratch/dev-ablation5-report.
+
+## Scheduler recovery and report draft
+
+Ego41027finished all490feature caches. Corrected validator41038 reuses them;
+shard1was held beforeexecution byuser_env_retrieval_failed_requeued_held.
+scontrolrelease(array/numericIDs),requeue,anddependencyupdate returnederrors.
+Submittedonlyreplacementshard41216_1 afterok41038_0:41038_2:41038_3, removing
+inheritedSLURM_GET_USER_ENV and exportingALL. Replacementinput41217 depends
+on41216. Cancelledonlyunstartedheld41038_1 andobsoletepending41198. No live
+useful extraction was cancelled or duplicated. OriginaljobIDs retained in the
+frozenprotocol history, executionamendment records repaireddependencies.
+
+Agent report_draft prepared5-page maintext+2-page AgentLogappendix LaTeX/PDF,
+compiledtwicewith existingcontainerpdflatex; noinstallations. Zerooverfullboxes
+orundefinedreferences; inspectedrenderedpages. Report remainsadraftwithformal
+caption/QA metrics andhumancontributions explicitlypending. Sourcehashes and
+verificationrecord included. No fabricatedhumancontributionattribution.
+
+Agent long_inputs completed31selector coverage/referencevalidation and16newly
+declared structural ablationcontrasts across10movies (2917707).4tests passed.
+All16Holm-adjustedpvalues1.0; no corrected-significanceclaim. This family was
+declaredafterdescriptivetables, not falselydescribedaspreregistered. Rawselections
+andfrozenparameters unchanged. Dedicatedresultsinclude pairedmetrics/provenance.

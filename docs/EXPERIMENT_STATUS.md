@@ -1001,3 +1001,16 @@ Scoring waitsall8conditions; nine video-clustered contrasts predeclared.
 
 Full formal source checks817passed,3skipped,5974subtests. GPU pipeline remains
 active; results are incomplete. PaidAPI and human labels remain deferred.
+
+### Queue correction and analysis (2026-11-23 16:59 UTC)
+
+Ego CPUchain is now41038_{0,2,3}→41216_1→41217. Held41038_1 andobsolete41198
+were cancelled before execution. Existing490caches are reused; scheduler login
+environment failure prompted explicit exportALL replacement. GPU41197/40964
+remain active. Additional72longQA A/AVflat no-timeline controls are frozen and
+queued onprimaryGPU beforeEgoVmemory; longtotal10conditions360requests.
+Longscoringwatcher waitsall10. No correctness read before this correction.
+
+All31selector tables and16movie-clustered ablation contrasts complete; allHolm
+pvalues1.0. Reportdraft docs/report/main.pdf includes5mainpages+2appendixpages,
+with formalcaption/QA andhumanattribution explicitlypending.

@@ -120,5 +120,30 @@
     "labels": "load only in dedicated evaluator after predictions exist; no prompt/input label access",
     "paired_family": "configs/egoschema_qa_comparisons.json",
     "no_tuning": "do not change settings after inspecting heldout correctness"
-  }
+  },
+  "execution_amendments": [
+    {
+      "recorded_utc": "2026-11-23T16:58:43.623325+00:00",
+      "reason": "Slurm user environment retrieval failure held an unstarted validation shard; release/requeue and dependency update failed",
+      "historical_chain_retained": [
+        "41027",
+        "41038",
+        "41198"
+      ],
+      "cancelled_unstarted_only": [
+        "41038_1",
+        "41198"
+      ],
+      "continuing_validation_shards": [
+        "41038_0",
+        "41038_2",
+        "41038_3"
+      ],
+      "replacement_validation": "41216 array task1; afterok:41038_0:41038_2:41038_3",
+      "replacement_input_builder": "41217 afterok:41216",
+      "environment_workaround": "unset SLURM_GET_USER_ENV; SLURM_EXPORT_ENV=ALL; sbatch --export=ALL",
+      "research_protocol_changed": false,
+      "duplicate_running_cache_jobs": false
+    }
+  ]
 }

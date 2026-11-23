@@ -68,3 +68,14 @@ in_env ro 'CUDA_VISIBLE_DEVICES="" python scripts/analyze_family.py --input /scr
 Agent contribution: read-only pilot and scheduler audit, frozen protocol and
 comparison specification. No heldout answers were read and no jobs were submitted
 by this documentation task. Parent agent coordinates execution and final reporting.
+
+## Execution amendment: scheduler environment failure
+
+The original job IDs above remain historical freeze records. Slurm held the
+unstarted validation shard41038_1 after failing to retrieve the user environment.
+Release/requeue and editing the downstream dependency failed. The parent cancelled
+only that unstarted shard and pending input job41198, leaving running validation
+shards untouched. Replacement41216 validates shard1 after41038_0,41038_2 and
+41038_3 succeed; input builder41217 depends on41216. Submission unsets
+SLURM_GET_USER_ENV and explicitly exports the current environment. No membership,
+model, prompt, comparison family or other research setting changed.

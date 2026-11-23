@@ -1,0 +1,9 @@
+{
+  "sources": {
+    "docs/results/reframed-local-dev.csv": "5b77a0b6ec5e436dc7d9b060f0d5ea97f49ec1798d54012bbeabbef8fdb4d5ae",
+    "docs/results/reframed-selectors/selector-results.json": "0b55f202cae0f65e263856d3a18dfb0263acff3d160182dcb6a925daeef347b1"
+  },
+  "scope": "completed development and selector results; no formal caption or QA result substitution",
+  "development_cells": 10,
+  "selector_core_cells": 5
+}
