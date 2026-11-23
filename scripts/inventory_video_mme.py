@@ -8,6 +8,7 @@ import urllib.request
 import urllib.error
 import urllib.parse
 import zipfile
+import uuid
 
 
 class HTTPRangeFile(io.RawIOBase):
@@ -32,8 +33,10 @@ class HTTPRangeFile(io.RawIOBase):
             separator='&' if urllib.parse.urlsplit(self.url).query else '?'
             # Refresh resolver redirects for this byte range; stale CDN redirects can time out.
             url=self.url+separator+f'download=true&pyro_range={start}-{end}'
-            request=urllib.request.Request(url,headers={'Range':f'bytes={start}-{end}'})
             for attempt in range(3):
+                # Obtain a fresh public resolver redirect even when retrying the same range.
+                request=urllib.request.Request(url+'&pyro_retry='+uuid.uuid4().hex,
+                                               headers={'Range':f'bytes={start}-{end}'})
                 try:
                     with urllib.request.urlopen(request,timeout=20) as response:
                         expected=f'bytes {start}-{end}/{self.size}'

@@ -45,6 +45,7 @@ def test_transient_range_failure_retries_same_bytes():
     with patch('scripts.inventory_video_mme.urllib.request.urlopen',side_effect=[urllib.error.URLError('timed out'),response]) as request:
         assert HTTPRangeFile('https://example.invalid/archive',4).read(4)==b'abcd'
         assert request.call_count==2
+        assert request.call_args_list[0].args[0].full_url != request.call_args_list[1].args[0].full_url
         assert request.call_args_list[0].args[0].get_header('Range')==request.call_args_list[1].args[0].get_header('Range')
 
 
