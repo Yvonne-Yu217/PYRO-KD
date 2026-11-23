@@ -1454,3 +1454,12 @@ keepalive, new paid calls, or changes to frozen inference source were made.
 Completion audit7fe412d validates AD, selectors, temporal analyses andlongQA;
 only unfinished Ego conditions prevent localcompletion. Final integrated tests
 started concurrently on CPU, with CUDA hidden.
+
+### Final integrated reporting checks — 2026-11-23
+
+Results branch including completion/reproduction guards:847passed,3skipped,
+2deprecationwarnings,5974subtests in103.11s. CPU-only command:source
+hpc/config.sh; in_env ro with CUDA_VISIBLE_DEVICES empty and
+/scratch/yy5919/pyro-test-env/bin/python -m pytest -q. Full log:
+/scratch/yy5919/pyro-results-final-tests.log. LongQA paper/deck updated and
+compiled twice;8paperpages(6beforeappendix),12slides. Ego inference continues.

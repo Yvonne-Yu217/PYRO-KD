@@ -1047,3 +1047,12 @@ LongQA:360/360 valid across10conditions, all13Holm p=1.0; see
 docs/results/video-mme-long. EgoU490/490complete; Vlocal active on41197 and
 Vmemory active on40964. CPUevaluation waits for all3×490 predictions. Both
 GPUs have useful inference; CPUtests/report work proceeds concurrently.
+
+### Final integrated reporting checks — 2026-11-23
+
+Results branch including completion/reproduction guards:847passed,3skipped,
+2deprecationwarnings,5974subtests in103.11s. CPU-only command:source
+hpc/config.sh; in_env ro with CUDA_VISIBLE_DEVICES empty and
+/scratch/yy5919/pyro-test-env/bin/python -m pytest -q. Full log:
+/scratch/yy5919/pyro-results-final-tests.log. LongQA paper/deck updated and
+compiled twice;8paperpages(6beforeappendix),12slides. Ego inference continues.
