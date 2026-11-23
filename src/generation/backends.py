@@ -4,8 +4,8 @@
   wrapping src/generation/hf_vlm.py; bf16, batched, OOM fallback to singles.
 - openai / gemini: API models over HTTPS (standard library only). Keys come
   from environment variables (OPENAI_API_KEY, GEMINI_API_KEY), never config
-  files. Every call is checked against a persistent SpendLedger with a hard
-  cap *before* it is sent, using a worst-case cost estimate; per-token prices
+  files. Every attempt is checked against a persistent SpendLedger's cap
+  before it is sent, using a conservative cost estimate. Per-token prices
   must be set in the config (no built-in prices, since they change).
 - qwen_omni: audio-native Qwen2.5-Omni via transformers (ablation 5): hears the
   moment's audio clip as well as the frames.
@@ -78,20 +78,30 @@ class SpendCapExceeded(RuntimeError):
     pass
 
 
+def _is_finite_nonnegative(value: object) -> bool:
+    if type(value) not in (int, float):
+        return False
+    try:
+        return math.isfinite(value) and value >= 0
+    except OverflowError:
+        return False
+
+
 class SpendLedger:
     """Cumulative API spend in a JSON file, shared by concurrent jobs via flock.
 
     reserve(estimate) refuses (SpendCapExceeded) if spent + reserved +
     estimate x ratio > cap, where ratio is the largest actual/estimate seen so
-    far (token counts are only known after a call). settle(estimate, actual)
-    replaces the reservation with the actual cost and updates the ratio. The
-    cap can therefore be exceeded by at most one call's underestimate, before
-    the ratio has been learned; keep a small margin below the real budget.
+    far. Settlement replaces the reservation with the reported cost if known,
+    or keeps the amount reserved when billing is uncertain. Provider costs
+    are only known after a call and can exceed estimates.
     """
 
     def __init__(self, path: str | Path, cap_usd: float):
-        if not (isinstance(cap_usd, (int, float)) and math.isfinite(cap_usd) and cap_usd >= 0):
+        if not _is_finite_nonnegative(cap_usd):
             raise ValueError("spend cap must be a finite non-negative number of USD")
+        if fcntl is None:
+            raise RuntimeError("API spend ledger requires file locking (fcntl)")
         self.path = Path(path)
         self.cap = float(cap_usd)
         self.path.parent.mkdir(parents=True, exist_ok=True)
@@ -100,22 +110,27 @@ class SpendLedger:
     def _locked(self):
         lock = self.path.with_suffix(self.path.suffix + ".lock")
         with open(lock, "a+") as handle:
-            if fcntl is not None:
-                fcntl.flock(handle, fcntl.LOCK_EX)
+            fcntl.flock(handle, fcntl.LOCK_EX)
             try:
                 state = {"spent_usd": 0.0, "reserved_usd": 0.0, "calls": 0, "max_ratio": 1.0}
                 if self.path.exists():
-                    state.update(json.loads(self.path.read_text(encoding="utf-8") or "{}"))
+                    saved = json.loads(self.path.read_text(encoding="utf-8"))
+                    if not isinstance(saved, dict) or any(
+                        not _is_finite_nonnegative(saved.get(key)) for key in state
+                    ):
+                        raise ValueError(f"invalid API spend ledger: {self.path}")
+                    state.update(saved)
                 yield state
-                tmp = self.path.with_suffix(".tmp")
-                tmp.write_text(json.dumps(state, indent=2), encoding="utf-8")
+                tmp = self.path.with_suffix(self.path.suffix + ".tmp")
+                tmp.write_text(json.dumps(state, indent=2, allow_nan=False), encoding="utf-8")
                 tmp.replace(self.path)
             finally:
-                if fcntl is not None:
-                    fcntl.flock(handle, fcntl.LOCK_UN)
+                fcntl.flock(handle, fcntl.LOCK_UN)
 
     def reserve(self, estimate: float) -> float:
         """Reserve a scaled estimate; returns the amount reserved (pass it to settle)."""
+        if not _is_finite_nonnegative(estimate) or estimate == 0:
+            raise SpendCapExceeded("API attempt requires a finite positive cost estimate")
         with self._locked() as state:
             scaled = estimate * max(1.0, state.get("max_ratio", 1.0))
             committed = state["spent_usd"] + state["reserved_usd"]
@@ -159,12 +174,29 @@ class Prices:
 def _require_prices(config: dict) -> Prices:
     prices = config.get("prices") or {}
     try:
-        return Prices(float(prices["input_per_million"]), float(prices["output_per_million"]),
-                      int(prices.get("image_tokens", 1500)))
+        if not isinstance(prices, dict):
+            raise TypeError("prices must be a mapping")
+        input_rate = prices["input_per_million"]
+        output_rate = prices["output_per_million"]
+        image_tokens = prices.get("image_tokens", 1500)
+        # TOML environment interpolation can supply numbers as strings.
+        if isinstance(input_rate, str):
+            input_rate = float(input_rate)
+        if isinstance(output_rate, str):
+            output_rate = float(output_rate)
+        if isinstance(image_tokens, str):
+            image_tokens = int(image_tokens)
+        if not (_is_finite_nonnegative(input_rate) and _is_finite_nonnegative(output_rate)):
+            raise ValueError("token rates must be finite and non-negative")
+        if input_rate == output_rate == 0:
+            raise ValueError("at least one token rate must be positive")
+        if not _is_finite_nonnegative(image_tokens) or image_tokens == 0 or int(image_tokens) != image_tokens:
+            raise ValueError("image_tokens must be a positive integer")
+        return Prices(float(input_rate), float(output_rate), int(image_tokens))
     except (KeyError, TypeError, ValueError) as exc:
         raise ValueError(
             "API backends need prices.input_per_million and prices.output_per_million in the config "
-            "(check the provider's current price list); refusing to run without a cost model"
+            f"(check the provider's current price list); invalid cost model: {exc}"
         ) from exc
 
 
@@ -179,7 +211,7 @@ def _ledger(config: dict) -> SpendLedger:
         raise ValueError(
             "API backends need an absolute ledger_path (config) or PYRO_API_LEDGER so every job shares one spend ledger"
         )
-    return SpendLedger(path, float(cap))
+    return SpendLedger(path, float(cap) if isinstance(cap, str) else cap)
 
 
 def _post_json(url: str, payload: dict, headers: dict, timeout: float) -> dict:
@@ -189,10 +221,22 @@ def _post_json(url: str, payload: dict, headers: dict, timeout: float) -> dict:
         return json.loads(response.read().decode())
 
 
+class _UnreadableFrameError(OSError):
+    pass
+
+
 def _image_b64(path: str) -> tuple[str, str]:
-    data = Path(path).read_bytes()
+    try:
+        data = Path(path).read_bytes()
+    except OSError as exc:
+        raise _UnreadableFrameError(str(exc)) from exc
     mime = "image/png" if path.lower().endswith(".png") else "image/jpeg"
     return mime, base64.b64encode(data).decode()
+
+
+def _usage_count(usage: object, key: str) -> int | None:
+    value = usage.get(key) if isinstance(usage, dict) else None
+    return value if type(value) is int and _is_finite_nonnegative(value) else None
 
 
 class _APIBackend:
@@ -217,44 +261,55 @@ class _APIBackend:
         return [self._one(r) for r in requests]
 
     def _one(self, request: GenRequest) -> GenResult:
-        estimate = self.prices.estimate(request.prompt, len(request.images), request.max_new_tokens)
+        if type(request.max_new_tokens) is not int or request.max_new_tokens <= 0:
+            return GenResult(request.id, error="request: max_new_tokens must be a positive integer")
         try:
-            reserved = self.ledger.reserve(estimate)
-        except SpendCapExceeded as exc:
-            return GenResult(request.id, error=f"spend_cap: {exc}")
-        started, actual, maybe_billed = time.time(), 0.0, False
-        try:
-            for attempt in range(self.max_retries + 1):
-                try:
-                    text, raw, in_tok, out_tok, finished = self._call(request)
-                    actual = self.prices.actual(in_tok, out_tok)
-                    return GenResult(request.id, text=text.strip(), raw=raw, new_tokens=out_tok, cost_usd=round(actual, 6),
-                                     latency_s=round(time.time() - started, 3), hit_token_limit=not finished,
-                                     error=None if finished else f"hit_token_limit: max_new_tokens={request.max_new_tokens}")
-                except urllib.error.HTTPError as exc:  # before URLError: HTTPError is a subclass of it
-                    if exc.code in (429, 500, 502, 503) and attempt < self.max_retries:
-                        time.sleep(min(30, 2 ** attempt))
-                        continue
-                    return GenResult(request.id, error=f"http {exc.code}: {exc.reason}")
-                except FileNotFoundError as exc:  # a frame file is gone: retrying cannot help, nothing was sent
-                    return GenResult(request.id, error=f"request: frame unreadable: {exc!r}")
-                except (TimeoutError, ConnectionError, http.client.HTTPException, json.JSONDecodeError) as exc:
-                    maybe_billed = True  # the request reached the provider; the reply was lost or unreadable
-                    if attempt < self.max_retries:
-                        time.sleep(min(30, 2 ** attempt))
-                        continue
-                    return GenResult(request.id, error=f"request: {exc!r}")
-                except (urllib.error.URLError, OSError, KeyError, IndexError, ValueError, TypeError) as exc:
-                    if attempt < self.max_retries:
-                        time.sleep(min(30, 2 ** attempt))
-                        continue
-                    return GenResult(request.id, error=f"request: {exc!r}")
-            return GenResult(request.id, error="request: retries exhausted")
-        except Exception as exc:  # never let one request take down the batch
-            return GenResult(request.id, error=f"request: {exc!r}")
-        finally:
-            # A reply that never arrived may still have been billed: charge the reserved worst case rather than $0.
-            self.ledger.settle(reserved, actual if actual or not maybe_billed else reserved, estimate)
+            estimate = self.prices.estimate(request.prompt, len(request.images), request.max_new_tokens)
+        except OverflowError:
+            return GenResult(request.id, error="spend_cap: request cost estimate overflowed")
+        started, total_cost = time.time(), 0.0
+        result = GenResult(request.id, error="request: retries exhausted")
+        for attempt in range(self.max_retries + 1):
+            try:
+                reserved = self.ledger.reserve(estimate)
+            except SpendCapExceeded as exc:
+                result = GenResult(request.id, error=f"spend_cap: {exc}")
+                break
+            # An unreadable reply can still be billable. Keep this reservation unless
+            # usage is known or the attempt was definitively rejected before generation.
+            attempt_cost, calibrated_estimate = reserved, None
+            retry = False
+            try:
+                text, raw, in_tok, out_tok, finished = self._call(request)
+                reported_cost = self.prices.actual(in_tok or 0, out_tok or 0)
+                full_usage = in_tok is not None and out_tok is not None
+                if math.isfinite(reported_cost) and (full_usage or reported_cost > reserved):
+                    attempt_cost, calibrated_estimate = reported_cost, estimate
+                result = GenResult(request.id, text=text.strip(), raw=raw, new_tokens=out_tok,
+                                   hit_token_limit=not finished,
+                                   error=None if finished else f"hit_token_limit: max_new_tokens={request.max_new_tokens}")
+            except urllib.error.HTTPError as exc:  # before OSError: HTTPError is a subclass of it
+                if exc.code in (400, 401, 403, 404, 413, 422, 429):
+                    attempt_cost = 0.0
+                retry = exc.code in (429, 500, 502, 503)
+                result = GenResult(request.id, error=f"http {exc.code}: {exc.reason}")
+            except _UnreadableFrameError as exc:
+                attempt_cost = 0.0
+                result = GenResult(request.id, error=f"request: frame unreadable: {exc}")
+            except (http.client.HTTPException, OSError, KeyError, IndexError, ValueError, TypeError) as exc:
+                retry = True
+                result = GenResult(request.id, error=f"request: {exc!r}")
+            except Exception as exc:  # isolate an unexpected failure to this request
+                result = GenResult(request.id, error=f"request: {exc!r}")
+            finally:
+                self.ledger.settle(reserved, attempt_cost, calibrated_estimate)
+                total_cost += attempt_cost
+            if not retry or attempt == self.max_retries:
+                break
+            time.sleep(min(30, 2 ** attempt))
+        result.cost_usd = round(total_cost, 6)
+        result.latency_s = round(time.time() - started, 3)
+        return result
 
 
 class OpenAIBackend(_APIBackend):
@@ -273,8 +328,8 @@ class OpenAIBackend(_APIBackend):
         reply = self.transport(url, payload, {"Authorization": f"Bearer {self.api_key}"}, self.timeout)
         choice = reply["choices"][0]
         usage = reply.get("usage", {})
-        return (choice["message"]["content"] or "", json.dumps(choice), int(usage.get("prompt_tokens", 0)),
-                int(usage.get("completion_tokens", 0)), choice.get("finish_reason") != "length")
+        return (choice["message"]["content"] or "", json.dumps(choice), _usage_count(usage, "prompt_tokens"),
+                _usage_count(usage, "completion_tokens"), choice.get("finish_reason") != "length")
 
 
 class GeminiBackend(_APIBackend):
@@ -295,8 +350,8 @@ class GeminiBackend(_APIBackend):
         candidate = reply["candidates"][0]
         text = "".join(p.get("text", "") for p in candidate.get("content", {}).get("parts", []))
         usage = reply.get("usageMetadata", {})
-        return (text, json.dumps(candidate), int(usage.get("promptTokenCount", 0)),
-                int(usage.get("candidatesTokenCount", 0)), candidate.get("finishReason") != "MAX_TOKENS")
+        return (text, json.dumps(candidate), _usage_count(usage, "promptTokenCount"),
+                _usage_count(usage, "candidatesTokenCount"), candidate.get("finishReason") != "MAX_TOKENS")
 
 
 class HFVLMBackend:

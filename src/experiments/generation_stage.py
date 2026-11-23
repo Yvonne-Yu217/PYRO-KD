@@ -15,6 +15,7 @@ evaluated (leakage).
 
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 from pathlib import Path
@@ -25,17 +26,17 @@ from src.audio.timeline import format_timeline
 from src.evaluation import placement
 from src.evaluation.metrics import match_timestamps, temporal_precision_recall_f1
 from src.evaluation.stats import bootstrap_mean_ci
-from src.experiments.config import ConfigError, get
+from src.experiments.config import ConfigError, get, stable_hash
 from src.experiments.data import ground_truth, load_context
 from src.experiments.io import append_jsonl, latest_by_key, read_jsonl, update_status, write_json
 from src.experiments.matrix import GenerationRun, SelectionRun
 from src.experiments.selection_stage import selections_path
-from src.generation.backends import GenRequest
+from src.generation.backends import GenRequest, GenResult
 from src.generation.outputs import final_rows, is_success, settled_ids
 from src.generation.prompts import build_prompt, build_qa_prompt, enforce_word_limit, transcript_context, word_limit_for_gap
-from src.utils.audio_features import available_gap, resolve_audio_path
-from src.utils.cache_checks import read_manifest
-from src.utils.media import frame_window
+from src.utils.audio_features import available_gap, owned_media_manifest
+from src.utils.cache_checks import MEDIA_INCOMPLETE, media_cache_problem, read_manifest
+from src.utils.media import cache_is_current, frame_window
 
 
 def moments_path(exp_dir: Path, run: SelectionRun) -> Path:
@@ -44,6 +45,18 @@ def moments_path(exp_dir: Path, run: SelectionRun) -> Path:
 
 def _transcript_items(record) -> list:
     return [SimpleNamespace(start=float(t["start"]), end=float(t["end"]), text=str(t["text"])) for t in record.transcript or []]
+
+
+def _current_media(cache: Path) -> tuple[dict | None, str | None]:
+    manifest, reason = read_manifest(cache)
+    if manifest is None:
+        return None, reason
+    try:
+        manifest = owned_media_manifest(manifest, cache)
+        problem = media_cache_problem(manifest)
+    except (OSError, ValueError):
+        return None, MEDIA_INCOMPLETE
+    return (None, problem) if problem else (manifest, None)
 
 
 def build_moments(cfg: dict, run: SelectionRun, records, exp_dir: Path) -> Path:
@@ -62,16 +75,13 @@ def build_moments(cfg: dict, run: SelectionRun, records, exp_dir: Path) -> Path:
             entry["status"] = entry["selection_status"]
             continue
         cache = Path(get(cfg, "paths.cache_root")) / record.video_id
-        manifest, reason = read_manifest(cache)
+        manifest, reason = _current_media(cache)
         if manifest is None:
             entry["status"] = reason
             continue
         context, available = load_context(record, cfg, run.spec.get("cue_set", "audio_cues.json"), need_visual=False)
         speech = [tuple(s) for s in context.audio_features["speech"]] if context.audio_features else None
-        try:
-            wav = resolve_audio_path(manifest, cache)
-        except ValueError:
-            wav = None
+        wav = manifest["audio_path"]
         cues = context.audio_cues
         transcript = _transcript_items(record)
         for i, t in enumerate(sel["times"]):
@@ -89,6 +99,7 @@ def build_moments(cfg: dict, run: SelectionRun, records, exp_dir: Path) -> Path:
                 "id": f"{record.video_id}_{run.name}_{i:03d}", "video_id": record.video_id, "selector": run.name,
                 "selection_run_id": run.run_id, "time": t, "k_requested": sel["k"],
                 "frames": [f.path for f in frames], "frame_times": [f.timestamp for f in frames],
+                "media_fingerprint": manifest["settings"]["source_fingerprint"],
                 "transcript": transcript_context(transcript, t), "word_limit": limit,
                 "word_limit_source": "vad" if speech is not None else "fallback_no_vad",
                 "audio_timeline": timeline, "timeline_status": "ok" if cues is not None else available.get("audio_cues"),
@@ -117,50 +128,120 @@ def check_exemplar_leakage(exemplars: dict, video_ids: set[str]) -> None:
         raise ConfigError(f"P1 exemplars come from evaluated videos {leaked}: rebuild them from the exemplar pool")
 
 
-def run_generation(
-    cfg: dict, run: GenerationRun, exp_dir: Path, backend_factory: Callable[[dict], Any], records=None,
-    limit: int | None = None, dry_run: bool = False,
-) -> Path:
-    """Generate AD for every moment of the run's selection; resumes from the output file."""
-    moments = read_jsonl(moments_path(exp_dir, run.selection))
-    if limit:
-        moments = moments[:limit]
-    out_path = generations_path(exp_dir, run, dry_run)
-    stage = "generate_dry_run" if dry_run else "generate"
-    max_new = int(get(cfg, "generation.max_new_tokens", 64))
-    done, _ = settled_ids(read_jsonl(out_path), max_new, 0.0)
-    todo = [m for m in moments if m["id"] not in done]
+def _ad_inputs(cfg: dict, run: GenerationRun, exp_dir: Path, records) -> dict[str, tuple[dict, GenRequest, str]]:
+    """Prepare the requests and fingerprints used by both resume and evaluation."""
+    path = moments_path(exp_dir, run.selection)
+    moments = read_jsonl(path)
     exemplars = None
     if run.prior == "P1":
         from src.generation.priors import load_exemplars
 
         exemplars = load_exemplars(get(cfg, "generation.exemplars_path", "configs/p1_exemplars.json"))
         check_exemplar_leakage(exemplars, {m["video_id"] for m in moments} | {r.video_id for r in records or []})
+    mode = run.audio_context
+    has_audio_input = run.model.get("backend") in ("qwen_omni", "echo")
+    if mode == "native" and not has_audio_input:
+        raise ConfigError(f"The native audio ablation needs an audio-capable backend for {run.model_label}")
+    max_new = int(get(cfg, "generation.max_new_tokens", 64))
+    span = float(get(cfg, "selection.span_seconds", 2.0))
+    policy = get(cfg, "generation.word_limit_policy", "truncate")
+    digests: dict[str, str | None] = {}
+    checked_media: set[str] = set()
+    inputs = {}
+
+    def file_digest(name: str) -> str | None:
+        if name not in digests:
+            try:
+                with Path(name).open("rb") as stream:
+                    digests[name] = hashlib.file_digest(stream, "sha256").hexdigest()
+            except OSError:
+                digests[name] = None  # the backend reports missing/unreadable request files
+        return digests[name]
+
+    for m in moments:
+        moment_id = m["id"]
+        if moment_id in inputs:
+            raise ConfigError(f"Duplicate moment ID {moment_id!r} in {path}")
+        media = m.get("media_fingerprint")
+        media_key = stable_hash(media, 64)
+        if media_key not in checked_media:
+            if not isinstance(media, dict) or not cache_is_current({"source": media.get("path"),
+                                                                     "settings": {"source_fingerprint": media}}):
+                raise ConfigError(f"Media is stale or unverifiable for moment {moment_id!r} in {path}. "
+                                  "Refresh the media cache and rerun the moments stage.")
+            checked_media.add(media_key)
+        use_timeline = mode == "timeline" or (mode is None and run.timeline)
+        prompt = build_prompt(run.prior, m["time"], len(m["frames"]), span, m["word_limit"],
+                              m.get("transcript", "") if mode is None else "",
+                              audio_timeline=m.get("audio_timeline", "") if use_timeline else "", exemplars=exemplars)
+        audio = m.get("audio_clip") if mode == "native" or (mode is None and has_audio_input) else None
+        request = GenRequest(moment_id, prompt, list(m["frames"]), audio, max_new)
+        timeline_status = m.get("timeline_status") if use_timeline else None
+        digest = stable_hash([run.run_id, m["video_id"], m["time"], m["frame_times"], media, prompt, max_new, policy,
+                              timeline_status,
+                              [(name, file_digest(name)) for name in request.images],
+                              (audio, file_digest(audio["path"])) if audio else None], 64)
+        inputs[moment_id] = m, request, digest
+    return inputs
+
+
+def _current_generation_rows(path: Path, inputs: dict[str, tuple[dict, GenRequest, str]]) -> list[dict]:
+    rows = []
+    for row in read_jsonl(path):
+        current = inputs.get(row.get("id"))
+        if current and row.get("input_fingerprint") == current[2]:
+            rows.append(row)
+        elif is_success(row):
+            raise ConfigError(f"Generation inputs changed or cannot be verified for moment {row.get('id')!r} in {path}. "
+                              "Preserve the old outputs and generate into a fresh experiment directory.")
+        # Failures from older inputs are retained on disk but cannot settle this request.
+    return rows
+
+
+def run_generation(
+    cfg: dict, run: GenerationRun, exp_dir: Path, backend_factory: Callable[[dict], Any], records=None,
+    limit: int | None = None, dry_run: bool = False,
+) -> Path:
+    """Generate AD for every moment of the run's selection; resume only matching requests."""
+    out_path = generations_path(exp_dir, run, dry_run)
+    stage = "generate_dry_run" if dry_run else "generate"
+    max_new = int(get(cfg, "generation.max_new_tokens", 64))
+    inputs = _ad_inputs(cfg, run, exp_dir, records)
+    done, _ = settled_ids(_current_generation_rows(out_path, inputs), max_new, 0.0)
+    todo = [entry for m_id, entry in list(inputs.items())[:limit or None] if m_id not in done]
     policy = get(cfg, "generation.word_limit_policy", "truncate")
     if not todo:
         update_status(exp_dir, stage, run.run_id, {"todo": 0, "done": len(done)})
         return out_path
-    backend = backend_factory(run.model)
-    batch_size = int(run.model.get("request_batch", 8))
-    span = float(get(cfg, "selection.span_seconds", 2.0))
+    spec = run.model
+    backend = None
+    batch_size = int(spec.get("request_batch", 8))
     n_ok = n_err = 0
     for start in range(0, len(todo), batch_size):
         batch = todo[start:start + batch_size]
-        requests, base = [], {}
-        for m in batch:
-            prompt = build_prompt(run.prior, m["time"], len(m["frames"]), span, m["word_limit"], m.get("transcript", ""),
-                                  audio_timeline=m.get("audio_timeline", "") if run.timeline else "", exemplars=exemplars)
-            requests.append(GenRequest(m["id"], prompt, list(m["frames"]),
-                                       m.get("audio_clip") if getattr(backend, "supports_audio", False) else None, max_new))
+        requests, rejected, base = [], [], {}
+        for m, request, digest in batch:
+            if run.audio_context == "native" and not request.audio:
+                rejected.append(GenResult(m["id"], error="no_native_audio"))
+            elif run.audio_context == "timeline" and m.get("timeline_status") != "ok":
+                rejected.append(GenResult(m["id"], error="unavailable_audio_timeline"))
+            else:
+                requests.append(request)
             base[m["id"]] = {"id": m["id"], "video_id": m["video_id"], "selector": m["selector"], "time": m["time"],
                              "word_limit": m["word_limit"], "frame_times": m["frame_times"], "prior": run.prior,
-                             "model": run.model_label, "model_id": getattr(backend, "model_id", None),
-                             "backend": getattr(backend, "name", None), "timeline": run.timeline,
-                             "run_id": run.run_id, "temperature": 0.0, "max_new_tokens": max_new, "prompt": prompt}
-        results = backend.generate(requests)
+                             "model": run.model_label, "timeline": run.timeline,
+                             "timeline_status": m.get("timeline_status") if run.timeline else None,
+                             "audio_context": run.audio_context, "input_fingerprint": digest,
+                             "run_id": run.run_id, "temperature": 0.0, "max_new_tokens": max_new, "prompt": request.prompt}
         rows = []
-        for r in results:
-            row = {**base[r.id], **r.to_dict()}
+        generated = []
+        if requests:
+            if backend is None:
+                backend = backend_factory(spec)
+            generated = backend.generate(requests)
+        for r in [*generated, *rejected]:
+            row = {**base[r.id], "model_id": getattr(backend, "model_id", spec.get("model")),
+                   "backend": getattr(backend, "name", spec.get("backend")), **r.to_dict()}
             row["model_output"] = row.pop("text", "")
             if r.error is None:
                 capped = enforce_word_limit(row["model_output"], base[r.id]["word_limit"], policy)
@@ -208,7 +289,7 @@ def _optional_scorer(name: str, cfg: dict):
 def evaluate_generation(cfg: dict, run: GenerationRun, records, exp_dir: Path, scorers: dict | None = None) -> dict:
     """Placement with real word counts, budget compliance and matched-pair text metrics."""
     by_id = {r.video_id: r for r in records}
-    rows = final_rows(read_jsonl(generations_path(exp_dir, run)))
+    rows = final_rows(_current_generation_rows(generations_path(exp_dir, run), _ad_inputs(cfg, run, exp_dir, records)))
     tol = float(get(cfg, "selection.tolerance_seconds", 2.0))
     slack = float(get(cfg, "selection.duration_slack_seconds", 1.0))
     wps, speed = float(get(cfg, "evaluation.tts_words_per_second", 2.5)), float(get(cfg, "evaluation.tts_speed", 1.2))
@@ -263,7 +344,7 @@ def evaluate_generation(cfg: dict, run: GenerationRun, records, exp_dir: Path, s
     resamples, seed = int(get(cfg, "evaluation.resamples", 10000)), int(get(cfg, "experiment.seed", 0))
     result = {
         "run_id": run.run_id, "selector": run.selection.name, "prior": run.prior, "model": run.model_label,
-        "timeline": run.timeline, "oracle": run.selection.is_oracle, "n_videos": len(per_video),
+        "timeline": run.timeline, "audio_context": run.audio_context, "oracle": run.selection.is_oracle, "n_videos": len(per_video),
         "macro_f1": bootstrap_mean_ci([v["f1"] for v in per_video], resamples, seed),
         "overlap_seconds": bootstrap_mean_ci([v["overlap_seconds"] for v in per_video], resamples, seed),
         "over_budget_rate": bootstrap_mean_ci([v["over_budget_rate"] for v in per_video], resamples, seed),
@@ -316,7 +397,7 @@ def run_qa(
         # One unusable video or one failed request must not stop the questions that follow.
         try:
             cache = Path(get(cfg, "paths.cache_root")) / record.video_id
-            manifest, reason = read_manifest(cache)
+            manifest, reason = _current_media(cache)
             if manifest is None:
                 append_jsonl(out_path, [{**base, "status": "no_frames", "prediction": None, "reason": reason}])
                 continue
