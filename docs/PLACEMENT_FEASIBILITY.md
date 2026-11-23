@@ -106,3 +106,29 @@ Working default for CPU diagnostics is fixed requested K with explicit unfilled-
 Results on the same ten dev clips: U_snapped76/111slots, O_snapped85/111. New eight-condition diagnostic uses the onset-enhanced A/AV recipe and prior V variants, preserving earlier reports. MacroF1: U_snapped0.377, O_snapped0.845; macro matched/requested:0.335 and0.746. Each report also shows realized counts and shortfalls. `evaluate_placed_dev.py --baseline-report ...` checks matching splits/settings/K and now reports a bootstrap interval for matched placements divided by requested slots, so fewer generated placements cannot disappear from that accounting. The metric is descriptive and is not a substitute for AD quality or rendered-overlap evaluation.
 
 Evidence: outputs/verification/reframed-dev-placement-with-baselines.json/.csv/.png and reframed-dev-baseline-metrics-check.json.80per-video records passed independent count/match/budget arithmetic checks; the eight-condition plot was visually inspected and its caption now derives selected/requested ranges from actual data. Current U/O variants still need generation-input integration and all methods need final score/weight/protocol work before the core matrix.
+
+Explicit gap score (exploratory)
+
+`select_placed` now accepts `gap_weight` and an explicit `gap_target_words`.
+GF = C/(C+T), where C=floor(3*(gap_end-playback_time)) is the remaining
+whole-word capacity after snapping and T is the declared scoring target.
+This bounded normalization is an implementation choice, not a formula specified
+by the proposal: target capacity gives0.5, longer gaps approach1. It rewards
+room for narration without an unbounded long-silence score. T neither caps
+generation nor replaces the hard `required_words` feasibility minimum. The
+weight defaults to0; a positive weight requires an explicit positive integer T.
+Selected records retain the unweighted GF so total scores can be reconstructed.
+The greedy method still picks the nearest feasible gap before scoring; it does
+not optimize alternative gap assignments. Rendered OP remains outstanding.
+
+A diagnostic with onset features, GF weight1 and target15 (an explicitly untuned
+scale, not a frozen narration length) selected97/99/98/98 of111 requested moments
+for A-trigger/A-suppress/AV-trigger/AV-suppress. Arithmetic was independently
+reconstructed for all392 selections. Candidate symmetric differences from the
+prior zero-GF recipe were34/66/43/40, counting additions and removals. No quality
+improvement is inferred. A separate zero-weight run exactly reproduced all391
+prior placements, scores, rejection lists and component records across40
+video-condition records (excluding the newly recorded GF field). Evidence:
+outputs/verification/reframed-dev-fused-with-gap-score.json,
+reframed-dev-fused-gap-zero-ablation.json and reframed-dev-gap-score-check.json.
+This is development-only mechanics, not tuning or a final matrix result.

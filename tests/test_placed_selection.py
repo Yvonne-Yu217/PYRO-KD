@@ -56,3 +56,32 @@ def test_all_candidates_accounted_for():
     groups=[[s.candidate_index for s in result.selected],result.infeasible_indices,
             result.separation_rejected_indices,result.budget_unselected_indices]
     assert sorted(i for group in groups for i in group)==list(range(15))
+
+
+def test_gap_reward_uses_remaining_capacity_and_changes_rank():
+    candidates=[Candidate(1,1),Candidate(8,1.1)]
+    plain=select(candidates,[(0,10)],1,novelty_weight=0)
+    scored=select(candidates,[(0,10)],1,novelty_weight=0,gap_weight=1,gap_target_words=6)
+    assert plain.selected[0].candidate_index == 1
+    assert scored.selected[0].candidate_index == 0
+    chosen=scored.selected[0]
+    assert chosen.gap_feasibility == pytest.approx(27/(27+6))
+    assert chosen.score == pytest.approx(1+chosen.gap_feasibility)
+    assert chosen.placement.word_limit == 27  # scoring target does not cap generation
+
+
+def test_gap_score_is_computed_after_snapping_and_zero_weight_is_ablation():
+    candidates=[Candidate(1,2),Candidate(8,1)]
+    result=select(candidates,[(4,10)],2,max_lag=3,gap_weight=1,gap_target_words=18)
+    first=result.selected[0]
+    assert first.placement.time == 4 and first.gap_feasibility == .5
+    plain=select(candidates,[(4,10)],2,max_lag=3)
+    disabled=select(candidates,[(4,10)],2,max_lag=3,gap_weight=0,gap_target_words=18)
+    assert [(s.candidate_index,s.score) for s in plain.selected] == [(s.candidate_index,s.score) for s in disabled.selected]
+
+
+@pytest.mark.parametrize('options',[{'gap_weight':-1},{'gap_weight':float('nan')},
+    {'gap_weight':1},{'gap_target_words':0},{'gap_target_words':True}])
+def test_invalid_gap_score_configuration_fails(options):
+    with pytest.raises(ValueError):
+        select([Candidate(1,1)],[(0,9)],1,**options)

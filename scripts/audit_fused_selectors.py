@@ -30,6 +30,8 @@ def main():
     p.add_argument('--max-lag',type=float,required=True)
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--include-onsets',action='store_true')
+    p.add_argument('--gap-weight',type=float,default=0.0)
+    p.add_argument('--gap-target-words',type=int)
     args=p.parse_args()
     if args.output.exists(): raise FileExistsError('preserve prior diagnostic; use a new output path')
     split=json.loads(args.split_config.read_text())
@@ -73,7 +75,8 @@ def main():
                     weights=weights,visual=visual,visual_embeddings=embeddings)
                 selected=select_placed(candidates,[(g['start'],g['end']) for g in audio['gaps']],k,
                     required_words=args.required_words,max_advance=args.max_advance,max_lag=args.max_lag,
-                    novelty_weight=weights['novelty'] if mode=='AV' else 0,embeddings=vectors)
+                    novelty_weight=weights['novelty'] if mode=='AV' else 0,embeddings=vectors,
+                    gap_weight=args.gap_weight,gap_target_words=args.gap_target_words)
                 name=mode+('_trigger' if sign==1 else '_suppress')
                 conditions[name]={**asdict(selected),'shortfall':selected.shortfall,
                     'candidate_components':[{'event_time':c.event_time,**scores} for c,scores in zip(candidates,components)]}
@@ -81,7 +84,10 @@ def main():
             name:sha(cache/name) for name in (['audio_features.json','speech_features.json','event_features.json','visual_features.json'] + (['onset_features.json'] if args.include_onsets else []))}})
         print(json.dumps({'video_id':video_id,'selected':{name:len(r['selected']) for name,r in conditions.items()}}),flush=True)
     names=list(records[0]['conditions'])
-    report={'scope':'exploratory mechanics only; no tuned weights, validated detector, GF/OP score or final matrix',
+    report={'scope':'exploratory mechanics only; optional GF, no tuned weights, validated detector, rendered OP score or final matrix',
+            'gap_score':{'weight':args.gap_weight,'target_words':args.gap_target_words,
+                         'formula':'remaining_word_capacity / (remaining_word_capacity + target_words)',
+                         'status':'exploratory normalization; not rendered duration'},
             'include_onsets':args.include_onsets,'weights':weights,'required_words':args.required_words,'max_advance':args.max_advance,'max_lag':args.max_lag,
             'speech_cues_sha256':sha(args.speech_cues),'split_sha256':sha(args.split_config),'videos':records,
             'totals':{name:{'requested':sum(r['conditions'][name]['requested'] for r in records),

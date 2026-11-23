@@ -25,6 +25,7 @@ class Selected:
     placement: SnappedMoment
     score: float
     novelty: float
+    gap_feasibility: float = 0.0
 
 
 @dataclass
@@ -43,7 +44,8 @@ class Selection:
 def select_placed(candidates: Sequence[Candidate], gaps, k: int, *, required_words: int,
                   max_advance: float, max_lag: float, novelty_weight: float,
                   embeddings=None, min_separation: float = 2.0,
-                  segment_ids=None, segment_quotas=None) -> Selection:
+                  segment_ids=None, segment_quotas=None,
+                  gap_weight: float = 0.0, gap_target_words: int | None = None) -> Selection:
     """Snap first, rank second; embeddings enable running cosine novelty.
 
     Base scores may be signed (e.g. event suppression). With embeddings, the
@@ -52,6 +54,13 @@ def select_placed(candidates: Sequence[Candidate], gaps, k: int, *, required_wor
     follows selection rank, not chronological playback. Separation applies to
     placement times. Word limits are gap capacity, not reserved AD durations;
     rendered AD-to-AD overlap still needs a downstream check.
+
+    Optional GF is capacity/(capacity+target_words), using remaining whole-word
+    capacity at the snapped playback time. It is 0.5 at the declared target and
+    approaches 1 for long gaps, avoiding unbounded reward for quiet clips. This
+    is an explicit exploratory normalization, not a proposal-prescribed formula
+    or rendered speech estimate. The target is a scoring scale, not a word cap
+    or the separate hard minimum required_words. Disabled by default.
     """
     import numpy as np
 
@@ -61,6 +70,13 @@ def select_placed(candidates: Sequence[Candidate], gaps, k: int, *, required_wor
         raise ValueError('novelty_weight must be finite and nonnegative')
     if not math.isfinite(min_separation) or min_separation < 0:
         raise ValueError('min_separation must be finite and nonnegative')
+    if not math.isfinite(gap_weight) or gap_weight < 0:
+        raise ValueError('gap_weight must be finite and nonnegative')
+    if gap_target_words is not None and (isinstance(gap_target_words, bool)
+            or not isinstance(gap_target_words, int) or gap_target_words < 1):
+        raise ValueError('gap_target_words must be a positive integer')
+    if gap_weight and gap_target_words is None:
+        raise ValueError('nonzero gap_weight requires explicit gap_target_words')
     if (segment_ids is None) != (segment_quotas is None):
         raise ValueError('segment IDs and quotas must be supplied together')
     if segment_ids is not None:
@@ -89,6 +105,8 @@ def select_placed(candidates: Sequence[Candidate], gaps, k: int, *, required_wor
                   for c in candidates]
     infeasible = [i for i,p in enumerate(placements) if p is None]
     remaining = {i for i,p in enumerate(placements) if p is not None}
+    gap_scores = [p.word_limit/(p.word_limit+gap_target_words)
+                  if p is not None and gap_target_words is not None else 0.0 for p in placements]
     chosen, separated = [], []
     similarity = np.full(len(candidates),-1.0)
     while remaining and len(chosen) < k:
@@ -100,9 +118,9 @@ def select_placed(candidates: Sequence[Candidate], gaps, k: int, *, required_wor
             return (float((1-np.clip(similarity[i],-1,1))/2)
                     if chosen and unit is not None else candidates[i].local_novelty)
         def score(i):
-            return candidates[i].base_score + novelty_weight*novelty(i)
+            return candidates[i].base_score + novelty_weight*novelty(i) + gap_weight*gap_scores[i]
         i = min(eligible,key=lambda j:(-score(j),placements[j].time,candidates[j].event_time,j))
-        chosen.append(Selected(i,len(chosen),placements[i],score(i),novelty(i)))
+        chosen.append(Selected(i,len(chosen),placements[i],score(i),novelty(i),gap_scores[i]))
         remaining.remove(i)
         if segment_ids is not None:
             segment_counts[segment_ids[i]] += 1
