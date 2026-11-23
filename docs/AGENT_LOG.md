@@ -310,3 +310,19 @@ requires612–1012images/question; evidence video-mme-qa-resource-inventory.json
 This is not a frozen long budget or measured GPU limit. Determine a feasible
 held-constant budget using development GPU smoke before opening held-out QA
 content; do not silently truncate frames or change K across selectors.
+
+
+Long QA actual-file integration check68288exit0:3tests passed under the data
+venv using temporary synthetic Parquet/JSONL only (tests/test_video_mme_qa_cli.py).
+The real CLI filters out an invalid answer outside frozen membership, preserves
+missing-question denominators and nonzero incomplete exit status, records source
+hashes, and rejects mismatched prediction provenance before attempting answer-file
+access. No real benchmark answer values were opened; no experiment QA scores
+were created. This resolves the previously untested Parquet filtering/CLI path.
+
+Fifth long ASR cache753 audited45639exit0:6674words/150VADwindows,
+32247997speech samples,0rejected words. Evidence
+outputs/verification/video-mme-asr-753-check.json; feature hash
+9fd67265d0680997dff21ee6da4af81bcdc0bb24a8a6160fdc5ec8c98186b7e9.
+Per-window languages are model estimates and not semantic validation.
+Long speech/event extraction continues; visual preparation remains verified12/12.
