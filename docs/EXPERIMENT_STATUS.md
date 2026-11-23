@@ -430,3 +430,16 @@ outputs/verification/video-mme-asr-753-check.json; feature hash
 9fd67265d0680997dff21ee6da4af81bcdc0bb24a8a6160fdc5ec8c98186b7e9.
 Per-window languages are model estimates and not semantic validation.
 Long speech/event extraction continues; visual preparation remains verified12/12.
+
+
+QA paired-analysis bridge implemented in scripts/export_qa_paired_metrics.py.
+Exports all frozen per-question outcomes including missing/errors as0, with
+video_id as cluster_id. Rejects differing question membership/source hashes,
+video mappings, answer labels and inconsistent outcome/summary metrics. Adjacent
+provenance records source report and export hashes. Existing paired cluster
+bootstrap/Wilcoxon and predeclared-family Holm pipeline can consume it; equal-video
+estimand explicit. Tests21299exit0:14passed across new exporter and existing paired
+analysis. Fixtures only, no real QA statistical findings created. Documented
+--unit cluster requirement, especially3questions/video for Video-MME. Current
+CPU40036 elapsed5h05m of6h; continuations40363/40408 remain dependency-pending.
+Long event616 progressed700/2646windows, longASR remains live, no duplicate jobs.

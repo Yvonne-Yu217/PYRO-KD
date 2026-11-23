@@ -231,3 +231,20 @@ fail explicitly. Run with `--input <actual-predictions.jsonl> --annotations
 predictions or scores exist yet. This is selected-subset accuracy, not a claim
 about the whole Video-MME benchmark. Duration-stratified analysis and final
 selection/inference protocol are still pending.
+
+For paired QA comparisons, export evaluated outcomes with
+`scripts/export_qa_paired_metrics.py --dataset video-mme --report U <u-score.json>
+--report V <v-score.json> --output <new-paired.jsonl>` (use `egoschema` for that
+benchmark). The exporter requires identical frozen provenance, question IDs,
+video mappings and answer indices across conditions, validates per-row outcomes
+against aggregate accuracy, and retains missing/failed/invalid answers as zero.
+It records source report hashes in an adjacent provenance JSON.
+
+Pass the export to `analyze_paired.py` or `analyze_family.py` with `--unit cluster`
+and metric `accuracy`. The cluster is the video, so multiple Video-MME questions
+are resampled together. The estimand is equal-video mean accuracy difference;
+with three questions per selected Video-MME video it also equals the overall
+question-accuracy difference. EgoSchema has one question per video. Predeclare
+comparison families before scoring; use the existing Holm correction for the
+family, retaining unavailable comparisons rather than shrinking it. No actual
+QA confidence intervals or superiority claims have been produced yet.
