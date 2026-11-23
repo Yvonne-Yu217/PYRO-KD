@@ -39,3 +39,29 @@ Remaining: implement cached one-second-hop event tracks, exclude speech/silence
 classes from event scoring, VAD-gated full transcripts with mapped word times,
 CLAP novelty, timeline integration, and human-labeled detector evaluation.
 The successful compatibility check proves none of those full-pipeline claims.
+
+## VAD-gated speech cache
+
+Implemented scripts/cache_speech_features.py and src/utils/speech_features.py.
+Speech intervals are unioned only when they overlap or touch; non-speech gaps
+are never bridged. Each interval is split into at most28-second windows,
+with inward sample rounding. Whisper uses English, beam5, temperature0,
+word timestamps, and no conditioning on prior windows. Predictions outside
+a supplied window are kept as rejected diagnostics rather than moved/clamped.
+Content hashes cover the exact WAV bytes, VAD config and intervals, pinned
+model revision, backend versions and decoding settings. Caches publish after
+checking that audio/VAD did not change during the run.
+
+```bash
+source hpc/config.sh
+in_env ro 'OMP_NUM_THREADS=4 /scratch/yy5919/pyro-audio-env/bin/python scripts/cache_speech_features.py --cache-dir /scratch/yy5919/pyro-kd-derived/cache/reframed --model-report outputs/verification/audio-model-download.json'
+```
+
+Completed all10 REFRAMED development caches with1645 retained words and no
+out-of-window words. One clip has zero VAD-positive intervals and therefore
+zero words; this is not evidence that it truly contains no speech. Independent
+checks verified every saved word/window lies within a VAD interval and each
+WAV hash matches. A repeat run reused all10 caches. Gating tests:4 passed,
+4 subtests. Evidence: outputs/verification/reframed-dev-speech{,-reuse}.log,
+reframed-dev-speech-check.json, and pytest-speech-features.log. This does not
+measure ASR accuracy or validate the VAD detector; human checks remain pending.
