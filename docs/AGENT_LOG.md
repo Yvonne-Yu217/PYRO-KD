@@ -1223,3 +1223,20 @@ First export invocation used an incorrect absent TTSroot, producing null derived
 fields; corrected to local-dev-pilot-v1 and existing OpenCLIP overlay. Raw outputs
 were never changed. Python/plot execution validated actual development artifacts.
 No human annotations were invented and no paid API requests were made.
+
+## Formal selector tables and course requirement verification
+
+Exported all31frozen selector configurations with exact30clip coverage checks,
+requested/realizedK, zero-budget picks, picks in speech, and temporal P/R/F1.
+Source artifact hash binds the report; no inferred human-quality labels or
+significance claims. Descriptive coreF1: U.3114,V.3889,A_cue.5051,AV.4940,
+O.8395(oracle upperbound). This is selector agreement before generation and
+must not be conflated with caption placement F1 or generated semantic quality.
+No settings were changed after reading these heldout results.
+
+Rechecked course page via curl after web-tool access failed. Agent Track requires
+an Agent Log appendix emphasizing agent failures and verification, incremental
+version history, a4–9page LaTeX/PDF researchreport, track declaration and human
+contribution attribution. Current English log records tooling, failures and
+checks; human contributions must be supplied by the team, not invented.
+Cached source /scratch/yy5919/pyro-course-project.html, retrieved2026-11-23.
