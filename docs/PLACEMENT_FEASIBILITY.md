@@ -75,3 +75,20 @@ Exploratory audio/fused ranking checkpoint
 `audit_fused_selectors.py` ran A/AV x global trigger/suppress on ten frozen dev clips using the same explicit1word/±2s placement settings. All four selected97/111; sign changes altered selected event sets in all ten clips for both A and AV. Independent40-case audit verified exact score reconstruction, time bounds, word capacity, separation and complete candidate accounting. This establishes mechanics, not accuracy or a result supporting either sign hypothesis. Evidence outputs/verification/reframed-dev-fused-selectors{,-check}.json.
 
 Outstanding before the final method: onset-strength incorporation, calibrated event scores and human detector validation, dev tuning, superclass parameterization, GF/OP score terms and rendered overlap, hierarchical budget allocation, generation input integration, and the unresolved fixed-K policy. The audit is not the20-run experiment matrix. Existing historical `build_moments --selector A` remains the old gap-feature selector; do not substitute it for this new pipeline.
+
+Exploratory development placement metrics (not final results)
+
+`scripts/evaluate_placed_dev.py` now evaluates the six cached placed conditions against real US AD start times after merging adjacent cues at<=0.5s. Matching is one-to-one within±2s. All ten clips are from distinct movies (checked), permitting video bootstrap here; do not reuse that assumption for the test set. All annotations are retained, with0out-of-bounds annotations observed. Raw match records, tolerance sweeps, requested/selected counts and matched-per-requested values are saved, including zero-selection videos if any.
+
+| Condition | Selected/requested | Macro F1 | 95% bootstrap CI |
+|---|---:|---:|---:|
+| A trigger |97/111|0.389|0.302–0.482|
+| A suppress |97/111|0.330|0.222–0.450|
+| AV trigger |97/111|0.407|0.350–0.478|
+| AV suppress |97/111|0.377|0.304–0.462|
+| V local |97/111|0.413|0.346–0.486|
+| V memory |97/111|0.461|0.369–0.566|
+
+Paired macro-F1 differences (10000bootstrap resamples, seed0): A trigger-minus-suppress0.059 [-0.015,0.139]; AV trigger-minus-suppress0.030 [-0.042,0.098]; V memory-minus-local0.048 [-0.024,0.141]. All include zero. These are untuned dev diagnostics with missing method components; no superiority, final hypothesis, or held-out generalization claim. U/O comparators and the complete matrix remain pending.
+
+Artifacts: outputs/verification/reframed-dev-placement-metrics.json (60 per-video records, six summaries and paired intervals), .csv, -metrics-check.json, and reframed-dev-placement-f1.png. The plot was rendered and visually inspected. Reproduce evaluation using --data-dir with the derived REFRAMED path, --fused-report outputs/verification/reframed-dev-fused-selectors.json, --visual-report outputs/verification/reframed-dev-placed-visual.json and a new --output path. Plot with scripts/plot_placed_dev.py --input <metrics.json> --output <figure.png>.
