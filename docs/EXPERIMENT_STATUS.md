@@ -743,3 +743,19 @@ Evidence outputs/verification/core-matrix-development-inputs-v2.json. Earlier
 inventory version hardcoded zero completed experiments; revised tool explicitly
 does not inspect execution outputs, avoiding a future stale completion claim.
 NativeOmni remains ablation, not API substitution. GPUhold/APIcap/humangates remain.
+
+
+2026-11-23T13:38UTC resumed in user-provided GPU session40880 onb-19-15,
+A100-SXM4-40GB,24h limit ending2026-11-24T13:26:29UTC. GPU initially0MiB/0%
+withno compute processes. User condition (finish transfers then obtainGPU) is now
+satisfied; proceeding with authorized small GPU smoke, not fullmatrix scaling.
+OldCPU40036TIMEOUT as scheduled. Continuations40363COMPLETED0:0 in36m36s and
+40408COMPLETED0:0 in3h37m32s. All step statuses0. Final speech12/12,visual12/12,
+events12/12auditscomplete; reports underoutputs/verification/long-cpu-resume-40363-attempt-0
+andlong-events-resume-40408-attempt-0. No detector/transcriptionaccuracy claim.
+Registered first real Qwen2.5VL7B smoke:4MTGdevmoments,P0,noaudio context,batch1,
+128newtokens,temp0,bf16,sdpa,pinnedcc594898137f460bfe9f0759e9844b3ce807cfb5.
+Output outputs/real-data-smoke/qwen25-mtg-U-P0-none.jsonl and associated metadata;
+logoutputs/real-data-smoke/qwen25-mtg-U-P0-none.log. Requires actual completion,
+output/frame/wordbudget inspection and evaluation before scaling. No duplicate
+GPU writer. Separate CPU user session40879 remains untouched.
