@@ -3,7 +3,7 @@
 ## Current checkpoint — 2026-11-23 03:24 UTC
 
 Transfers are complete for all source-available MTG, REFRAMED and EgoSchema files.
-The 12-video Video-MME long subset has verified media, PCM/frame and VAD caches.
+The 12-video Video-MME long subset has verified media, PCM/frame, VAD and spectral-flux onset caches.
 All 12 visual-feature caches now pass independent verification: 55,549 embeddings
 and 6,850 shot boundaries (`outputs/verification/video-mme-visual-check.json`).
 This is feature integrity and ranking mechanics, not scientific accuracy.
@@ -576,3 +576,26 @@ partialcoverage). Combined independently verified event coverage now604+616:
 no restart or duplicate writer. ProcessorRSS dropped after completing616, and
 saved batch checkpoints are retained. Original ASR96112 remains active.
 Actual full event extraction is still incomplete; final12video audit required.
+
+
+Registered long-video spectral-flux onset preparation onCPU40036 using existing
+scripts/cache_onset_features.py and unchanged SETTINGS(version1,16kmono,hop160,
+FFT512,64mels,centerFalse,1smax bins,per-video-max normalization). Input is the
+verified12video WAV cache; no event/ASR dependency and distinct onset files avoid
+writer overlap. Command in_env ro 'OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1
+MKL_NUM_THREADS=1 /scratch/yy5919/pyro-audio-env/bin/python -u
+scripts/cache_onset_features.py --cache-dir /scratch/yy5919/pyro-kd-derived/cache/video-mme'.
+Log outputs/verification/video-mme-onsets.log. No parameter tuning or label access.
+Independent provenance/grid/normalization audit follows completion.
+
+
+Long spectral-flux onset preparation76263exit0 COMPLETE12/12. Independent audit
+66784exit0 verified27780one-second windows across all12: current source/WAV/config
+hashes, exact grid, finite nonnegative values and per-video-max normalization.
+Full raw-WAV recomputation for604 matched stored strength/normalized arrays;
+other11received provenance/numerical checks without redundant reinference.
+Evidence outputs/verification/video-mme-onsets-check.json and video-mme-onsets.log;
+new reusable scripts/verify_onset_cache.py supports explicit recompute IDs.
+Existing onset tests11596exit0:3passed. Same development parameters, no threshold
+or normalization tuning, no QA labels inspected. This is spectral-flux consistency,
+not human onset accuracy. Learned event/ASR stillactive; event710 now200/1982windows.

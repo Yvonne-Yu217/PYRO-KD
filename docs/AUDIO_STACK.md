@@ -266,3 +266,5 @@ and remain to be checked during a real model load. Source evidence is retained i
 outputs/verification/qwen25-omni-runtime-api.txt and -generation-source.txt.
 The initial processor report's overly broad signature flag was renamed to
 `generate_declares_return_audio`; its original JSON is preserved alongside it.
+
+Long-video onset cache complete: all12/27780one-second windows passed source/settings/grid/normalization checks, and full-waveform recomputation for604 matched. Evidence outputs/verification/video-mme-onsets-check.json. Use scripts/verify_onset_cache.py with --subset and optional --recompute-video-id for explicit audit coverage; no human onset accuracy claim.
