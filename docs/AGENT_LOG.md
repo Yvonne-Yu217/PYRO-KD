@@ -1373,3 +1373,11 @@ has3739.111902seconds of VAD/Whisper-union gaps. Bounded occupancy is .4655
 (no-contextQwen),.5456(timelineQwen),.3822(nativeOmni); these are descriptive
 occupancy, not quality. Per-caption remaining-gap ratios also retained. Compact
 report binds fullscratchdetails bySHA256; no waveforms committed.
+
+Prepared12-slide Beamer draft from verifieddevelopment, selector andformal
+ablation evidence. Core/QA slots remain visiblypending. ExistingcontainerTeX
+compiledtwice withoutoverfullboxes/undefinedreferences; renderedslides7and11
+inspected. Firstcompile hadanescapedlinebreakerror, correctedbeforepublication.
+No installations,GPUjobs orfakefuturemetrics. Addedgenericfull-familypaired
+plot/table exporter andvalidatedall16existingselectorcontrasts withoutfiltering
+onsignificance; sourcehash binds thestatisticalJSON andpointwiseCIs are labeled.

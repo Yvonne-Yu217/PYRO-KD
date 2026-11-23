@@ -1,0 +1,24 @@
+{
+  "status": "draft; final core/QA metrics and human attribution pending",
+  "slides": 12,
+  "engine": "existing read-only container /usr/bin/pdflatex",
+  "compile_passes": 2,
+  "overfull_boxes": 0,
+  "undefined_references": 0,
+  "visual_inspection": [
+    7,
+    11
+  ],
+  "source_sha256": {
+    "docs/slides/main.tex": "560754c2a427ef572fbfb180d976b9226aed4d689eca1036db77ab3ebeb884b5",
+    "docs/results/reframed-dev-coverage.pdf": "3e9d0ebec2f9a7cb9a0cffe007303fbe715811963f69e36b9ea666ae9ae3bcd3",
+    "docs/results/reframed-selectors/selector-results.json": "0b55f202cae0f65e263856d3a18dfb0263acff3d160182dcb6a925daeef347b1",
+    "docs/results/reframed-selector-ablations/selector-ablation-stats.json": "36dee956f1f910f6231a0a7f59ab980f6768dc95deb8aa826338be4757f82c9c",
+    "docs/results/reframed-formal-ablation5/ablation5-results.json": "0c4c128a57f33bb5d20405a59644771d0d856246c6169a13608fa0f9217cf426",
+    "docs/results/reframed-formal-ablation5/interpretation.md": "0f94ee40ba8a983d636264132532d5f27e063f09c7a90a020ef997f9a4fd6fb8",
+    "docs/results/qualitative-agent-review.md": "a860958e7cbd679dcef87c8a3850569b45ad92b7a6f10acf765a50ce3f35cf55",
+    "docs/results/long-selection-budget-audit.md": "7e1a729cf5dbff421e48deee825c95b836e66373c85570f32ebc1ab599182faa"
+  },
+  "pdf_sha256": "bf7917f1a22ad4f51c65d8f197896d0dcdb3bb08a002872d7eec4706230b48bc",
+  "no_new_software_installation": true
+}
