@@ -55,3 +55,9 @@ in_env ro 'python scripts/audit_gap_feasibility.py --dataset mtg-ad --data-dir /
 
 Reports include all15 combinations of capacity1/6/15 and bounds0/1/2/5/10,
 per-video counts and split hashes. No generation or quality metric was run.
+
+Running visual memory implementation checkpoint
+
+`build_moments.py --selector V --visual-novelty memory` now enables greedy novelty against every already-selected embedding, recomputed after each choice. The first selection uses the historical adjacent-frame score; subsequent novelty is `(1 - max cosine to selected frames) / 2`, plus the existing shot-boundary bonus. Embeddings are normalized at use, validated against the committed cache, and invalid/missing embeddings fail explicitly. Minimum separation remains 2 seconds; ties choose earlier times and output is chronological. `--visual-novelty local` preserves the adjacent-frame baseline (still the compatibility default). Mode is recorded in inputs and reports.
+
+This is ranking integration, not completion of the two-stage selector: the builder still filters unspeakable moments after ranking, and the placement/fixed-K protocol remains unresolved. Memory currently refers to selected candidates, including candidates subsequently filtered by the old builder; the final snapped-candidate pipeline must rank feasible placements before generation. Shot/novelty weights remain untuned. There are no real development visual caches in the derived cache directory yet, so validation currently covers synthetic recurrence/separation cases and existing pipeline tests, not real visual feature extraction or scientific results. Per-label event weights, speech cues and AV integration remain outstanding.

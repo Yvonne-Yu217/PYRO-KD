@@ -568,3 +568,49 @@ class VisualCueSelector:
             self.candidates(features), k, min_separation,
             time_of=lambda c: c.time, score_of=lambda c: c.score,
         )
+
+    def select_memory(self, features, embeddings, k, min_separation=MIN_SEPARATION_SECONDS):
+        """Greedy novelty against all selected embeddings, with a shot bonus.
+
+        Initialize with the local-window score. After the first selection,
+        novelty is (1 - maximum cosine to selected memory) / 2, bounded [0,1].
+        Returned scores describe each candidate when it was chosen. Selection
+        order is used for memory; the result is then sorted chronologically.
+        No held-out labels, time-gap placement or model inference occurs here.
+        """
+        import numpy as np
+
+        candidates = self.candidates(features)
+        vectors = np.asarray(embeddings, dtype=np.float64)
+        if (vectors.ndim != 2 or len(vectors) != len(candidates)
+                or vectors.shape[1] == 0 or not np.isfinite(vectors).all()):
+            raise ValueError('memory requires finite embeddings aligned with frame times')
+        norms = np.linalg.norm(vectors, axis=1)
+        if np.any(norms <= 0):
+            raise ValueError('memory requires nonzero embeddings')
+        if isinstance(k, bool) or not isinstance(k, int) or k < 1:
+            raise ValueError('k must be a positive integer')
+        if not math.isfinite(min_separation) or min_separation < 0:
+            raise ValueError('min_separation must be finite and nonnegative')
+        if any(not math.isfinite(w) or w < 0 for w in (self.novelty_weight, self.shot_weight)):
+            raise ValueError('visual weights must be finite and nonnegative')
+        unit = vectors / norms[:, None]
+        remaining = set(range(len(candidates)))
+        chosen = []
+        max_similarity = np.full(len(candidates), -1.0)
+        while remaining and len(chosen) < k:
+            def scored(i):
+                candidate = candidates[i]
+                if not chosen:
+                    return candidate
+                novelty = float((1 - np.clip(max_similarity[i], -1, 1)) / 2)
+                return VisualCandidate(candidate.time,
+                    self.novelty_weight * novelty + self.shot_weight * candidate.shot_boundary,
+                    novelty, candidate.shot_boundary)
+            index = min(remaining, key=lambda i: (-scored(i).score, candidates[i].time, i))
+            selected = scored(index)
+            chosen.append(selected)
+            max_similarity = np.maximum(max_similarity, unit @ unit[index])
+            remaining = {i for i in remaining if i != index
+                         and abs(candidates[i].time - selected.time) >= min_separation}
+        return sorted(chosen, key=lambda c: c.time)

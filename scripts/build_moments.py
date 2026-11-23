@@ -39,6 +39,7 @@ from src.utils.cache_checks import load_audio_features  # noqa: E402
 from src.utils.media import cache_is_complete, cache_is_current, frame_window, load_manifest  # noqa: E402
 from src.utils.selection import k_for_duration, uniform_timestamps  # noqa: E402
 from src.utils.visual_features import VisualCueSelector, load_current_features as load_visual_features  # noqa: E402
+from src.utils.visual_features import load_embeddings  # noqa: E402
 
 
 def _select_audio(duration, k, features):
@@ -83,6 +84,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--dataset", choices=["mtg-ad", "reframed"], default="mtg-ad")
     parser.add_argument("--selector", choices=sorted(SELECTORS), default="U")
+    parser.add_argument("--visual-novelty", choices=["local", "memory"], default="local",
+                        help="V ranking: historical adjacent-frame or selected-memory novelty")
     parser.add_argument("--videos", choices=["dev", "test"], default="dev")
     parser.add_argument("--splits", type=Path, default=None)
     parser.add_argument("--data-dir", type=Path, default=None)
@@ -156,7 +159,13 @@ def main() -> None:
                 report["status"] = "missing_visual_features"
             else:
                 report["status"] = "ok"
-            times = SELECTORS[args.selector](duration, k, visual if args.selector == "V" else features)
+            if args.selector == "V" and args.visual_novelty == "memory" and visual is not None:
+                embeddings = load_embeddings(cache, visual)
+                if embeddings is None:
+                    raise ValueError(f"{video_id}: memory novelty requires valid cached embeddings")
+                times = [c.time for c in VisualCueSelector().select_memory(visual, embeddings, k)]
+            else:
+                times = SELECTORS[args.selector](duration, k, visual if args.selector == "V" else features)
             report["num_selected"] = len(times)
             report["selection_shortfall"] = (
                 0 if report["status"] in ("missing_audio_features", "missing_visual_features")
@@ -180,6 +189,7 @@ def main() -> None:
                     "video_id": video_id,
                     "dataset": name,
                     "selector": args.selector,
+                    "visual_novelty": args.visual_novelty if args.selector == "V" else None,
                     "time": t,
                     "frames": [f.path for f in window],
                     "frame_times": [f.timestamp for f in window],
@@ -196,7 +206,7 @@ def main() -> None:
                 report["status"] = "shortfall"
     report_path = output.with_suffix(".report.json")
     report_path.write_text(json.dumps({
-        "dataset": name, "selector": args.selector, "videos": reports,
+        "dataset": name, "selector": args.selector, "visual_novelty": args.visual_novelty if args.selector == "V" else None, "videos": reports,
         "word_budget_rule": WORD_BUDGET_RULE,
     }, indent=2) + "\n", encoding="utf-8")
     print(f"wrote {rows} moments to {output}")
