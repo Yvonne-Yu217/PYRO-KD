@@ -103,3 +103,14 @@ Recovery update: refreshed index run completed20/20 archives,900members with
 selected-archive-members-complete.json. Earlier failures were access-path
 failures, not evidence of corrupt ZIP releases. The initial payload job still
 uses the original map, so ID864 needs the recovered map in a later download.
+
+Independent selected-media verifier: scripts/verify_video_mme_subset.py checks
+frozen IDs/revision, ZIP size/CRC, recorded SHA, fresh ffprobe streams/duration,
+and optionally three10s decoded16kHzmono audio windows at10%,50%,90%. This is not
+full video/audio decode or semantic QA validation. Partial audit currently passes
+four files (808,802,616,857), all with nonzero samples. It reports remaining IDs
+as incomplete rather than silently removing them. Recovery subsequently verified
+710 from its saved compressed bytes; the final12-file audit is still pending.
+
+Reproduce after transfers: inside the read-only environment, run
+`python scripts/verify_video_mme_subset.py --members /scratch/yy5919/pyro-kd-derived/video-mme/selected-archive-members-complete.json --videos /scratch/yy5919/pyro-kd-derived/video-mme/videos --report outputs/verification/video-mme-subset-check.json --decode-samples`.
