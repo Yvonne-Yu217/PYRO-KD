@@ -796,3 +796,43 @@ fingerprint. Tests46861exit0:12passed covering repair/failure/exception/no-repai
 native runner and provenance. Registered third same4MTGsmoke on40880,output
 outputs/real-data-smoke/qwen25-mtg-U-P0-none-budget-repair.jsonl, batch1/temp0/
 128tokens/P0/none/sdpa/quantnone/pinnedQwen. No gridscaling. Requires actualinspection.
+
+
+Bounded-repair GPU smoke71886exit0:3/4valid,1remainingwordbudgetfailure. Five
+modelcalls acrossfourinputs; failed2wordcase repaired to"boat on water" (still3),
+bothdrafts preserved. No further prompt adjustment based on this individualcase.
+Registered ten-video REFRAMED development diagnostic using same fixedsharedprompt/
+one-repairpolicy, source9a5c834, earliestexistingpositivebudgetUinputper frozenclip,
+P0/none/batch1/temp0/128tokens/sdpa/bf16/Qwenpinnedcc5948. Output
+outputs/real-data-smoke/qwen25-reframed-ten-U-P0-repair.jsonl and .log. Purpose:
+measure failure prevalence and exercise actualevaluationacross10clips; not final
+selector/coregridscaling orclaim ofwordbudgetgatepassing. Failures remain denominator
+coverage. Neededsemantic/renderedoverlapverification remains beforelargerexperiments.
+
+
+2026-11-23 new user sessions40891GPU/b-19-17 and40892CPU/b-10-1; prior40880
+CANCELLED after24m32s. Generation13177hadcompleted10REFRAMEDrows, but evaluation8112
+handle/process disappeared withno report. Restarted evaluation28180 CPU-only after
+verifying no livewriter; logs evaluation-resume.log. User explicitly requests
+active task management and useful GPUutilization. Registered independent first
+EgoSchemaGPUsmoke:one frozenpilot Uquestion/60frames/16maxnewtokens/temp0/pinned
+Qwen2.5VL7B/sdpa/bf16 on40891. Outputoutputs/real-data-smoke/egoschema-U-first.jsonl.
+No labelsprovidedtoinference; evaluationfollows. No duplicateGPUworker. CPU AD
+semantic evaluation overlapsGPU QA. Fullgridstillheldpendinggates.
+
+
+First EgoSchema GPU smoke37075 completed one60framequestion withvalid"A"answer,
+2newtokens,noerror,peakallocated19862140928bytes(~19.9GB). Validinference/input
+parsing, not yet accuracyclaim. Registered full10question U pilot innewfile
+outputs/real-data-smoke/egoschema-U-ten.jsonl under currentruntimecode; previous
+first-questionoutput preserved (sourcefingerprint changed by TTSimplementation).
+SamepinnedQwen/bf16/sdpa/16tokens/temp0. Noheldout490inference orlabelinspection.
+Piper1.8.0 isolatedTTSenv installed, voiceen_US-ljspeech-medium pinned toe9c8a39444359388adaa94255becb37a5a2b8e51,
+3assets63536868bytes verifiedupstreamLFS/Git hashes. Modelcard sayspublicdomain
+dataset; noLessaclicenseformsubmitted. Configconfigs/piper_tts.json, noise0,
+normalrate1.0,CPU2threads. Realrender21213exit0:9validREFRAMEDdescriptionsrendered,
+1budgetfailureexcludedandexplicitlyreported. WAVPCMnonempty/mono/16bit/22050Hz
+validated. Evidence /scratch/yy5919/pyro-kd-derived/tts/reframed-ten-smoke/report.json.
+Actual1.2xoverlapaudit37593running whileGPUQAproceeds. TTSqualitynotyetlistened.
+Sources: https://github.com/OHF-Voice/piper1-gpl/blob/main/docs/API_PYTHON.md and
+https://huggingface.co/rhasspy/piper-voices/blob/e9c8a39444359388adaa94255becb37a5a2b8e51/en/en_US/ljspeech/medium/MODEL_CARD.
