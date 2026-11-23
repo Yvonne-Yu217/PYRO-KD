@@ -228,6 +228,29 @@ def _optional_scorer(name: str, cfg: dict):
     return None, f"unknown scorer {name}"
 
 
+def budget_compliance(rows: list[dict], missing_count: int = 0) -> dict:
+    """Budget rate among complete decodes with explicit boolean budget flags.
+
+    A word-budget flag failure is a complete decode and belongs in this rate.
+    Token-limit/backend failures and legacy rows without a flag remain unknown;
+    missing expected predictions are separate, never silently counted as passes.
+    """
+    known = []
+    for row in rows:
+        error = row.get("error")
+        complete_decode = (not row.get("hit_token_limit")
+                           and (error is None or str(error).startswith("word_budget:"))
+                           and isinstance(row.get("output"), str))
+        if complete_decode and isinstance(row.get("over_budget"), bool):
+            known.append(row)
+    n_over = sum(row["over_budget"] for row in known)
+    total = len(rows) + missing_count
+    return {"n_known": len(known), "n_over_budget": n_over,
+            "n_unknown_generated": len(rows) - len(known), "n_missing": missing_count,
+            "known_fraction": len(known) / total if total else None,
+            "rate": n_over / len(known) if known else None}
+
+
 def evaluate_generation(cfg: dict, run: GenerationRun, records, exp_dir: Path, scorers: dict | None = None) -> dict:
     """Placement with real word counts, budget compliance and matched-pair text metrics."""
     by_id = {r.video_id: r for r in records}
@@ -257,14 +280,15 @@ def evaluate_generation(cfg: dict, run: GenerationRun, records, exp_dir: Path, s
         primary = temporal_precision_recall_f1(times, truth, tol)
         speech = [tuple(s) for s in context.audio_features["speech"]] if context.audio_features else None
         placements = [(r["time"], len(r["output"].split())) for r in ok]
+        expected_ids = expected_by_video.get(video_id, set())
+        actual_ids = {r["id"] for r in vrows}
+        budget = budget_compliance(vrows, len(expected_ids - actual_ids))
         entry = {"video_id": video_id, "n_moments": len(vrows), "n_ok": len(ok), "n_error": len(vrows) - len(ok),
                  "precision": primary["precision"], "recall": primary["recall"], "f1": primary["f1"],
                  "mean_words": (sum(n for _, n in placements) / len(placements)) if placements else None,
-                 "over_budget_rate": (sum(bool(r.get("over_budget")) for r in ok) / len(ok)) if ok else None,
+                 "over_budget_rate": budget["rate"], "budget_compliance": budget,
                  "overlap_seconds": (placement.speech_overlap(placements, speech, wps, speed)["overlap_seconds"]
                                      if speech is not None else None)}
-        expected_ids = expected_by_video.get(video_id, set())
-        actual_ids = {r["id"] for r in vrows}
         entry.update(n_expected=len(expected_ids), missing_ids=sorted(expected_ids - actual_ids),
                      unexpected_ids=sorted(actual_ids - expected_ids),
                      no_generation_rows=not bool(vrows))
@@ -291,6 +315,12 @@ def evaluate_generation(cfg: dict, run: GenerationRun, records, exp_dir: Path, s
         except Exception as exc:
             text_metrics[name] = {"status": f"failed: {exc!r}"}
     resamples, seed = int(get(cfg, "evaluation.resamples", 10000)), int(get(cfg, "experiment.seed", 0))
+    budget_totals = {key: sum(v["budget_compliance"][key] for v in per_video)
+                     for key in ("n_known", "n_over_budget", "n_unknown_generated", "n_missing")}
+    budget_total = budget_totals["n_known"] + budget_totals["n_unknown_generated"] + budget_totals["n_missing"]
+    budget_totals["known_fraction"] = budget_totals["n_known"] / budget_total if budget_total else None
+    budget_totals["rate"] = (budget_totals["n_over_budget"] / budget_totals["n_known"]
+                             if budget_totals["n_known"] else None)
     result = {
         "run_id": run.run_id, "selector": run.selection.name, "prior": run.prior, "model": run.model_label,
         "timeline": run.timeline, "oracle": run.selection.is_oracle, "n_videos": len(per_video),
@@ -302,6 +332,9 @@ def evaluate_generation(cfg: dict, run: GenerationRun, records, exp_dir: Path, s
         "macro_f1": bootstrap_mean_ci([v["f1"] for v in per_video], resamples, seed),
         "overlap_seconds": bootstrap_mean_ci([v["overlap_seconds"] for v in per_video], resamples, seed),
         "over_budget_rate": bootstrap_mean_ci([v["over_budget_rate"] for v in per_video], resamples, seed),
+        "budget_compliance": {**budget_totals,
+            "denominator": "complete decoded rows with explicit boolean over_budget flags; observed evaluated-video rows",
+            "unknown_policy": "token/backend failures or absent flags are unknown; missing expected predictions are separate"},
         "text_metrics": text_metrics, "videos": per_video,
     }
     write_json(exp_dir / "eval" / f"generation_{run.run_id}.json", result)
