@@ -1308,3 +1308,9 @@ matchingmomentIDs, movieclusterbootstrap/Wilcoxon andHolm3; nativecomparisons
 explicitly change model. Execution waitscompletecore-referenceexport/all3cells.
 Focused reporting/statistics regression suite26passed in4.37s, log
 /scratch/yy5919/pyro-reporting-analysis-tests.log. NoGPU orpaidAPI calls used.
+
+QA reporting now optionally binds input membership and records actual durations
+and framecounts for per-video accuracy-versus-length plots. No fitted trend or
+length-dependent causal claim; no new threshold selection. Validated30condition-
+video rows against the existing3condition×10questionEgo pilot, all3minutes.
+The long-video plot will expose unequal realizedframes alongside durations.
