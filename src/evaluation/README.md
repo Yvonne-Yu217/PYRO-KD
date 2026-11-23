@@ -216,3 +216,18 @@ needs its matching provenance sidecar. Dry runs inspect but do not repair files.
 This assumes the job registry's single-writer rule; do not run two writers for
 one output. The strict evaluator can then consume resumed files without silently
 discarding malformed records. No real prediction file has required recovery yet.
+
+Video-MME long QA: `scripts/evaluate_video_mme_qa.py` uses
+`configs/video_mme_long_questions.json` as the fixed question denominator and
+links it to the pinned video subset and annotation-file hash. It refuses empty
+predictions before accessing labels, then reads only the selected question IDs,
+video IDs and answers. Prediction inputs must use dataset `video-mme`, split
+`long-heldout`, and source_sha256 keys `question_membership` and `subset` matching
+those configuration files. The shared QA runner preserves these fields.
+Missing/invalid/truncated/failed answers count incorrect; per-video and per-domain
+accuracy uses the same denominator policy. Mixed conditions and source mismatches
+fail explicitly. Run with `--input <actual-predictions.jsonl> --annotations
+<pinned-parquet> --output <new-score.json>` in the data environment. No real
+predictions or scores exist yet. This is selected-subset accuracy, not a claim
+about the whole Video-MME benchmark. Duration-stratified analysis and final
+selection/inference protocol are still pending.

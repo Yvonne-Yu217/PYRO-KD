@@ -249,3 +249,20 @@ passed in outputs/verification/video-mme-question-membership-check.json. Agent
 mistake: first attempted the data venv interpreter on the host (exit127); it
 requires the container's /ext3 interpreter, and the corrected in_env invocation
 succeeded. Visual extraction now10/12logged (through864); longASR/eventpilot live.
+
+
+Long-video QA evaluator added in scripts/evaluate_video_mme_qa.py. Uses frozen
+36-question membership/source hashes; refuses empty predictions before reading
+labels, reads only selected answer rows after prediction provenance checks, and
+reports per-video/domain plus overall fixed-denominator accuracy. Missing,
+invalid and truncated answers count incorrect. Tests76164exit0:19passed across
+new and shared QA scoring. No actual answer labels loaded or QA scores created.
+
+Long event pilot21486exit0:604 completed1832windows. Independent audit15996exit0
+verified exact pinned models, WAV/source identity, dimensions, normalization,
+RMS and reconstructed cues; explicit1/12coverage, not detector accuracy. Prepared
+hpc/long_events_resume.sbatch (bash syntax and model pins checked): CPU4/12GB/6h,
+revalidates604pilot before extraction, resumes batch checkpoints, audits all12,
+per-attempt logs/status and nonzero failures. Plan full event extraction now
+insideCPU40036 plus immutable continuation afterany40036; no GPU use. All ordinary
+CPU work stays on the compute allocation; no duplicate active cache writers.
