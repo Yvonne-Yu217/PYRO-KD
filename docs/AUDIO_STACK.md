@@ -35,10 +35,9 @@ weights were reported. For Whisper, development clip CxWby8RuUwU6's VAD interval
 [0.5,3.3] produced 10 word timestamps within its boundaries. No non-VAD samples
 were passed to Whisper. Evidence: audio-model-offline-check.json/.log.
 
-Remaining: implement cached one-second-hop event tracks, exclude speech/silence
-classes from event scoring, VAD-gated full transcripts with mapped word times,
-CLAP novelty, timeline integration, and human-labeled detector evaluation.
-The successful compatibility check proves none of those full-pipeline claims.
+The sections below record subsequent development-cache implementation.
+Remaining work includes timeline/selector integration and human-labeled
+detector evaluation; the compatibility check alone proves neither.
 
 ## VAD-gated speech cache
 
@@ -95,7 +94,7 @@ model revisions, dependency versions, window settings, label order and NPZ
 hash. Interrupted or mismatched array/metadata pairs do not pass cache reuse.
 Pilot CxWby8RuUwU6 completed74 windows and passed independent shape/finite,
 normalization, class-mask and NPZ-hash checks. Three numerical tests passed.
-Full ten-clip CPU caching is running; its completion must be verified separately.
+Full ten-clip CPU caching subsequently completed and passed the audit below.
 
 Full-cache audit (run after extraction, or as an explicitly incomplete check):
 
@@ -110,3 +109,11 @@ finite/range-valid scores, NPZ/config hashes, and recomputes RMS and derived
 cues. It is not model re-inference or an accuracy test. Missing unfinished
 files make complete=false and exit1; do not interpret that as extraction
 failure while the registered extraction process remains live.
+
+Completion checkpoint (2026-11-23): extraction26247 exited0. Audit72375
+verified all10 development clips and1336 one-second time points. Repeat66969
+reused all10 caches. Evidence: outputs/verification/reframed-dev-events-check.json,
+reframed-dev-events-check.log, reframed-dev-events-reuse.log. These checks prove
+artifact consistency and coverage, not event detection accuracy. VAD/ASR/event
+features are now present for this development subset; downstream integration,
+human detector labels and full experiments remain outstanding.
