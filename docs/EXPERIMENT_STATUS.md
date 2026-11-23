@@ -906,3 +906,26 @@ cachingfeatures. Do not duplicate whilelive. Datasetprimary andsubset unchanged.
 Remaining: verifyfullpilot/semanticandrenderedmetrics, resolveformalprotocol,
 finishcachedtestfeatures andlocalformalexperiments, QA/ablations/statistics/report;
 API model/judge andhumanlabels/ratings explicitlydeferredbyuser.
+
+## Prepared development ablation5 (not launched)
+
+Isolated branch `work/revision15-ablation-fixes`, worktree
+`/scratch/yy5919/pyro-revision15-ablation`. Config
+`configs/experiments/reframed_dev_ablation5.toml`; exact A_cue pilot selector,
+95 moments per condition, P0, Qwen absent/present and pinned Omni native.
+Ablation prompts exclude supplied subtitles; explicit30second native window
+matches the timeline. Fresh moment materialization required. API cost0.
+
+Commands after code review/commit, under the existing GPU writer lock:
+
+```bash
+source hpc/config.sh
+in_env ro 'python scripts/run_experiment.py --config configs/experiments/reframed_dev_ablation5.toml --stage select'
+in_env ro 'python scripts/run_experiment.py --config configs/experiments/reframed_dev_ablation5.toml --stage moments'
+in_env ro 'python scripts/run_experiment.py --config configs/experiments/reframed_dev_ablation5.toml --stage ablation5 --limit 2'
+# Inspect all6 outputs before removing --limit for the full285 inputs.
+```
+
+Expected full cost15–25GPUminutes, uncertain native30s cost; bound to40minutes.
+Focused regression31passed48subtests. No GPU allocated or launched by this
+preparation. Detailed provenance/reuse restrictions in Agent Log.

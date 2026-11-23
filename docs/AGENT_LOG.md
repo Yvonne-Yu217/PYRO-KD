@@ -894,3 +894,48 @@ Verification: focused next-stage regression command (`pytest -q
 3 skipped, 5964 subtests. Real OpenCLIP check:
 `/scratch/yy5919/pyro-openclip-check.log`. Full long input artifact:
 `/scratch/yy5919/pyro-kd-derived/moments/video-mme-long-U-none-v1.jsonl`.
+
+## 2026-11-23: delegated audio-context ablation audit and fixes
+
+Agent audit found that REFRAMED's adapter places supplied dialogue subtitles in
+`record.transcript`; the integrated generation runner previously supplied those
+subtitles whenever `timeline=false`. That made ablation 5's absent and native
+conditions receive extra audio text. In isolated worktree
+`/scratch/yy5919/pyro-revision15-ablation`, ablation 5 now suppresses that legacy
+transcript in all three conditions. Historical non-ablation behavior is retained.
+No source beneath the live pilot or queued long-QA smoke was edited.
+
+The native path also used a four-second waveform whereas the textual timeline
+used thirty seconds. Added explicit `native_audio_window_seconds`, validated as
+finite/positive and clipped to media duration. The new development ablation5
+config sets both windows to thirty seconds; historical default remains intact.
+The setting participates in run identity. Fresh moments must be prepared so the
+new native span is materialized; copying old moment JSONL unchanged is invalid.
+
+Prepared `configs/experiments/reframed_dev_ablation5.toml`: A_cue selected by
+non-oracle development placement F1 (.51368 versus AV .48337), P0, same tuned
+nse=.5/sc=.5/gf=.5, K=5/min, four frames/two seconds, pinned Qwen and Omni, batch1,
+temperature0, 128 tokens, word-budget flagging. The exact A_cue selector spec
+matches the pilot and its existing 95 moments. No new inference was launched.
+
+Plan before launch: 95 absent Qwen +95 present Qwen +95 native Omni =285 inputs;
+smoke first two per condition (6 inputs), inspect failures and waveform handling,
+then resume without duplicating successful smoke rows. Approximate local GPU
+cost15–25 minutes including loading, based on measured dev Qwen~1.6s/input and
+small native smoke~5s/input; thirty-second native audio may take longer. Bound a
+full attempt to40minutes, monitor and resume. API cost$0. No human rating claim.
+
+The old timeline-present pilot may be reused only after exact equality of all
+95 IDs, selected times, frame paths/times, word budgets and actual prompt text,
+plus identical model/generation settings and documented source provenance.
+New native-window identity changes the run ID, and the experiment source guard
+correctly rejects wholesale reuse. Do not copy predictions merely because the
+selector label matches. If a validated per-cell import is not implemented, rerun
+that cell explicitly (about3–5 extra GPU minutes) and retain prior outputs.
+
+Verification: regression tests exercise all three condition prompts and audio
+requests, subtitle exclusion, timeline isolation, legacy behavior, media-edge
+clipping, invalid windows and run identity. Initial follow-up command mistakenly
+named a nonexistent matrix test file and ran zero tests; corrected focused suite
+is recorded in `/scratch/yy5919/pyro-ablation-context-tests.log`.
+Final focused verification:31 passed,48 subtests passed; `git diff --check` passed.

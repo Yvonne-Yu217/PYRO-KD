@@ -115,7 +115,10 @@ def core_generation_runs(cfg: dict, task: str = "ad") -> list[GenerationRun]:
 
 
 def _gen_identity(gen: dict) -> dict:
-    return {k: gen.get(k) for k in ("max_new_tokens", "temperature", "word_limit_policy", "timeline_window_seconds")}
+    identity = {k: gen.get(k) for k in ("max_new_tokens", "temperature", "word_limit_policy", "timeline_window_seconds")}
+    if "native_audio_window_seconds" in gen:
+        identity["native_audio_window_seconds"] = gen["native_audio_window_seconds"]
+    return identity
 
 
 # --- ablations (proposal §5.3) -------------------------------------------------

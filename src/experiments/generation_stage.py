@@ -46,6 +46,21 @@ def _transcript_items(record) -> list:
     return [SimpleNamespace(start=float(t["start"]), end=float(t["end"]), text=str(t["text"])) for t in record.transcript or []]
 
 
+def native_audio_clip(cfg: dict, wav, time: float, duration: float, visual_span: float) -> dict | None:
+    """Explicit native window for controlled ablations; legacy default unchanged."""
+    if wav is None:
+        return None
+    window = get(cfg, "generation.native_audio_window_seconds")
+    if window is None:
+        return {"path": str(wav), "start": max(0.0, time - visual_span / 2 - 1.0),
+                "end": time + visual_span / 2 + 1.0}
+    window = float(window)
+    if not math.isfinite(window) or window <= 0:
+        raise ConfigError("native_audio_window_seconds must be finite and positive")
+    return {"path": str(wav), "start": max(0.0, time - window / 2),
+            "end": min(duration, time + window / 2)}
+
+
 def build_moments(cfg: dict, run: SelectionRun, records, exp_dir: Path) -> Path:
     """(Re)write the moments file for one selection run from its selections."""
     selections = latest_by_key(read_jsonl(selections_path(exp_dir, run)), "video_id")
@@ -92,8 +107,7 @@ def build_moments(cfg: dict, run: SelectionRun, records, exp_dir: Path) -> Path:
                 "transcript": transcript_context(transcript, t), "word_limit": limit,
                 "word_limit_source": "vad" if speech is not None else "fallback_no_vad",
                 "audio_timeline": timeline, "timeline_status": "ok" if cues is not None else available.get("audio_cues"),
-                "audio_clip": ({"path": str(wav), "start": max(0.0, t - span / 2 - 1.0), "end": t + span / 2 + 1.0}
-                               if wav is not None else None),
+                "audio_clip": native_audio_clip(cfg, wav, t, context.duration, span),
             })
             entry["written"] += 1
     path = moments_path(exp_dir, run)
@@ -148,7 +162,12 @@ def run_generation(
         batch = todo[start:start + batch_size]
         requests, base = [], {}
         for m in batch:
-            prompt = build_prompt(run.prior, m["time"], len(m["frames"]), span, m["word_limit"], "" if run.timeline else m.get("transcript", ""),
+            # Ablation 5 compares no audio text, derived timeline, and native
+            # waveform. REFRAMED's legacy transcript is supplied subtitles;
+            # including it in tl0/native would contaminate that comparison.
+            # Preserve transcript context for historical non-ablation callers.
+            transcript = "" if run.timeline or run.ablation == "ablation5" else m.get("transcript", "")
+            prompt = build_prompt(run.prior, m["time"], len(m["frames"]), span, m["word_limit"], transcript,
                                   audio_timeline=m.get("audio_timeline", "") if run.timeline else "", exemplars=exemplars)
             requests.append(GenRequest(m["id"], prompt, list(m["frames"]),
                                        m.get("audio_clip") if getattr(backend, "supports_audio", False) else None, max_new))
