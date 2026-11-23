@@ -117,3 +117,13 @@ reframed-dev-events-check.log, reframed-dev-events-reuse.log. These checks prove
 artifact consistency and coverage, not event detection accuracy. VAD/ASR/event
 features are now present for this development subset; downstream integration,
 human detector labels and full experiments remain outstanding.
+
+Speech-cue development preparation
+
+`src/utils/speech_cues.py` derives separate lexical deictic and adjacent-transcript semantic-change tracks plus long-silence opportunities from validated VAD gaps. Chunks stop at ASR gate boundaries, sentence punctuation or24words; they never bridge separate transcription windows. The phrase list is frozen in code (look at this/that, over there, watch this/that); matches can be figurative and are not labels. Semantic distance is `(1-cosine)/2` between successive chunks, first chunk zero. Short VAD chunks can make this a noisy proxy for topic change. Speaker-change diarization remains unimplemented.
+
+CPU preparation uses the existing pinned sentence-transformers/all-mpnet-base-v2 revision e8c3b32edf5434bc2275fc9bab85f82640a19130 with four threads/batch16; model files and library versions are fingerprinted in the output. Run inside the read-only environment:
+`OMP_NUM_THREADS=4 OPENBLAS_NUM_THREADS=4 python -u scripts/prepare_speech_cues.py --cache-dir /scratch/yy5919/pyro-kd-derived/cache/reframed --min-silence 5 --silence-scale 30 --output outputs/verification/reframed-dev-speech-cues.json`.
+Use a new output path when repeating; records are not overwritten. The5s threshold and30s scale are exploratory, not dev-tuned. No ASR words does not imply silence: only current VAD gaps define silence cues.
+
+Ten development clips produced294 chunks,18long-silence cues and0phrase-matching chunks. Output includes embeddings for rechecking semantic differences. Audit outputs/verification/reframed-dev-speech-cues-check.json verified frozen IDs, ASR source hashes, gate bounds,768-dimensional normalized embeddings and reconstructed cosine changes. This is preparation, not detector accuracy or final audio-selector scoring. A/AV integration and speech/non-speech ablations remain outstanding.
