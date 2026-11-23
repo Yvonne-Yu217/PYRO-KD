@@ -230,3 +230,23 @@ Generation resume integrity fix COMPLETE: src/generation/jsonl_recovery.py used 
 Registered bounded long audio-event pilot604 on CPU40036 alongside ASR94991/visual72713. Existing pinned AST/CLAP snapshots, unchanged1s hop/10s centered zero-padded windows, batch4/torch4threads; no tagger threshold tuning/QA labels. Command source hpc/config.sh; in_env ro 'OMP_NUM_THREADS=4 MKL_NUM_THREADS=4 /scratch/yy5919/pyro-audio-env/bin/python -u scripts/cache_event_features.py --cache-dir /scratch/yy5919/pyro-kd-derived/cache/video-mme --model-report outputs/verification/audio-model-download.json --video-id 604 --batch-size 4'; log outputs/verification/video-mme-events-pilot.log. Memory checked:~19GBavailable before launch, existingASR/visual each~1.5GBRSS. Do not scale until full-video numerical/source audit passes. PendingCPU40363 resumes only ASR/visual; event work is not part of that frozen job.
 
 Long event pilot LIVE21486/process106092 (~2.15GBRSS at check), originalASR94991/visual72713 also active; no full event scale-up. CLAP load warnings inspected: unexpected text-model/projection/logit-scale weights are from loading the audio-only submodel; no MISSING or unexpected audio weights found. Extended verify_event_cache.py supports --subset-config and explicit --video-id restricted to frozen IDs, records frozen_subset_size/full_subset_coverage/configSHA, enforces memory5 and actual16kmono/duration agreement. Tests9041exit0:3passed; stronger verifier88093exit0 passed all10existing REFRAMED caches without changing features. After21486terminalsuccess, audit command: source hpc/config.sh; in_env ro 'python scripts/verify_event_cache.py --cache-dir /scratch/yy5919/pyro-kd-derived/cache/video-mme --subset-config configs/video_mme_long_subset.json --video-id 604 --model-report outputs/verification/audio-model-download.json --report outputs/verification/video-mme-events-pilot-check.json'. This is1/12mechanics coverage, not detector accuracy. Third longASR710 independently verified28950exit0:6099words/329windows,0rejected. Total verifiedASR now3/12; no semantic transcript inspection or QA scoring.
+
+
+## Cue2Narrate access re-audit — 2026-11-23
+
+Read-only GitHub API checks found main at
+`08c89ea63281b819a0fd73c060d8c954f9e696ef`, containing only `.gitignore`,
+`LICENSE`, and `README.md`; the releases list is empty. No runnable implementation,
+checkpoints, or paired-window annotations are supplied in that public snapshot.
+Evidence: `outputs/verification/cue2narrate-access-audit.json`.
+Repository: https://github.com/multimodal-ai-lab/Cue2Narrate
+
+The paper's release plan distinguishes restricted LongLSMDC data from intended
+public code/checkpoints: https://arxiv.org/html/2609.01725v1 . The official LSMDC
+page routes access through MPII-MD registration and credentialed downloads:
+https://sites.google.com/site/describingmovies/download . Its linked form at
+https://moviedescreg.mpi-inf.mpg.de/register.php is reachable and requests an email
+address. No form was submitted or message sent. Standard LSMDC access alone does
+not establish availability of LongLSMDC paired windows or Cue2Narrate weights.
+Direct reproduction remains pending those artifacts; the baseline is retained
+in scope, and published scores are not substituted for our own evaluation.

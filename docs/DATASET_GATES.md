@@ -146,3 +146,23 @@ Evidence: outputs/verification/video-mme-preprocessing.json,
 video-mme-cache-check.json and video-mme-stream-timing.json. This is label-blind
 media preparation, not multilingual transcription, detector validation, selection
 or QA evaluation. Those experiment gates remain open.
+
+
+## Cue2Narrate access re-audit — 2026-11-23
+
+Read-only GitHub API checks found main at
+`08c89ea63281b819a0fd73c060d8c954f9e696ef`, containing only `.gitignore`,
+`LICENSE`, and `README.md`; the releases list is empty. No runnable implementation,
+checkpoints, or paired-window annotations are supplied in that public snapshot.
+Evidence: `outputs/verification/cue2narrate-access-audit.json`.
+Repository: https://github.com/multimodal-ai-lab/Cue2Narrate
+
+The paper's release plan distinguishes restricted LongLSMDC data from intended
+public code/checkpoints: https://arxiv.org/html/2609.01725v1 . The official LSMDC
+page routes access through MPII-MD registration and credentialed downloads:
+https://sites.google.com/site/describingmovies/download . Its linked form at
+https://moviedescreg.mpi-inf.mpg.de/register.php is reachable and requests an email
+address. No form was submitted or message sent. Standard LSMDC access alone does
+not establish availability of LongLSMDC paired windows or Cue2Narrate weights.
+Direct reproduction remains pending those artifacts; the baseline is retained
+in scope, and published scores are not substituted for our own evaluation.

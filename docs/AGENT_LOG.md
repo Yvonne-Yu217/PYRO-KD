@@ -154,3 +154,23 @@ Committed continuation9e20099, created detached worktree at exact SHA, submitted
 Code inspection exposed a concrete interruption edge case: read_rows skipped a partial last line but subsequent append could concatenate the next prediction onto it, losing a valid new record to parsing. Added readonly strict resume inspection and lossless backed-up atomic tail repair to AD/QA runners; complete-line corruption now fails instead of being hidden on resume. Preserved old general read_rows helper for existing readers, and kept dry-run nonmutating. Regression tests60437passed48, including real byte-level partial-UTF8 repair and mocked two-question resume retaining both IDs. Only synthetic test files repaired; no actual predictions exist. Latest scheduler confirms40036running/40363dependency pending, activeASR/visual continue on compute node. No GPU hold change, no human labels fabricated.
 
 Started bounded long event pilot21486 on604 with unchanged dev-tested AST/CLAP settings, after checking availableRAM~19GB and current CPU workload. It remains active; inspected CLAP unused text-branch warnings rather than assuming all warnings benign (no missing/audio unexpected weights found). Extended audit with explicit frozen-subset/pilot coverage and protocol duration/memory checks; event tests9041passed3 and actual ten-dev-cache reaudit88093passed10/10. Verified newly finished ASR710via28950,6099words329windows0rejections. No long event completion, detector accuracy, human labels or QA results claimed. Both originalASR94991/visual72713 remain live; queuedCPU40363 unaffected and excludes event work. Shell/Python/container/Git; no GPU or API calls.
+
+
+## Cue2Narrate access re-audit — 2026-11-23
+
+Read-only GitHub API checks found main at
+`08c89ea63281b819a0fd73c060d8c954f9e696ef`, containing only `.gitignore`,
+`LICENSE`, and `README.md`; the releases list is empty. No runnable implementation,
+checkpoints, or paired-window annotations are supplied in that public snapshot.
+Evidence: `outputs/verification/cue2narrate-access-audit.json`.
+Repository: https://github.com/multimodal-ai-lab/Cue2Narrate
+
+The paper's release plan distinguishes restricted LongLSMDC data from intended
+public code/checkpoints: https://arxiv.org/html/2609.01725v1 . The official LSMDC
+page routes access through MPII-MD registration and credentialed downloads:
+https://sites.google.com/site/describingmovies/download . Its linked form at
+https://moviedescreg.mpi-inf.mpg.de/register.php is reachable and requests an email
+address. No form was submitted or message sent. Standard LSMDC access alone does
+not establish availability of LongLSMDC paired windows or Cue2Narrate weights.
+Direct reproduction remains pending those artifacts; the baseline is retained
+in scope, and published scores are not substituted for our own evaluation.
