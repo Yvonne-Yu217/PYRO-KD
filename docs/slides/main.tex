@@ -21,7 +21,7 @@
 \begin{frame}
 \titlepage
 \vspace{-4mm}
-\begin{center}\small Formal local caption results complete; QA aggregation pending.\newline Paid APIs and human labels are deferred; no human-quality claim.\end{center}
+\begin{center}\small Local captions and long-video QA complete; EgoSchema aggregation pending.\newline Paid APIs and human labels are deferred; no human-quality claim.\end{center}
 \end{frame}
 
 \begin{frame}{Separate what matters from where narration fits}
@@ -175,18 +175,17 @@ Both avoid machine-labeled original speech.\\[2mm]
 \source{Long selection-capacity audit; frozen ten-condition/13 contrast QA family; no arbitrary filling or test tuning.}
 \end{frame}
 
-\begin{frame}{QA remains pending; audio diagnostics are not human labels}
-\begin{alertblock}{Do not substitute development numbers}
-Fill QA results only after every frozen condition and paired export completes. Local caption metrics are complete; ten paid cells remain deferred.
-\end{alertblock}
+\begin{frame}{Long QA: complete coverage, no validated benefit}
+\centering\small
+\input{long_qa_table.tex}
+\vspace{4mm}
 \begin{itemize}
-\item Machine low-audio-change subset: 9/548 reference starts; not truly silent-event labels. \Acue{} matches 0/9, U 5/9.
-\item EgoSchema: 490 questions per condition; failures count incorrect.
-\item Long QA: 36 questions per condition across 12 video clusters.
-\item Paired bootstrap intervals, Wilcoxon tests, Holm within declared families.
-\item Report all deferred paid rows and unvalidated human requirements.
+\item All 360 answers valid: 36 questions from 12 videos per condition.
+\item Matched frames: timeline \Acue{} 20 versus 21 without; AV 18 versus 20.
+\item All 13 video-clustered contrasts have Holm $p=1.0$. Small sample; not proof of no effect.
+\item Cross-selector A/AV comparisons remain constrained-budget diagnostics.
 \end{itemize}
-\source{Frozen QA protocols; detector-defined diagnostics only. Event precision/recall requires deferred human labels.}
+\source{Frozen 10 conditions/13 contrasts; no missing or invalid answers. EgoSchema 490-question results still pending.}
 \end{frame}
 
 \begin{frame}{Agent verification: failures that changed the workflow}
@@ -207,10 +206,10 @@ Wrong formal TTS cache & Correct external watcher; reuse existing renders \\
 
 \begin{frame}{What the evidence supports—and what remains open}
 \begin{itemize}
-\item Cue-driven selectors have higher descriptive placement means than U on the frozen subset; selection alone does not guarantee usable narration.
+\item Higher placement means do not guarantee usable narration.
 \item Text timelines improve valid-output availability at identical selected moments; playback self-overlap remains substantial.
-\item All prompt-prior temporal contrasts have Holm $p=1.0$; human-quality effects remain unmeasured. QA conclusions are pending.
-\item No Cue2Narrate baseline claim, equal-realized-budget long-audio claim, or human-quality claim.
+\item All prompt-prior temporal contrasts have Holm $p=1.0$; human-quality effects remain unmeasured.
+\item Long QA: all 13 Holm $p=1.0$; matched-frame timelines do not improve descriptive accuracy. EgoSchema remains pending; no equal-budget or human-quality claim.
 \end{itemize}
 \begin{block}{Remaining requirements}
 Paid-model/rubric authorization; human detector labels; blinded peer ratings; confirmed human contributions and team code walkthrough.

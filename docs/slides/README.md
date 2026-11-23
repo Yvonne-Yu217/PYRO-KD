@@ -2,7 +2,7 @@
 
 `main.tex` and `main.pdf` contain a12-slide Beamer draft. The deck includes
 verified development, formal selector, and formal audio-context ablation results.
-The formal local core and audio-context metrics are complete; QA aggregation remains explicitly pending. Human authorship and
+The formal local core and audio-context metrics are complete; Long QA is complete; EgoSchema aggregation remains explicitly pending. Human authorship and
 contribution attribution require team confirmation; paid APIs and human labels
 remain deferred. No human-quality, Cue2Narrate, or equal-realized-budget long-QA
 claim is made.
@@ -44,4 +44,12 @@ The formal coverage totals3398attempts,3108valid captions and3024individual
 TTSfits. Core17-contrast and audio-context3-contrast families were declared after
 descriptive results, not preregistered. Timeline-vs-none uses identical selected
 timestamps, so temporalF1 differences reflect valid-output availability rather
-than a selection change or semantic-quality proof. QA remains pending.
+than a selection change or semantic-quality proof. EgoSchema remains pending.
+
+Long QA refresh: all10conditions completed360valid answers, with no missing,
+invalid or generation-error rows. All13Holm-adjusted comparison p-values are1.0.
+Matched-frame timeline controls scoreA_cue20/36versus21/36without andAV18/36versus
+20/36without. This does not establish absence of an effect on a12-video subset.
+Cross-selector A/AV results remain constrained-budget diagnostics. Canonical
+sources: `docs/results/video-mme-long/qa-results.json` and `comparisons.json`.
+Only EgoSchema results remain pending in the local quantitative report.

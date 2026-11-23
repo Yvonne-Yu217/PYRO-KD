@@ -62,3 +62,27 @@ if formal_path.exists():
     provenance.update(formal_core_cells=20, formal_local_cells=10, formal_deferred_cells=10, scope='completed development, selector and formal caption results; QA pending')
     (OUT/'table_provenance.json').write_text(json.dumps(provenance, indent=2)+'\n')
     print('Generated20formal core rows and5paired slide rows;3108valid/3024TTSfit verified.')
+
+long_path = ROOT/'docs/results/video-mme-long/qa-results.json'
+if long_path.exists():
+    qa = json.loads(long_path.read_text())['rows']
+    assert len(qa) == 10 and all(r['expected'] == r['valid'] == 36 for r in qa)
+    assert all(r['missing'] == r['invalid_answers'] == r['generation_errors'] == 0 for r in qa)
+    labels = {'U-none':'U / none', 'V-local-none':'V / none', 'U-flat-timeline':'U / timeline', 'V_local-flat-timeline':'V / timeline', 'A_cue-flat-timeline':r'A\_cue flat / timeline', 'A_cue-hierarchical-timeline':r'A\_cue hier. / timeline', 'AV-flat-timeline':'AV flat / timeline', 'AV-hierarchical-timeline':'AV hier. / timeline', 'A_cue-flat-none':r'A\_cue flat / none', 'AV-flat-none':'AV flat / none'}
+    lines = [r'\begin{tabular}{lrrl}', r'\toprule Condition & Correct/36 & Accuracy & 95\% CI \\', r'\midrule']
+    for r in qa:
+        lines.append(f"{labels[r['condition']]} & {r['correct']} & {r['accuracy']:.3f} & [{r['ci_low']:.3f},{r['ci_high']:.3f}] " + r'\\')
+    lines.extend([r'\bottomrule', r'\end{tabular}'])
+    (OUT/'long_qa_table.tex').write_text('\n'.join(lines)+'\n')
+    by = {r['condition']:r for r in qa}
+    lines = [r'\begin{tabular}{lrrr}', r'\toprule Selector & No timeline & Flat + timeline & Hier. + timeline \\', r'\midrule']
+    for name, off, on, hier in [('U','U-none','U-flat-timeline',None),('V','V-local-none','V_local-flat-timeline',None),(r'A\_cue','A_cue-flat-none','A_cue-flat-timeline','A_cue-hierarchical-timeline'),('AV','AV-flat-none','AV-flat-timeline','AV-hierarchical-timeline')]:
+        cells = [str(by[x]['correct'])+'/36' if x else '---' for x in [off,on,hier]]
+        lines.append(name+' & '+' & '.join(cells)+' '+r'\\')
+    lines.extend([r'\bottomrule', r'\end{tabular}'])
+    (ROOT/'docs/slides/long_qa_table.tex').write_text('\n'.join(lines)+'\n')
+    provenance = json.loads((OUT/'table_provenance.json').read_text())
+    provenance['sources'][str(long_path.relative_to(ROOT))] = hashlib.sha256(long_path.read_bytes()).hexdigest()
+    provenance.update(long_qa_conditions=10,long_qa_attempts=360,scope='completed development, selector, formal caption and long QA results; EgoSchema pending')
+    (OUT/'table_provenance.json').write_text(json.dumps(provenance,indent=2)+'\n')
+    print('Generated10long QA conditions;360valid answers andzero missing/errors verified.')

@@ -2,7 +2,7 @@
 
 This guide describes the frozen local experiment. It does not authorize paid API
 calls. Human event labels, blinded ratings and rubric judging remain deferred.
-Formal local caption generation, metrics and TTS are complete; QA remains in progress. Consult
+Formal local caption generation, metrics and TTS are complete; long QA is also complete and EgoSchema remains in progress. Consult
 [EXPERIMENT_STATUS.md](EXPERIMENT_STATUS.md) and artifact coverage before calling
 any stage complete. Do not rerun a live job or alter its source worktree.
 
@@ -166,4 +166,15 @@ are separate artifacts; neither substitutes for human labels.
 
 Refresh paper and deck AD tables from the canonical artifacts with
 `python docs/report/refresh_tables.py`, then compile each LaTeX source twice.
-This leaves pending QA result slots untouched.
+The generator also refreshes completed long QA tables; EgoSchema result slots remain pending.
+
+## Completed long-video QA exports
+
+`docs/results/video-mme-long/qa-results.json` contains10conditions with36/36valid
+answers each,360total, no invalid/missing/generation-error rows. The same directory
+contains13paired contrasts, coverage, per-video frame/duration analysis, and plots.
+All13Holm-adjusted p-values are1.0. Same-frame timeline A_cue scores20/36versus
+21/36without; AV18/36versus20/36without. This is not evidence that timelines help,
+and the small sample does not prove no effect. A/AV versus U/V remains a
+constrained-realized-budget diagnostic. The frozen subset is12videos, not the
+wholeVideo-MME benchmark. EgoSchema aggregation remains pending.

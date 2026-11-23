@@ -1,16 +1,15 @@
 {
-  "status": "draft; formal local AD complete; QA and human attribution pending",
+  "status": "draft; formal local AD and long QA complete; EgoSchema and human attribution pending",
   "slides": 12,
   "engine": "existing read-only container /usr/bin/pdflatex",
   "compile_passes": 2,
   "overfull_boxes": 0,
   "undefined_references": 0,
   "visual_inspection": [
-    5,
-    7
+    10
   ],
   "source_sha256": {
-    "docs/slides/main.tex": "36afa6fc675762e44ebc3896209b061ed216321cf15987d4c840ffaa3a3114af",
+    "docs/slides/main.tex": "511699940575da39203e172b121b11834f416fa4720bfbe7b62ec8a2800a805a",
     "docs/results/reframed-dev-coverage.pdf": "3e9d0ebec2f9a7cb9a0cffe007303fbe715811963f69e36b9ea666ae9ae3bcd3",
     "docs/results/reframed-selectors/selector-results.json": "0b55f202cae0f65e263856d3a18dfb0263acff3d160182dcb6a925daeef347b1",
     "docs/results/reframed-selector-ablations/selector-ablation-stats.json": "36dee956f1f910f6231a0a7f59ab980f6768dc95deb8aa826338be4757f82c9c",
@@ -23,8 +22,12 @@
     "docs/results/reframed-ablation5-temporal/contrasts.json": "80239f8bcffe1360af413ee5e0d62fb9881a7c9dbf3c05573b3470079209d8a4",
     "docs/results/reframed-formal-gap-utilization/measured-gap-utilization.json": "191c187a3028fb689eea9897e9b9f9663ce77c1b3592614a3346e647649ffda6",
     "docs/results/reframed-audio-cue-diagnostics/audio-cue-diagnostics.json": "35956dc1120515870af06b774ab27ac9d6da3ba55e0c83b18c4031c4abf215bc",
-    "docs/slides/core_table.tex": "ebc36a4fbe79f53c11ac3cf43678a8993eb31fc1f2bc19d19f5c225be8f65dcc"
+    "docs/slides/core_table.tex": "ebc36a4fbe79f53c11ac3cf43678a8993eb31fc1f2bc19d19f5c225be8f65dcc",
+    "docs/results/video-mme-long/qa-results.json": "22543bdafc6ae54e6398f771c7ad3a29a1613bf9a2a977141071b34d4937853c",
+    "docs/results/video-mme-long/comparisons.json": "da35f91bbe04b5677145f62e4a8fc2e6a11988843f75c995aa5ea7b42414f445",
+    "docs/results/video-mme-long/paired-contrasts.md": "fef5dc408281c6c68b9643cc953d5f25aa31b42e94c40c06ea3e32b9a0315008",
+    "docs/slides/long_qa_table.tex": "5db812c32547de1192ad3fdc9eb39f495c0511c57f673d875490f7a6db969866"
   },
-  "pdf_sha256": "a8138bdab42c2bd58618c51778e9f9a942fedcc0741274352299da86a9aa1053",
+  "pdf_sha256": "df8e9a147b4c190df60621b55e36aca9367e24d1985b60a4dd7449aa5abab547",
   "no_new_software_installation": true
 }
