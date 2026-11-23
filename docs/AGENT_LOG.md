@@ -1297,3 +1297,14 @@ declared structural ablationcontrasts across10movies (2917707).4tests passed.
 All16Holm-adjustedpvalues1.0; no corrected-significanceclaim. This family was
 declaredafterdescriptivetables, not falselydescribedaspreregistered. Rawselections
 andfrozenparameters unchanged. Dedicatedresultsinclude pairedmetrics/provenance.
+
+## Additional reporting preparation
+
+Prepared fixeddenominator QA table/plot exporter using the tested paired-report
+validator and pointwise video-bootstrap intervals. Real10questionpilot validation
+reproduced U10/10,Vlocal9/10,Vmemory9/10 withallstatuscounts accounted for.
+Preparedthree structural audio-context temporalcontrasts withsame30references,
+matchingmomentIDs, movieclusterbootstrap/Wilcoxon andHolm3; nativecomparisons
+explicitly change model. Execution waitscompletecore-referenceexport/all3cells.
+Focused reporting/statistics regression suite26passed in4.37s, log
+/scratch/yy5919/pyro-reporting-analysis-tests.log. NoGPU orpaidAPI calls used.
