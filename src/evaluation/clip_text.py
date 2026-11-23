@@ -2,8 +2,7 @@
 
 Pairs come from the temporal matcher (as for BERTScore), never from text
 matching. The encoder is injectable; the default builds OpenCLIP's text tower
-(same ViT-B-32 / laion2b weights as the visual features) lazily. Untested
-against real weights here (open_clip is not installed on this laptop).
+(same ViT-B-32 / laion2b weights as the visual features) lazily. The default checkpoint reuses the pinned safetensors cache.
 """
 
 from __future__ import annotations
@@ -19,6 +18,13 @@ def openclip_text_encoder(model_name: str = "ViT-B-32", pretrained: str = "laion
     import torch
 
     device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+    from src.utils.visual_features import DEFAULT_CONFIG
+    if model_name == DEFAULT_CONFIG["clip_model"] and pretrained == DEFAULT_CONFIG["clip_pretrained"]:
+        from huggingface_hub import hf_hub_download
+        pretrained = hf_hub_download(
+            "laion/CLIP-ViT-B-32-laion2B-s34B-b79K", "open_clip_model.safetensors",
+            revision=DEFAULT_CONFIG["clip_revision"], local_files_only=True,
+        )
     model, _, _ = open_clip.create_model_and_transforms(model_name, pretrained=pretrained, device=device)
     tokenizer = open_clip.get_tokenizer(model_name)
     model.eval()

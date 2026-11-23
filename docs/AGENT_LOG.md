@@ -856,3 +856,41 @@ for50frozenREFRAMEDtestmedia only (no outcome inspection). The20input matrixsmok
 produced18valid/2budgetfailures acrossall10localcells; full804inputdevelopment
 pilot continues in one reusedmodel process with45minute watchdog. Timingestimate
 will be revised from actual per-row latency; fullcoverage remains unverified.
+
+
+## 2026-11-23: next-stage preparation alongside the local dev pilot
+
+Agent work: kept source in the active prep worktree unchanged; implemented the
+verified Omni thinker path in the experiment backend and reused the pinned
+OpenCLIP safetensors checkpoint for text scoring. The first CPU scorer failed
+because OpenCLIP searched for an uncached .bin; corrected CPU sanity check
+returned cosine 1.0 for identical texts and 0.423604 for different texts.
+Separate metric output directories avoid concurrent writers.
+
+Added label-free long-QA input construction. Reads only question ID, video ID,
+question and options; never the answer column. Frozen 12-video / 36-question U
+inputs built successfully, retaining four frames per moment (612–1012 frames
+per question). Base environment lacked pyarrow; reran with existing data env.
+A one-question hardware smoke is the next GPU task, using max-side 224 for all
+long-QA conditions, retaining all selected frames. This resolution is a resource
+choice before any held-out accuracy inspection; no outcome tuning is allowed.
+At most 20 GPU minutes are allocated to this smoke; API cost $0.
+
+Failure correction: CPU media job 40988 failed an assertion because the agent
+incorrectly assumed 50 frozen test clips. The actual pre-existing membership
+is 30, matching the proposal's explicit scope-reduction option. No membership
+was changed. Cancelled impossible dependent jobs 40990/40991 and submitted
+41016 (media), 41017 (speech/visual), 41018 (events/onsets), both afterok:41016.
+Corrected the earlier 50-clip records. No held-out outcome was examined.
+
+User contributions: paid API calls remain prohibited; genuine human labels
+and peer ratings will be supplied later. No agent-generated annotations replace
+them. Local inference and CPU evaluation remain in progress on allocation40964.
+
+Verification: focused next-stage regression command (`pytest -q
+ tests/test_long_qa_inputs.py tests/test_omni_backend.py
+ tests/test_resume_readiness.py`) passed 13 tests; log
+`/scratch/yy5919/pyro-next-checks.log`. Prior integration suite: 790 passed,
+3 skipped, 5964 subtests. Real OpenCLIP check:
+`/scratch/yy5919/pyro-openclip-check.log`. Full long input artifact:
+`/scratch/yy5919/pyro-kd-derived/moments/video-mme-long-U-none-v1.jsonl`.

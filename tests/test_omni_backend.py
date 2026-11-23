@@ -77,3 +77,20 @@ def test_rejects_audio_output_tuple():
     model.thinker = AudioThinker()
     with pytest.raises(ValueError, match='text token sequence'):
         generate_one(Processor(), model, ['frame'], 'prompt')
+
+
+def test_experiment_backend_uses_verified_text_path(monkeypatch):
+    from src.generation import omni
+    from src.generation.backends import QwenOmniBackend, GenRequest
+    processor, model = object(), object()
+    monkeypatch.setattr(omni, 'load_model', lambda *args: (processor, model, 'test'))
+    calls = []
+    def generate(p, m, images, prompt, **kwargs):
+        assert p is processor and m is model
+        calls.append(kwargs)
+        return ['A plane flies.'], ['A plane flies.<end>'], [4]
+    monkeypatch.setattr(omni, 'generate_one', generate)
+    backend = QwenOmniBackend('pinned-model')
+    result = backend.generate([GenRequest('one', 'describe', [], max_new_tokens=16)])[0]
+    assert result.error is None and result.text == 'A plane flies.' and result.new_tokens == 4
+    assert calls == [{'waveform': None, 'max_new_tokens': 16, 'temperature': 0.0}]

@@ -896,7 +896,7 @@ reused across10U/V/A_cue/AV/OxP0/P1cells, timelinepresent,804preparedinputs tota
 45minute watchdog bounds this attempt; inspect finalcoverage before resuming.
 Not a formal frozen test run. No other GPUwriter should be started concurrently.
 
-CPU Slurm40988 (pyro-test-media) prepares only50frozenREFRAMEDtestmedia, without
+CPU Slurm40988 (pyro-test-media) prepares only30frozenREFRAMEDtestmedia, without
 reference-outcome inspection. Script/sbatch under/scratch/yy5919/pyro-test-media.sbatch;
 report/scratch/yy5919/pyro-resume-results/reframed-test-media.json;
 log/scratch/yy5919/pyro-test-media-40988.log. Checkcompletion and failures before
