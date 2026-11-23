@@ -1314,3 +1314,9 @@ and framecounts for per-video accuracy-versus-length plots. No fitted trend or
 length-dependent causal claim; no new threshold selection. Validated30condition-
 video rows against the existing3condition×10questionEgo pilot, all3minutes.
 The long-video plot will expose unequal realizedframes alongside durations.
+
+Archived14exact small HPC executiondrivers in hpc/revision15 with sourcehashes,
+syntaxchecks and historical dependencyoverride instructions. These snapshots
+preserve actualcommands without changing runningfiles; no data,weights,secrets,
+caches or rawoutputs committed. LiveGPUownership and sourceworktree requirements
+are explicit, including the repairedEgo41216→41217dependencychain.
