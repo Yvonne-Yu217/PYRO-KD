@@ -41,3 +41,31 @@ class SpeechTests(unittest.TestCase):
             def transcribe(self,*args,**kwargs): raise AssertionError('must not call ASR')
         result=transcribe_gated(np.zeros(100),[],Model(),sample_rate=10)
         self.assertEqual(result,{'words':[],'rejected_words':[],'windows':[],'speech_samples':0})
+
+
+class MultilingualSpeechTests(unittest.TestCase):
+    def test_per_window_detection_retains_language_and_never_bridges_gaps(self):
+        calls=[]
+        class Model:
+            def transcribe(self,wave,**kwargs):
+                calls.append((len(wave),kwargs['language']))
+                return [],SimpleNamespace(language='es' if len(calls)==1 else 'fr',language_probability=.8)
+        result=transcribe_gated(np.zeros(100),[(1,2),(5,7)],Model(),sample_rate=10,language=None)
+        self.assertEqual(calls,[(10,None),(20,None)])
+        self.assertEqual([w['detected_language'] for w in result['windows']],['es','fr'])
+        self.assertTrue(all(w['language_probability']==.8 for w in result['windows']))
+
+    def test_forced_language_passes_through_without_fake_detection_metadata(self):
+        class Model:
+            def transcribe(self,wave,**kwargs):
+                assert kwargs['language']=='zh'
+                return [],None
+        result=transcribe_gated(np.zeros(100),[(1,2)],Model(),sample_rate=10,language='zh')
+        self.assertNotIn('detected_language',result['windows'][0])
+
+    def test_invalid_language_metadata_fails(self):
+        class Model:
+            def transcribe(self,*args,**kwargs):
+                return [],SimpleNamespace(language='es',language_probability=float('nan'))
+        with self.assertRaises(ValueError):
+            transcribe_gated(np.zeros(100),[(1,2)],Model(),sample_rate=10,language=None)

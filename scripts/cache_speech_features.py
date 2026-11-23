@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Cache English Whisper words from current Silero VAD intervals, offline on CPU."""
+"""Cache Whisper words from current VAD intervals, with explicit language policy."""
 import argparse
 import hashlib
 import importlib.metadata
@@ -18,15 +18,22 @@ def main():
     p.add_argument('--cache-dir',type=Path,required=True)
     p.add_argument('--model-report',type=Path,required=True)
     p.add_argument('--video-id',action='append',help='restrict to these prepared video IDs')
+    p.add_argument('--model-id',default='Systran/faster-whisper-small.en')
+    p.add_argument('--language',default='en',help='language code or auto for per-VAD-window detection')
     args=p.parse_args()
     import soundfile as sf
     from faster_whisper import WhisperModel
-    record=next(r for r in json.loads(args.model_report.read_text())['models'] if r['repo_id']=='Systran/faster-whisper-small.en')
+    record=next(r for r in json.loads(args.model_report.read_text())['models'] if r['repo_id']==args.model_id)
+    language=None if args.language=='auto' else args.language
+    if args.model_id.endswith('.en') and language!='en':
+        raise ValueError('English-only weights require --language en; use pinned multilingual weights for auto')
     settings={'version':SPEECH_FEATURES_VERSION,'model':record['repo_id'],'revision':record['revision'],
-              'compute_type':'int8','device':'cpu','language':'en','max_seconds':28.0,
+              'compute_type':'int8','device':'cpu','language':language,'max_seconds':28.0,
               'beam_size':5,'temperature':0.0,'condition_on_previous_text':False,
               'faster_whisper':importlib.metadata.version('faster-whisper'),
               'ctranslate2':importlib.metadata.version('ctranslate2')}
+    if language is None:
+        settings['language_detection']='per_vad_window; no translation; no cross-gap audio'
     manifests=sorted(args.cache_dir.glob('*/manifest.json'))
     if args.video_id:
         manifests=[p for p in manifests if p.parent.name in args.video_id]
@@ -58,7 +65,9 @@ def main():
                     raise ValueError('requires prepared 16kHz mono audio')
                 if model is None:
                     model=WhisperModel(record['snapshot'],device='cpu',compute_type='int8',cpu_threads=4,local_files_only=True)
-                features=transcribe_gated(wave,vad['speech'],model)
+                if language!='en' and not model.model.is_multilingual:
+                    raise ValueError('loaded weights do not support multilingual transcription')
+                features=transcribe_gated(wave,vad['speech'],model,language=language)
                 current,reason=load_current_features(cache,manifest)
                 if current is None or current['config_hash']!=vad['config_hash'] or hashlib.sha256(audio.read_bytes()).hexdigest()!=provenance['audio_sha256']:
                     raise ValueError('audio/VAD changed during transcription')

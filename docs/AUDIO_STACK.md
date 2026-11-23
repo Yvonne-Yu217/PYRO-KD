@@ -133,3 +133,24 @@ Spectral-onset cue checkpoint
 `cache_onset_features.py` computes librosa spectral-flux strength from16kHzmono WAV with hop160/n_fft512/n_mels64/centerFalse, takes the maximum within each half-open1s bin, and records raw strength plus video-maximum normalization (silent tracks remain0). Separate onset_features.json records source WAV hash, settings and library versions; AST/CLAP outputs remain unchanged. This is an uncalibrated full-audio cue, including possible speech transients, not a validated non-speech event label.
 
 All10REFRAMEDdev clips cached:1336windows. Independent audit verified source hashes, event-grid alignment and normalization. Nine unit tests passed, including actual silent-wave extraction. `audit_fused_selectors.py --include-onsets` explicitly adds normalized strength under the global trigger/suppress sign; omission preserves the earlier recipe. New source hashes are included for downstream export validation. Exploratory totals97/99/97/98 of111requested for Atrigger/Asuppress/AVtrigger/AVsuppress. Selected event sets changed in9/8/9/9clips; no accuracy or superiority claim. Outputs outputs/verification/reframed-dev-onsets-check.json and reframed-dev-fused-with-onsets-v2.json. Earlier reports retained. Threshold/weight tuning and fixed-K resolution remain pending.
+
+Multilingual preparation support (not yet run on long videos)
+
+`cache_speech_features.py --model-id <pinned multilingual repo in model report>
+--language auto` now passes `language=None` separately for each existing
+VAD-positive window and records detected language/probability per window.
+Speech stays in the detected language; there is no translation or concatenation
+across silent gaps. A forced language code is also supported. Auto/non-English
+requests fail with English-only repo names or loaded English-only weights.
+Language policy enters the cache fingerprint; default small.en/en settings and
+existing English feature schema are preserved.
+
+Local faster-whisper implementation was inspected to confirm its optional
+language argument and returned language metadata. Unit tests cover two different
+window languages, forced-code pass-through, invalid detection probabilities and
+unchanged VAD isolation. This is plumbing, not validated multilingual accuracy:
+short speech windows can be poor language-detection evidence. Multilingual
+weights still need a frozen revision and an actual offline compatibility check;
+no Video-MME ASR has been run. The English-only MPNet semantic-shift and lexical
+cue policy also requires a multilingual decision before long-form audio-aware
+selection. Do not silently describe current English-only caches as multilingual.
