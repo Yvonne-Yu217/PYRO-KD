@@ -31,3 +31,11 @@ CPUscorers wait for complete expectedattemptcoverage. LongQA waits all10frozen
 conditions; Ego waits all3heldoutconditions and stable predictionhashes before
 reading answers. TTSuses thetestcache and preserves alreadyrendered audio.
 See `docs/RESULTS_REPRODUCTION.md` for scientific settings and report commands.
+
+The active long-QA scorer is `pyro-score-long-qa-v3.py`: it verifies exact
+36question/video mappings and one run fingerprint for every condition, with
+stable complete files across two polls before labels are opened. Earlier scorer
+snapshot is retained as execution history. CPU continuation controller41245
+waits afterany41197 and submits an Ego-only GPU continuation only for unfinished
+U/V work after validated inputs exist. No GPU is allocated by that controller
+when both conditions are already complete.

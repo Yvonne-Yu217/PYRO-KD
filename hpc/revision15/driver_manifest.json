@@ -68,5 +68,25 @@
     "file": "pyro-watch-egoschema-evaluation.py",
     "original": "/scratch/yy5919/pyro-watch-egoschema-evaluation.py",
     "sha256": "6e861cfc6e4117c080d660263613dfcea0381fdbde06596e00b41edb693d914f"
+  },
+  {
+    "file": "pyro-score-long-qa-v3.py",
+    "original": "/scratch/yy5919/pyro-score-long-qa-v3.py",
+    "sha256": "bc2ae11c10d594bd4a2f113bbc119ee4a1415a59447ac760098d9885e2047ee4"
+  },
+  {
+    "file": "pyro-ego-continuation.py",
+    "original": "/scratch/yy5919/pyro-ego-continuation.py",
+    "sha256": "5b425212bd503eb47520c1c0f351c96aec2b02d7346ec0ff45d52a1d297c83f9"
+  },
+  {
+    "file": "pyro-ego-continuation-controller.sbatch",
+    "original": "/scratch/yy5919/pyro-ego-continuation-controller.sbatch",
+    "sha256": "2c4fa4f11274659c9253e85f75786f6948b400ec06e9f967baf72e0a6b38cd21"
+  },
+  {
+    "file": "pyro-ego-continuation-gpu.sbatch",
+    "original": "/scratch/yy5919/pyro-ego-continuation-gpu.sbatch",
+    "sha256": "a6be74f56f73a4b6260c6e66c086653e54f3885f38eab9c3755083c5b49715f0"
   }
 ]

@@ -1320,3 +1320,26 @@ syntaxchecks and historical dependencyoverride instructions. These snapshots
 preserve actualcommands without changing runningfiles; no data,weights,secrets,
 caches or rawoutputs committed. LiveGPUownership and sourceworktree requirements
 are explicit, including the repairedEgo41216→41217dependencychain.
+
+## Stronger completion checks and conditional GPU continuation
+
+Stopped the waitinglongQA scorer before anyscore JSON existed; newv3driver adds
+exact36question/video membership, singlefingerprint, completeJSONL andstable
+hashes overtwo30secondpolls, plusduplicate-scorerlock. All8completedconditions
+passed realmembership checks; syntheticmissing/duplicaterows were rejected.
+Newlogpyro-long-qa-scoring-v3.log; preservespriorv1/v2scripts/logs. No labels
+read or researchprotocolchanged during this readiness correction.
+
+A suspected CUDAquotingissue was a tool-display escaping misread. A preparatory
+assertion failed before writing anyreplacementfile; direct filechecks confirmed
+theoriginalCPUscript already sets the correctemptydevicevariable. Existing
+jobwas left running, and no unnecessaryreplacement was submitted.
+
+Agent audit_remaining prepared/testedconditionalEgo continuationcontroller41245,
+afterany41197,1CPU/2GB. It checks terminaljobstate, completevalidatedinputs,
+missingpredictionIDs, a submissionlock and registeredjobID. OnlyunfinishedU/V
+requests can trigger one2.5hA100job (90minmaxpercondition,~35minestimatedeach).
+Completeoutputs yield no-op; no GPU waiting or duplicateinference. Uinputfile
+published490questions/7350moments/29400frames,zero shortfall. Vlocal/Vmemory
+continue CPU preparation. This is a continuation of existingfrozenwork, not
+additional experimentconditions or paidAPI authorization.
