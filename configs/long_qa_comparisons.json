@@ -1,0 +1,58 @@
+{
+  "status": "specified before reading heldout correctness",
+  "conditions": [
+    "U-none",
+    "V-local-none",
+    "U-flat-timeline",
+    "V_local-flat-timeline",
+    "A_cue-flat-timeline",
+    "A_cue-hierarchical-timeline",
+    "AV-flat-timeline",
+    "AV-hierarchical-timeline"
+  ],
+  "contrasts": [
+    [
+      "V-local-none",
+      "U-none"
+    ],
+    [
+      "U-flat-timeline",
+      "U-none"
+    ],
+    [
+      "V_local-flat-timeline",
+      "V-local-none"
+    ],
+    [
+      "V_local-flat-timeline",
+      "U-flat-timeline"
+    ],
+    [
+      "A_cue-flat-timeline",
+      "V_local-flat-timeline"
+    ],
+    [
+      "AV-flat-timeline",
+      "V_local-flat-timeline"
+    ],
+    [
+      "A_cue-hierarchical-timeline",
+      "A_cue-flat-timeline"
+    ],
+    [
+      "AV-hierarchical-timeline",
+      "AV-flat-timeline"
+    ],
+    [
+      "AV-hierarchical-timeline",
+      "V-local-none"
+    ]
+  ],
+  "unit": "video cluster",
+  "clusters": 12,
+  "questions": 36,
+  "resamples": 10000,
+  "seed": 0,
+  "multiple_testing": "Holm over all9 declared contrasts",
+  "interpretation": "A/AV are constrained-budget diagnostics; realized-frame counts differ, so do not attribute their differences solely to selection at equalK"
+}

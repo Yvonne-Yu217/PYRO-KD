@@ -977,3 +977,14 @@ Re-evaluate/replace derived metric reports from preserved predictions using the
 corrected evaluator; raw generations remain valid. New records expose known
 complete-decode denominator, overrun numerator, unknown-generated and missing
 coverage. Do not interpret token-limit unknowns as budget-compliant predictions.
+
+### Formal source frozen
+
+09abb6c onwork/revision15-formal-runs; configconfigs/experiments/reframed_test_local.toml,
+freeze recordconfigs/reframed_formal_freeze.json. Local generation ceiling192,
+chosen from15-case dev diagnostic:5complete at128–139tokens,10stillfail at512.
+CPU41116 after41034 prepares31selector variants and coremoments. GPU core launch
+requires successful preparation and count review. APIs remain capped at0.
+Long visualU/V complete36/36each without inference errors; timelineU also
+complete, remainingtimeline conditions running through sharedGPU lock40964.
+Scoring waitsall8conditions; nine video-clustered contrasts predeclared.

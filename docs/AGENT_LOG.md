@@ -1172,3 +1172,17 @@ Core export now distinguishes1110requested,1008selected,804prepared,705valid
 and688TTS-fitting dev outputs, with84/789known decoded budget overruns and15
 unknown token-limit cases. This prevents conditional fit rates from hiding losses.
 Model-cache revisions for BERTScore, sentence cosine andOpenCLIP recorded offline.
+
+Predeclared nine long-QA contrasts before correctness was read, with12video
+clusters,10000paired bootstrap resamples andHolm correction across the family:
+configs/long_qa_comparisons.json. Scorer waits for all8conditions to finish;
+current session4071/log /scratch/yy5919/pyro-long-qa-scoring.log. A watcher field
+name mismatch (p_value vs analyzer's pvalue) was corrected while it was still
+waiting, before any scoring; stopped/restarted it without touching GPU workers.
+
+Formal source09abb6c is pushed onwork/revision15-formal-runs and isolated at
+/scratch/yy5919/pyro-revision15-formal. CPU preparation41116 depends on41034:
+derive gated Whisper view, validate data,31selector runs/evaluation, then core
+moments. GPU generation awaits actual-count and coverage review. Binary reference
+availability audit confirmed30/30US tracks; timing audit maximum metadata/media
+difference0.049322seconds. No reference text or score was used to alter configs.
