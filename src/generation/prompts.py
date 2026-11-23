@@ -1,5 +1,5 @@
-"""AD prompts. P0 is the plain instruction; P1 (guidelines + 3 professional
-exemplars) is added in Week 3. Everything except the prior itself is shared,
+"""AD prompts. P0 is plain; P1 adds guidelines and 3 sourced professional
+exemplars. Everything except the prior itself is shared,
 so prompt differences cannot leak into the selector comparison."""
 
 import math
@@ -21,7 +21,18 @@ P0 = (
     "Output only the description."
 )
 
-PROMPTS = {"P0": P0}
+P1_GUIDELINES = (
+    "Audio-description guidelines:\n"
+    "Describe observable actions, people, objects and spatial relationships. "
+    "Use concise, objective, present-tense language. Do not invent identities, "
+    "motives, emotions or events unsupported by the frames. Prioritize visual "
+    "information needed to understand the action. Avoid repeating speech or "
+    "information already clear from the supplied audio context. Respect the "
+    "current word limit; do not pad short descriptions.\n"
+    "Professional descriptions below illustrate style only. Their people, "
+    "objects and events are unrelated to the current frames.\n"
+)
+PROMPTS = {"P0": P0, "P1": P0}
 
 
 def format_clock(seconds: float) -> str:
@@ -64,6 +75,7 @@ def build_prompt(
     span: float,
     word_limit: int,
     transcript_text: str = "",
+    exemplars: Sequence[str] = (),
 ) -> str:
     if prior not in PROMPTS:
         raise ValueError(f"unknown prior {prior!r}; available: {sorted(PROMPTS)}")
@@ -74,7 +86,17 @@ def build_prompt(
         "Do not repeat what is said.\n"
         if transcript_text else ""
     )
-    return PROMPTS[prior].format(
+    if prior == "P1" and (
+        len(exemplars) != 3 or any(not isinstance(x, str) or not x.strip() for x in exemplars)
+    ):
+        raise ValueError("P1 requires exactly three nonempty professional exemplars")
+    if prior == "P0" and exemplars:
+        raise ValueError("P0 must not receive exemplars")
+    plain = PROMPTS[prior].format(
         num_frames=num_frames, span=span, time=format_clock(time),
         context=context, word_limit=word_limit,
     )
+    if prior == "P0":
+        return plain
+    examples = "\n".join(f"Example {i}: {text}" for i, text in enumerate(exemplars, 1))
+    return P1_GUIDELINES + examples + "\n\nCurrent video:\n" + plain

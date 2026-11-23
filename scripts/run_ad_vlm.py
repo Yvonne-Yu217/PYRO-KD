@@ -25,6 +25,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from src.generation.hf_vlm import MODELS, generate_batch, load_model, resolve_model  # noqa: E402
 from src.generation.outputs import merge_meta, read_rows, settled_ids, status_counts  # noqa: E402
 from src.generation.prompts import PROMPTS, build_prompt, word_limit_for_gap  # noqa: E402
+from src.generation.exemplars import check_resume_prior, load_exemplars  # noqa: E402
 
 
 def read_jsonl(path: Path) -> list[dict]:
@@ -100,6 +101,7 @@ def prepare(row: dict, args) -> tuple[list, str, int]:
     images = [resize_max_side(Image.open(p).convert("RGB"), args.max_side) for p in row["frames"]]
     prompt = build_prompt(
         args.prior, row["time"], len(images), args.span, word_limit, row.get("transcript", ""),
+        exemplars=getattr(args, "exemplar_texts", ()),
     )
     return images, prompt, word_limit
 
@@ -112,6 +114,7 @@ def parse_args():
     p.add_argument("--output", default=None,
                    help="default: outputs/<model>/<input stem>_<prior>.jsonl")
     p.add_argument("--prior", choices=sorted(PROMPTS), default="P0")
+    p.add_argument("--exemplars", help="frozen training-only bundle required for P1")
     p.add_argument("--span", type=float, default=2.0, help="seconds covered by each frame window")
     p.add_argument("--batch-size", type=int, default=4)
     p.add_argument("--max-new-tokens", type=int, default=64)
@@ -129,6 +132,11 @@ def parse_args():
 
 def main():
     args = parse_args()
+    if (args.prior == "P1") != bool(args.exemplars):
+        raise ValueError("--exemplars is required for P1 and forbidden for P0")
+    args.exemplar_texts, args.exemplar_sha256 = (
+        load_exemplars(args.exemplars) if args.exemplars else ([], None)
+    )
     model_id = resolve_model(args.model)
     short = args.model.replace("/", "__") + ("" if args.quant == "none" else f"-{args.quant}")
     out_path = Path(args.output or f"outputs/{short}/{Path(args.input).stem}_{args.prior}.jsonl")
@@ -138,6 +146,7 @@ def main():
     if args.limit:
         rows = rows[: args.limit]
     rows_on_disk = read_rows(out_path)
+    check_resume_prior(rows_on_disk, args.prior, args.exemplar_sha256)
     finished, repeats = settled_ids(rows_on_disk, args.max_new_tokens, args.temperature)
     finished &= {r["id"] for r in rows}
     todo = [r for r in rows if r["id"] not in finished]
@@ -176,7 +185,8 @@ def main():
                 base = {"id": row["id"], "video_id": row.get("video_id"), "temperature": args.temperature,
                         "selector": row.get("selector"), "time": row["time"],
                         "frame_times": row.get("frame_times"), "model": args.model,
-                        "model_id": model_id, "quant": args.quant, "prior": args.prior}
+                        "model_id": model_id, "quant": args.quant, "prior": args.prior,
+                        "exemplar_sha256": args.exemplar_sha256}
                 try:
                     images, prompt, word_limit = prepare(row, args)
                     prepared.append((images, prompt))

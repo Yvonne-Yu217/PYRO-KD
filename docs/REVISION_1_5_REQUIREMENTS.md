@@ -26,7 +26,7 @@ explicitly linked. Passing unit tests is not experiment evidence.
    identical timeline format and temperature 0. Tune five score weights on
    dev only, with cross-validation for signed/per-superclass event weights.
 5. Core matrix: U/V/A/AV/O x P0/P1 x open Qwen-class/API model = 20.
-   P1 uses guidelines and three professional validation exemplars. API needs
+   P1 uses guidelines and three professional exemplars (the source does not specify a split). API needs
    user spending cap. Preserve full local matrix while API is blocked.
 6. Eight ablations: speech vs events vs both; trigger/suppress global and
    per-class; Whisper event baseline vs tagger/CLAP; event-time vs gap-snap;
