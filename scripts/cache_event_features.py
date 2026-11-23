@@ -11,6 +11,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from src.utils.audio_features import resolve_audio_path
 from src.utils.media import load_manifest
 from src.utils.event_features import EVENT_VERSION, EXCLUDED_LABELS, centered_window, event_times, event_cues
+from src.utils.event_checkpoints import EventCheckpoints
 
 
 def main():
@@ -67,13 +68,25 @@ def main():
                 times=event_times(len(wave),sr)
                 wave48=librosa.resample(wave,orig_sr=sr,target_sr=48000)
                 probabilities,embeddings=[],[]
+                checkpoints=EventCheckpoints(cache/'.event-checkpoints',digest)
+                reused_batches=0
                 for start in range(0,len(times),args.batch_size):
                     centers=times[start:start+args.batch_size]
-                    ast_inputs=ast_extractor([centered_window(wave,sr,t) for t in centers],sampling_rate=sr,return_tensors='pt')
-                    clap_inputs=clap_extractor([centered_window(wave48,48000,t) for t in centers],sampling_rate=48000,return_tensors='pt')
-                    with torch.inference_mode():
-                        probabilities.append(ast_model(**ast_inputs).logits.sigmoid().cpu().numpy())
-                        embeddings.append(clap_model(**clap_inputs).audio_embeds.cpu().numpy())
+                    batch=checkpoints.load(start,len(centers))
+                    if batch is None:
+                        ast_inputs=ast_extractor([centered_window(wave,sr,t) for t in centers],sampling_rate=sr,return_tensors='pt')
+                        clap_inputs=clap_extractor([centered_window(wave48,48000,t) for t in centers],sampling_rate=48000,return_tensors='pt')
+                        with torch.inference_mode():
+                            batch=(ast_model(**ast_inputs).logits.sigmoid().cpu().numpy(),
+                                   clap_model(**clap_inputs).audio_embeds.cpu().numpy())
+                        checkpoints.save(start,*batch)
+                    else:
+                        reused_batches+=1
+                    probabilities.append(batch[0]);embeddings.append(batch[1])
+                    if start==0 or (start//args.batch_size+1)%25==0 or start+len(centers)==len(times):
+                        print(json.dumps({'video_id':cache.name,'status':'progress',
+                            'windows_done':start+len(centers),'windows_total':len(times),
+                            'reused_batches':reused_batches}),flush=True)
                 probabilities=np.concatenate(probabilities); embeddings=np.concatenate(embeddings)
                 rms=np.asarray([np.sqrt(np.mean(centered_window(wave,sr,t,seconds=1.0)**2)) for t in times])
                 cues=event_cues(probabilities,embeddings,rms,labels)

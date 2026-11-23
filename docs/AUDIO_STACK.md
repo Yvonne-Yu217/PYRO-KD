@@ -220,3 +220,17 @@ protocol coverage only; it does not certify the proposal's annotation volume,
 label quality, or human gate. Run `verify_event_cache.py` first for the broader
 numerical cache audit. No experiment detector scores have been produced: unit
 tests use temporary synthetic fixtures only.
+
+CPU event extraction now checkpoints each completed inference batch under
+`<video-cache>/.event-checkpoints/<source-and-settings-digest>/`. Resume verifies
+batch indices, dimensions, float32 values, nonzero embeddings and payload SHA256.
+A changed WAV/model/settings digest uses a separate directory; missing, corrupt,
+or incompletely written batches are recomputed. Metadata is committed after the
+atomic payload replacement. Final event arrays and their existing provenance
+format remain unchanged, and completed final caches are reused first. Checkpoints
+are retained for recovery and require a single writer per video, as do final
+caches. Progress prints after the first batch, every 25 batches, and the last.
+The already-running long pilot predates this code and still saves per video;
+subsequent runs gain batch recovery. Synthetic interruption tests prove exact
+cue-array equality after reconstruction; a real interrupted model run has not
+yet been exercised.

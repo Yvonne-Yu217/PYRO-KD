@@ -279,3 +279,17 @@ partial/unknown coverage, invalid data, empty input, and changed-WAV rejection.
 Initial tests52591exit0:15passed before adding the full CLI provenance regression.
 Synthetic labels stay inside temporary tests. GPU hold and human-data question
 remain pending; this preparation does not remove those gates.
+
+
+Added per-batch CPU event recovery in src/utils/event_checkpoints.py and integrated
+it into cache_event_features.py for subsequent runs. Each source/settings-digest
+namespace stores atomic float32 probability/raw-embedding batches with hashes,
+indices and shape checks. Invalid/incomplete batches recompute; final caches and
+numerical recipe stay unchanged. Progress logs now report completed windows and
+reused batches. Live pilot106092 predates edits and remains untouched (no duplicate
+writer or restart). Tests5975exit0:28passed across checkpoint, event feature and
+human scoring suites; simulated interrupted inference reuses only completed
+batches and reconstructs bit-identical cue arrays. No real interrupted model run
+yet. Agent mistake: initial test command76673 referenced nonexistent
+ tests/test_event_cache_audit.py, exit4/no tests; corrected to actual test files.
+Visual extraction reached8/12 (through808); ASR and event pilot remain active.
