@@ -59,6 +59,51 @@ def global_timeline(cache,manifest):
                 'source_hashes':{name:sha(cache/name) for name in ['speech_features.json','event_features.json','event_features.npz']}}
     return entries,provenance
 
+def audio_selection(cache, cue_cache, manifest, selector_name, budget, selection_config, k):
+    """Use validated cue bundles; audio-only A never loads visual features."""
+    from src.audio.cues_io import load_cues_for_selection
+    from src.utils.audio_features import load_current_features, resolve_audio_path
+    from src.selection.registry import SelectionContext, resolve_spec, run_selector, spec_uses_visual
+    vad, reason = load_current_features(cache, manifest)
+    if vad is None:
+        raise ValueError(f"missing/stale VAD: {reason}")
+    cues, reason = load_cues_for_selection(cue_cache, resolve_audio_path(manifest, cache), vad)
+    if cues is None:
+        raise ValueError(f"missing/stale cue bridge: {reason}")
+    if (cues.get('asr') or {}).get('source') != 'whisper-vad-gated':
+        raise ValueError('long QA requires VAD-gated ASR')
+    required = ['asr', 'tagger', 'clap', 'acoustic']
+    if any(not str(cues.get('streams', {}).get(x, '')).startswith('ok') for x in required):
+        raise ValueError('incomplete required audio streams')
+    custom = selection_config.get('selectors', {}).get(selector_name)
+    if not isinstance(custom, dict):
+        raise ValueError('explicit development-frozen selector configuration required')
+    spec = resolve_spec({'name': selector_name, **custom})
+    from src.selection.two_stage import merge_config
+    if merge_config(spec.get('options'))['min_separation'] != 2.0:
+        raise ValueError('long QA holds minimum separation at 2 seconds')
+    if selector_name == 'A_cue' and spec_uses_visual(spec):
+        raise ValueError('proposal A_cue must not use visual scores')
+    spec['budget'] = budget
+    if budget == 'hierarchical':
+        spec['hierarchy'] = selection_config.get('ablations', {}).get('hierarchy', {})
+    visual = embeddings = None
+    if spec_uses_visual(spec):
+        visual, reason = load_validated_features(cache)
+        if visual is None:
+            raise ValueError(f'missing/stale visual features: {reason}')
+        embeddings = load_embeddings(cache, visual)
+        if embeddings is None:
+            raise ValueError('running novelty requires validated embeddings')
+    context = SelectionContext(cache.name, manifest['media_info']['duration'], vad, cues, visual, embeddings)
+    selected = run_selector(spec, context, k)
+    if selected.status != 'ok':
+        raise ValueError(f'selection did not complete: {selected.status}')
+    return selected.times, {'spec': spec, 'status': selected.status, 'diagnostics': selected.diagnostics,
+                            'cue_sha256': sha(cue_cache / 'audio_cues.json'),
+                            'vad_sha256': sha(cache / 'audio_features.json')}
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--annotations',type=Path,required=True)
@@ -66,11 +111,21 @@ def main():
     p.add_argument('--subset',type=Path,default=Path('configs/video_mme_long_subset.json'))
     p.add_argument('--budget',type=Path,default=Path('configs/reframed_splits.json'))
     p.add_argument('--cache-dir',type=Path,required=True)
-    p.add_argument('--selector',choices=['U','V_local','V_memory'],required=True)
+    p.add_argument('--selector',choices=['U','V_local','V_memory','A_cue','AV'],required=True)
     p.add_argument('--audio-context',choices=['none','timeline'],required=True)
+    p.add_argument('--budget-allocation', choices=['flat','hierarchical'], default='flat')
+    p.add_argument('--selection-config',type=Path,help='development-frozen TOML; required for A_cue/AV')
+    p.add_argument('--cue-cache-dir',type=Path,help='validated bridge cache root; defaults to cache-dir')
     p.add_argument('--output',type=Path,required=True)
     args=p.parse_args()
     if args.output.exists():raise FileExistsError('preserve prior frozen inputs')
+    if args.budget_allocation == 'hierarchical' and args.selector not in ('A_cue','AV'):
+        raise ValueError('hierarchical allocation requires A_cue or AV')
+    selection_config = None
+    if args.selector in ('A_cue','AV'):
+        if args.selection_config is None: raise ValueError('explicit --selection-config required')
+        from src.experiments.config import load_config
+        selection_config = load_config(args.selection_config)
     membership=json.loads(args.membership.read_text());subset=json.loads(args.subset.read_text())
     if sha(args.subset)!=membership['subset_sha256'] or sha(args.annotations)!=membership['annotations_sha256']:
         raise ValueError('frozen membership/source mismatch')
@@ -80,6 +135,7 @@ def main():
     rows=pq.read_table(args.annotations,columns=QUESTION_COLUMNS,filters=[('question_id','in',list(expected))]).to_pylist()
     if len(rows)!=len(expected) or {r['question_id'] for r in rows}!=set(expected):raise ValueError('question coverage mismatch')
     sources={'question_membership':sha(args.membership),'subset':sha(args.subset),'annotations':sha(args.annotations),'budget':sha(args.budget)}
+    if args.selection_config is not None: sources['selection_config'] = sha(args.selection_config)
     rate=json.loads(args.budget.read_text())['k_rule']['rate_per_minute']
     contexts={}
     for ident in sorted(set(expected.values())):
@@ -87,7 +143,11 @@ def main():
         if not cache_is_current(manifest) or not cache_is_complete(manifest) or not manifest['audio_path']:
             raise ValueError('verified audio-bearing long media required')
         duration=manifest['media_info']['duration'];k=k_for_duration(duration,rate)
+        selection_provenance = {}
         if args.selector=='U':times=uniform_timestamps(duration,k)
+        elif args.selector in ('A_cue','AV'):
+            times, selection_provenance = audio_selection(cache, (args.cue_cache_dir or args.cache_dir)/ident,
+                manifest, args.selector, args.budget_allocation, selection_config, k)
         else:
             features,reason=load_validated_features(cache)
             if features is None:raise ValueError(reason)
@@ -103,6 +163,7 @@ def main():
             raise ValueError('frame budget or temporal separation violation')
         context={'frames':[str(f.path) for f in frames],'frame_times':[f.timestamp for f in frames],
                  'selected_times':times,'k_requested':k,'k_realized':len(times),'k_shortfall':k-len(times),
+                 'selection_provenance':selection_provenance,'budget_allocation':args.budget_allocation,
                  'duration':duration,'rate_per_minute':rate,'frames_per_moment':4,'window_seconds':2.}
         if args.audio_context=='timeline':
             context['audio_timeline'],context['audio_timeline_provenance']=global_timeline(cache,manifest)
@@ -112,8 +173,8 @@ def main():
         if set(row)!=set(QUESTION_COLUMNS) or expected[row['question_id']]!=row['video_id']:
             raise ValueError('unexpected question columns/mapping')
         record={**contexts[row['video_id']],'id':row['question_id'],'video_id':row['video_id'],
-                'dataset':'video-mme','split':'long-heldout','selector':args.selector.split('_')[0],
-                'selection_condition':args.selector,'audio_context':args.audio_context,
+                'dataset':'video-mme','split':'long-heldout','selector':args.selector if args.selector=='A_cue' else args.selector.split('_')[0],
+                'selection_condition':args.selector + ('_'+args.budget_allocation if args.selector in ('A_cue','AV') else ''),'audio_context':args.audio_context,
                 'question':row['question'],'options':normalize_options(row['options']),
                 'source_sha256':sources,'protocol_status':'fixed membership; no outcome-based tuning'}
         reject_labels(record);build_qa_prompt(record);outputs.append(record)

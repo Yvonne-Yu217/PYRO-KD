@@ -939,3 +939,38 @@ clipping, invalid windows and run identity. Initial follow-up command mistakenly
 named a nonexistent matrix test file and ran zero tests; corrected focused suite
 is recorded in `/scratch/yy5919/pyro-ablation-context-tests.log`.
 Final focused verification:31 passed,48 subtests passed; `git diff --check` passed.
+
+## 2026-11-23: controlled long-video input preparation
+
+Agent `long_inputs` worked only in the isolated `work/revision15-long-prep`
+worktree; active inference worktrees were not changed. Added A_cue/AV QA input
+construction for flat and hierarchical allocation using the existing validated
+selector implementation. The builder requires an explicit development-frozen
+selector TOML, records its hash and cue/VAD hashes, preserves K and four frames
+per moment, checks the common two-second separation, and retains shortfalls and
+segment diagnostics. A_cue cannot read visual features; AV requires validated
+visual embeddings. Cue inputs must pass source hashes and VAD-gated ASR checks.
+Question ingestion still reads only ID/video/question/options, never answers.
+
+Fixed selector ablation construction to inherit frozen core nuisance weights
+before overriding only the ablated factors. Previously ablations silently
+reverted to preset weights, making controlled comparisons unreliable. Tests
+cover source-only, hierarchy-only and stream-only changes, and audio-only input
+isolation. No held-out QA results were read or generated.
+
+A real CPU development-data check on `l5lLQICPOcnb` passed for A_cue/AV crossed
+with flat/hierarchical, retaining 11 moments and zero shortfall in each condition.
+Log: `/scratch/yy5919/pyro-long-dev-selection-smoke.log`. Initial test invocation
+mistakenly named a nonexistent matrix test file, so no tests ran; the command was
+corrected to use the existing integration and hierarchy suites. Long inputs
+require the separately prepared verified cue bridge and speech-cue audit; this
+change does not claim those long audio caches are complete.
+
+Final verification: 28 tests passed (two dependency deprecation warnings), log
+`/scratch/yy5919/pyro-long-prep-final-tests.log`. An intermediate integration run
+had 26 passes and two source-identity failures because this agent edited the
+isolated helper during its own CPU test; rerunning the unchanged final source
+passed. No live inference source was edited. Dev gated-Whisper tag extraction
+found zero bracketed event tags in all ten cached clips; this is a measured
+limitation, not evidence of no real audio events. Log:
+`/scratch/yy5919/pyro-gated-whisper-tag-sparsity.log`.

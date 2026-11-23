@@ -929,3 +929,17 @@ in_env ro 'python scripts/run_experiment.py --config configs/experiments/reframe
 Expected full cost15–25GPUminutes, uncertain native30s cost; bound to40minutes.
 Focused regression31passed48subtests. No GPU allocated or launched by this
 preparation. Detailed provenance/reuse restrictions in Agent Log.
+
+## Long A_cue/AV preparation interface (not launched)
+
+From the long-prep branch, after the long cue bridge is verified:
+
+```bash
+source hpc/config.sh
+in_env ro 'CUDA_VISIBLE_DEVICES="" OMP_NUM_THREADS=2 OPENBLAS_NUM_THREADS=2 /scratch/yy5919/pyro-data-env/bin/python scripts/build_long_qa_inputs.py --annotations /scratch/yy5919/pyro-kd-derived/video-mme/annotations.parquet --cache-dir /scratch/yy5919/pyro-kd-derived/cache/video-mme --cue-cache-dir /scratch/yy5919/pyro-kd-derived/cache/video-mme-pr22-bridge --selector AV --budget-allocation hierarchical --selection-config configs/experiments/reframed_local_dev_pilot.toml --audio-context timeline --output /scratch/yy5919/pyro-kd-derived/moments/video-mme-long-AV-hier-timeline-v1.jsonl'
+```
+
+Use distinct output names for flat/hierarchical and A_cue/AV conditions. All
+conditions inherit identical development-frozen nuisance weights. The bridge
+path above is the intended destination, not evidence of existing complete data.
+No GPU allocation or generation was launched by this agent.
