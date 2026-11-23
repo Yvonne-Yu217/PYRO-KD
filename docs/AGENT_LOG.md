@@ -1366,3 +1366,10 @@ Agent long_inputs added waveform-bound measuredgaputilization (d225a4b),
 includingunusedgaps and zero-outputvideos. Devvalidation705WAVs/804attempts,
 100video-cells;17relevanttests passed. Boundeduniquegapoccupancy and nominal
 caption-duration/gap ratios are reported separately, withselfoverlap retained.
+
+Formal ablation5 measured-gap export validated1047waveform-backed valid captions
+across90video-cells, including unusedgaps andzero-outputvideos. Eachcondition
+has3739.111902seconds of VAD/Whisper-union gaps. Bounded occupancy is .4655
+(no-contextQwen),.5456(timelineQwen),.3822(nativeOmni); these are descriptive
+occupancy, not quality. Per-caption remaining-gap ratios also retained. Compact
+report binds fullscratchdetails bySHA256; no waveforms committed.
