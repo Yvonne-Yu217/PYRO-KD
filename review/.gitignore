@@ -2,3 +2,8 @@ generated/
 private/
 __pycache__/
 *.pyc
+
+# Original synthetic practice assets only; real review media stays ignored.
+!web/demo/original.mp4
+!web/demo/x.mp4
+!web/demo/y.mp4
