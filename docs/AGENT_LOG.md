@@ -939,3 +939,28 @@ clipping, invalid windows and run identity. Initial follow-up command mistakenly
 named a nonexistent matrix test file and ran zero tests; corrected focused suite
 is recorded in `/scratch/yy5919/pyro-ablation-context-tests.log`.
 Final focused verification:31 passed,48 subtests passed; `git diff --check` passed.
+
+## 2026-11-23: completed local development pilot and GPU handoff
+
+Agent verified all804 expected attempts across10 local cells, with705 valid
+outputs,84 word-budget failures and15 token-limit failures. CPU BERTScore,
+OpenCLIP and actual Piper TTS at1.2x completed all10 cells. Consolidation checks
+matched coverage/F1 between independent scorer processes and required rendered
+counts to equal valid generation counts. No human ratings were created.
+Summary: docs/results/reframed-local-dev.md; full per-example records and source
+hashes: /scratch/yy5919/pyro-resume-results/local-dev-report/dev-results.json.
+Source inference:15d99df; text-checkpoint fix:1f5fb60. Measured speech overlap
+and narration self-overlap are separate; omitted/failed predictions are not
+counted as successfully spoken descriptions. All summaries remain dev-only.
+
+GPU allocation40964 immediately moved from completed pilot to long-QA resource
+checks through shared flock. Both succeeded:604-1 with612 frames, peak22.60GB;
+891-1 with1012 frames, peak26.57GB. Both use224px max-side, four frames per
+moment, full K=5/min, pinned Qwen7B and16 output tokens. No ground-truth answers
+or correctness scores were inspected. Then started ablation5 six-output smoke
+on source04491e1; actual process session2287 (not a Slurm job ID). Useful queue
+contains local audio-context comparison and long visual QA. No dummy workloads.
+
+CPU media41016 completed30/30 frozen test clips. Feature jobs41017 and41018
+running independently on CPU nodes with disjoint outputs. APIs remain disabled;
+human detector validation and peer ratings remain pending by user instruction.

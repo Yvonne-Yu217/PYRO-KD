@@ -929,3 +929,15 @@ in_env ro 'python scripts/run_experiment.py --config configs/experiments/reframe
 Expected full cost15–25GPUminutes, uncertain native30s cost; bound to40minutes.
 Focused regression31passed48subtests. No GPU allocated or launched by this
 preparation. Detailed provenance/reuse restrictions in Agent Log.
+
+## 2026-11-23: local pilot complete, next GPU stage active
+
+10 local dev cells:804 attempts,705valid,99failures; full results in
+[development table](results/reframed-local-dev.md). No formal AD freeze yet:
+review token-limit handling and ablation context fixes first. Actual TTS and
+all three text metrics complete. All20 proposal cells still require ten API
+conditions, explicitly deferred at zero spending authorization.
+
+Long-QA resource smokes passed612 and1012 frames on40964 with224px resolution;
+no held-out outcome scoring. Ablation5 smoke follows on04491e1, serial GPU lock.
+CPU41016 complete30 clips;41017 speech/visual and41018 event/onset active.
