@@ -422,3 +422,15 @@ check, not silently declared safe. Agent metadata mistake: explicit signature
 inspection initially named 'supports_return_audio'; corrected to 'declares' and
 preserved original report, because **kwargs/decorators support the legacy option.
 Audio-native ablation remains incomplete and unfrozen; GPU hold unchanged.
+
+
+Live event checkpoint audit97214exit0 passed a snapshot of537committed batches /
+2148contiguous prefix windows for longvideo616. Recomputed settings+currentWAV
+configuration hash6d7a0fcb66d9694e2d1891d4424e34ec1bff6433b8f1341420abc1bb40f8e78d,
+then verified every committed payload hash, index/count, float32 dimensions,
+finite probabilities and nonzero embeddings through EventCheckpoints.load.
+Evidence outputs/verification/video-mme-events-live-checkpoint-audit.json;
+reproducer check_live_event_checkpoints.py beside it. Live writer was not changed
+or restarted; later batches are explicitly outside this snapshot. This is not
+complete616coverage or detector accuracy. Both longASR96112 and event115097 remain
+live; CPU40036 had~41minutes left at the initial check, continuation jobs unchanged.
