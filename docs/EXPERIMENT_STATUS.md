@@ -8,7 +8,7 @@ All 12 visual-feature caches now pass independent verification: 55,549 embedding
 and 6,850 shot boundaries (`outputs/verification/video-mme-visual-check.json`).
 This is feature integrity and ranking mechanics, not scientific accuracy.
 
-- Speech: 7/12 long caches independently verified; process96112/session94991
+- Speech: 8/12 long caches independently verified; process96112/session94991
   continues. Per-window language codes are unvalidated model estimates.
 - Audio events: 3/12 long caches verified (6,460 windows); full extraction
   process115097/session27774 continues with batch checkpoints. Actual short-dev
@@ -669,3 +669,23 @@ metadata, settled resume without loading and rejection of changed WAV even when
 output is already settled. No actual AD prediction generated. Added exact later
 same-Omni none/native GPU smoke commands to docs/REAL_DATA_SMOKE.md; unexecuted
 under GPU hold. This does not resolve GPU memory, configuration warnings or quality.
+
+
+Eighth long speech808 verified64715exit0:5697words/516VADwindows,25454386speech
+samples,0rejected. Feature SHA c4b0ac94b781dd7f8851c68ba5323114b8c7e0f157b43e5e6ec5455b155befa0.
+Evidence outputs/verification/video-mme-asr-808-check.json/.log. Detected language
+codes remain model estimates. Full long speech/event processing continues.
+
+Core-matrix readiness inspection exposed a missing REFRAMED generated-AD evaluator:
+existing evaluate_ad.py only loaded MTG. Added explicit dataset adapter using US
+cues merged at<=0.5s (same placement diagnostic policy), movie cluster IDs, frozen
+membership filtering and explicit missing-selected-video accounting. CLI records
+selection hash and reference policy. Mixed backend/audio/selection/fingerprint
+values are rejected; absent audio mode is treated as legacy for mixture checks.
+Synthetic fixture integration checks merged reference text, missing-video FN,
+shared movie IDs, out-of-membership rejection and mixed audio rejection. Existing
+MTG schema assertions updated for explicit reference and coverage fields; first
+run failed one old exact-schema assertion, then corrected the expected schema.
+Final focused tests37644:29passed+27subtests. No real AD outputs or metrics created;
+semantic-model freezes, OpenCLIP, rendered overlap and calibrated judges remain.
+Documentation: src/evaluation/README.md. No GPU/API action.

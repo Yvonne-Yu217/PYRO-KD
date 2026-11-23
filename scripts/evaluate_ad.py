@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Evaluate MTG-AD generation JSONL with temporal and matched-text metrics.
+"""Evaluate MTG-AD or REFRAMED generation JSONL with temporal and matched-text metrics.
 
     python scripts/evaluate_ad.py --input outputs/run.jsonl --split validation \
         --data-dir data/mtg-ad --output outputs/run.evaluation.json
@@ -20,11 +20,12 @@ import math
 from pathlib import Path
 from statistics import fmean, median
 import sys
+from types import SimpleNamespace
 from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from src.datasets import mtg_ad  # noqa: E402
+from src.datasets import mtg_ad, reframed  # noqa: E402
 from src.generation.outputs import is_failure, split_rows  # noqa: E402
 from src.evaluation.bertscore import BERTScoreScorer, GeneratedADItem, compute_bertscore  # noqa: E402
 from src.evaluation.cosine_similarity import (  # noqa: E402
@@ -33,7 +34,8 @@ from src.evaluation.cosine_similarity import (  # noqa: E402
 from src.evaluation.metrics import match_timestamps  # noqa: E402
 
 
-_RUN_FIELDS = ("selector", "model", "model_id", "prior", "quant")
+_RUN_FIELDS = ("selector", "model", "model_id", "prior", "quant", "backend", "audio_context",
+               "selection_condition", "run_fingerprint")
 
 
 def _reject_constant(value: str) -> None:
@@ -136,11 +138,14 @@ def evaluate_ad(
     bert_scorer: BERTScoreScorer | None = None,
     encoder: SentenceEncoder | None = None,
     all_videos: bool = False,
+    dataset: str = 'mtg-ad',
+    evaluation_video_ids: Sequence[str] | None = None,
 ) -> dict[str, Any]:
     """Load a split and evaluate one generation run, with injectable scorers.
 
     Match once per video and pass the identical TemporalMatch objects to both
-    semantic functions. MTGVideo.ad is used directly. Error rows are skipped
+    semantic functions. MTGVideo.ad is used directly; REFRAMED uses US cues
+    merged across gaps <=0.5 seconds and retains the movie cluster. Error rows are skipped
     as predictions, but retained in reports. Unknown video IDs, mixed run
     metadata, and duplicate successful IDs fail before any model is loaded.
     Dataset semantic means/median pool scored pairs, excluding unavailable
@@ -160,16 +165,34 @@ def evaluate_ad(
     # a success supersedes earlier error rows for its id, and repeated errors count once. The
     # superseded error rows stay in the report as history (src/generation/outputs.py).
     rows, superseded_errors = split_rows(all_rows)
-    videos = mtg_ad.load_split(data_dir, split)
+    if dataset == 'mtg-ad':
+        videos = mtg_ad.load_split(data_dir, split)
+    elif dataset == 'reframed':
+        videos = [SimpleNamespace(
+            video_id=clip.video_id, category=None, movie_id=clip.movie_id,
+            ad=[GeneratedADItem(cue.start, cue.text)
+                for cue in reframed.merge_cues(clip.ad_us, max_gap=.5)])
+            for clip in reframed.load_split(data_dir, split)]
+    else:
+        raise ValueError('unsupported AD dataset')
     by_id = {video.video_id: video for video in videos}
     if len(by_id) != len(videos):
-        raise ValueError("MTG-AD split contains duplicate video IDs")
+        raise ValueError("dataset split contains duplicate video IDs")
+    if evaluation_video_ids is not None:
+        if not evaluation_video_ids or len(set(evaluation_video_ids)) != len(evaluation_video_ids):
+            raise ValueError('evaluation membership must be unique and nonempty')
+        if not set(evaluation_video_ids) <= by_id.keys():
+            raise ValueError('evaluation membership contains IDs outside split')
+        by_id = {ident: by_id[ident] for ident in evaluation_video_ids}
     input_ids = {row["video_id"] for row in rows}
     unknown = sorted(input_ids - by_id.keys())
     if unknown:
-        raise ValueError(f"Generated video IDs absent from MTG-AD {split!r} split: {unknown}")
+        raise ValueError(f"Generated video IDs absent from {dataset} {split!r} evaluation membership: {unknown}")
 
     metadata: dict[str, Any] = {}
+    for field, default in (('audio_context', 'legacy'), ('backend', 'vlm')):
+        if len({row.get(field, default) for row in rows}) > 1:
+            raise ValueError(f'Mixed {field} values; evaluate each experiment separately')
     successful: dict[str, list[dict[str, Any]]] = defaultdict(list)
     failed: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for row in rows:
@@ -246,6 +269,7 @@ def evaluate_ad(
                 semantic_errors.append({"video_id": video_id, "metric": name, "error": metric["error"]})
         results.append({
             "video_id": video_id, "category": video.category, "status": status,
+            "movie_id": getattr(video, 'movie_id', None),
             "num_generated": len(generated), "num_ground_truth": len(video.ad),
             "num_generation_errors": len(failed[video_id]), "generation_errors": failed[video_id],
             "generated_items": [
@@ -263,14 +287,18 @@ def evaluate_ad(
     return {
         "status": "partial" if generation_errors or semantic_errors else "ok" if rows else "empty_input",
         "input": str(generated_path), "data_dir": str(data_dir), "split": split,
-        "scope": "all_split_videos" if all_videos else "input_video_ids",
+        "dataset": dataset,
+        "scope": ("all_selected_videos" if evaluation_video_ids is not None else "all_split_videos") if all_videos else "input_video_ids",
         "metadata": metadata,
         "evaluation_config": {
             "tolerance_seconds": tolerance_seconds,
+            "reference_track": 'merged_us' if dataset == 'reframed' else 'ad',
+            "reference_merge_gap_seconds": .5 if dataset == 'reframed' else None,
             "bertscore": {"lang": lang, "model_type": bert_model},
             "cosine": {"model_name": cosine_model},
         },
-        "coverage": {"num_split_videos": len(videos), "num_evaluated_videos": len(results),
+        "coverage": {"num_split_videos": len(videos), "num_selected_videos": len(by_id),
+                     "num_evaluated_videos": len(results),
                      "split_video_ids_without_input": sorted(by_id.keys() - input_ids)},
         "num_input_rows": len(all_rows), "num_successful_rows": len(rows) - len(generation_errors),
         "num_generation_errors": len(generation_errors), "generation_errors": generation_errors,
@@ -300,6 +328,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--input", type=Path, required=True)
     parser.add_argument("--data-dir", type=Path, default=Path("data/mtg-ad"))
+    parser.add_argument('--dataset', choices=('mtg-ad', 'reframed'), default='mtg-ad')
+    parser.add_argument('--selection-config', type=Path, help='frozen clips membership; split must match')
     parser.add_argument("--split", choices=mtg_ad.SPLITS, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--tolerance", type=float, default=2.0, help="inclusive start-time tolerance in seconds")
@@ -311,11 +341,21 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.input.resolve() == args.output.resolve():
         parser.error("--output must differ from --input")
     try:
+        membership = None
+        if args.selection_config:
+            selection = json.loads(args.selection_config.read_text())
+            if selection['split'] != args.split:
+                raise ValueError('selection split mismatch')
+            membership = [clip['video_id'] for clip in selection['clips']]
         result = evaluate_ad(
             args.input, args.data_dir, args.split, tolerance_seconds=args.tolerance,
             lang=args.lang, bert_model=args.bert_model, cosine_model=args.cosine_model,
             all_videos=args.all_videos,
+            dataset=args.dataset, evaluation_video_ids=membership,
         )
+        if args.selection_config:
+            import hashlib
+            result['selection_config_sha256'] = hashlib.sha256(args.selection_config.read_bytes()).hexdigest()
     except (OSError, ValueError) as exc:
         parser.error(str(exc))
     serialized = json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False) + "\n"

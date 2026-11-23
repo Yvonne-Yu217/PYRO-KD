@@ -62,7 +62,7 @@ class EvaluationIntegrationTests(unittest.TestCase):
             ["A later.", "A first."],
         )
         self.assertEqual(result["coverage"], {
-            "num_split_videos": 3, "num_evaluated_videos": 2,
+            "num_split_videos": 3, "num_selected_videos": 3, "num_evaluated_videos": 2,
             "split_video_ids_without_input": ["unused"],
         })
         self.loader.assert_called_once_with(Path(self.tmp.name, "dataset"), "validation")
@@ -365,6 +365,8 @@ class EvaluationIntegrationTests(unittest.TestCase):
         self.assertEqual(report["videos"][0]["cosine"]["model_name"], "test-cosine")
         self.assertEqual(report["evaluation_config"], {
             "tolerance_seconds": 1.5,
+            "reference_track": "ad",
+            "reference_merge_gap_seconds": None,
             "bertscore": {"lang": "en", "model_type": "test-bert"},
             "cosine": {"model_name": "test-cosine"},
         })

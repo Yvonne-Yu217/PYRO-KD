@@ -248,3 +248,29 @@ question-accuracy difference. EgoSchema has one question per video. Predeclare
 comparison families before scoring; use the existing Holm correction for the
 family, retaining unavailable comparisons rather than shrinking it. No actual
 QA confidence intervals or superiority claims have been produced yet.
+
+
+### REFRAMED generated descriptions
+
+`scripts/evaluate_ad.py --dataset reframed` now adapts the official US AD track,
+merging adjacent cues at <=0.5s before the same one-to-one temporal and matched
+text metrics used for MTG-AD. Each clip retains its `movie_id`; aggregate temporal
+counts are descriptive pooled counts, not movie-independent confidence intervals.
+Use movie clusters in later paired statistics. The `cosine` metric here is sentence
+embedding similarity, not the separately required OpenCLIP image/text score.
+
+For the later development smoke, supply the frozen ten-clip membership and include
+missing clips explicitly:
+
+```bash
+python scripts/evaluate_ad.py --dataset reframed --data-dir /scratch/yy5919/pyro-kd-derived/datasets/reframed --split validation --selection-config configs/reframed_splits.json --all-videos --input <actual-predictions.jsonl> --output <new-evaluation.json> --bert-model <frozen-local-model> --cosine-model <frozen-local-model>
+```
+
+The selection file must match the official split; unknown prediction IDs fail.
+Its SHA256 is retained in the CLI report. Mixed backend, audio context, selection
+condition or generation fingerprints fail. Empty/error/missing predictions never
+become successful descriptions. Semantic model failures remain explicit and
+matched-only semantic means must be interpreted alongside temporal coverage.
+Only synthetic injected-scorer tests have exercised this new dataset path; no
+real REFRAMED generation metrics are available yet. Semantic model pins, OpenCLIP,
+rendered overlap and calibrated judges remain separate required work.
