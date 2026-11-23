@@ -97,3 +97,5 @@ Registered CPU event-track pilot on REFRAMED dev CxWby8RuUwU6: source hpc/config
 Event pilot16928 exited0: CxWby8RuUwU6,74 windows. Independent check10674 passed NPZ hash, finite shapes74x527/74x512, normalized CLAP embeddings and zero onset scores for10 excluded speech/silence labels. Tests3 passed. Registered full10-clip CPU event caching using same command without --video-id; log outputs/verification/reframed-dev-events.log. Reuses pilot. No validated detector timing/accuracy claim; human gate remains outstanding.
 
 Full REFRAMED dev event caching active session26247. Poll this session and outputs/verification/reframed-dev-events.log; final per-video report /scratch/yy5919/pyro-kd-derived/cache/reframed/event_features_report.json. Do not duplicate. Pilot independently passed; full run not yet complete.
+
+Event extraction26247/PID50117 still active; pilot74 windows and HfOMXYYPG5nx160 windows completed. Verification script scripts/verify_event_cache.py reports partial coverage until all10 files exist. Aggregate output outputs/verification/reframed-dev-events-check.json; an incomplete audit is not a failed extraction. Continue polling existing process.

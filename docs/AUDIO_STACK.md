@@ -96,3 +96,17 @@ hash. Interrupted or mismatched array/metadata pairs do not pass cache reuse.
 Pilot CxWby8RuUwU6 completed74 windows and passed independent shape/finite,
 normalization, class-mask and NPZ-hash checks. Three numerical tests passed.
 Full ten-clip CPU caching is running; its completion must be verified separately.
+
+Full-cache audit (run after extraction, or as an explicitly incomplete check):
+
+```bash
+source hpc/config.sh
+in_env ro 'python scripts/verify_event_cache.py --cache-dir /scratch/yy5919/pyro-kd-derived/cache/reframed --model-report outputs/verification/audio-model-download.json --report outputs/verification/reframed-dev-events-check.json'
+```
+
+The audit uses frozen development IDs, checks current source/WAV hashes,
+model revisions and vocabulary, one-second coverage, normalized embeddings,
+finite/range-valid scores, NPZ/config hashes, and recomputes RMS and derived
+cues. It is not model re-inference or an accuracy test. Missing unfinished
+files make complete=false and exit1; do not interpret that as extraction
+failure while the registered extraction process remains live.
