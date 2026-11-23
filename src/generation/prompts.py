@@ -19,7 +19,8 @@ P0 = (
     "{context}"
     "Write one audio description for a blind or low-vision viewer of what is "
     "happening in these frames, in at most {word_limit} words. "
-    "Output only the description."
+    "Output only the description. The limit is strict: count space-separated words "
+    "and use no more than {word_limit}. Use a short phrase when the limit is small."
 )
 
 P1_GUIDELINES = (

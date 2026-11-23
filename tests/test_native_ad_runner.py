@@ -5,12 +5,15 @@ import sys
 import numpy as np
 import pytest
 import soundfile as sf
+import torch
 from PIL import Image
 from scripts import run_ad_vlm
 from src.generation import omni
 
 
 def test_native_runner_records_waveform_and_resumes_without_loading(tmp_path, monkeypatch):
+    monkeypatch.setattr(torch.cuda, 'is_available', lambda: False)
+    monkeypatch.setattr(torch.cuda, 'device_count', lambda: 0)
     audio = tmp_path / 'audio.wav'
     sf.write(audio, np.zeros(32000, dtype=np.float32), 16000, subtype='FLOAT')
     frame = tmp_path / 'frame.jpg'

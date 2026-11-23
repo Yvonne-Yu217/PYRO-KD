@@ -43,6 +43,13 @@ def read_rows(path: str | Path) -> list[dict[str, Any]]:
     return rows
 
 
+def exceeds_word_budget(row: dict[str, Any]) -> bool:
+    """AD word budgets count whitespace-delimited words; preserve the full decode."""
+    budget, text = row.get('word_limit'), row.get('output')
+    return (isinstance(budget, int) and not isinstance(budget, bool) and budget >= 0
+            and isinstance(text, str) and len(text.split()) > budget)
+
+
 def is_failure(row: dict[str, Any]) -> bool:
     """True for an error row, including a legacy truncated row.
 
@@ -53,7 +60,8 @@ def is_failure(row: dict[str, Any]) -> bool:
     token budget is raised. Every reader (runner, meta, evaluator) goes through this
     one definition.
     """
-    return "error" in row or row.get("hit_token_limit") is True
+    return ("error" in row or row.get("hit_token_limit") is True
+            or row.get('word_limit_exceeded') is True or exceeds_word_budget(row))
 
 
 def is_success(row: dict[str, Any]) -> bool:

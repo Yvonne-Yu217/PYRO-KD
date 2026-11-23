@@ -759,3 +759,22 @@ Output outputs/real-data-smoke/qwen25-mtg-U-P0-none.jsonl and associated metadat
 logoutputs/real-data-smoke/qwen25-mtg-U-P0-none.log. Requires actual completion,
 output/frame/wordbudget inspection and evaluation before scaling. No duplicate
 GPU writer. Separate CPU user session40879 remains untouched.
+
+
+First real GPU smoke51403exit0 complete on40880 using source3811351:4MTGmoments
+fromonevideo. Load191.8s,generate8.0s,peakallocated16.99GB,0tokenlimitfailures.
+Actual output audit found2/4word-budgetviolations (3>2 and6>5), so this did NOT
+pass the smoke gate despite old runner n_ok4. Agent frame review also notes
+unsupported left-hand/pressing detail in guitar caption; rawdecodesunchanged.
+Reviewoutputs/real-data-smoke/qwen25-mtg-U-P0-none.review.json andframes.jpg.
+Evaluation61469exit1 expectedpartial:2valid/2budgetfailures,0temporalpairs among
+limited4inputslotsvs5references; no semanticmodels loaded/scored. Not a selector
+performance claim. Added whitespace-wordbudget failure accounting to runner and
+shared outputreader, including legacyunflaggedviolations, retainingfullrawdecode.
+Clarifiedstrict wordlimit insharedP0/P1prompt; no post-hoc truncation. Tests8622
+firstfailed mockedmodelGPUstatreset onnewGPUhost; fixedtestCUDAisolation. Final
+73407exit0:61passed+38subtests. Registered repeat same4inputs innewoutput
+qwen25-mtg-U-P0-none-budget-v2.jsonl, same model/settings except sharedpromptfix.
+No fullmatrix scaling. Ten-videoREFRAMEDsmoke input also preparedfromearliest
+existingpositivebudgetUrowper frozenclip, provenance reframed-ten-video-smoke-inputs.json;
+notfinalselectorprotocol andnotyetinferred.

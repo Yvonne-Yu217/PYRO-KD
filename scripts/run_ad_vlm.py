@@ -59,6 +59,7 @@ def done_ids(path: Path, max_new_tokens: int | None = None, temperature: float =
 
 def finalize_generation(
     text: str, raw: str, new_tokens: int, batch_size: int, latency: float, max_new_tokens: int,
+    word_limit: int | None = None,
 ) -> dict:
     """Result record for one generation.
 
@@ -82,6 +83,12 @@ def finalize_generation(
             f"hit_token_limit: generation reached max_new_tokens={max_new_tokens} "
             "before finishing (output is cut off and was not scored)"
         )
+    if word_limit is not None:
+        result['word_count'] = len(text.split())
+        result['word_limit_exceeded'] = result['word_count'] > word_limit
+        if result['word_limit_exceeded']:
+            result['error'] = result.get('error', '') + (
+                f" word_limit_exceeded: {result['word_count']} words > {word_limit}; full decode retained")
     return result
 
 
@@ -297,7 +304,8 @@ def main():
                     gen_s += dt
                     for j, i in enumerate(idx):
                         results[i] = finalize_generation(
-                            texts[j], raws[j], n_new[j], len(idx), dt, args.max_new_tokens)
+                            texts[j], raws[j], n_new[j], len(idx), dt, args.max_new_tokens,
+                            records[i]['word_limit'])
                 except Exception as e:
                     if torch.cuda.is_available():
                         torch.cuda.empty_cache()
