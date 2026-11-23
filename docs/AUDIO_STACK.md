@@ -268,3 +268,5 @@ The initial processor report's overly broad signature flag was renamed to
 `generate_declares_return_audio`; its original JSON is preserved alongside it.
 
 Long-video onset cache complete: all12/27780one-second windows passed source/settings/grid/normalization checks, and full-waveform recomputation for604 matched. Evidence outputs/verification/video-mme-onsets-check.json. Use scripts/verify_onset_cache.py with --subset and optional --recompute-video-id for explicit audit coverage; no human onset accuracy claim.
+
+Full Omni staging update: all19assets/22,379,295,753bytes, including5weight shards and speaker data, are now downloaded and verified against pinned upstream file identities; all2448tensor keys match the safetensors index. Evidence outputs/verification/qwen25-omni-model-check.json. This supersedes the earlier processor-only download status. No model instantiation/GPU inference occurred, so configuration warnings and runtime feasibility remain open.

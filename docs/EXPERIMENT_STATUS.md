@@ -8,7 +8,7 @@ All 12 visual-feature caches now pass independent verification: 55,549 embedding
 and 6,850 shot boundaries (`outputs/verification/video-mme-visual-check.json`).
 This is feature integrity and ranking mechanics, not scientific accuracy.
 
-- Speech: 6/12 long caches independently verified; process96112/session94991
+- Speech: 7/12 long caches independently verified; process96112/session94991
   continues. Per-window language codes are unvalidated model estimates.
 - Audio events: 2/12 long caches verified (4,478 windows); full extraction
   process115097/session27774 continues with batch checkpoints. Actual short-dev
@@ -601,3 +601,21 @@ or normalization tuning, no QA labels inspected. This is spectral-flux consisten
 not human onset accuracy. Learned event/ASR stillactive; event710 now200/1982windows.
 
 Registered full pinned Qwen2.5Omni7B asset download onCPU40036 after successful actual multimodal processor check and runtime API review. Same ae9e1690543ffd5c0221dc27f79834d0294cba00 revision; includes five model shards and speaker data required by the installed wrapper. Reuses processor snapshot. No GPU job, paid API or model instantiation. Config configs/qwen25_omni_model.json; log outputs/verification/qwen25-omni-model-download.log and report qwen25-omni-model-download.json. Intended to make later GPU ablation smoke offline; config warnings and real GPU feasibility remain unresolved.
+
+
+Full Qwen2.5Omni7B download3293exit0 and independent file/index verifier63745exit0
+COMPLETE:19assets/22379295753bytes,5safetensors shards/2448tensor names, pinned
+ ae9e1690543ffd5c0221dc27f79834d0294cba00. Includes required speaker file. Every
+large file matched upstream LFS SHA256 and plain files matched pinned Git blob
+SHA1; all files also have recorded SHA256. Safetensors header keys exactly match
+index assignments. Evidence outputs/verification/qwen25-omni-model-check.json/.log,
+model-download.json/.log and upstream-file-identities.json. New reusable verifier
+scripts/verify_pinned_model_files.py streams8MBchunks without instantiating a model.
+Full assets now staged; earlier processor-only status is superseded. GPU loading,
+configuration-warning validation and audio-native inference remain untested.
+
+Seventh longASR802 verified32201exit0:7964words/711VADwindows,
+36587194speech samples,0rejected. Feature SHA256
+ e4e22eccefd41daef9dd51e58da7811dd9771154d248c640afd28d4896d89747;
+evidence outputs/verification/video-mme-asr-802-check.json. Language codes remain
+model estimates. Long speech/event extraction continues onCPU40036; no GPU request.
