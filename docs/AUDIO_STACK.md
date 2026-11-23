@@ -154,3 +154,22 @@ weights still need a frozen revision and an actual offline compatibility check;
 no Video-MME ASR has been run. The English-only MPNet semantic-shift and lexical
 cue policy also requires a multilingual decision before long-form audio-aware
 selection. Do not silently describe current English-only caches as multilingual.
+
+Multilingual model cached and offline compatibility passed
+
+Pinned Systran/faster-whisper-small revision536b0662742c02347bc0e980a01041f333bce120
+in configs/multilingual_speech_model.json, downloaded486214370bytes/5files.
+Official model card https://huggingface.co/Systran/faster-whisper-small identifies
+this as the CTranslate2 conversion of openai/whisper-small. The separate
+English-only snapshot remains unchanged. Offline CPU int8 test used the fixed
+REFRAMED development clip CxWby8RuUwU6, VAD interval0.5–3.3s:10words, zero rejected
+out-of-gate words, detected en probability0.9944057465. This English excerpt checks
+loading, word timing and language metadata only; non-English ASR accuracy is not
+validated. All five downloaded files have SHA256 recorded in the check report.
+
+Reproduce with `scripts/check_multilingual_speech.py --cache-dir
+/scratch/yy5919/pyro-kd-derived/cache/reframed --model-report
+outputs/verification/multilingual-speech-download.json --output NEW_CHECK.json`
+using /scratch/yy5919/pyro-audio-env/bin/python inside the container, OMP_NUM_THREADS=4.
+Artifacts multilingual-speech-{download,offline-check}.json/log are in
+outputs/verification. No long held-out ASR output or QA answers inspected.

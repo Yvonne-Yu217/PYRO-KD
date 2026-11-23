@@ -1,0 +1,30 @@
+{
+  "models": [
+    {
+      "repo_id": "Systran/faster-whisper-small",
+      "revision": "536b0662742c02347bc0e980a01041f333bce120",
+      "files": [
+        {
+          "name": "README.md",
+          "bytes": 1998
+        },
+        {
+          "name": "config.json",
+          "bytes": 2370
+        },
+        {
+          "name": "model.bin",
+          "bytes": 483546902
+        },
+        {
+          "name": "tokenizer.json",
+          "bytes": 2203239
+        },
+        {
+          "name": "vocabulary.txt",
+          "bytes": 459861
+        }
+      ]
+    }
+  ]
+}
