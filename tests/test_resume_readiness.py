@@ -47,3 +47,28 @@ class ResumeReadinessTests(TestCase):
             self.assertEqual(row['missing_video_ids'], ['absent'])
             self.assertEqual(row['not_run']['missing'], 1)
             self.assertFalse(row['complete'])
+
+    def test_generation_retains_missing_video_denominator(self):
+        from types import SimpleNamespace
+        from src.experiments.matrix import core_generation_runs
+        from src.experiments.generation_stage import evaluate_generation
+        cfg = {'matrix': {'selectors': ['U'], 'priors': ['P0'], 'models': ['m']},
+               'models': {'m': {'backend': 'echo'}}, 'evaluation': {'resamples': 10, 'text_metrics': []}}
+        run = core_generation_runs(cfg)[0]
+        record = SimpleNamespace(video_id='absent', ad=[], ad_starts=[])
+        ctx = SimpleNamespace(duration=10., audio_features={'speech': []})
+        with TemporaryDirectory() as d, patch('src.experiments.generation_stage.load_context', return_value=(ctx, {})):
+            report = evaluate_generation(cfg, run, [record], Path(d))
+            self.assertEqual(report['n_videos'], 1)
+            self.assertEqual(report['missing_video_ids'], ['absent'])
+            self.assertTrue(report['videos'][0]['no_generation_rows'])
+
+    def test_backend_factory_reuses_one_model_across_calls(self):
+        with patch('src.generation.backends.build_backend') as build:
+            factory = _backend_factory(False)
+            spec = {'backend': 'hf_vlm', 'model': 'pinned-model'}
+            first = factory(spec)
+            self.assertIs(factory(dict(spec)), first)
+            self.assertEqual(build.call_count, 1)
+            factory({**spec, 'model': 'other-model'})
+            self.assertEqual(build.call_count, 2)

@@ -829,3 +829,23 @@ Whisper-tag derivative, and7 belongs to long videos. No held-out outcomes opened
 The original task attachment path was unavailable on this host; explicit current
 user instructions and the connected proposal were used. User explicitly deferred
 human labels/ratings and forbade paid APIs; do not represent either as completed.
+
+Completed29-selector development sweep (all10videos each), tables/plots under
+reframed_dev_bridged_v1. These use estimated word-rate overlap, not rendered TTS.
+Default dev CV allowed all-zero A cue weights to win (F1.52377/CV.45598); that is
+recorded rather than silently presenting it as cue scoring. A second explicitly
+nonzero speech/event grid preserves the core method: A nse.5/sc.5/gf.5,
+F1.51368/CV.49516; AV nse.5/sc1/gf0, F1.48337/CV.47226. Dev-only exploratory tuning;
+no held-out outcomes. Both grids and outputs retained.
+
+Generation coverage audit found an additional missing-video loop in generation
+metrics; now every expected video is represented, with missing moment/video IDs.
+Added regression. Model factory now retains a single model across selector/prior
+cells and releases it when model settings change. Flagged over-budget generations
+are errors rather than successful stage counts. Tests43passed+38subtests.
+
+Prepared reframed_local_dev_pilot.toml with pinned Qwen, timeline present, both
+priors, frozen training examples, raw word-limit failures, temperature0,4frames,
+2second window and shared K. Registering20-input GPU integration smoke (2/cell)
+then complete local dev generation only if each cell yields a valid output.
+This is local development, not formal test evaluation; API/human work deferred.

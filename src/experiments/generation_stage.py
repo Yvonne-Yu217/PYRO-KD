@@ -166,7 +166,11 @@ def run_generation(
                 capped = enforce_word_limit(row["model_output"], base[r.id]["word_limit"], policy)
                 row.update(output=capped["text"], words=capped["words"], raw_words=capped["raw_words"],
                            over_budget=capped["over_budget"], truncated=capped["truncated"])
-                n_ok += 1
+                if capped["over_budget"] and policy == "flag":
+                    row["error"] = "word_budget: generated output exceeds the declared limit"
+                    n_err += 1
+                else:
+                    n_ok += 1
             else:
                 row["output"] = row["model_output"]
                 n_err += 1
@@ -221,10 +225,12 @@ def evaluate_generation(cfg: dict, run: GenerationRun, records, exp_dir: Path, s
     by_video: dict[str, list[dict]] = {}
     for row in rows:
         by_video.setdefault(row.get("video_id"), []).append(row)
-    for video_id, vrows in by_video.items():
-        record = by_id.get(video_id)
-        if record is None:
-            continue
+    expected_moments = read_jsonl(moments_path(exp_dir, run.selection))
+    expected_by_video = {}
+    for moment in expected_moments:
+        expected_by_video.setdefault(moment["video_id"], set()).add(moment["id"])
+    for video_id, record in by_id.items():
+        vrows = by_video.get(video_id, [])
         ok = [r for r in vrows if is_success(r) and r.get("output")]
         context, _ = load_context(record, cfg, need_visual=False)
         truth, _ = ground_truth(record, context.duration, slack)
@@ -238,6 +244,11 @@ def evaluate_generation(cfg: dict, run: GenerationRun, records, exp_dir: Path, s
                  "over_budget_rate": (sum(bool(r.get("over_budget")) for r in ok) / len(ok)) if ok else None,
                  "overlap_seconds": (placement.speech_overlap(placements, speech, wps, speed)["overlap_seconds"]
                                      if speech is not None else None)}
+        expected_ids = expected_by_video.get(video_id, set())
+        actual_ids = {r["id"] for r in vrows}
+        entry.update(n_expected=len(expected_ids), missing_ids=sorted(expected_ids - actual_ids),
+                     unexpected_ids=sorted(actual_ids - expected_ids),
+                     no_generation_rows=not bool(vrows))
         per_video.append(entry)
         gt_items = sorted(record.ad or [], key=lambda e: e.start)
         gt_items = [e for e in gt_items if e.start in set(truth)]
@@ -264,6 +275,11 @@ def evaluate_generation(cfg: dict, run: GenerationRun, records, exp_dir: Path, s
     result = {
         "run_id": run.run_id, "selector": run.selection.name, "prior": run.prior, "model": run.model_label,
         "timeline": run.timeline, "oracle": run.selection.is_oracle, "n_videos": len(per_video),
+        "expected_videos": len(by_id),
+        "missing_video_ids": sorted(set(by_id) - set(by_video)),
+        "unexpected_video_ids": sorted(set(by_video) - set(by_id)),
+        "expected_moments": len(expected_moments),
+        "missing_moment_ids": sorted(m["id"] for m in expected_moments if m["id"] not in {r["id"] for r in rows}),
         "macro_f1": bootstrap_mean_ci([v["f1"] for v in per_video], resamples, seed),
         "overlap_seconds": bootstrap_mean_ci([v["overlap_seconds"] for v in per_video], resamples, seed),
         "over_budget_rate": bootstrap_mean_ci([v["over_budget_rate"] for v in per_video], resamples, seed),
