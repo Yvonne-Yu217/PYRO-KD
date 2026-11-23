@@ -1404,3 +1404,36 @@ Fourfocused tests passed; a livepartialaudit correctlyreturnednotready andleft
 QA scoring artifacts unopened. Manifest always distinguisheslocalcompletion
 from deferredAPI/human/Cue2Narrate work, and records unequal longrealizedbudgets.
 No models, largeweight/framecache hashing, GPUjobs ornewlabels are involved.
+
+## Formal local core and paired analyses completed
+
+All10local corecells completed3398unique attempts, with3108valid captions and
+290failures (256word-budget,34token-limit). No missingattempts or duplicateIDs.
+All3108validcaptions have actualTTS;3024individuallyfit machine speech-free
+video bounds. Acrossall10conditions, originalspeech timeline-union collision is
+17.807seconds and excessoverlappingnarration is7651.939seconds. These are
+aggregateexperimentalconditions, not onecombinedaudio track orhumanaudibility.
+Requested3880→selected3820→prepared3398→valid3108→individualfit3024.
+
+All30clips stay in evaluation, includingzero-outputvideos. A_cueP0 temporalF1
+.521 is highestamongdeployablecells; oracleP0/P1 .669/.696 are upper-bound
+placementconditions. Four of17newlydeclared core temporalcontrasts haveHolm
+p.0332; noP1−P0temporalcontrast survives correction. These are placementmetrics,
+not semantic-quality tests, and the family was declaredafterearlyUoutputs existed.
+
+Audio-context temporal family: timeline−none meanF1+.0519,pointwise95%movie
+bootstrapCI[.0107,.1189],Holm3p.0410. Native−nonep.7344; native−timelinep.0625.
+Identicalpreparedtimes mean context effects on temporalF1 reflectvalid-output
+availability, not improvedsemanticgrounding. Native alsochangesmodel. Source-
+bound references/rawoutputs validated before statistics; all10movieclustersused.
+
+Measuredcore gaputilization validatedall300video-cells,includingunusedgaps.
+The sharedgapdenominator is3739.111902seconds percell; boundedoccupancy ranges
+.3961–.6146. Detailedwaveform checks remain external, compacttotals/provenance
+are versioned. Coregeneration processwall5228.711seconds(±15scompletionpoll),
+recordedmodel-calllatency5120.479seconds; these are notallocatedGPUbillingtime.
+
+CPUfinalizer commandlogging initially containednon-JSON Path objects. Caught
+before export, stoppedwaitingv1workers, validatedstring conversion andstarted
+v2copies. Fullformal reportpipeline thencompleted successfully; no inference
+source orrawoutputwas changed. Originaldrivers/logs retained for audit.

@@ -88,5 +88,15 @@
     "file": "pyro-ego-continuation-gpu.sbatch",
     "original": "/scratch/yy5919/pyro-ego-continuation-gpu.sbatch",
     "sha256": "a6be74f56f73a4b6260c6e66c086653e54f3885f38eab9c3755083c5b49715f0"
+  },
+  {
+    "file": "pyro-finalize-formal-reports-v2.py",
+    "original": "/scratch/yy5919/pyro-finalize-formal-reports-v2.py",
+    "sha256": "704e1b7d0505965d25a4afab606709e6ce5c969f6179cbd94f04505d58dc572c"
+  },
+  {
+    "file": "pyro-finalize-qa-reports-v2.py",
+    "original": "/scratch/yy5919/pyro-finalize-qa-reports-v2.py",
+    "sha256": "3ec30a9f9d8324f4d4086e86021081d2bc0a5c1fb5b7a6344076771e1cfc3061"
   }
 ]

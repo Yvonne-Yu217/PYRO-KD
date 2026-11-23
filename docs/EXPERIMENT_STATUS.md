@@ -1030,3 +1030,13 @@ with formalcaption/QA andhumanattribution explicitlypending.
 - CPUcontroller41245 is pending afterany41197, and will allocate a continuation
   GPUonlyif U/V remainunfinished. No duplicateGPUjob or paidAPI call.
 - Report and12-slide deck drafts compile; finalcore/QA slots remainpending.
+
+### Formal AD complete — 2026-11-23 18:00 UTC
+
+All10Qwencorecells:3398attempts,3108valid,290explicitfailures,0missing. Alltext
+metrics andactualTTScomplete;3024individualspeechfits. Full20plannedcelltable
+(including10APIdeferred) atdocs/results/reframed-formal-core/core-results.md.
+Core17contrast andablation3contrast movie analyses complete; measuredgap
+reports retainunusedgaps/zerooutputs. PrimaryGPU advanced directly tolongQA
+no-timelinecontrols; secondarycompletedEgoU490/490valid andstartedVlocal.
+EgoVmemory remainsqueued onprimary. No paidAPI/human labels introduced.
