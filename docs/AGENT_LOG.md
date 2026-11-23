@@ -763,3 +763,29 @@ top-levelgoldfields absent ininput. Evidence egoschema-U-ten.independent-check.j
 Noheldout490accuracy. V_localcompleted10answers; CPUevaluationlaunched. V_memory
 GPUqueue44349continues sequentially, no simultaneousGPUmodels. Userrequest for
 usefulGPUactivity handled with independentQAwork whileCPUAD/TTS auditsrun.
+
+## 2026-11-23: isolated PR #22 integration and resume safety
+
+Codex read the authoritative Revision 1.5 tab, course Agent Track requirements,
+AGENTS.md, HPC instructions, status history, live queue and existing outputs.
+Fetched origin; PR #22 was open at 8148fe0. Created an isolated worktree/branch
+from 7bfe411 and integrated that branch, preserving original uncommitted logs.
+Parallel-agent startup failed because the local thread database is malformed;
+continued directly. No human annotations or API authorization were supplied.
+
+Fixed four inspected defects: stale config/source/input reuse, missing-video
+coverage, relative API ledger paths, and truncated JSONL append recovery with
+exact-byte backup. Added four regression tests. Retained both QA evaluation APIs
+and the HPC P1/strict-budget prompt behavior. Integration initially failed on a
+P1 test heading, CUDA-dependent mock tests, and conflicting timeline APIs; these
+were diagnosed and corrected. Full suite before the final timeline correction:
+789 passed, one failed, three skipped, 5964 subtests. Final affected-suite check:
+36 passed and 11 subtests in 63.42 seconds, including the previously failing
+end-to-end experiment test. Log: /scratch/yy5919/pyro-resume-fixed2-tests.log.
+Git diff whitespace check passed. Dataset adapter validation passed (96 validation,
+91 test records); it does not replace existing media integrity evidence.
+
+Draft REFRAMED plan enumerates 20 cells with proposal A_cue, timeline present,
+raw over-budget output retained, batch1 and zero API cap. Human detector labels,
+peer ratings, formal protocol freeze and cache-schema reconciliation remain.
+See docs/RESUME_2026_11_23.md for evidence, cost assumptions and next steps.

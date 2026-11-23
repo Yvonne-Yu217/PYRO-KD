@@ -1,0 +1,49 @@
+# Template for the long-form QA benchmark (proposal §1, RQ4) and ablation 7.
+# The benchmark is not chosen yet (§6 check). Convert it to the canonical JSONL
+# (src/datasets/adapters.py: CANONICAL_SCHEMA) and point LONGQA_JSONL at it.
+
+[experiment]
+name = "longform_qa"
+seed = 0
+task = "qa"
+
+[dataset]
+name = "canonical"
+label = "longform-qa"
+path = "${LONGQA_JSONL}"
+split = "test"                # needs experiment.allow_test = true: set it only for the single final run
+subset = "all"
+
+[paths]
+cache_root = "${PYRO_CACHE:-data/cache}/longform-qa"
+output_root = "${PYRO_OUTPUTS:-outputs}/experiments"
+
+[k_rule]
+rate_per_minute = 3.48        # K per minute held constant with MTG-AD
+
+[qa]
+max_frames = 32
+max_new_tokens = 8
+timeline_max_items = 40
+
+[matrix]
+selectors = ["U", "V", "A", "AV"]
+priors = ["P0"]
+models = ["qwen"]
+
+[selectors.AV]
+base = "AV"
+budget = "hierarchical"
+
+[models.qwen]
+backend = "hf_vlm"
+model = "qwen2.5-vl-7b"
+batch_size = 1
+
+[ablations]
+enabled = ["7", "8"]
+
+[ablations.hierarchy]
+min_segment_seconds = 60.0
+max_segment_seconds = 300.0
+floor_fraction = 0.5

@@ -863,3 +863,13 @@ top-levelgoldfields absent ininput. Evidence egoschema-U-ten.independent-check.j
 Noheldout490accuracy. V_localcompleted10answers; CPUevaluationlaunched. V_memory
 GPUqueue44349continues sequentially, no simultaneousGPUmodels. Userrequest for
 usefulGPUactivity handled with independentQAwork whileCPUAD/TTS auditsrun.
+
+## 2026-11-23 isolated integration checkpoint
+
+Resume worktree: /scratch/yy5919/pyro-revision15-resume; branch
+work/revision15-resume-20261123 combines local 7bfe411 with PR22 head8148fe0.
+Original checkout preserved. Four runner safety fixes and affected integration
+checks pass (36 tests,11subtests); pre-final full suite789passed/1failed/3skipped,
+remaining failure then fixed and rerun. Draft20-cell plan and detailed audit:
+docs/RESUME_2026_11_23.md. No paid calls or formal grid launches. API authorization,
+human annotation gates, final protocol and cache adapter remain pending.

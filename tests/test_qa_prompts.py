@@ -53,6 +53,8 @@ def test_runner_records_choice_and_resumes_without_loading(tmp_path,monkeypatch)
     source=tmp_path/'input.jsonl';source.write_text(json.dumps(data)+'\n')
     output=tmp_path/'predictions.jsonl'
     monkeypatch.setattr(sys,'argv',['run_qa_vlm','--input',str(source),'--output',str(output)])
+    import torch
+    monkeypatch.setattr(torch.cuda, 'device_count', lambda: 0)
     monkeypatch.setattr(runner,'load_model',lambda *args:(None,None,'unit-test-double'))
     monkeypatch.setattr(runner,'generate_batch',lambda *args,**kwargs:(['B'],['B'],[1]))
     with pytest.raises(SystemExit) as exc: runner.main()
@@ -75,6 +77,8 @@ def test_runner_recovers_partial_tail_before_resuming(tmp_path,monkeypatch):
     output=tmp_path/'predictions.jsonl'
     argv=['run_qa_vlm','--input',str(source),'--output',str(output)]
     monkeypatch.setattr(sys,'argv',argv+['--limit','1'])
+    import torch
+    monkeypatch.setattr(torch.cuda, 'device_count', lambda: 0)
     monkeypatch.setattr(runner,'load_model',lambda *args:(None,None,'unit-test-double'))
     monkeypatch.setattr(runner,'generate_batch',lambda *args,**kwargs:(['B'],['B'],[1]))
     with pytest.raises(SystemExit) as exc: runner.main()

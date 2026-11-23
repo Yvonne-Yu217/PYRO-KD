@@ -81,7 +81,16 @@ def build_prompt(
     transcript_text: str = "",
     exemplars: Sequence[str] = (),
     audio_timeline_text: str | None = None,
+    audio_timeline: str = "",
 ) -> str:
+    if audio_timeline:
+        if audio_timeline_text is not None:
+            raise ValueError("supply only one audio timeline")
+        audio_timeline_text = "Audio timeline around this moment: " + audio_timeline
+    if exemplars is None:
+        exemplars = ()
+    if isinstance(exemplars, dict):
+        exemplars = [item["text"] for item in exemplars["exemplars"]]
     if prior not in PROMPTS:
         raise ValueError(f"unknown prior {prior!r}; available: {sorted(PROMPTS)}")
     if word_limit <= 0:
@@ -109,3 +118,50 @@ def build_prompt(
         return plain
     examples = "\n".join(f"Example {i}: {text}" for i, text in enumerate(exemplars, 1))
     return P1_GUIDELINES + examples + "\n\nCurrent video:\n" + plain
+
+
+QA_PROMPT = (
+    "These {num_frames} frames are sampled from a video, in order, at {times}.\n"
+    "{context}"
+    "Question: {question}\n"
+    "{options}\n"
+    "Answer with the letter of the correct option only."
+)
+
+
+def build_qa_prompt(
+    question: str, options: Sequence[str], frame_times: Sequence[float], audio_timeline: str = "",
+    transcript_text: str = "",
+) -> str:
+    """Zero-shot multiple-choice QA over keyframes, with an optional audio timeline."""
+    from src.audio.timeline import clock
+
+    if not options:
+        raise ValueError("a multiple-choice question needs options")
+    letters = "ABCDEFGHIJ"
+    context = ""
+    if transcript_text:
+        context += f'Speech in the video: "{transcript_text}"\n'
+    if audio_timeline:
+        context += f"Audio timeline of the video: {audio_timeline}\n"
+    return QA_PROMPT.format(
+        num_frames=len(frame_times), times=", ".join(clock(t) for t in frame_times), context=context,
+        question=question.strip(), options="\n".join(f"{letters[i]}. {o}" for i, o in enumerate(options)),
+    )
+
+
+def count_words(text: str) -> int:
+    return len(text.split())
+
+
+def enforce_word_limit(text: str, word_limit: int, policy: str = "truncate") -> dict:
+    """Apply the strict word cap (Risk 1). policy "truncate" keeps the first
+    word_limit words for rendering; "flag" keeps the text. Both record the raw
+    count and whether the model exceeded its budget."""
+    if policy not in ("truncate", "flag"):
+        raise ValueError("policy must be 'truncate' or 'flag'")
+    words = text.split()
+    over = len(words) > word_limit
+    rendered = " ".join(words[:word_limit]) if over and policy == "truncate" else text.strip()
+    return {"text": rendered, "raw_words": len(words), "words": count_words(rendered),
+            "over_budget": over, "truncated": over and policy == "truncate"}

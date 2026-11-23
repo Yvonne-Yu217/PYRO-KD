@@ -1,0 +1,90 @@
+# DRAFT REFRAMED development plan (not frozen or authorized for generation): the core 5 x 2 x 2 matrix and the selector-level ablations.
+# Paths come from environment variables (see hpc/env.example.sh); nothing here
+# names a user, cluster or scratch directory. Secrets are never set here.
+#
+#   python scripts/run_experiment.py --config configs/experiments/reframed_dev_revision15_resume.toml --stage plan
+#   python scripts/run_experiment.py --config configs/experiments/reframed_dev_revision15_resume.toml --stage selector-only
+
+[experiment]
+name = "reframed_dev_revision15_resume"
+seed = 0
+task = "ad"
+allow_test = false            # tune and iterate on dev only
+
+[dataset]
+name = "reframed"
+# HF layout (data/mtg-ad) or the Globus copy, e.g. MTG_AD_ROOT=/scratch/<netid>/mtg-ad-transfer/mtg-ad
+root = "${REFRAMED_ROOT:-/scratch/yy5919/pyro-kd-derived/datasets/reframed}"
+split = "validation"
+subset = "dev"                # the 10 fixed dev videos; "all" = 332 validation videos
+splits_config = "configs/reframed_splits.json"
+
+[paths]
+cache_root = "${PYRO_CACHE:-/scratch/yy5919/pyro-kd-derived/cache}/reframed"
+output_root = "${PYRO_OUTPUTS:-outputs}/experiments"
+
+[k_rule]
+# K = max(1, round(rate * minutes)); the rate comes from splits_config when unset.
+
+[selection]
+tolerance_seconds = 2.0
+duration_slack_seconds = 1.0
+num_frames = 4                # held constant: 4 frames across 2 s
+span_seconds = 2.0
+
+[matrix]
+selectors = ["U", "V", "A", "AV", "O"]
+a_selector = "A_cue"              # team decision: "A" (gap-quality, current) or "A_cue" (proposal §5.2)
+priors = ["P0", "P1"]
+models = ["qwen", "api"]
+
+# Untuned AV defaults live in src/selection/two_stage.py; override per selector here, e.g.
+# [selectors.AV]
+# kind = "two_stage"
+# options = { novelty_mode = "memory", weights = { vn = 1.0, nse = 0.5, sc = 0.5, gf = 0.5, op = 1.0 } }
+
+[models.qwen]
+backend = "hf_vlm"
+model = "qwen2.5-vl-7b"       # proposal: Qwen2.5-VL 7B/8B class; qwen3-vl-8b also works
+batch_size = 1
+request_batch = 1
+
+[models.api]
+backend = "openai"            # or "gemini" with model = "gemini-2.0-flash" (check current names)
+model = "gpt-4o-mini"
+api_key_env = "OPENAI_API_KEY"
+spend_cap_usd = 0.0          # hard cap across all API runs sharing the ledger
+ledger_path = "${PYRO_OUTPUTS:-outputs}/api_spend_ledger.json"
+request_batch = 1
+# Prices are required and deliberately not built in: copy them from the provider's
+# current price list before running. USD per 1M tokens.
+# prices = { input_per_million = 0.0, output_per_million = 0.0, image_tokens = 1500 }
+
+[models.omni]
+backend = "qwen_omni"
+model = "Qwen/Qwen2.5-Omni-7B"
+
+[generation]
+max_new_tokens = 64
+temperature = 0.0             # held constant
+word_limit_policy = "flag"
+timeline = true              # core matrix runs without the timeline; ablation 5 varies it
+timeline_window_seconds = 30.0
+exemplars_path = "${PYRO_P1:-/scratch/yy5919/pyro-kd-derived/prompts/reframed-train-p1.json}"
+
+[evaluation]
+baseline = "U"
+resamples = 10000
+tts_words_per_second = 2.5    # base TTS rate; rendered at 1.2x = 3 words/s, matching the word cap
+tts_speed = 1.2
+text_metrics = ["bertscore", "sentence_cosine", "clip_text"]
+
+[ablations]
+enabled = ["1", "2", "3", "4", "6", "8"]   # "3" needs the Whisper-tag cue set; "7" belongs on long videos
+nse_magnitude = 0.5
+
+[ablations.timeline]          # ablation 5: set after the selector-only results pick the top selector
+selector = "AV"
+model = "qwen"
+audio_native_model = "omni"
+prior = "P0"

@@ -2,6 +2,10 @@
 # Course rule: coursework runs on Cloud Bursting, NOT on Torch.
 # Sourced by setup_env.sh, download_models.sh, prepare_data.sh, submit.sh and run_ad.sbatch.
 
+# Optional per-user settings (copied from hpc/env.example.sh; never committed).
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+if [ -f "$REPO_ROOT/hpc/env.sh" ]; then source "$REPO_ROOT/hpc/env.sh"; fi
+
 # Course SLURM account (300 GPU-hours per student for Fall 2026).
 ACCOUNT="${ACCOUNT:-csci_ga_2271-2026fa}"
 
@@ -12,7 +16,7 @@ ACCOUNT="${ACCOUNT:-csci_ga_2271-2026fa}"
 #   g2-standard-24   2x L4
 #   c12m85-a100-1    1x A100 (40 GB)
 #   c24m170-a100-2   2x A100 (40 GB each)
-CPU_PARTITION="n2c48m24"
+CPU_PARTITION="${CPU_PARTITION:-n2c48m24}"
 
 # Environment overlay and model cache on scratch (the course asks for /scratch/NetID).
 # Reuse the team's smoke-test environment if it exists (saves ~20 min and a 50 GB overlay).
