@@ -1,0 +1,39 @@
+{
+  "status": "predeclared diagnostic family before heldout inference/correctness",
+  "frozen_utc": "2026-11-23T16:43:59.036810+00:00",
+  "dataset": "egoschema",
+  "scope": "visual-only heldout diagnostic",
+  "conditions": [
+    "U",
+    "V_local",
+    "V_memory"
+  ],
+  "comparisons": [
+    {
+      "a": "V_local",
+      "b": "U",
+      "metric": "accuracy"
+    },
+    {
+      "a": "V_memory",
+      "b": "U",
+      "metric": "accuracy"
+    },
+    {
+      "a": "V_memory",
+      "b": "V_local",
+      "metric": "accuracy"
+    }
+  ],
+  "unit": "cluster",
+  "cluster": "video_id",
+  "clusters": 490,
+  "questions": 490,
+  "resamples": 10000,
+  "seed": 0,
+  "multiple_testing": "Holm over all3 declared EgoSchema diagnostic comparisons",
+  "confidence_intervals": "pointwise95% bootstrap intervals, not simultaneous family intervals",
+  "estimand": "equal-video mean paired accuracy difference; one question per video",
+  "failure_policy": "fixed denominator; missing/invalid/generation failures count incorrect",
+  "family_boundary": "separate explicitly diagnostic family from long-form QA; do not describe cross-family significance as globally corrected"
+}
