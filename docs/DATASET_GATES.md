@@ -1,7 +1,7 @@
 # Revision 1.5 dataset gates — 2026-11-22
 
-Current transfer priority is MTG, EgoSchema and REFRAMED on the CPU allocation.
-No additional bulk dataset download has been started.
+MTG, EgoSchema and REFRAMED transfer to Cloud Bursting is complete.
+Long-form access inspection is now proceeding on the CPU allocation.
 
 ## Cue2Narrate
 
@@ -36,11 +36,49 @@ precedence; no fallback has been invoked.
 ## Existing datasets
 
 MTG: 413 videos transferred with SHA256 checks passing; 20 source failures.
-EgoSchema: full 5031-video source manifest, 500 public labels; 51 preexisting
-local videos independently probed without audio. Full transfer/verification
-pending. Use as visual-only diagnostic unless actual source audio exists.
+EgoSchema: all5031 videos transferred and probed without audio;500public labels.
+Size/stream/duration checks passed for all files. Use as visual-only diagnostic unless actual source audio exists.
 REFRAMED: 1983 source-available videos; 40 failures all in training. Source
-validation/test coverage 96/91. Local full transfer/verification pending.
+validation/test coverage 96/91. Local transfer/size/stream/duration verification complete for all1983 files.
 
 Human audio-detector labels and peer ratings remain required external inputs;
 none have been synthesized or represented as collected.
+
+## Video-MME pinned access and label-blind subset — 2026-11-23
+
+The official README links the LMMS release, now redirected to
+[lmms-eval/Video-MME](https://huggingface.co/datasets/lmms-eval/Video-MME).
+Pinned dataset revision: ead1408f75b618502df9a1d8e0950166bf0a2a0b.
+The20 video ZIPs total100,994,322,505bytes; annotation Parquet is405,167bytes.
+Only metadata and archive-index byte ranges are being acquired at this step,
+not the entire101GB release. Exact HTTP206 ranges verified on ZIP01. Range
+reader rejects ignored/mismatched ranges before reading a whole archive.
+Academic local research use follows the official access route; do not publish
+or redistribute raw videos/annotations.
+
+Frozen subset: configs/video_mme_long_subset.json. Select2videos/domain across
+6domains from300long videos by ascending SHA256(seed0:video_id). Selection
+reads only video_id/videoID/duration/domain columns, never questions/options/
+answers. This gives12held-out evaluation videos; no performance-based or
+availability-based replacement. Retain failures explicitly. This is a small
+long-form subset, not a claim to evaluate the full benchmark. The web dataset
+viewer incidentally displayed short-video example questions/answers before
+column-restricted selection; those short videos are not eligible for this
+long-only subset and no long question/answer content was inspected.
+
+Metadata and release inventory live under
+/scratch/yy5919/pyro-kd-derived/video-mme. A separate system-site-packages
+pyro-data-env supplies pyarrow26.0.1; shared overlay unchanged. Archive indexing
+is in progress; selective video extraction and actual audio/duration checks
+remain required before this gate passes. This inspection does not establish
+30–60minute duration or usable audio for any selected file yet.
+
+Archive inventory checkpoint:16/20archives successfully indexed,760members,
+81,514bytes of index transfer. Eleven frozen IDs mapped to2,581,429,970compressed
+bytes; ID864 remains unlocated. archives17–20 raised BadZipFile in ZipFile after
+transport trouble; a direct archive17 range probe also failed with URLError.
+Do not infer corrupted release files: Python ZipFile can swallow OSError during
+end-record reads and surface BadZipFile. The reader now wraps exhausted network
+failures explicitly as transport errors. Complete parts are durable; the partial
+inventory and selected-archive-members.json remain under the scratch metadata
+root. No selected media payload has been downloaded, and audio gate remains open.
