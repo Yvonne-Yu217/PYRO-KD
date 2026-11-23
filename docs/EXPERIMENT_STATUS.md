@@ -943,3 +943,9 @@ Use distinct output names for flat/hierarchical and A_cue/AV conditions. All
 conditions inherit identical development-frozen nuisance weights. The bridge
 path above is the intended destination, not evidence of existing complete data.
 No GPU allocation or generation was launched by this agent.
+
+Gated Whisper dev ablation inputs: ten verified cached clips, zero emitted
+bracketed tags. Ready CPU command from the whisper-ablation branch:
+`python scripts/run_experiment.py --config configs/experiments/reframed_dev_ablation3.toml --stage selector-only`.
+No model labels are configured, so this config cannot accidentally generate paid
+or local model outputs. Human event-detector validation remains deferred.
