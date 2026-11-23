@@ -42,7 +42,8 @@ class Selection:
 
 def select_placed(candidates: Sequence[Candidate], gaps, k: int, *, required_words: int,
                   max_advance: float, max_lag: float, novelty_weight: float,
-                  embeddings=None, min_separation: float = 2.0) -> Selection:
+                  embeddings=None, min_separation: float = 2.0,
+                  segment_ids=None, segment_quotas=None) -> Selection:
     """Snap first, rank second; embeddings enable running cosine novelty.
 
     Base scores may be signed (e.g. event suppression). With embeddings, the
@@ -60,6 +61,15 @@ def select_placed(candidates: Sequence[Candidate], gaps, k: int, *, required_wor
         raise ValueError('novelty_weight must be finite and nonnegative')
     if not math.isfinite(min_separation) or min_separation < 0:
         raise ValueError('min_separation must be finite and nonnegative')
+    if (segment_ids is None) != (segment_quotas is None):
+        raise ValueError('segment IDs and quotas must be supplied together')
+    if segment_ids is not None:
+        if (len(segment_ids) != len(candidates) or not segment_quotas
+                or any(isinstance(q,bool) or not isinstance(q,int) or q<0 for q in segment_quotas)
+                or sum(segment_quotas)>k
+                or any(isinstance(i,bool) or not isinstance(i,int) or not 0<=i<len(segment_quotas) for i in segment_ids)):
+            raise ValueError('invalid segment IDs/quotas for requested budget')
+        segment_counts = [0]*len(segment_quotas)
     # Validate bounds/gaps even when candidate list is empty.
     snap_to_gap(0, gaps, required_words, max_advance=max_advance, max_lag=max_lag)
     if any(not all(math.isfinite(v) for v in (c.event_time,c.base_score,c.local_novelty))
@@ -82,14 +92,20 @@ def select_placed(candidates: Sequence[Candidate], gaps, k: int, *, required_wor
     chosen, separated = [], []
     similarity = np.full(len(candidates),-1.0)
     while remaining and len(chosen) < k:
+        eligible = (remaining if segment_ids is None else
+                    {i for i in remaining if segment_counts[segment_ids[i]] < segment_quotas[segment_ids[i]]})
+        if not eligible:
+            break
         def novelty(i):
             return (float((1-np.clip(similarity[i],-1,1))/2)
                     if chosen and unit is not None else candidates[i].local_novelty)
         def score(i):
             return candidates[i].base_score + novelty_weight*novelty(i)
-        i = min(remaining,key=lambda j:(-score(j),placements[j].time,candidates[j].event_time,j))
+        i = min(eligible,key=lambda j:(-score(j),placements[j].time,candidates[j].event_time,j))
         chosen.append(Selected(i,len(chosen),placements[i],score(i),novelty(i)))
         remaining.remove(i)
+        if segment_ids is not None:
+            segment_counts[segment_ids[i]] += 1
         if unit is not None:
             similarity = np.maximum(similarity,unit @ unit[i])
         rejected = {j for j in remaining if abs(placements[j].time-placements[i].time)<min_separation}
