@@ -849,3 +849,10 @@ priors, frozen training examples, raw word-limit failures, temperature0,4frames,
 2second window and shared K. Registering20-input GPU integration smoke (2/cell)
 then complete local dev generation only if each cell yields a valid output.
 This is local development, not formal test evaluation; API/human work deferred.
+
+At15:04UTC a fresh host audit found active GPU40964 onb-19-30; old40891/40892
+were gone. Earlier user resume changed the execution host. Registered CPU40988
+for50frozenREFRAMEDtestmedia only (no outcome inspection). The20input matrixsmoke
+produced18valid/2budgetfailures acrossall10localcells; full804inputdevelopment
+pilot continues in one reusedmodel process with45minute watchdog. Timingestimate
+will be revised from actual per-row latency; fullcoverage remains unverified.

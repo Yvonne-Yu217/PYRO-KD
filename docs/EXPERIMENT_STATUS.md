@@ -873,3 +873,36 @@ checks pass (36 tests,11subtests); pre-final full suite789passed/1failed/3skippe
 remaining failure then fixed and rerun. Draft20-cell plan and detailed audit:
 docs/RESUME_2026_11_23.md. No paid calls or formal grid launches. API authorization,
 human annotation gates, final protocol and cache adapter remain pending.
+
+## Active local-only continuation — 2026-11-23 15:06 UTC
+
+User confirmed no paid APIs and human labels/ratings later. Main work now lives
+on branch work/revision15-cache-bridge at aa37be3, worktree
+/scratch/yy5919/pyro-revision15-prep. The older GPU smoke checkout is unchanged.
+Current host/session changed after user resume: b-19-30, Slurm40964 (the old
+40891/40892 allocations are no longer live). Verify live state before resuming.
+
+Omni thinker control/native both passed one real example; raw outputs under
+/scratch/yy5919/pyro-revision15-resume/outputs/real-data-smoke. Agent inspected
+first/last frames: native plane/mountain description supported; control's car
+claim unsupported (the sequence includes a plane). These are not human ratings.
+Ten-clip Qwen P1 diagnostic:7valid/10,3wordbudgetfailures; fullrawoutputs retained.
+
+Integrated matrix smoke completed20inputs:18valid,2wordbudgetfailures; everycell
+producedvalidoutput. Full local development pilot running in exec session85304,
+log /scratch/yy5919/pyro-local-dev-full.log, allocation40964. One pinnedQwen model
+reused across10U/V/A_cue/AV/OxP0/P1cells, timelinepresent,804preparedinputs total
+(U66,V75,A95,AV95,O71 times2priors). Successfulsmokeoutputs reused. Current
+45minute watchdog bounds this attempt; inspect finalcoverage before resuming.
+Not a formal frozen test run. No other GPUwriter should be started concurrently.
+
+CPU Slurm40988 (pyro-test-media) prepares only50frozenREFRAMEDtestmedia, without
+reference-outcome inspection. Script/sbatch under/scratch/yy5919/pyro-test-media.sbatch;
+report/scratch/yy5919/pyro-resume-results/reframed-test-media.json;
+log/scratch/yy5919/pyro-test-media-40988.log. Checkcompletion and failures before
+cachingfeatures. Do not duplicate whilelive. Datasetprimary andsubset unchanged.
+
+29selector dev sweep and nonzero devCV completed. Detailedchronology inAGENT_LOG.
+Remaining: verifyfullpilot/semanticandrenderedmetrics, resolveformalprotocol,
+finishcachedtestfeatures andlocalformalexperiments, QA/ablations/statistics/report;
+API model/judge andhumanlabels/ratings explicitlydeferredbyuser.
