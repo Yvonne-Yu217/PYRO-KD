@@ -361,3 +361,15 @@ submission is not completion; continue monitoring. Separate pending40363 resumes
 ASR/visual and does not write event caches. No duplicate active event writer.
 Latest originaljobs: visual11/12logged through891; ASR729computed7361words,
 619VADwindows,0rejected (independent729audit stillpending). No GPU inference.
+
+
+Fourth long speech cache729 independently verified7537exit0:7361words across
+619VADwindows,38575990speech samples,0rejected words. Evidence
+outputs/verification/video-mme-asr-729-check.json; feature SHA256
+3d419e61d58be3dfa03f144ac7fe4fdd851324145d42ea9e852f8349d3617904.
+Detected language-window codes are unvalidated model estimates, not ground truth.
+Verified ASR coverage now4/12. Livevisual72713/process102860 polled directly and
+still active on final898;11complete visual metadata files, no restart. Full event
+job27774 has begun616 with batch checkpoints;604 remains sole completed long event
+cache. CPU continuation40363 and40408 still PENDING Dependency afterany40036.
+Full visual audit remains next after72713terminalsuccess, not yet complete.
