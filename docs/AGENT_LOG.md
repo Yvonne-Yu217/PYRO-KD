@@ -339,3 +339,16 @@ analysis. Fixtures only, no real QA statistical findings created. Documented
 --unit cluster requirement, especially3questions/video for Video-MME. Current
 CPU40036 elapsed5h05m of6h; continuations40363/40408 remain dependency-pending.
 Long event616 progressed700/2646windows, longASR remains live, no duplicate jobs.
+
+
+Actual CPU QA processor preflight84874exit0 on first EgoSchema U pilot question:
+60images encoded into14075input tokens;16new-token allowance fits the pinned
+Qwen2.5VL7B config's128000context. New scripts/check_qa_processor.py records source,
+config and frame hashes plus tensor dimensions/bytes and explicit coverage;
+local processor only, no model weights/GPU/QA predictions. Coverage1/10pilot,
+not GPU memory feasibility or long-input capacity. Evidence
+outputs/verification/egoschema-qa-processor-pilot.json/.log; reproduction command
+in docs/REAL_DATA_SMOKE.md. Shared-template Transformers kwargs-placement warning
+recorded; actual encoding passed. Initial read tried nonexistent check_vlm_inputs.py;
+corrected discovery found debug_processor.py and the actual shared generation path.
+Long ASR96112 and event115097 remain active; no duplicate writers or GPU request.

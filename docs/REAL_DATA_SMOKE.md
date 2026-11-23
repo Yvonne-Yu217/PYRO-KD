@@ -87,3 +87,27 @@ Placed A/AV generation inputs prepared (exploratory)
 Inputs: `/scratch/yy5919/pyro-kd-derived/moments/reframed_{A_trigger,A_suppress,AV_trigger,AV_suppress}_placed_event_dev_exploratory.jsonl` and corresponding `_timeline.jsonl` files. Each has97 rows across10clips,111requested and14shortfall. Shifted narration rows:25/16/25/18 respectively. Cached timelines use existing exploratory0.5score/0.1rise thresholds; no annotation text is injected. Eight real-input dry runs (four conditions x P0/P1, first4rows each) passed, log outputs/verification/placed-input-preparation.log and per-condition logs. Independent all-row audit outputs/verification/placed-input-check.json checks base preservation, source frames, exact budgets and distinct event/playback timing. This is not VLM inference or a finalized experimental protocol.
 
 Example export: `python scripts/export_placed_moments.py --selection-report outputs/verification/reframed-dev-fused-selectors.json --condition AV_trigger --cache-dir /scratch/yy5919/pyro-kd-derived/cache/reframed --frame-center event --output <new-output.jsonl>`. Export verifies selection-source hashes, live VAD gaps, bounds and media freshness; it refuses to overwrite an input. Attach timeline with scripts/attach_audio_timeline.py as documented earlier; P1 uses the frozen train-only exemplar bundle.
+
+QA processor preflight is available in `scripts/check_qa_processor.py`. It uses
+only a pinned local processor/config and the same image resizing/chat-template
+path as QA generation; no VLM weights load. It records input/frame/config hashes,
+encoded tensor shapes/bytes, token count and configured context, preserving prior
+reports. Default coverage is one question; full coverage is explicitly reported.
+
+Actual EgoSchema U pilot first-question check84874exit0:60images,14,075input tokens,
+16requested new tokens,128,000configured context; within the declared context.
+Evidence `outputs/verification/egoschema-qa-processor-pilot.json` and `.log`.
+This is1/10pilot-question coverage, not GPU feasibility, QA accuracy or long-video
+capacity. Reproduce inside the read-only container with:
+
+```bash
+python scripts/check_qa_processor.py \
+  --input /scratch/yy5919/pyro-kd-derived/moments/egoschema_U_pilot_qa_exploratory.jsonl \
+  --model-path /home/yy5919/.cache/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5 \
+  --report <new-report.json> --limit 1
+```
+
+The processor emitted a Transformers kwargs-placement warning with the shared
+chat-template invocation; the actual one-question encoding succeeded. No frame
+truncation or automatic budget reduction was applied. A real GPU `--limit 1`
+QA smoke is still required before scaling.
