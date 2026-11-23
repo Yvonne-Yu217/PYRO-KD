@@ -1,0 +1,4 @@
+selector,prior,model,timeline,status,requested_moments,selected_moments,valid,expected,failed,missing,zero_output_videos,budget_overruns,budget_known,budget_unknown,f1,bertscore,openclip,tts_fit,tts_rendered,tts_overlap_seconds,tts_narration_excess_seconds,generation_latency_seconds
+A_cue,P0,qwen,False,evaluated with failures,388,384,349,384,35,0,1,8,357,27,0.4692515063792388,0.8604324544698363,0.41120927844577243,345,349,0.4683125000000121,435.9939375000002,585.803
+A_cue,P0,qwen,True,evaluated with failures,388,384,372,384,12,0,0,6,378,6,0.5211779849992354,0.8666991293573993,0.4086010035368604,370,372,0.2706250000000239,729.9713125000001,555.328
+A_cue,P0,omni,False,evaluated with failures,388,384,326,384,58,0,1,4,330,54,0.4651848364349048,0.8707530852541323,0.4422147999039326,324,326,0.4070624999999808,332.35162500000007,775.049

@@ -1343,3 +1343,26 @@ Completeoutputs yield no-op; no GPU waiting or duplicateinference. Uinputfile
 published490questions/7350moments/29400frames,zero shortfall. Vlocal/Vmemory
 continue CPU preparation. This is a continuation of existingfrozenwork, not
 additional experimentconditions or paidAPI authorization.
+
+## Formal audio-context ablation completed
+
+All three conditions cover the same384 prepared moments across30 testclips;
+core timeline rows reused automatically via identicalrunID. Qwenno-context:
+349valid/35failures; Qwentimeline372/12; Omninative326/58. All valid captions
+have actualPiper1.2x renders and completedtextmetrics. Individualfit counts are
+345/349,370/372,324/326; speechcollision seconds .4683,.2706,.4071 respectively.
+Excess overlapping narration remains substantial:435.994,729.971,332.352seconds.
+No missing attempts. Native changes model+modality; textmetrics are conditional.
+Descriptive results committed; pairedstatisticalinterpretation waitscompletecore
+referencevalidation. No tuning or rerunning based on these heldout outcomes.
+
+Agent report_draft inspected four traceabledevelopmentexamples of cuesnapping,
+word-cap-compliant speechcollision, ADselfoverlap and unsupportedvisualclaims.
+Actualfourinputframes were viewed for thegrounding judgment. IDs,source/frame/
+WAVhashes and machinebounds are preserved inqualitative-agent-review.md. This
+is agentinspection only, not humanannotations or an error-rateestimate.
+
+Agent long_inputs added waveform-bound measuredgaputilization (d225a4b),
+includingunusedgaps and zero-outputvideos. Devvalidation705WAVs/804attempts,
+100video-cells;17relevanttests passed. Boundeduniquegapoccupancy and nominal
+caption-duration/gap ratios are reported separately, withselfoverlap retained.
