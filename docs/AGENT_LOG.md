@@ -964,3 +964,11 @@ contains local audio-context comparison and long visual QA. No dummy workloads.
 CPU media41016 completed30/30 frozen test clips. Feature jobs41017 and41018
 running independently on CPU nodes with disjoint outputs. APIs remain disabled;
 human detector validation and peer ratings remain pending by user instruction.
+
+Frozen the two long visual QA control conditions before reading correctness:
+configs/long_visual_qa_frozen.json records exact source, input hashes, model,
+224px resolution, full four-frame K=5/min budget and decoding.36 questions each,
+12 frozen videos; $0API; estimate30 GPU minutes,45-minute bound per condition.
+These visual-only controls do not replace the required audio-aware conditions.
+First U smoke prediction may be resumed because exact source/settings/input
+fingerprint match; no ground-truth result has been read or used to tune anything.
