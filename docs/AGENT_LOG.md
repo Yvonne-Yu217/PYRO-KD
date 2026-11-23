@@ -1152,3 +1152,23 @@ Real dev audit:789 known complete decodes,84 over-budget,15 token/backend unknow
 across the ten cells (804 final rows). Pooled overrun rate84/789=10.6464%, rather
 than the erroneous zero. Final report-compatibility rerun2tests passed after
 adding the numerator column; logpyro-generation-budget-report-tests.log.
+
+## Formal AD freeze after development evidence
+
+15-case512-token diagnostic completed:5valid responses (128,129,130,139,139tokens),
+10persistent truncation/loop failures. Freeze192tokens for all formal local
+conditions: enough for the completed dev responses, with a bounded failure cost.
+Do not rewrite the original128-token pilot or treat failed loops as valid text.
+The same decoding/prompt implementation is retained; the ceiling only extends
+unfinished responses. Configs/reframed_formal_freeze.json records all evidence,
+fixed30test membership and source hashes; frozen TOML replaces the draft.
+Frames center on selected placement times, making the runner convention explicit.
+
+Final checks initially named a nonexistent test file (no tests ran; retained
+wrong-filename log). Corrected to test_generation_budget_coverage.py and ran
+26focused/integration tests successfully. Budget metric changes had30tests+
+38subtests and2report compatibility tests. Full previous merged suite812passed.
+Core export now distinguishes1110requested,1008selected,804prepared,705valid
+and688TTS-fitting dev outputs, with84/789known decoded budget overruns and15
+unknown token-limit cases. This prevents conditional fit rates from hiding losses.
+Model-cache revisions for BERTScore, sentence cosine andOpenCLIP recorded offline.

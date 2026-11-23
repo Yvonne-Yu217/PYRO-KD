@@ -1,0 +1,12 @@
+{
+  "roberta-large": "/scratch/yy5919/hf_cache/hub/models--roberta-large/snapshots/722cf37b1afa9454edce342e7895e588b6ff1d59/config.json",
+  "sentence-transformers/all-mpnet-base-v2": "/scratch/yy5919/hf_cache/hub/models--sentence-transformers--all-mpnet-base-v2/snapshots/e8c3b32edf5434bc2275fc9bab85f82640a19130/config.json",
+  "OpenCLIP": {
+    "clip_model": "ViT-B-32",
+    "clip_pretrained": "laion2b_s34b_b79k",
+    "clip_revision": "1a25a446712ba5ee05982a381eed697ef9b435cf",
+    "shot_detector": "ContentDetector",
+    "shot_threshold": 27.0,
+    "shot_min_scene_seconds": 1.0
+  }
+}
