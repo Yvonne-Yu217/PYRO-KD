@@ -297,3 +297,16 @@ still active on final898;11complete visual metadata files, no restart. Full even
 job27774 has begun616 with batch checkpoints;604 remains sole completed long event
 cache. CPU continuation40363 and40408 still PENDING Dependency afterany40036.
 Full visual audit remains next after72713terminalsuccess, not yet complete.
+
+
+Long visual extraction72713exit0:12computed,0reused,0failed. Full independent
+audit85259exit0 COMPLETE12/12:55549normalized512-D embeddings and6850shot boundaries,
+current source/feature hashes, reconstructed novelty and local/memory ranking
+budget/separation invariants passed. Evidence outputs/verification/
+video-mme-visual-check.json and .log. No semantic/QA accuracy claim. Current status
+header refreshed to distinguish completed preparation from pending experiments.
+Long-QA resource inventory using unchanged dev5moments/min and4frames/moment
+requires612–1012images/question; evidence video-mme-qa-resource-inventory.json.
+This is not a frozen long budget or measured GPU limit. Determine a feasible
+held-constant budget using development GPU smoke before opening held-out QA
+content; do not silently truncate frames or change K across selectors.

@@ -1,6 +1,34 @@
 # Experiment status
 
-## Current checkpoint — 2026-11-23 00:07 UTC
+## Current checkpoint — 2026-11-23 03:24 UTC
+
+Transfers are complete for all source-available MTG, REFRAMED and EgoSchema files.
+The 12-video Video-MME long subset has verified media, PCM/frame and VAD caches.
+All 12 visual-feature caches now pass independent verification: 55,549 embeddings
+and 6,850 shot boundaries (`outputs/verification/video-mme-visual-check.json`).
+This is feature integrity and ranking mechanics, not scientific accuracy.
+
+- Speech: 4/12 long caches independently verified; process96112/session94991
+  continues. Per-window language codes are unvalidated model estimates.
+- Audio events: full-video604 pilot verified (1,832 windows); full extraction
+  process115097/session27774 continues with batch checkpoints. Actual short-dev
+  checkpoint replay was bit-identical and independently audited.
+- Active CPU allocation40036 ends04:22:47UTC. CPU-only continuation40363 resumes
+  ASR/visual;40408 resumes events. Both depend on40036 ending and use immutable
+  source worktrees. Submitted jobs still require completion and audits.
+- Long QA membership is frozen at36questions; no question text/options/answers
+  have been inspected. Long QA evaluator is implemented/tested, with no actual
+  predictions or scores. The current dev5moments/min rule implies612–1012images
+  per long question; final inference budget is not frozen and needs GPU testing.
+- GPU hold remains pending the user's session. No actual VLM inference, completed
+  20-condition matrix, final QA/AD results or report/slides yet. Human audio labels
+  and60peer comparisons are unavailable; paid APIs have no spending cap.
+- Cue2Narrate main08c89ea63281b819a0fd73c060d8c954f9e696ef has no implementation
+  or checkpoints; direct reproduction remains an access dependency.
+
+Earlier checkpoints and chronological updates below are retained for provenance.
+
+## Transfer checkpoint — 2026-11-23 00:07 UTC
 
 **Torch-to-Cloud-Bursting data transfer and verification complete.**
 CPU allocation 40036 on b-10-63 was used; scheduled end remains
@@ -373,3 +401,16 @@ still active on final898;11complete visual metadata files, no restart. Full even
 job27774 has begun616 with batch checkpoints;604 remains sole completed long event
 cache. CPU continuation40363 and40408 still PENDING Dependency afterany40036.
 Full visual audit remains next after72713terminalsuccess, not yet complete.
+
+
+Long visual extraction72713exit0:12computed,0reused,0failed. Full independent
+audit85259exit0 COMPLETE12/12:55549normalized512-D embeddings and6850shot boundaries,
+current source/feature hashes, reconstructed novelty and local/memory ranking
+budget/separation invariants passed. Evidence outputs/verification/
+video-mme-visual-check.json and .log. No semantic/QA accuracy claim. Current status
+header refreshed to distinguish completed preparation from pending experiments.
+Long-QA resource inventory using unchanged dev5moments/min and4frames/moment
+requires612–1012images/question; evidence video-mme-qa-resource-inventory.json.
+This is not a frozen long budget or measured GPU limit. Determine a feasible
+held-constant budget using development GPU smoke before opening held-out QA
+content; do not silently truncate frames or change K across selectors.
