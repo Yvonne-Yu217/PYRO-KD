@@ -46,3 +46,40 @@ def test_invalid_budgets_and_spacing(k, separation):
     features, vectors = fixture()
     with pytest.raises(ValueError):
         VisualCueSelector().select_memory(features, vectors, k, separation)
+
+
+def test_segment_quotas_retain_global_memory_and_separation():
+    features,vectors=fixture()
+    selector=VisualCueSelector()
+    kwargs=dict(segment_ids=[0,0,1,1],segment_quotas=[1,1])
+    local=selector.select(features,2,**kwargs)
+    memory=selector.select_memory(features,vectors,2,**kwargs)
+    assert [c.time for c in local]==[2,4]
+    assert [c.time for c in memory]==[2,4]
+    # Across a boundary, spacing still rejects the second segment's best frame.
+    assert [c.time for c in selector.select(features,2,3,**kwargs)]==[2,6]
+    assert [c.time for c in selector.select_memory(features,vectors,2,3,**kwargs)]==[2,6]
+    assert len(selector.select_memory(features,vectors,3,segment_ids=[0,0,1,1],segment_quotas=[0,1]))==1
+
+
+def test_one_segment_matches_existing_flat_selectors():
+    features,vectors=fixture();selector=VisualCueSelector()
+    kwargs=dict(segment_ids=[0]*4,segment_quotas=[3])
+    assert selector.select(features,3,**kwargs)==selector.select(features,3)
+    assert selector.select_memory(features,vectors,3,**kwargs)==selector.select_memory(features,vectors,3)
+
+
+def test_hierarchy_memory_does_not_reset_at_segment_boundary():
+    features={'frame_times':[0,2,4],'novelty':[1.,.9,.1],'shots':[]}
+    vectors=np.array([[1,0],[1,0],[0,1]])
+    kwargs=dict(segment_ids=[0,1,1],segment_quotas=[1,1])
+    selector=VisualCueSelector()
+    assert [c.time for c in selector.select(features,2,**kwargs)]==[0,2]
+    assert [c.time for c in selector.select_memory(features,vectors,2,**kwargs)]==[0,4]
+
+
+@pytest.mark.parametrize('ids,quotas',[(None,[1]),([0],None),([0],[1]),([0]*4,[4]),([1]*4,[1])])
+def test_invalid_segment_constraints_rejected(ids,quotas):
+    features,vectors=fixture();selector=VisualCueSelector()
+    with pytest.raises(ValueError):selector.select(features,2,segment_ids=ids,segment_quotas=quotas)
+    with pytest.raises(ValueError):selector.select_memory(features,vectors,2,segment_ids=ids,segment_quotas=quotas)

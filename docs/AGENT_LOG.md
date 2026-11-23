@@ -365,3 +365,16 @@ shared AD/QA recipe. Actual GPU feasibility remains untested. Live process check
 ASR96112 and events115097 active at~4CPUthreads each; event616 reached1100/2646
 windows with batch checkpoints. CPU40036 has~51minutes remaining; dependent
 CPU40363/40408 still queued. No restart, duplicate submission or GPU allocation.
+
+
+Prepared real long visual hierarchy mechanics audit. VisualCueSelector gains
+optional segment IDs/quotas for local and memory selection; defaults preserve
+flat behavior. Memory and2s separation remain global across segments. New
+scripts/audit_long_visual_hierarchy.py uses all12 verified visual caches, existing
+flat audit and dev20–60s/quiet-floor1 settings; boundaries are visual shots only,
+density is local visual candidate-score mass/second. Existing5/min budget is
+mechanics-only, not final QA capacity. No question/answer access or heldout tuning.
+Tests48463exit0:80passed/49subtests, including one-segment equivalence, cross-boundary
+spacing and memory not reset; prior87238passed79before added memory regression.
+Register next CPU4-or-less audit on40036 with output
+outputs/verification/video-mme-visual-hierarchy.json; no feature cache writes.
