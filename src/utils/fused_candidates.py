@@ -21,7 +21,7 @@ def nearest_indices(source, query):
     return np.where(np.abs(query-source[left])<=np.abs(query-source[right]),left,right)
 
 
-def event_score(onsets, labels, clap_change, loudness_rise_db, *, sign, class_weights=None):
+def event_score(onsets, labels, clap_change, loudness_rise_db, *, sign, class_weights=None, onset_strength=None):
     """Signed event role; optional per-label overrides, speech/silence always zero.
 
     Class aggregation is strongest positive minus strongest negative rise, so
@@ -43,7 +43,10 @@ def event_score(onsets, labels, clap_change, loudness_rise_db, *, sign, class_we
     weights=np.array([0 if name in EXCLUDED_LABELS else overrides.get(name,sign) for name in labels])
     weighted=p*weights
     classes=np.maximum(weighted,0).max(axis=1)-np.maximum(-weighted,0).max(axis=1)
-    return classes+sign*(clap/2+np.minimum(loud/20,1))
+    strength=np.zeros(len(p)) if onset_strength is None else np.asarray(onset_strength,dtype=float)
+    if strength.shape!=(len(p),) or not np.isfinite(strength).all() or np.any(strength<0) or np.any(strength>1):
+        raise ValueError('normalized onset strength must be aligned in [0,1]')
+    return classes+sign*(clap/2+np.minimum(loud/20,1)+strength)
 
 
 def make_candidates(mode, event, labels, speech_tracks, *, sign, weights,
@@ -58,7 +61,7 @@ def make_candidates(mode, event, labels, speech_tracks, *, sign, weights,
         raise ValueError('explicit nonnegative component weights required')
     event_times=np.asarray(event['times'],dtype=float)
     nse=event_score(event['class_onsets'],labels,event['clap_change'],event['loudness_rise_db'],
-                    sign=sign,class_weights=class_weights)
+                    sign=sign,class_weights=class_weights,onset_strength=event.get("onset_strength"))
     if len(event_times)!=len(nse): raise ValueError('event timestamps mismatch')
     times=set(event_times.tolist())
     times.update(c['time'] for kind in ('speech','silence') for c in speech_tracks[kind])

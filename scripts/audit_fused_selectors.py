@@ -29,6 +29,7 @@ def main():
     p.add_argument('--max-advance',type=float,required=True)
     p.add_argument('--max-lag',type=float,required=True)
     p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--include-onsets',action='store_true')
     args=p.parse_args()
     if args.output.exists(): raise FileExistsError('preserve prior diagnostic; use a new output path')
     split=json.loads(args.split_config.read_text())
@@ -54,6 +55,12 @@ def main():
         if sha(cache/'event_features.npz')!=meta['arrays_sha256']: raise ValueError('event arrays changed')
         with np.load(cache/'event_features.npz',allow_pickle=False) as arrays:
             event={name:arrays[name] for name in arrays.files}
+        if args.include_onsets:
+            onset=json.loads((cache/'onset_features.json').read_text())
+            if not onset['complete'] or onset['provenance']['audio_sha256']!=wavhash:
+                raise ValueError('stale onset features')
+            if not np.array_equal(onset['times'],event['times']): raise ValueError('onset/event grid mismatch')
+            event['onset_strength']=np.asarray(onset['normalized'])
         visual,reason=load_validated_features(cache)
         if visual is None: raise ValueError(f'{video_id}: {reason}')
         embeddings=load_embeddings(cache,visual)
@@ -70,12 +77,12 @@ def main():
                 name=mode+('_trigger' if sign==1 else '_suppress')
                 conditions[name]={**asdict(selected),'shortfall':selected.shortfall,
                     'candidate_components':[{'event_time':c.event_time,**scores} for c,scores in zip(candidates,components)]}
-        records.append({'video_id':video_id,'conditions':conditions,'source_sha256':{
-            name:sha(cache/name) for name in ('audio_features.json','speech_features.json','event_features.json','visual_features.json')}})
+        records.append({'onset_sha256':sha(cache/'onset_features.json') if args.include_onsets else None,'video_id':video_id,'conditions':conditions,'source_sha256':{
+            name:sha(cache/name) for name in (['audio_features.json','speech_features.json','event_features.json','visual_features.json'] + (['onset_features.json'] if args.include_onsets else []))}})
         print(json.dumps({'video_id':video_id,'selected':{name:len(r['selected']) for name,r in conditions.items()}}),flush=True)
     names=list(records[0]['conditions'])
     report={'scope':'exploratory mechanics only; no tuned weights, validated detector, GF/OP score or final matrix',
-            'weights':weights,'required_words':args.required_words,'max_advance':args.max_advance,'max_lag':args.max_lag,
+            'include_onsets':args.include_onsets,'weights':weights,'required_words':args.required_words,'max_advance':args.max_advance,'max_lag':args.max_lag,
             'speech_cues_sha256':sha(args.speech_cues),'split_sha256':sha(args.split_config),'videos':records,
             'totals':{name:{'requested':sum(r['conditions'][name]['requested'] for r in records),
                             'selected':sum(len(r['conditions'][name]['selected']) for r in records)} for name in names}}
