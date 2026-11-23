@@ -8,7 +8,7 @@ All 12 visual-feature caches now pass independent verification: 55,549 embedding
 and 6,850 shot boundaries (`outputs/verification/video-mme-visual-check.json`).
 This is feature integrity and ranking mechanics, not scientific accuracy.
 
-- Speech: 5/12 long caches independently verified; process96112/session94991
+- Speech: 6/12 long caches independently verified; process96112/session94991
   continues. Per-window language codes are unvalidated model estimates.
 - Audio events: full-video604 pilot verified (1,832 windows); full extraction
   process115097/session27774 continues with batch checkpoints. Actual short-dev
@@ -496,3 +496,19 @@ video-mme-visual-hierarchy-check.json. This validates long-video mechanics only;
 no QA content/labels inspected, no accuracy/quality gain claimed, and5/min remains
 an exploratory resource-heavy budget rather than final GPU-validated protocol.
 A/AV hierarchy still requires completed audio features and multilingual policy.
+
+
+Sixth long ASR cache763 independently verified25909exit0:3959words/423VADwindows,
+20860789speech samples,0rejected words. Evidence
+outputs/verification/video-mme-asr-763-check.json; feature SHA256
+ a22390e534a0325c0ec10bb5f83e43739082334571356cbc4e1bc78af5919c66.
+Verified speech coverage6/12. Language estimates remain unvalidated.
+
+Live jobs96112/115097 confirmed at~4CPUthreads each. Event616 has395committed
+batch metadata records covering1580windows at this check (not a completed-video
+audit). PendingCPU40363/40408 were revalidated through scontrol: both depend on
+40036, with correct WorkDir/Command and clean immutable source checkouts at
+9e20099a7dcae76a457da2222b18e64e8be15fe4 and
+65258e9458db0b8a94c468eb682f5eba984b213f respectively. No duplicate submissions.
+CPU40036 had~46minutes remaining; walltime is not extended by activity. Queued
+work still needs monitoring through terminal status and final coverage checks.
