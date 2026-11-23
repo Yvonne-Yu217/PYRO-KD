@@ -8,7 +8,9 @@
     "A_cue-flat-timeline",
     "A_cue-hierarchical-timeline",
     "AV-flat-timeline",
-    "AV-hierarchical-timeline"
+    "AV-hierarchical-timeline",
+    "A_cue-flat-none",
+    "AV-flat-none"
   ],
   "contrasts": [
     [
@@ -46,6 +48,22 @@
     [
       "AV-hierarchical-timeline",
       "V-local-none"
+    ],
+    [
+      "A_cue-flat-timeline",
+      "A_cue-flat-none"
+    ],
+    [
+      "AV-flat-timeline",
+      "AV-flat-none"
+    ],
+    [
+      "A_cue-flat-none",
+      "V-local-none"
+    ],
+    [
+      "AV-flat-none",
+      "V-local-none"
     ]
   ],
   "unit": "video cluster",
@@ -53,6 +71,8 @@
   "questions": 36,
   "resamples": 10000,
   "seed": 0,
-  "multiple_testing": "Holm over all9 declared contrasts",
-  "interpretation": "A/AV are constrained-budget diagnostics; realized-frame counts differ, so do not attribute their differences solely to selection at equalK"
+  "multiple_testing": "Holm over all13 declared contrasts",
+  "interpretation": "A/AV are constrained-budget diagnostics; realized-frame counts differ, so do not attribute their differences solely to selection at equalK",
+  "amendment": "Added missing A/AV no-timeline controls before any heldout correctness evaluation; previous nine contrasts preserved",
+  "amended_utc": "2026-11-23T16:49:23.028347+00:00"
 }

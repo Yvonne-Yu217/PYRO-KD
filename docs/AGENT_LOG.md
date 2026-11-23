@@ -1240,3 +1240,22 @@ version history, a4–9page LaTeX/PDF researchreport, track declaration and huma
 contribution attribution. Current English log records tooling, failures and
 checks; human contributions must be supplied by the team, not invented.
 Cached source /scratch/yy5919/pyro-course-project.html, retrieved2026-11-23.
+
+## Long-QA missing-control correction before scoring
+
+A final proposal audit found that the initial8condition queue omitted A/AV
+flat timeline-absent controls required by the on/off comparison. Stopped the
+waiting scorer PID55369 after asserting evaluationdirectory had no JSONscores;
+no correctness was read. Added72requests using EXACT existing frames, selected
+times, questions/options and selection metadata; only removed timeline/context.
+Frozen additionalprotocol and hashes inlong_no_timeline_qa_frozen.json. Appended
+four contrasts to the originalnine, Holm13family, before any accuracy scoring.
+No selection thresholds, modelsettings, membership or previouscontrasts changed.
+
+First derivationhelper used the same-named promptfunction from the wrongmodule
+and failed before writing outputs. Corrected import tosrc.generation.qa and
+used its recursive label-rejection helper. Verified all72paired inputrows differ
+only in timeline-related fields. Newprimary GPUqueue waits behindcore inference,
+sourcea7e0e1a, outputlogpyro-primary-long-controls.log, estimate15–25GPUminutes
+(max45percondition), API$0. EgoVmemory remains queued independently. Restarted
+CPUscorer with10conditions inpyro-long-qa-scoring-v2.log; waitsall360predictions.
