@@ -8,7 +8,7 @@ All 12 visual-feature caches now pass independent verification: 55,549 embedding
 and 6,850 shot boundaries (`outputs/verification/video-mme-visual-check.json`).
 This is feature integrity and ranking mechanics, not scientific accuracy.
 
-- Speech: 8/12 long caches independently verified; process96112/session94991
+- Speech: 9/12 long caches independently verified; process96112/session94991
   continues. Per-window language codes are unvalidated model estimates.
 - Audio events: 3/12 long caches verified (6,460 windows); full extraction
   process115097/session27774 continues with batch checkpoints. Actual short-dev
@@ -712,3 +712,19 @@ to2TP/(2TP+FP+FN); rerun66234exit0 passed38tests+27subtests. Agent prematurely
 wrote a passing test entry in27cd883 before inspecting the completed result;
 that claim is corrected above and this history preserves the mistake. No real
 evaluation export or scientific result was produced with the faulty version.
+
+
+Pre-walltime checkpoint2026-11-23T04:18UTC: ninth longASR857 independently
+verified96370exit0 (631words/116VADwindows/2639997speech samples/0rejected).
+Feature SHA8e743e1770da419ba2de7077a4401027cb7531f7cddce57efb49fc0739cf3454;
+evidence video-mme-asr-857-check.json/.log. Language labels are estimates only.
+Current event729 committed-prefix audit89349exit0 verified176batches/704windows
+against current WAV SHA and independently audited710recipe, including payload
+hashes, contiguous indices, shapes, finite values and valid probabilities.
+Digestaf10f8c942e5f352e8d2846e71f2fab9a99294bfef9f644f2fe7bc7fe9ab732f.
+Evidence video-mme-events-729-checkpoint-audit.json and reproducible audit.py.
+This is a prefix snapshot, not completed729features; completed event coverage
+remains3/12. ASR is atomic pervideo, so its in-progress video may need repeating.
+No duplicate writer or job restart.40036ends04:22:47UTC regardless ofactivity;
+40363and40408remain dependency-pending withclean immutable worktrees. They still
+require observed completion/full audits. GPUhold remains; finalexperimentsnotdone.
