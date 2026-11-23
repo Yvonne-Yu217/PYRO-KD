@@ -1437,3 +1437,20 @@ CPUfinalizer commandlogging initially containednon-JSON Path objects. Caught
 before export, stoppedwaitingv1workers, validatedstring conversion andstarted
 v2copies. Fullformal reportpipeline thencompleted successfully; no inference
 source orrawoutputwas changed. Originaldrivers/logs retained for audit.
+
+## Long QA complete; useful GPU queues active (2026-11-23 18:12 UTC)
+
+All10long-video conditions completed360/360valid predictions, zero missing or
+invalid outputs. Dataset-wide readiness preceded scoring. All13declared paired
+contrasts have Holm p=1.0; matched-frame A timeline20/36 versus none21/36,
+AV timeline18/36 versus none20/36. These data do not establish a timeline or
+hierarchy advantage. A/AV retain realized-frame-budget limitations. Exported
+tables, length plots and paired contrasts are in docs/results/video-mme-long.
+
+Both allocated A100s remain productively occupied by disjoint EgoSchema
+V_local/V_memory inference. U completed490/490. CPUcontroller41245 requests
+a continuation only if secondary41197 ends with unfinished outputs. No dummy
+keepalive, new paid calls, or changes to frozen inference source were made.
+Completion audit7fe412d validates AD, selectors, temporal analyses andlongQA;
+only unfinished Ego conditions prevent localcompletion. Final integrated tests
+started concurrently on CPU, with CUDA hidden.

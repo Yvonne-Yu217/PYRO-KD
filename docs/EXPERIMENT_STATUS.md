@@ -1040,3 +1040,10 @@ Core17contrast andablation3contrast movie analyses complete; measuredgap
 reports retainunusedgaps/zerooutputs. PrimaryGPU advanced directly tolongQA
 no-timelinecontrols; secondarycompletedEgoU490/490valid andstartedVlocal.
 EgoVmemory remainsqueued onprimary. No paidAPI/human labels introduced.
+
+### Long QA complete — 2026-11-23 18:12 UTC
+
+LongQA:360/360 valid across10conditions, all13Holm p=1.0; see
+docs/results/video-mme-long. EgoU490/490complete; Vlocal active on41197 and
+Vmemory active on40964. CPUevaluation waits for all3×490 predictions. Both
+GPUs have useful inference; CPUtests/report work proceeds concurrently.

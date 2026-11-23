@@ -1,0 +1,6 @@
+{
+  "source": "/scratch/yy5919/pyro-resume-results/long-qa-frozen/evaluation/comparisons.json",
+  "source_sha256": "da35f91bbe04b5677145f62e4a8fc2e6a11988843f75c995aa5ea7b42414f445",
+  "comparisons": 13,
+  "scope": "12audio-bearing long videos,36frozen questions percondition. A/AV are constrained-budget diagnostics; frames differ fromvisualcontrols. No whole-benchmark or equal-budget claim."
+}

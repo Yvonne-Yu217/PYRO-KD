@@ -1,0 +1,211 @@
+{
+  "dataset": "video-mme",
+  "scope": "12audio-bearing long videos,36frozen questions percondition. A/AV are constrained-budget diagnostics; frames differ fromvisualcontrols. No whole-benchmark or equal-budget claim.",
+  "rows": [
+    {
+      "condition": "U-none",
+      "videos": 12,
+      "expected": 36,
+      "attempted": 36,
+      "valid": 36,
+      "correct": 18,
+      "accuracy": 0.5,
+      "ci_low": 0.3333333333333333,
+      "ci_high": 0.6666666666666666,
+      "generation_errors": 0,
+      "invalid_answers": 0,
+      "missing": 0
+    },
+    {
+      "condition": "V-local-none",
+      "videos": 12,
+      "expected": 36,
+      "attempted": 36,
+      "valid": 36,
+      "correct": 17,
+      "accuracy": 0.4722222222222222,
+      "ci_low": 0.27777777777777773,
+      "ci_high": 0.6666666666666666,
+      "generation_errors": 0,
+      "invalid_answers": 0,
+      "missing": 0
+    },
+    {
+      "condition": "U-flat-timeline",
+      "videos": 12,
+      "expected": 36,
+      "attempted": 36,
+      "valid": 36,
+      "correct": 16,
+      "accuracy": 0.4444444444444444,
+      "ci_low": 0.25,
+      "ci_high": 0.6388888888888888,
+      "generation_errors": 0,
+      "invalid_answers": 0,
+      "missing": 0
+    },
+    {
+      "condition": "V_local-flat-timeline",
+      "videos": 12,
+      "expected": 36,
+      "attempted": 36,
+      "valid": 36,
+      "correct": 16,
+      "accuracy": 0.4444444444444444,
+      "ci_low": 0.27777777777777773,
+      "ci_high": 0.6388888888888888,
+      "generation_errors": 0,
+      "invalid_answers": 0,
+      "missing": 0
+    },
+    {
+      "condition": "A_cue-flat-timeline",
+      "videos": 12,
+      "expected": 36,
+      "attempted": 36,
+      "valid": 36,
+      "correct": 20,
+      "accuracy": 0.5555555555555556,
+      "ci_low": 0.3611111111111111,
+      "ci_high": 0.75,
+      "generation_errors": 0,
+      "invalid_answers": 0,
+      "missing": 0
+    },
+    {
+      "condition": "A_cue-hierarchical-timeline",
+      "videos": 12,
+      "expected": 36,
+      "attempted": 36,
+      "valid": 36,
+      "correct": 20,
+      "accuracy": 0.5555555555555556,
+      "ci_low": 0.3611111111111111,
+      "ci_high": 0.75,
+      "generation_errors": 0,
+      "invalid_answers": 0,
+      "missing": 0
+    },
+    {
+      "condition": "AV-flat-timeline",
+      "videos": 12,
+      "expected": 36,
+      "attempted": 36,
+      "valid": 36,
+      "correct": 18,
+      "accuracy": 0.5,
+      "ci_low": 0.3055555555555555,
+      "ci_high": 0.6944444444444445,
+      "generation_errors": 0,
+      "invalid_answers": 0,
+      "missing": 0
+    },
+    {
+      "condition": "AV-hierarchical-timeline",
+      "videos": 12,
+      "expected": 36,
+      "attempted": 36,
+      "valid": 36,
+      "correct": 18,
+      "accuracy": 0.5,
+      "ci_low": 0.3055555555555555,
+      "ci_high": 0.6944444444444445,
+      "generation_errors": 0,
+      "invalid_answers": 0,
+      "missing": 0
+    },
+    {
+      "condition": "A_cue-flat-none",
+      "videos": 12,
+      "expected": 36,
+      "attempted": 36,
+      "valid": 36,
+      "correct": 21,
+      "accuracy": 0.5833333333333334,
+      "ci_low": 0.38888888888888884,
+      "ci_high": 0.7777777777777778,
+      "generation_errors": 0,
+      "invalid_answers": 0,
+      "missing": 0
+    },
+    {
+      "condition": "AV-flat-none",
+      "videos": 12,
+      "expected": 36,
+      "attempted": 36,
+      "valid": 36,
+      "correct": 20,
+      "accuracy": 0.5555555555555556,
+      "ci_low": 0.3611111111111111,
+      "ci_high": 0.75,
+      "generation_errors": 0,
+      "invalid_answers": 0,
+      "missing": 0
+    }
+  ],
+  "sources": [
+    {
+      "condition": "U-none",
+      "path": "/scratch/yy5919/pyro-resume-results/long-qa-frozen/evaluation/U-none.json",
+      "sha256": "080c2c61bea2c4c1280f384d43a938245028b43268a76ae24b7331f981781f51"
+    },
+    {
+      "condition": "V-local-none",
+      "path": "/scratch/yy5919/pyro-resume-results/long-qa-frozen/evaluation/V-local-none.json",
+      "sha256": "5bd4805336cde52a5df2704e8ff8dbeb1633b5ccd24e3da290eaca0a9b1cae0b"
+    },
+    {
+      "condition": "U-flat-timeline",
+      "path": "/scratch/yy5919/pyro-resume-results/long-qa-frozen/evaluation/U-flat-timeline.json",
+      "sha256": "d580d2e886865e207e1f72088863fe5e82c9f614ebfe198e24e01e1f0fbe6d57"
+    },
+    {
+      "condition": "V_local-flat-timeline",
+      "path": "/scratch/yy5919/pyro-resume-results/long-qa-frozen/evaluation/V_local-flat-timeline.json",
+      "sha256": "f06e43e8c63373c0060941ad8a7ab107ddb0b77c719f5c497315ae0a43b88a91"
+    },
+    {
+      "condition": "A_cue-flat-timeline",
+      "path": "/scratch/yy5919/pyro-resume-results/long-qa-frozen/evaluation/A_cue-flat-timeline.json",
+      "sha256": "72daa90bc5fbb57f1d045d6e0cce4da5aac7c69ec1f68780e20e5f022e5e2965"
+    },
+    {
+      "condition": "A_cue-hierarchical-timeline",
+      "path": "/scratch/yy5919/pyro-resume-results/long-qa-frozen/evaluation/A_cue-hierarchical-timeline.json",
+      "sha256": "1c235e752c18378ab0e4e2d7dc15d7febd439fabd596c3b86654f284fdc00401"
+    },
+    {
+      "condition": "AV-flat-timeline",
+      "path": "/scratch/yy5919/pyro-resume-results/long-qa-frozen/evaluation/AV-flat-timeline.json",
+      "sha256": "83f51018968d1ccc7b4b20d0f3b65104b3a28a5de61fafdb174fde911a179070"
+    },
+    {
+      "condition": "AV-hierarchical-timeline",
+      "path": "/scratch/yy5919/pyro-resume-results/long-qa-frozen/evaluation/AV-hierarchical-timeline.json",
+      "sha256": "55a8e98e889225faae9f0d14a22df9e02def4ee182bb094e34538c4d4c8e3699"
+    },
+    {
+      "condition": "A_cue-flat-none",
+      "path": "/scratch/yy5919/pyro-resume-results/long-qa-frozen/evaluation/A_cue-flat-none.json",
+      "sha256": "c7a52976f1d93435a922bd98fe9f2511d51e2f3c4074a772c4b9c71c2e84f0b9"
+    },
+    {
+      "condition": "AV-flat-none",
+      "path": "/scratch/yy5919/pyro-resume-results/long-qa-frozen/evaluation/AV-flat-none.json",
+      "sha256": "cec910c0613e67f5b6ead4fab4ffdad30ccfb1ab000fc5d50e3cd883e02fac82"
+    }
+  ],
+  "failed_or_missing": {
+    "U-none": [],
+    "V-local-none": [],
+    "U-flat-timeline": [],
+    "V_local-flat-timeline": [],
+    "A_cue-flat-timeline": [],
+    "A_cue-hierarchical-timeline": [],
+    "AV-flat-timeline": [],
+    "AV-hierarchical-timeline": [],
+    "A_cue-flat-none": [],
+    "AV-flat-none": []
+  },
+  "interval": "Pointwise95% percentile bootstrap over videos,10000 resamples,seed0; not simultaneous intervals. Failed/missing/invalid predictions count incorrect."
+}

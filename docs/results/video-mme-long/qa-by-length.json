@@ -1,0 +1,1137 @@
+{
+  "rows": [
+    {
+      "condition": "U-none",
+      "video_id": "604",
+      "duration_minutes": 30.518373399999998,
+      "frames": 612,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "U-none",
+      "video_id": "616",
+      "duration_minutes": 44.09198488333333,
+      "frames": 880,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "U-none",
+      "video_id": "710",
+      "duration_minutes": 33.0265155,
+      "frames": 660,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "U-none",
+      "video_id": "729",
+      "duration_minutes": 45.94803325,
+      "frames": 920,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "U-none",
+      "video_id": "753",
+      "duration_minutes": 34.87753288333333,
+      "frames": 696,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "U-none",
+      "video_id": "763",
+      "duration_minutes": 32.222718066666665,
+      "frames": 644,
+      "questions": 3,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "condition": "U-none",
+      "video_id": "802",
+      "duration_minutes": 48.584659099999996,
+      "frames": 972,
+      "questions": 3,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "condition": "U-none",
+      "video_id": "808",
+      "duration_minutes": 35.011821616666666,
+      "frames": 700,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "U-none",
+      "video_id": "857",
+      "duration_minutes": 33.14996825,
+      "frames": 664,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "U-none",
+      "video_id": "864",
+      "duration_minutes": 40.281590333333334,
+      "frames": 804,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "U-none",
+      "video_id": "891",
+      "duration_minutes": 50.50069236666666,
+      "frames": 1012,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "U-none",
+      "video_id": "898",
+      "duration_minutes": 34.69757823333334,
+      "frames": 692,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "V-local-none",
+      "video_id": "604",
+      "duration_minutes": 30.518373399999998,
+      "frames": 612,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "V-local-none",
+      "video_id": "616",
+      "duration_minutes": 44.09198488333333,
+      "frames": 880,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "V-local-none",
+      "video_id": "710",
+      "duration_minutes": 33.0265155,
+      "frames": 660,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "V-local-none",
+      "video_id": "729",
+      "duration_minutes": 45.94803325,
+      "frames": 920,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "V-local-none",
+      "video_id": "753",
+      "duration_minutes": 34.87753288333333,
+      "frames": 696,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "V-local-none",
+      "video_id": "763",
+      "duration_minutes": 32.222718066666665,
+      "frames": 644,
+      "questions": 3,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "condition": "V-local-none",
+      "video_id": "802",
+      "duration_minutes": 48.584659099999996,
+      "frames": 972,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "V-local-none",
+      "video_id": "808",
+      "duration_minutes": 35.011821616666666,
+      "frames": 700,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "V-local-none",
+      "video_id": "857",
+      "duration_minutes": 33.14996825,
+      "frames": 664,
+      "questions": 3,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "condition": "V-local-none",
+      "video_id": "864",
+      "duration_minutes": 40.281590333333334,
+      "frames": 804,
+      "questions": 3,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "condition": "V-local-none",
+      "video_id": "891",
+      "duration_minutes": 50.50069236666666,
+      "frames": 1012,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "V-local-none",
+      "video_id": "898",
+      "duration_minutes": 34.69757823333334,
+      "frames": 692,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "U-flat-timeline",
+      "video_id": "604",
+      "duration_minutes": 30.518373399999998,
+      "frames": 612,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "U-flat-timeline",
+      "video_id": "616",
+      "duration_minutes": 44.09198488333333,
+      "frames": 880,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "U-flat-timeline",
+      "video_id": "710",
+      "duration_minutes": 33.0265155,
+      "frames": 660,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "U-flat-timeline",
+      "video_id": "729",
+      "duration_minutes": 45.94803325,
+      "frames": 920,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "U-flat-timeline",
+      "video_id": "753",
+      "duration_minutes": 34.87753288333333,
+      "frames": 696,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "U-flat-timeline",
+      "video_id": "763",
+      "duration_minutes": 32.222718066666665,
+      "frames": 644,
+      "questions": 3,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "condition": "U-flat-timeline",
+      "video_id": "802",
+      "duration_minutes": 48.584659099999996,
+      "frames": 972,
+      "questions": 3,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "condition": "U-flat-timeline",
+      "video_id": "808",
+      "duration_minutes": 35.011821616666666,
+      "frames": 700,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "U-flat-timeline",
+      "video_id": "857",
+      "duration_minutes": 33.14996825,
+      "frames": 664,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "U-flat-timeline",
+      "video_id": "864",
+      "duration_minutes": 40.281590333333334,
+      "frames": 804,
+      "questions": 3,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "condition": "U-flat-timeline",
+      "video_id": "891",
+      "duration_minutes": 50.50069236666666,
+      "frames": 1012,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "U-flat-timeline",
+      "video_id": "898",
+      "duration_minutes": 34.69757823333334,
+      "frames": 692,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "V_local-flat-timeline",
+      "video_id": "604",
+      "duration_minutes": 30.518373399999998,
+      "frames": 612,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "V_local-flat-timeline",
+      "video_id": "616",
+      "duration_minutes": 44.09198488333333,
+      "frames": 880,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "V_local-flat-timeline",
+      "video_id": "710",
+      "duration_minutes": 33.0265155,
+      "frames": 660,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "V_local-flat-timeline",
+      "video_id": "729",
+      "duration_minutes": 45.94803325,
+      "frames": 920,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "V_local-flat-timeline",
+      "video_id": "753",
+      "duration_minutes": 34.87753288333333,
+      "frames": 696,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "V_local-flat-timeline",
+      "video_id": "763",
+      "duration_minutes": 32.222718066666665,
+      "frames": 644,
+      "questions": 3,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "condition": "V_local-flat-timeline",
+      "video_id": "802",
+      "duration_minutes": 48.584659099999996,
+      "frames": 972,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "V_local-flat-timeline",
+      "video_id": "808",
+      "duration_minutes": 35.011821616666666,
+      "frames": 700,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "V_local-flat-timeline",
+      "video_id": "857",
+      "duration_minutes": 33.14996825,
+      "frames": 664,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "V_local-flat-timeline",
+      "video_id": "864",
+      "duration_minutes": 40.281590333333334,
+      "frames": 804,
+      "questions": 3,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "condition": "V_local-flat-timeline",
+      "video_id": "891",
+      "duration_minutes": 50.50069236666666,
+      "frames": 1012,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "V_local-flat-timeline",
+      "video_id": "898",
+      "duration_minutes": 34.69757823333334,
+      "frames": 692,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "A_cue-flat-timeline",
+      "video_id": "604",
+      "duration_minutes": 30.518373399999998,
+      "frames": 56,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "A_cue-flat-timeline",
+      "video_id": "616",
+      "duration_minutes": 44.09198488333333,
+      "frames": 880,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "A_cue-flat-timeline",
+      "video_id": "710",
+      "duration_minutes": 33.0265155,
+      "frames": 68,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "A_cue-flat-timeline",
+      "video_id": "729",
+      "duration_minutes": 45.94803325,
+      "frames": 252,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "A_cue-flat-timeline",
+      "video_id": "753",
+      "duration_minutes": 34.87753288333333,
+      "frames": 76,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "A_cue-flat-timeline",
+      "video_id": "763",
+      "duration_minutes": 32.222718066666665,
+      "frames": 644,
+      "questions": 3,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "condition": "A_cue-flat-timeline",
+      "video_id": "802",
+      "duration_minutes": 48.584659099999996,
+      "frames": 628,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "A_cue-flat-timeline",
+      "video_id": "808",
+      "duration_minutes": 35.011821616666666,
+      "frames": 560,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "A_cue-flat-timeline",
+      "video_id": "857",
+      "duration_minutes": 33.14996825,
+      "frames": 664,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "A_cue-flat-timeline",
+      "video_id": "864",
+      "duration_minutes": 40.281590333333334,
+      "frames": 804,
+      "questions": 3,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "condition": "A_cue-flat-timeline",
+      "video_id": "891",
+      "duration_minutes": 50.50069236666666,
+      "frames": 664,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "A_cue-flat-timeline",
+      "video_id": "898",
+      "duration_minutes": 34.69757823333334,
+      "frames": 692,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "A_cue-hierarchical-timeline",
+      "video_id": "604",
+      "duration_minutes": 30.518373399999998,
+      "frames": 56,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "A_cue-hierarchical-timeline",
+      "video_id": "616",
+      "duration_minutes": 44.09198488333333,
+      "frames": 880,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "A_cue-hierarchical-timeline",
+      "video_id": "710",
+      "duration_minutes": 33.0265155,
+      "frames": 68,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "A_cue-hierarchical-timeline",
+      "video_id": "729",
+      "duration_minutes": 45.94803325,
+      "frames": 252,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "A_cue-hierarchical-timeline",
+      "video_id": "753",
+      "duration_minutes": 34.87753288333333,
+      "frames": 76,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "A_cue-hierarchical-timeline",
+      "video_id": "763",
+      "duration_minutes": 32.222718066666665,
+      "frames": 636,
+      "questions": 3,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "condition": "A_cue-hierarchical-timeline",
+      "video_id": "802",
+      "duration_minutes": 48.584659099999996,
+      "frames": 624,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "A_cue-hierarchical-timeline",
+      "video_id": "808",
+      "duration_minutes": 35.011821616666666,
+      "frames": 560,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "A_cue-hierarchical-timeline",
+      "video_id": "857",
+      "duration_minutes": 33.14996825,
+      "frames": 664,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "A_cue-hierarchical-timeline",
+      "video_id": "864",
+      "duration_minutes": 40.281590333333334,
+      "frames": 804,
+      "questions": 3,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "condition": "A_cue-hierarchical-timeline",
+      "video_id": "891",
+      "duration_minutes": 50.50069236666666,
+      "frames": 664,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "A_cue-hierarchical-timeline",
+      "video_id": "898",
+      "duration_minutes": 34.69757823333334,
+      "frames": 692,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "AV-flat-timeline",
+      "video_id": "604",
+      "duration_minutes": 30.518373399999998,
+      "frames": 52,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "AV-flat-timeline",
+      "video_id": "616",
+      "duration_minutes": 44.09198488333333,
+      "frames": 880,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "AV-flat-timeline",
+      "video_id": "710",
+      "duration_minutes": 33.0265155,
+      "frames": 68,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "AV-flat-timeline",
+      "video_id": "729",
+      "duration_minutes": 45.94803325,
+      "frames": 248,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "AV-flat-timeline",
+      "video_id": "753",
+      "duration_minutes": 34.87753288333333,
+      "frames": 76,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "AV-flat-timeline",
+      "video_id": "763",
+      "duration_minutes": 32.222718066666665,
+      "frames": 644,
+      "questions": 3,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "condition": "AV-flat-timeline",
+      "video_id": "802",
+      "duration_minutes": 48.584659099999996,
+      "frames": 616,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "AV-flat-timeline",
+      "video_id": "808",
+      "duration_minutes": 35.011821616666666,
+      "frames": 556,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "AV-flat-timeline",
+      "video_id": "857",
+      "duration_minutes": 33.14996825,
+      "frames": 664,
+      "questions": 3,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "condition": "AV-flat-timeline",
+      "video_id": "864",
+      "duration_minutes": 40.281590333333334,
+      "frames": 804,
+      "questions": 3,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "condition": "AV-flat-timeline",
+      "video_id": "891",
+      "duration_minutes": 50.50069236666666,
+      "frames": 668,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "AV-flat-timeline",
+      "video_id": "898",
+      "duration_minutes": 34.69757823333334,
+      "frames": 692,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "AV-hierarchical-timeline",
+      "video_id": "604",
+      "duration_minutes": 30.518373399999998,
+      "frames": 56,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "AV-hierarchical-timeline",
+      "video_id": "616",
+      "duration_minutes": 44.09198488333333,
+      "frames": 880,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "AV-hierarchical-timeline",
+      "video_id": "710",
+      "duration_minutes": 33.0265155,
+      "frames": 68,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "AV-hierarchical-timeline",
+      "video_id": "729",
+      "duration_minutes": 45.94803325,
+      "frames": 252,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "AV-hierarchical-timeline",
+      "video_id": "753",
+      "duration_minutes": 34.87753288333333,
+      "frames": 76,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "AV-hierarchical-timeline",
+      "video_id": "763",
+      "duration_minutes": 32.222718066666665,
+      "frames": 620,
+      "questions": 3,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "condition": "AV-hierarchical-timeline",
+      "video_id": "802",
+      "duration_minutes": 48.584659099999996,
+      "frames": 616,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "AV-hierarchical-timeline",
+      "video_id": "808",
+      "duration_minutes": 35.011821616666666,
+      "frames": 552,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "AV-hierarchical-timeline",
+      "video_id": "857",
+      "duration_minutes": 33.14996825,
+      "frames": 664,
+      "questions": 3,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "condition": "AV-hierarchical-timeline",
+      "video_id": "864",
+      "duration_minutes": 40.281590333333334,
+      "frames": 804,
+      "questions": 3,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "condition": "AV-hierarchical-timeline",
+      "video_id": "891",
+      "duration_minutes": 50.50069236666666,
+      "frames": 656,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "AV-hierarchical-timeline",
+      "video_id": "898",
+      "duration_minutes": 34.69757823333334,
+      "frames": 692,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "A_cue-flat-none",
+      "video_id": "604",
+      "duration_minutes": 30.518373399999998,
+      "frames": 56,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "A_cue-flat-none",
+      "video_id": "616",
+      "duration_minutes": 44.09198488333333,
+      "frames": 880,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "A_cue-flat-none",
+      "video_id": "710",
+      "duration_minutes": 33.0265155,
+      "frames": 68,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "A_cue-flat-none",
+      "video_id": "729",
+      "duration_minutes": 45.94803325,
+      "frames": 252,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "A_cue-flat-none",
+      "video_id": "753",
+      "duration_minutes": 34.87753288333333,
+      "frames": 76,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "A_cue-flat-none",
+      "video_id": "763",
+      "duration_minutes": 32.222718066666665,
+      "frames": 644,
+      "questions": 3,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "condition": "A_cue-flat-none",
+      "video_id": "802",
+      "duration_minutes": 48.584659099999996,
+      "frames": 628,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "A_cue-flat-none",
+      "video_id": "808",
+      "duration_minutes": 35.011821616666666,
+      "frames": 560,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "A_cue-flat-none",
+      "video_id": "857",
+      "duration_minutes": 33.14996825,
+      "frames": 664,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "A_cue-flat-none",
+      "video_id": "864",
+      "duration_minutes": 40.281590333333334,
+      "frames": 804,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "A_cue-flat-none",
+      "video_id": "891",
+      "duration_minutes": 50.50069236666666,
+      "frames": 664,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "A_cue-flat-none",
+      "video_id": "898",
+      "duration_minutes": 34.69757823333334,
+      "frames": 692,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "AV-flat-none",
+      "video_id": "604",
+      "duration_minutes": 30.518373399999998,
+      "frames": 52,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "AV-flat-none",
+      "video_id": "616",
+      "duration_minutes": 44.09198488333333,
+      "frames": 880,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "AV-flat-none",
+      "video_id": "710",
+      "duration_minutes": 33.0265155,
+      "frames": 68,
+      "questions": 3,
+      "correct": 2,
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "condition": "AV-flat-none",
+      "video_id": "729",
+      "duration_minutes": 45.94803325,
+      "frames": 248,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "AV-flat-none",
+      "video_id": "753",
+      "duration_minutes": 34.87753288333333,
+      "frames": 76,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "AV-flat-none",
+      "video_id": "763",
+      "duration_minutes": 32.222718066666665,
+      "frames": 644,
+      "questions": 3,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "condition": "AV-flat-none",
+      "video_id": "802",
+      "duration_minutes": 48.584659099999996,
+      "frames": 616,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "AV-flat-none",
+      "video_id": "808",
+      "duration_minutes": 35.011821616666666,
+      "frames": 556,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "AV-flat-none",
+      "video_id": "857",
+      "duration_minutes": 33.14996825,
+      "frames": 664,
+      "questions": 3,
+      "correct": 0,
+      "accuracy": 0.0
+    },
+    {
+      "condition": "AV-flat-none",
+      "video_id": "864",
+      "duration_minutes": 40.281590333333334,
+      "frames": 804,
+      "questions": 3,
+      "correct": 1,
+      "accuracy": 0.3333333333333333
+    },
+    {
+      "condition": "AV-flat-none",
+      "video_id": "891",
+      "duration_minutes": 50.50069236666666,
+      "frames": 668,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    },
+    {
+      "condition": "AV-flat-none",
+      "video_id": "898",
+      "duration_minutes": 34.69757823333334,
+      "frames": 692,
+      "questions": 3,
+      "correct": 3,
+      "accuracy": 1.0
+    }
+  ],
+  "inputs": [
+    {
+      "condition": "U-none",
+      "path": "/scratch/yy5919/pyro-kd-derived/moments/video-mme-long-U-none-v1.jsonl",
+      "sha256": "6a68106eca8c17a085950bf0ac8ed0d201e2d8827f8db717182a923355029175"
+    },
+    {
+      "condition": "V-local-none",
+      "path": "/scratch/yy5919/pyro-kd-derived/moments/video-mme-long-V-local-none-v1.jsonl",
+      "sha256": "c0f312a6c292718dbbd93cf04ee3d82c4446280c8e429b1a243360a9fd5aac87"
+    },
+    {
+      "condition": "U-flat-timeline",
+      "path": "/scratch/yy5919/pyro-kd-derived/moments/video-mme-long-U-flat-timeline-v1.jsonl",
+      "sha256": "96a52e96bdceaadbefa1878f85a6f5c42a027412f5a0b0246ab9ae218b5f9e0f"
+    },
+    {
+      "condition": "V_local-flat-timeline",
+      "path": "/scratch/yy5919/pyro-kd-derived/moments/video-mme-long-V_local-flat-timeline-v1.jsonl",
+      "sha256": "258679e2525e7eb72b6176cd6594ebdc8299ad87775193e3666e00ce71cbbee9"
+    },
+    {
+      "condition": "A_cue-flat-timeline",
+      "path": "/scratch/yy5919/pyro-kd-derived/moments/video-mme-long-A_cue-flat-timeline-v1.jsonl",
+      "sha256": "7d314923f484272d27488773690154920061081dde2c39896e695119cbb51869"
+    },
+    {
+      "condition": "A_cue-hierarchical-timeline",
+      "path": "/scratch/yy5919/pyro-kd-derived/moments/video-mme-long-A_cue-hierarchical-timeline-v1.jsonl",
+      "sha256": "444b3b91bf817e938e40bf824b6b97c3551e07ee7cbe5fe439d516f95120e9c8"
+    },
+    {
+      "condition": "AV-flat-timeline",
+      "path": "/scratch/yy5919/pyro-kd-derived/moments/video-mme-long-AV-flat-timeline-v1.jsonl",
+      "sha256": "0442e83bdac64cf47dc2e1fa477e019bea3fc8f32756f601ea2977c086e9848d"
+    },
+    {
+      "condition": "AV-hierarchical-timeline",
+      "path": "/scratch/yy5919/pyro-kd-derived/moments/video-mme-long-AV-hierarchical-timeline-v1.jsonl",
+      "sha256": "720ad9cbd6792b3daeed36b485ed6737ca7cf7617777c5ea583c2fb9bfcc70b5"
+    },
+    {
+      "condition": "A_cue-flat-none",
+      "path": "/scratch/yy5919/pyro-kd-derived/moments/video-mme-long-A_cue-flat-none-v1.jsonl",
+      "sha256": "6faa4d2fcedc1e7cb277698a1c12dfb5eb4f878911221699950b7f23cafe319e"
+    },
+    {
+      "condition": "AV-flat-none",
+      "path": "/scratch/yy5919/pyro-kd-derived/moments/video-mme-long-AV-flat-none-v1.jsonl",
+      "sha256": "b94e441fff8c6814bb3186905acdc5bed5d48d318c1311e802a8253dbf68e782"
+    }
+  ],
+  "scope": "Descriptive per-video accuracy versus measured duration; no fitted trend or length-dependent causal claim. Frame counts exposed for constrained-budget conditions."
+}
