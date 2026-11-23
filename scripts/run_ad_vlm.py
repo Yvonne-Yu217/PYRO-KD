@@ -27,6 +27,7 @@ from src.generation.outputs import merge_meta, read_rows, settled_ids, status_co
 from src.generation.prompts import PROMPTS, build_prompt, word_limit_for_gap  # noqa: E402
 from src.generation.exemplars import check_resume_prior, load_exemplars  # noqa: E402
 from src.generation.audio_timeline import check_audio_resume, render_timeline, timeline_hash  # noqa: E402
+from src.generation.jsonl_recovery import read_resume_rows,apply_tail_recovery
 from src.generation.provenance import capture_provenance, check_resume_fingerprint  # noqa: E402
 
 
@@ -160,7 +161,7 @@ def main():
     })
     if args.limit:
         rows = rows[: args.limit]
-    rows_on_disk = read_rows(out_path)
+    rows_on_disk, recovery = read_resume_rows(out_path)
     check_resume_fingerprint(rows_on_disk, provenance["run_fingerprint"])
     check_resume_prior(rows_on_disk, args.prior, args.exemplar_sha256)
     check_audio_resume(rows_on_disk, rows, args.audio_context)
@@ -185,6 +186,12 @@ def main():
         print("[run_ad] dry run: no model loaded")
         return
 
+    if recovery is not None:
+        if not rows_on_disk:
+            sidecar = json.loads(out_path.with_suffix(out_path.suffix + '.provenance.json').read_text())
+            if sidecar['run_fingerprint'] != provenance['run_fingerprint']:
+                raise ValueError('interrupted output provenance mismatch')
+        print(json.dumps({'output_recovery': apply_tail_recovery(out_path, recovery)}), flush=True)
     if not todo:
         print("[run_ad] no pending moments; no model loaded")
         return

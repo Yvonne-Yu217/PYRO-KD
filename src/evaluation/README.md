@@ -204,3 +204,15 @@ coverage/invalid outputs are saved with `complete=false` and exit status1.
 
 This implementation has been tested with synthetic unit fixtures only. No actual
 EgoSchema predictions or accuracy results exist yet; GPU smoke remains required.
+
+Prediction-tail recovery: the AD and QA runners now inspect output JSONL before
+resuming. An unterminated malformed final line (including a partial UTF-8 code
+point) is removed only after preserving the exact original file as
+`<output>.before-recovery-<SHA256>.bin`. A valid final object without a newline is
+retained and delimited. Publication uses atomic replacement; changes detected
+since inspection abort repair. Complete/interior corruption is never silently
+skipped. Existing prediction fingerprints are checked first; a partial-only file
+needs its matching provenance sidecar. Dry runs inspect but do not repair files.
+This assumes the job registry's single-writer rule; do not run two writers for
+one output. The strict evaluator can then consume resumed files without silently
+discarding malformed records. No real prediction file has required recovery yet.

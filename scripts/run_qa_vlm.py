@@ -11,8 +11,9 @@ import time
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from src.generation.qa import build_qa_prompt,parse_answer
 from src.generation.hf_vlm import load_model,generate_batch,resolve_model
+from src.generation.jsonl_recovery import read_resume_rows,apply_tail_recovery
 from src.generation.provenance import capture_provenance,check_resume_fingerprint
-from src.generation.outputs import read_rows,settled_ids
+from src.generation.outputs import settled_ids
 from scripts.run_ad_vlm import resize_max_side,finalize_generation
 
 
@@ -48,7 +49,7 @@ def main():
               'attn_impl':args.attn_impl,'max_side':args.max_side,'temperature':0.,'top_p':.9,
               'parser':'strict_standalone_letter_v1'}
     provenance=capture_provenance(Path(__file__).resolve().parents[1],args.input,rows,settings)
-    prior=read_rows(args.output)
+    prior,recovery=read_resume_rows(args.output)
     check_resume_fingerprint(prior,provenance['run_fingerprint'])
     if args.limit: rows=rows[:args.limit]
     done,_=settled_ids(prior,args.max_new_tokens,0.)
@@ -60,6 +61,12 @@ def main():
                               'prompt_characters':len(prompt),'dry_run':True}))
         print(json.dumps({'complete':True,'questions_checked':len(todo),'model_loaded':False}))
         return
+    if recovery is not None:
+        if not prior:
+            sidecar=json.loads(args.output.with_suffix(args.output.suffix+'.provenance.json').read_text())
+            if sidecar['run_fingerprint']!=provenance['run_fingerprint']:
+                raise ValueError('interrupted output provenance mismatch')
+        print(json.dumps({'output_recovery':apply_tail_recovery(args.output,recovery)}),flush=True)
     if not todo:
         print('No pending questions; no model loaded');return
     args.output.parent.mkdir(parents=True,exist_ok=True)

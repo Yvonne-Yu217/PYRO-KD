@@ -63,3 +63,27 @@ def test_runner_records_choice_and_resumes_without_loading(tmp_path,monkeypatch)
     monkeypatch.setattr(runner,'load_model',forbidden)
     runner.main()
     assert len(output.read_text().splitlines())==1
+
+
+def test_runner_recovers_partial_tail_before_resuming(tmp_path,monkeypatch):
+    import json,sys
+    from PIL import Image
+    import scripts.run_qa_vlm as runner
+    image=tmp_path/'frame.jpg';Image.new('RGB',(8,8)).save(image)
+    inputs=[{**row(),'id':ident,'frames':[str(image)],'frame_times':[0.]} for ident in ('first','second')]
+    source=tmp_path/'input.jsonl';source.write_text(''.join(json.dumps(r)+'\n' for r in inputs))
+    output=tmp_path/'predictions.jsonl'
+    argv=['run_qa_vlm','--input',str(source),'--output',str(output)]
+    monkeypatch.setattr(sys,'argv',argv+['--limit','1'])
+    monkeypatch.setattr(runner,'load_model',lambda *args:(None,None,'unit-test-double'))
+    monkeypatch.setattr(runner,'generate_batch',lambda *args,**kwargs:(['B'],['B'],[1]))
+    with pytest.raises(SystemExit) as exc: runner.main()
+    assert exc.value.code==0
+    with output.open('ab') as handle: handle.write(b'{"id":"second","output":"\xe4\xb8')
+    interrupted=output.read_bytes()
+    monkeypatch.setattr(sys,'argv',argv)
+    with pytest.raises(SystemExit) as exc: runner.main()
+    assert exc.value.code==0
+    assert [r['id'] for r in map(json.loads,output.read_text().splitlines())]==['first','second']
+    backups=list(tmp_path.glob('*.before-recovery-*.bin'))
+    assert len(backups)==1 and backups[0].read_bytes()==interrupted
