@@ -689,3 +689,17 @@ run failed one old exact-schema assertion, then corrected the expected schema.
 Final focused tests37644:29passed+27subtests. No real AD outputs or metrics created;
 semantic-model freezes, OpenCLIP, rendered overlap and calibrated judges remain.
 Documentation: src/evaluation/README.md. No GPU/API action.
+
+
+Added REFRAMED temporal paired export scripts/export_ad_paired_metrics.py. It
+requires complete frozen selected-video coverage, selection hashes and generation
+fingerprints; compares perclip reference hashes, movie IDs and temporal settings;
+recomputes P/R/F1 from counts. Missing predictions remain0withreference, empty
+reference/prediction retainsnull. Exports clip examples/movie clusters, explicit
+errors/generatedcounts and source/output hash sidecar. Existing analyze_paired
+--unit cluster estimates equal-movie mean within-movie clip metrics. No pooled-F1
+or semantic-quality interpretation. evaluate_ad.py now hashes input bytes and
+actual merged reference timestamp/text pairs. Tests57034exit0:38passed+27subtests,
+including grouped clips, missing-predictionzero, mismatched references/membership/
+protocol/counts and missing generation evidence. Fixtures only, no real scores.
+Full matrix, tuned/equal-Kprotocol and semantic/quality/human evaluation remain.

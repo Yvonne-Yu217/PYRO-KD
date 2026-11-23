@@ -16,6 +16,7 @@ from collections import defaultdict
 from collections.abc import Callable, Sequence
 from dataclasses import asdict
 import json
+import hashlib
 import math
 from pathlib import Path
 from statistics import fmean, median
@@ -270,6 +271,9 @@ def evaluate_ad(
         results.append({
             "video_id": video_id, "category": video.category, "status": status,
             "movie_id": getattr(video, 'movie_id', None),
+            "reference_sha256": hashlib.sha256(json.dumps(
+                [(item.timestamp, item.text) for item in video.ad],
+                ensure_ascii=False, allow_nan=False).encode()).hexdigest(),
             "num_generated": len(generated), "num_ground_truth": len(video.ad),
             "num_generation_errors": len(failed[video_id]), "generation_errors": failed[video_id],
             "generated_items": [
@@ -288,6 +292,7 @@ def evaluate_ad(
         "status": "partial" if generation_errors or semantic_errors else "ok" if rows else "empty_input",
         "input": str(generated_path), "data_dir": str(data_dir), "split": split,
         "dataset": dataset,
+        "input_sha256": hashlib.sha256(Path(generated_path).read_bytes()).hexdigest(),
         "scope": ("all_selected_videos" if evaluation_video_ids is not None else "all_split_videos") if all_videos else "input_video_ids",
         "metadata": metadata,
         "evaluation_config": {

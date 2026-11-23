@@ -274,3 +274,26 @@ matched-only semantic means must be interpreted alongside temporal coverage.
 Only synthetic injected-scorer tests have exercised this new dataset path; no
 real REFRAMED generation metrics are available yet. Semantic model pins, OpenCLIP,
 rendered overlap and calibrated judges remain separate required work.
+
+### Paired REFRAMED temporal export
+
+`export_ad_paired_metrics.py --report NAME FILE` (repeat for each condition)
+accepts only complete frozen selected-video reports with recorded generation
+fingerprints and selection hashes. Each report must come from `evaluate_ad.py
+--dataset reframed --selection-config ... --all-videos`. The exporter checks
+identical clip/movie membership, merged-reference hashes and temporal protocol,
+and reconstructs precision/recall/F1 from TP/FP/FN. Missing generations remain zero
+where a reference exists; truly empty reference/prediction pairs retain null.
+Generation errors/counts remain in the exported rows.
+
+```bash
+python scripts/export_ad_paired_metrics.py --report A <A-evaluation.json> --report B <B-evaluation.json> --output <paired-temporal.jsonl>
+python scripts/analyze_paired.py --input <paired-temporal.jsonl> --output <paired-analysis.json> --a A --b B --metric temporal_f1 --unit cluster
+```
+
+The estimand is an equal-movie mean of within-movie clip metrics, not pooled F1.
+Use the predeclared comparison family with `analyze_family.py` for Holm-adjusted
+inference. This export covers temporal metrics only: matched-only BERTScore and
+sentence cosine need separate coverage-aware analysis, and OpenCLIP/human/judge
+metrics remain separate. Synthetic tests verify clustering and comparability;
+no real paired AD scores have been exported yet.
