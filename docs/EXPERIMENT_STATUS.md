@@ -1,23 +1,31 @@
 # Experiment status
 
-## Current checkpoint — 2026-11-22 23:16 UTC
+## Current checkpoint — 2026-11-23 00:07 UTC
 
-Data preparation is running on Cloud Bursting CPU node b-10-63, user allocation
-40036 (RUNNING; scheduled end 2026-11-23 04:22:47 UTC). GPU submissions remain
-on hold per the user's instruction until data is ready and they obtain a GPU session.
+**Torch-to-Cloud-Bursting data transfer and verification complete.**
+CPU allocation 40036 on b-10-63 was used; scheduled end remains
+2026-11-23 04:22:47 UTC. GPU jobs remain on hold pending the user's GPU session.
 
 - Authoritative proposal: Revision 1.5, tab `t.ickd261ntenp`; requirements in
   `docs/REVISION_1_5_REQUIREMENTS.md`.
 - Source baseline: `3139be9be2ef52f498b5db5fecfdfa5618da03b0`.
-- MTG: all 413 source-available videos copied and SHA256 verified; 20 source failures remain.
-- EgoSchema: all 5031 videos copied and manifest/ffprobe verified; all lack audio.
-- REFRAMED: copy active, approximately 11% at this checkpoint. Transfer supervisor
-  PID 10131 and rsync PID 20258 confirmed live. Verification watcher PID 11171
-  waits for transfer completion before checking all 1983 available videos.
+- MTG: 413/413 source-available videos copied and SHA256 verified; 20 source failures remain.
+- EgoSchema: 5031/5031 copied and manifest/ffprobe verified; all lack audio.
+- REFRAMED: 1983/1983 copied and manifest/ffprobe verified; 40 source failures
+  remain (all in train). No missing, unexpected, size/probe or snapshot errors.
+- Transfer session 49851 and verification watcher 73417 both exited 0.
+  REFRAMED transfer completed 2026-11-23 00:04:54 UTC.
+- Raw destination: `/scratch/yy5919/mtg-ad-transfer`; loader views:
+  `/scratch/yy5919/pyro-kd-derived/datasets`; raw Torch sources were unchanged.
 - Evidence: `outputs/verification/mtg-transfer-final.json`, `mtg-sha256.log`,
-  `egoschema-transfer-final.json`; live log `outputs/transfers/pull_torch_datasets.log`.
-- No real GPU inference or scientific comparison results yet. All experiment scope
-  remains outstanding except the documented infrastructure and CPU preparation.
+  `egoschema-transfer-final.json`, `reframed-transfer-final.json`;
+  transfer log `outputs/transfers/pull_torch_datasets.log`.
+- Evaluation-media checks cover manifest IDs, sizes, stream types and durations;
+  they do not claim full video decode or cryptographic hashes for EgoSchema/REFRAMED.
+- Real MTG dev preprocessing, four-input dry run and offline Qwen2.5-VL-7B
+  processor encoding passed. Exact later GPU command: `docs/REAL_DATA_SMOKE.md`.
+- No real GPU inference or scientific comparison results yet. Full Revision 1.5
+  implementation, GPU smoke, experiments and final reporting remain outstanding.
 
 ## Historical updates (chronological; superseded statements retained for provenance)
 
