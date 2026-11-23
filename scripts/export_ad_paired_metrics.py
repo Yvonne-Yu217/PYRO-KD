@@ -35,7 +35,7 @@ def export_reports(reports):
             empty = tp + fp + fn == 0
             expected = dict(precision=None if empty else tp/(tp+fp) if tp+fp else 0.,
                             recall=None if empty else tp/(tp+fn) if tp+fn else 0.,
-                            f1=None if empty else 2*tp/(2*tp+fp))
+                            f1=None if empty else 2*tp/(2*tp+fp+fn))
             for key, value in expected.items():
                 actual = temporal[key]
                 if (value is None and actual is not None) or (value is not None and

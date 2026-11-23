@@ -699,7 +699,16 @@ reference/prediction retainsnull. Exports clip examples/movie clusters, explicit
 errors/generatedcounts and source/output hash sidecar. Existing analyze_paired
 --unit cluster estimates equal-movie mean within-movie clip metrics. No pooled-F1
 or semantic-quality interpretation. evaluate_ad.py now hashes input bytes and
-actual merged reference timestamp/text pairs. Tests57034exit0:38passed+27subtests,
+actual merged reference timestamp/text pairs. Final corrected tests66234exit0:38passed+27subtests,
 including grouped clips, missing-predictionzero, mismatched references/membership/
 protocol/counts and missing generation evidence. Fixtures only, no real scores.
 Full matrix, tuned/equal-Kprotocol and semantic/quality/human evaluation remain.
+
+
+Correction to paired-export validation history: first test57034 exited1 with
+37passed/1failed. Exporter F1 reconstruction incorrectly omitted FN in its
+denominator. The missing-prediction/cluster fixture detected it. Fixed formula
+to2TP/(2TP+FP+FN); rerun66234exit0 passed38tests+27subtests. Agent prematurely
+wrote a passing test entry in27cd883 before inspecting the completed result;
+that claim is corrected above and this history preserves the mistake. No real
+evaluation export or scientific result was produced with the faulty version.
