@@ -939,3 +939,32 @@ clipping, invalid windows and run identity. Initial follow-up command mistakenly
 named a nonexistent matrix test file and ran zero tests; corrected focused suite
 is recorded in `/scratch/yy5919/pyro-ablation-context-tests.log`.
 Final focused verification:31 passed,48 subtests passed; `git diff --check` passed.
+
+## 2026-11-23: explicit frozen memberships for preparation
+
+Delegated agent work in `/scratch/yy5919/pyro-revision15-formal-prep`, isolated
+from both live/queued GPU worktrees. The cache bridge previously iterated only
+REFRAMED development clips, and the EgoSchema input builder hardcoded its ten
+pilot questions. Added explicit membership selection without reading outcomes:
+REFRAMED dev/test, Video-MME long, and EgoSchema pilot/heldout. Pilot/dev defaults
+remain unchanged. Frozen configs contain10dev,30test,12long videos and490heldout
+EgoSchema questions. Memberships themselves were not modified.
+
+The bridge validates complete speech-cue reports against the exact selected IDs,
+subset and source config hash. Duplicate, missing, extra, overlapping and unsafe
+IDs fail before writes. Existing reports without a subset field remain compatible
+only with dev. Extended the CPU speech-cue preparer with the same explicit subset
+selection; model/checkpoint and min-silence5/silence-scale30 settings remain the
+existing dev settings. Invalid membership is rejected before model loading.
+
+EgoSchema `--split heldout` excludes every pilot ID, validates frozen counts,
+retains ordered options and four frames per selected moment, and emits split
+provenance. No answers are copied into input rows. The default remains pilot.
+This change does not create missing heldout media/visual caches; those are a
+separate prerequisite. No GPU jobs, API calls or heldout scoring were launched.
+
+Verification:27 focused tests passed, including exact heldout CLI output with
+synthetic answer sentinels, wrong-schema/overlap/duplicate checks and bridge
+coverage/provenance failures. Log `/scratch/yy5919/pyro-formal-prep-tests.log`;
+only warning is the existing Hugging Face environment-variable deprecation.
+Structural checks on the real membership configs passed without opening answers.

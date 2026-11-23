@@ -1,4 +1,4 @@
-"""Prepare separate speech cue tracks on frozen REFRAMED dev clips, CPU only."""
+"""Prepare separate speech cue tracks on explicit frozen dev/test/long memberships, CPU only."""
 import argparse
 import hashlib
 import importlib.metadata
@@ -11,6 +11,8 @@ from src.utils.speech_cues import DEICTIC_PHRASES,speech_chunks,cue_tracks
 from src.utils.audio_features import load_current_features,resolve_audio_path
 from src.utils.media import load_manifest,cache_is_current
 
+from src.datasets.frozen_membership import frozen_video_ids
+
 MODEL='sentence-transformers/all-mpnet-base-v2'
 REVISION='e8c3b32edf5434bc2275fc9bab85f82640a19130'
 
@@ -20,17 +22,18 @@ def main():
     p.add_argument('--cache-dir',type=Path,required=True)
     p.add_argument('--split-config',type=Path,default=Path('configs/reframed_splits.json'))
     p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--subset',choices=('dev','test','long'),default='dev')
     p.add_argument('--min-silence',type=float,required=True)
     p.add_argument('--silence-scale',type=float,required=True)
     args=p.parse_args()
     if args.output.exists(): raise FileExistsError('use a new output path to preserve cue records')
+    ids=frozen_video_ids(json.loads(args.split_config.read_text()),args.subset)
     import torch
     from huggingface_hub import snapshot_download
     from sentence_transformers import SentenceTransformer
     torch.set_num_threads(4)
     snapshot=Path(snapshot_download(MODEL,revision=REVISION,local_files_only=True))
     model=SentenceTransformer(str(snapshot),device='cpu',local_files_only=True)
-    ids=[r['video_id'] for r in json.loads(args.split_config.read_text())['clips']]
     records=[]
     for video_id in ids:
         cache=args.cache_dir/video_id
@@ -62,6 +65,7 @@ def main():
             'versions':{name:importlib.metadata.version(name) for name in ('sentence-transformers','torch','transformers')},
             'settings':{'max_words':24,'phrases':DEICTIC_PHRASES,'min_silence':args.min_silence,'silence_scale':args.silence_scale},
             'split_sha256':hashlib.sha256(args.split_config.read_bytes()).hexdigest(),
+            'subset':args.subset,
             'scope':'exploratory automated cues; no diarization, human labels, threshold tuning or accuracy claim',
             'videos':records}
     args.output.parent.mkdir(parents=True,exist_ok=True)

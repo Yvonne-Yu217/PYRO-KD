@@ -1,6 +1,7 @@
 """Build PR22 cue views from verified HPC caches; no model inference or raw writes.
 
-Development-only: preserves exact cached ASR, CLAP and acoustic tracks. Tagger
+Uses explicit frozen dev, test or long membership; preserves cached ASR, CLAP
+and acoustic tracks. Tagger
 onset extraction uses PR22's declared default policy, which remains untuned.
 """
 import argparse
@@ -15,6 +16,7 @@ from src.audio.salience import class_onsets
 from src.utils.audio_features import load_current_features, resolve_audio_path
 from src.utils.media import load_manifest, cache_is_current
 from src.utils.speech_cues import speech_chunks
+from src.datasets.frozen_membership import frozen_video_ids
 
 
 def sha(path):
@@ -81,21 +83,33 @@ def bridge(cache, speech_record, config):
     return record
 
 
+def validate_speech_membership(speech, ids, subset, split_hash):
+    if not speech.get('complete') or speech.get('split_sha256') != split_hash:
+        raise ValueError('speech cue split mismatch')
+    if speech.get('subset', 'dev') != subset:
+        raise ValueError('speech cue subset mismatch')
+    rows = speech.get('videos', [])
+    by_id = {r['video_id']: r for r in rows}
+    if len(by_id) != len(rows) or set(by_id) != set(ids):
+        raise ValueError('speech cue membership differs from frozen IDs')
+    return by_id
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--cache-root', required=True, type=Path)
     p.add_argument('--speech-cues', required=True, type=Path)
     p.add_argument('--splits', type=Path, default=Path('configs/reframed_splits.json'))
     p.add_argument('--output-root', required=True, type=Path)
+    p.add_argument('--subset', choices=('dev', 'test', 'long'), default='dev')
     args = p.parse_args()
     split = json.loads(args.splits.read_text())
     speech = json.loads(args.speech_cues.read_text())
-    if not speech['complete'] or speech['split_sha256'] != sha(args.splits):
-        raise ValueError('speech cue split mismatch')
-    by_id = {r['video_id']: r for r in speech['videos']}
+    ids = frozen_video_ids(split, args.subset)
+    by_id = validate_speech_membership(speech, ids, args.subset, sha(args.splits))
     records = []
-    for row in split['clips']:
-        ident = row['video_id']; cache = args.cache_root / ident
+    for ident in ids:
+        cache = args.cache_root / ident
         record = bridge(cache, by_id[ident], merged_config(None))
         record['bridge_sources'][str(args.speech_cues.resolve())] = sha(args.speech_cues)
         record['bridge_sources'][str(args.splits.resolve())] = sha(args.splits)
@@ -114,7 +128,7 @@ def main():
         else:
             write_cues(target, record)
         records.append({'video_id': ident, 'events': len(record['events']), 'speech_cues': len(record['speech_cues'])})
-    (args.output_root / 'bridge-report.json').write_text(json.dumps({'complete': True, 'scope': 'development only; untuned onset extraction', 'videos': records}, indent=2)+'\n')
+    (args.output_root / 'bridge-report.json').write_text(json.dumps({'complete': True, 'scope': 'frozen membership; untuned onset extraction; no label inspection', 'subset': args.subset, 'split_sha256': sha(args.splits), 'videos': records}, indent=2)+'\n')
     print(json.dumps(records))
 
 if __name__ == '__main__':
