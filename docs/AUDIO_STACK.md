@@ -236,3 +236,33 @@ cue-array equality after reconstruction; a real interrupted model run has not
 yet been exercised.
 
 Real-data recovery follow-up: isolated 73.2s development clip CxWby8RuUwU6 produced 74 windows and 19 checkpoints; rebuilding without final cache files reused all 19 batches, yielded seven bit-identical arrays and an identical NPZ SHA256, and passed the independent event cache verifier. Evidence: outputs/verification/event-checkpoint-real-comparison.json and event-checkpoint-real-audit.json. No OS-kill test or human detector-accuracy claim.
+
+## Audio-native ablation preparation
+
+The proposal includes an audio-native comparison on a development-selected
+selector. Qwen2.5-Omni-7B's [official model card](https://huggingface.co/Qwen/Qwen2.5-Omni-7B)
+documents audio/image input and text-only output. Its video memory table is not
+an estimate for our sparse-frame inputs; actual GPU feasibility remains untested.
+
+Processor/config assets only are pinned in `configs/qwen25_omni_processor.json`
+at `ae9e1690543ffd5c0221dc27f79834d0294cba00`:13files/16,175,017bytes verified.
+The22,362,861,192bytes of model shards and speaker file were not downloaded.
+Snapshot: /scratch/yy5919/hf_cache/hub/models--Qwen--Qwen2.5-Omni-7B/snapshots/ae9e1690543ffd5c0221dc27f79834d0294cba00.
+
+Actual CPU check `scripts/check_omni_processor.py` encoded four development frames
+around15s and the same clip's first30s mono16k audio into2430tokens. It asserts both
+audio and image tensors exist and records file/slice hashes. Evidence:
+outputs/verification/qwen25-omni-real-processor.json/.log and processor-download.json.
+No model weights were instantiated and no descriptions/QA predictions produced.
+This is input compatibility only, not a frozen ablation or matched-context claim.
+
+Installed runtime source audit: text-only generation uses `generation_mode="text"`;
+`return_audio` is accepted through a deprecated decorator alias, so absence from
+the explicit signature does not prove unsupported behavior. The full wrapper's
+loader/generator requires speaker data even in text-only operation. Download it
+when preparing full weights; the processor-only snapshot is not inference-ready.
+Configuration warnings about talker token IDs versus its vocabulary were observed
+and remain to be checked during a real model load. Source evidence is retained in
+outputs/verification/qwen25-omni-runtime-api.txt and -generation-source.txt.
+The initial processor report's overly broad signature flag was renamed to
+`generate_declares_return_audio`; its original JSON is preserved alongside it.

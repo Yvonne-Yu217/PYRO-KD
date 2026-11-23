@@ -408,3 +408,17 @@ audit). PendingCPU40363/40408 were revalidated through scontrol: both depend on
 65258e9458db0b8a94c468eb682f5eba984b213f respectively. No duplicate submissions.
 CPU40036 had~46minutes remaining; walltime is not extended by activity. Queued
 work still needs monitoring through terminal status and final coverage checks.
+
+
+Audio-native candidate preparation: official Qwen2.5Omni7B release API pinned
+ ae9e1690543ffd5c0221dc27f79834d0294cba00. Processor-only download81765exit0 verified
+13files/16175017bytes;22.36GBweights and speaker data not downloaded. Actual real
+REFRAMED development audio+4image encoding69176exit0 produced2430tokens with both
+modalities present; no model weights loaded. New config and check script plus
+hash evidence retained. Runtime audit36991exit0/source-file inspection resolved
+API difference: generation_mode='text', legacy return_audio via deprecated alias;
+full wrapper still needs speaker data. Config warnings remain an actual-load
+check, not silently declared safe. Agent metadata mistake: explicit signature
+inspection initially named 'supports_return_audio'; corrected to 'declares' and
+preserved original report, because **kwargs/decorators support the legacy option.
+Audio-native ablation remains incomplete and unfrozen; GPU hold unchanged.
