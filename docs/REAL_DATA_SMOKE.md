@@ -53,3 +53,16 @@ when comparing budgets; do not resume historical outputs under a new protocol.
 Evidence: outputs/verification/mtg-revision15-word-budget.json and
 mtg-revision15-p0-dry-run.log. Unknown-gap fallback remains historical behavior
 and is not proof of gap fit. All 78 rebuilt inputs have known gap lengths.
+
+REFRAMED development inputs are also prepared on CPU. Reproduce:
+
+```bash
+source hpc/config.sh
+in_env ro 'OMP_NUM_THREADS=4 python scripts/preprocess_reframed_dev.py --data-dir /scratch/yy5919/pyro-kd-derived/datasets/reframed --cache-dir /scratch/yy5919/pyro-kd-derived/cache/reframed --report outputs/verification/reframed-dev-preprocess.json'
+in_env ro 'OMP_NUM_THREADS=4 python scripts/cache_audio_features.py --cache-dir /scratch/yy5919/pyro-kd-derived/cache/reframed'
+in_env ro 'python scripts/build_moments.py --dataset reframed --selector U --videos dev --data-dir /scratch/yy5919/pyro-kd-derived/datasets/reframed --cache-dir /scratch/yy5919/pyro-kd-derived/cache/reframed --output /scratch/yy5919/pyro-kd-derived/moments/reframed_U_dev_revision15.jsonl'
+```
+
+Ten frozen validation clips yield2663 frames and current basic audio features.
+The current U builder yields66 inputs and45 zero-budget exclusions. These are
+smoke inputs; full fixed-K comparison readiness has not been established.
