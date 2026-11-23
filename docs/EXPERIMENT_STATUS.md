@@ -1014,3 +1014,19 @@ Longscoringwatcher waitsall10. No correctness read before this correction.
 All31selector tables and16movie-clustered ablation contrasts complete; allHolm
 pvalues1.0. Reportdraft docs/report/main.pdf includes5mainpages+2appendixpages,
 with formalcaption/QA andhumanattribution explicitlypending.
+
+### Verified checkpoint — 2026-11-23 17:42 UTC
+
+- Full results-branch suite:837passed,3skipped,5974subtests.
+- All31 formal selector configurations,16selector contrasts and audio-cue
+  diagnostics complete; these use30clips/10movies.
+- Formal ablation5 complete: same384moments percondition; valid counts349
+  no-context,372timeline,326native. Textmetrics, actualTTS and measuredgap
+  utilization complete. Tables underdocs/results/reframed-formal-ablation5*.
+- Primary40964: eightcorecells complete; oracleP0/P1 remain inprogress/queue,
+  followed by72longQAcontrols and490EgoVmemory questions.
+- Secondary41197: bothAVlongconditions andbothadditionalADconditions complete;
+  EgoU active, Vlocal queued. AllEgo inputs validated490/490,zero shortfall.
+- CPUcontroller41245 is pending afterany41197, and will allocate a continuation
+  GPUonlyif U/V remainunfinished. No duplicateGPUjob or paidAPI call.
+- Report and12-slide deck drafts compile; finalcore/QA slots remainpending.

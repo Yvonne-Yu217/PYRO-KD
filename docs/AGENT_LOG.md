@@ -1381,3 +1381,12 @@ inspected. Firstcompile hadanescapedlinebreakerror, correctedbeforepublication.
 No installations,GPUjobs orfakefuturemetrics. Addedgenericfull-familypaired
 plot/table exporter andvalidatedall16existingselectorcontrasts withoutfiltering
 onsignificance; sourcehash binds thestatisticalJSON andpointwiseCIs are labeled.
+
+## Integrated results-branch verification
+
+The accumulated reporting/analysis branch passed the full test suite:837passed,
+3skipped,2warnings and5974subtests in99.71seconds. Log:
+/scratch/yy5919/pyro-results-integrated-tests.log. CUDAwas hidden; no inference
+source changed and no paidAPI was called. The frozenformal09abb6c source had
+previously passed817tests before launch; these additionalchecks cover the new
+analysis/reporting code without replacing the originalrunprovenance.
