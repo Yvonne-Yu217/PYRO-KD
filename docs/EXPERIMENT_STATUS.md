@@ -1,30 +1,26 @@
 # Experiment status
 
-## Current checkpoint — 2026-11-23 04:12 UTC
+## Current checkpoint — 2026-11-23 13:46 UTC
 
-Transfers are complete for all source-available MTG, REFRAMED and EgoSchema files.
-The 12-video Video-MME long subset has verified media, PCM/frame, VAD and spectral-flux onset caches.
-All 12 visual-feature caches now pass independent verification: 55,549 embeddings
-and 6,850 shot boundaries (`outputs/verification/video-mme-visual-check.json`).
-This is feature integrity and ranking mechanics, not scientific accuracy.
+All source-available MTG, REFRAMED and EgoSchema transfers are complete.
+The 12-video long Video-MME subset has complete verified media, VAD, visual,
+speech, event and onset caches. Continuations40363/40408 completed successfully;
+final speech60,588words/4,724windows and events27,780windows. These are cache
+integrity checks, not transcription/detector accuracy.
 
-- Speech: 9/12 long caches independently verified; process96112/session94991
-  continues. Per-window language codes are unvalidated model estimates.
-- Audio events: 3/12 long caches verified (6,460 windows); full extraction
-  process115097/session27774 continues with batch checkpoints. Actual short-dev
-  checkpoint replay was bit-identical and independently audited.
-- Active CPU allocation40036 ends04:22:47UTC. CPU-only continuation40363 resumes
-  ASR/visual;40408 resumes events. Both depend on40036 ending and use immutable
-  source worktrees. Submitted jobs still require completion and audits.
-- Long QA membership is frozen at36questions; no question text/options/answers
-  have been inspected. Long QA evaluator is implemented/tested, with no actual
-  predictions or scores. The current dev5moments/min rule implies612–1012images
-  per long question; final inference budget is not frozen and needs GPU testing.
-- GPU hold remains pending the user's session. No actual VLM inference, completed
-  20-condition matrix, final QA/AD results or report/slides yet. Human audio labels
-  and60peer comparisons are unavailable; paid APIs have no spending cap.
-- Cue2Narrate main08c89ea63281b819a0fd73c060d8c954f9e696ef has no implementation
-  or checkpoints; direct reproduction remains an access dependency.
+User GPU session40880 onb-19-15 provides oneA10040GB through2026-11-24T13:26:29UTC.
+The prior hold condition is satisfied by completed transfers and this newGPU
+session. First four-moment MTG U/P0 smoke ran onGPU. Initial2/4wordbudgetfailures;
+shared prompt clarification plus explicit failure accounting yielded3/4valid,
+1remainingbudgetfailure. No token-limit failures. Rawattempts preserved. This
+is onevideo only and does not pass the full smoke/evaluationgate. No grid scaling.
+
+Next: bounded consistently applied word-budget repair, rerun/inspectsmallsmoke,
+then ten-videoREFRAMEDdevelopment smoke and real semantic/renderedoverlapmetrics.
+Ten-video input is prepared, not yet inferred. Full20matrix/APIcap, finalselector
+weights/equal-Kpolicy, humanlabels/60peercomparisons, finalQA/ADstatistics and
+report/slides remain incomplete. LongQA36questionmembership is frozen; question
+content remains unopened. Cue2Narrate implementation/checkpoints still unavailable.
 
 Earlier checkpoints and chronological updates below are retained for provenance.
 
@@ -778,3 +774,14 @@ qwen25-mtg-U-P0-none-budget-v2.jsonl, same model/settings except sharedpromptfix
 No fullmatrix scaling. Ten-videoREFRAMEDsmoke input also preparedfromearliest
 existingpositivebudgetUrowper frozenclip, provenance reframed-ten-video-smoke-inputs.json;
 notfinalselectorprotocol andnotyetinferred.
+
+
+Second GPU smoke47071exit0 completed source8b54a64:4decoded/3withinbudget/1budget
+failure,0token-limitfailures. Actualattemptmetadata load14.0s,generate6.0s,
+peakGPU17.0GB. Remaining2wordcase output"boat on water." has3words;
+newrunner correctly records error and preserves fullrawdecode. Other outputs:
+"Person plays guitar with fingers on strings."(7/23),"man closes eyes mouth open hand on face."(8/11),
+"man looks at camera."(4/5). Agent frame inspection supports broadactions but
+is not humanqualityvalidation. No all-clear smokeclaim/gridexpansion. Nextneeded
+is bounded shared word-budget repair with allattempts/cost preserved, then
+actualten-video development evaluation including semantic andrenderedoverlap.

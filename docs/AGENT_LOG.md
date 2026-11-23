@@ -674,3 +674,14 @@ qwen25-mtg-U-P0-none-budget-v2.jsonl, same model/settings except sharedpromptfix
 No fullmatrix scaling. Ten-videoREFRAMEDsmoke input also preparedfromearliest
 existingpositivebudgetUrowper frozenclip, provenance reframed-ten-video-smoke-inputs.json;
 notfinalselectorprotocol andnotyetinferred.
+
+
+Second GPU smoke47071exit0 completed source8b54a64:4decoded/3withinbudget/1budget
+failure,0token-limitfailures. Actualattemptmetadata load14.0s,generate6.0s,
+peakGPU17.0GB. Remaining2wordcase output"boat on water." has3words;
+newrunner correctly records error and preserves fullrawdecode. Other outputs:
+"Person plays guitar with fingers on strings."(7/23),"man closes eyes mouth open hand on face."(8/11),
+"man looks at camera."(4/5). Agent frame inspection supports broadactions but
+is not humanqualityvalidation. No all-clear smokeclaim/gridexpansion. Nextneeded
+is bounded shared word-budget repair with allattempts/cost preserved, then
+actualten-video development evaluation including semantic andrenderedoverlap.
