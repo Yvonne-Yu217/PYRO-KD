@@ -136,3 +136,13 @@ Project venv: 482 tests, OK, 8 skipped (ffmpeg x7, PySceneDetect x1); baseline w
 ### Blockers and deviations
 
 See `docs/readiness_report.md` (deviations 1-10) and `PROJECT_STATUS.md`. Open question for the team: Cloud Bursting vs Torch.
+
+
+## 2026-11-23 — Revision 1.5 execution record
+
+The ongoing English Agent Log and experiment status now live in
+`docs/AGENT_LOG.md` and `docs/EXPERIMENT_STATUS.md`. They record real smoke/pilot
+verification, frozen formal runs, failures, fixes, source commits and HPC jobs.
+Current research results are under `docs/results/`; reproduction commands and
+artifact locations are in `docs/RESULTS_REPRODUCTION.md`. The historical entries
+above remain unchanged. Paid API and human-label work is explicitly deferred.

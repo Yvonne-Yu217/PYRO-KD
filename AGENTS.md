@@ -18,3 +18,20 @@ explicit user authorization. Do not rebuild compatible cached model features
 just to satisfy a second schema; validate an adapter first. Never modify source
 files underneath live inference. Keep human detector labels and peer ratings
 explicitly pending until real annotations are supplied.
+
+## Current execution freeze
+
+Formal caption and EgoSchema inference use the immutable09abb6c worktree
+`/scratch/yy5919/pyro-revision15-formal`. Remaining long-video QA uses immutable
+a7e0e1a in `pyro-revision15-long-prep`; original visual controls retain their
+recorded1f5fb60 provenance. Reporting changes belong in `pyro-revision15-records`
+on `work/revision15-results`. These isolated branches contain the earlier PR22
+integration and validated fixes; do not switch their source during live jobs.
+
+Read the latest experiment status and inspect Slurm/process/output evidence
+before submitting anything. Primary GPU queues share one lock; secondary tasks
+own disjoint output files. Conditional continuation must verify prior jobs are
+terminal and expected outputs are unfinished before requesting another GPU.
+Never allocate a GPU just to wait for CPU inputs or run a dummy keepalive.
+Paid API budget remains zero. Human annotations must come from the user/team;
+agent qualitative inspection must be labeled as such.

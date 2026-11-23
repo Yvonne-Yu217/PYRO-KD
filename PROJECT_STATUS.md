@@ -1,5 +1,21 @@
 # Project status
 
+## Current Revision 1.5 record — 2026-11-23
+
+The authoritative live experiment record is [docs/EXPERIMENT_STATUS.md](docs/EXPERIMENT_STATUS.md),
+with verification and failures in [docs/AGENT_LOG.md](docs/AGENT_LOG.md).
+Real-data smoke tests, development pilots and formal selector evaluation have
+completed. Frozen local caption and QA experiments are running from isolated
+worktrees; the audio-context ablation has completed. See the current record for
+exact coverage, source hashes, job IDs and remaining stages.
+
+Paid API calls and human annotations/peer ratings remain deferred by the user.
+The [report draft](docs/report/main.pdf) and [presentation draft](docs/slides/main.pdf)
+mark unfinished results explicitly. The older readiness snapshot below is retained
+as historical evidence, not the current execution state.
+
+## Historical readiness snapshot
+
 Snapshot as of 2026-11-19, branch `rishabh/experiment-readiness` (from main 3139be9; not pushed, no PR). Verification levels: **implemented** (code exists), **tested** (unit/integration tests with synthetic data or injected models), **verified** (run on real data/models). Nothing in this branch is *verified* yet: no real dataset, model, API or cluster job has been run from it.
 
 ## Completed
