@@ -378,3 +378,17 @@ Tests48463exit0:80passed/49subtests, including one-segment equivalence, cross-bo
 spacing and memory not reset; prior87238passed79before added memory regression.
 Register next CPU4-or-less audit on40036 with output
 outputs/verification/video-mme-visual-hierarchy.json; no feature cache writes.
+
+
+Real long visual hierarchy mechanics3720exit0 COMPLETE12/12. Source24850af
+(full SHA recorded in outputs/verification/video-mme-visual-hierarchy-source.txt).
+Using dev20–60s bounds/floor1 and visual-shot boundaries yields1144segments;
+local and global-memory hierarchy each select2314/2314requested moments with
+0shortfall. Independent arithmetic audit verified contiguous full-duration
+segments, <=60s spans, quota sums/floors, unique timestamp membership counts,
+per-segment quota bounds and global2s spacing. Evidence
+outputs/verification/video-mme-visual-hierarchy.json/.log and
+video-mme-visual-hierarchy-check.json. This validates long-video mechanics only;
+no QA content/labels inspected, no accuracy/quality gain claimed, and5/min remains
+an exploratory resource-heavy budget rather than final GPU-validated protocol.
+A/AV hierarchy still requires completed audio features and multilingual policy.
