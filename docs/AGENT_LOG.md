@@ -685,3 +685,14 @@ newrunner correctly records error and preserves fullrawdecode. Other outputs:
 is not humanqualityvalidation. No all-clear smokeclaim/gridexpansion. Nextneeded
 is bounded shared word-budget repair with allattempts/cost preserved, then
 actualten-video development evaluation including semantic andrenderedoverlap.
+
+
+Registered optional bounded word-budget repair (--word-budget-retries1), shared
+acrossP0/P1 andVLM/Omni backends. One extra same-model/frame-context call only for
+nontruncatedoverbudgetoutput; bothprompts/rawdrafts/token counts/errors retained in
+generation_attempts, total_new_tokens/generation_calls/repair_latency_s recorded.
+Failure remainsfailure, no stringtruncation/no unboundedloop. Policy enters run
+fingerprint. Tests46861exit0:12passed covering repair/failure/exception/no-repair,
+native runner and provenance. Registered third same4MTGsmoke on40880,output
+outputs/real-data-smoke/qwen25-mtg-U-P0-none-budget-repair.jsonl, batch1/temp0/
+128tokens/P0/none/sdpa/quantnone/pinnedQwen. No gridscaling. Requires actualinspection.

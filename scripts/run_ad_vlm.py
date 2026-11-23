@@ -136,6 +136,8 @@ def parse_args():
     p.add_argument("--prior", choices=sorted(PROMPTS), default="P0")
     p.add_argument("--exemplars", help="frozen training-only bundle required for P1")
     p.add_argument('--backend', choices=('vlm', 'omni'), default='vlm')
+    p.add_argument('--word-budget-retries', type=int, choices=(0, 1), default=0,
+                   help='optional one model repair of an over-budget draft; all attempts retained')
     p.add_argument("--audio-context", choices=("legacy", "none", "timeline", "native"), default="legacy",
                    help="legacy transcript; no audio text; or cached speech/event timeline")
     p.add_argument("--span", type=float, default=2.0, help="seconds covered by each frame window")
@@ -184,6 +186,7 @@ def main():
         "temperature": args.temperature, "top_p": args.top_p,
         "reasoning_strength": args.reasoning_strength,
         "backend": args.backend,
+        "word_budget_retries": args.word_budget_retries,
     })
     if args.limit:
         rows = rows[: args.limit]
@@ -316,6 +319,25 @@ def main():
 
             for i, rec in enumerate(records):
                 res = results[i]
+                if args.word_budget_retries:
+                    from src.generation.budget_repair import repair_once
+                    def repair_generate(repair_prompt):
+                        start_time = time.time()
+                        if args.backend == 'omni':
+                            from src.generation.omni import generate_one
+                            wave = load_native_audio(rec['native_audio']) if args.audio_context == 'native' else None
+                            text, raw, tokens = generate_one(
+                                processor, model, prepared[i][0], repair_prompt, wave,
+                                args.max_new_tokens, args.temperature, args.top_p)
+                        else:
+                            text, raw, tokens = generate_batch(
+                                processor, model, [prepared[i][0]], [repair_prompt],
+                                max_new_tokens=args.max_new_tokens, temperature=args.temperature,
+                                top_p=args.top_p, reasoning_strength=args.reasoning_strength)
+                        return finalize_generation(text[0], raw[0], tokens[0], 1,
+                            time.time()-start_time, args.max_new_tokens, rec['word_limit'])
+                    res = repair_once(res, rec['prompt'], rec['word_limit'], repair_generate)
+                    gen_s += res['repair_latency_s']
                 n_ok += "error" not in res
                 n_err += "error" in res
                 n_truncated += bool(res.get("hit_token_limit"))
