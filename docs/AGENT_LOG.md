@@ -1099,3 +1099,15 @@ pinned Qwen16tokens; exact dev-frozen cue weights. Timeline compression20speech+
 Estimated45–75GPUminutes total,45-minute watchdog per condition,$0API. Inputs
 are prepared onCPU before their GPU lock request; each input hash is captured
 before inference. Human detector validation remains explicitly unavailable.
+
+Added complete core-matrix export, validated against completed dev artifacts:
+20rows exactly,10local evaluated and10API explicitly deferred; no missing API
+cell is silently omitted or represented as a zero score. Export preserves
+failed/missing IDs, zero-output video counts, source hashes and actual TTS
+coverage. Reproduce via scripts/export_core_results.py (see --help). Summary:
+docs/results/reframed-dev-full-matrix.md.
+
+Queue watchdog correction before any audio-aware QA launch: stopped the waiting
+queue process (no GPU child yet), replaced Python-only timeout with GNU timeout
+and30-second forced-kill grace to bound its subprocess group, then restarted.
+Current session36268 replaces54677; no inference source or active model changed.
