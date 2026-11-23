@@ -1,0 +1,2348 @@
+{
+  "plan": {
+    "family": "selector_ablation_temporal_F1_16",
+    "declaration": "Newly declared 2026-11-23 after descriptive31-run results were available; structural contrasts, not selected by effects; not prospectively preregistered",
+    "metric": "temporal_f1",
+    "unit": "cluster",
+    "cluster": "movie_id",
+    "resamples": 10000,
+    "seed": 0,
+    "confidence_level": 0.95,
+    "adjustment": "Holm across all16 contrasts",
+    "contrasts": [
+      {
+        "ablation": "1",
+        "a": "A_cue-speech",
+        "b": "A_cue-both"
+      },
+      {
+        "ablation": "1",
+        "a": "A_cue-nonspeech",
+        "b": "A_cue-both"
+      },
+      {
+        "ablation": "2",
+        "a": "AV-trigger",
+        "b": "AV-suppress"
+      },
+      {
+        "ablation": "2",
+        "a": "AV-music-trig",
+        "b": "AV-music-supp"
+      },
+      {
+        "ablation": "2",
+        "a": "AV-impulsive-trig",
+        "b": "AV-impulsive-supp"
+      },
+      {
+        "ablation": "2",
+        "a": "AV-vocal_nonspeech-trig",
+        "b": "AV-vocal_nonspeech-supp"
+      },
+      {
+        "ablation": "2",
+        "a": "AV-ambient-trig",
+        "b": "AV-ambient-supp"
+      },
+      {
+        "ablation": "2",
+        "a": "AV-other-trig",
+        "b": "AV-other-supp"
+      },
+      {
+        "ablation": "3",
+        "a": "A_cue-tagger",
+        "b": "A_cue-whispertags"
+      },
+      {
+        "ablation": "4",
+        "a": "AV-snap",
+        "b": "AV-event"
+      },
+      {
+        "ablation": "8",
+        "a": "AV-memory",
+        "b": "AV-local"
+      },
+      {
+        "ablation": "8",
+        "a": "AV-memory-pure",
+        "b": "AV-local"
+      },
+      {
+        "ablation": "8",
+        "a": "V_mem",
+        "b": "V"
+      },
+      {
+        "ablation": "6",
+        "a": "A_cue-music-only",
+        "b": "A_cue"
+      },
+      {
+        "ablation": "6",
+        "a": "A_cue-impulsive-only",
+        "b": "A_cue"
+      },
+      {
+        "ablation": "6",
+        "a": "A_cue-ambient-only",
+        "b": "A_cue"
+      }
+    ]
+  },
+  "provenance": {
+    "sources": {
+      "/scratch/yy5919/pyro-revision15-formal/configs/experiments/reframed_test_local.toml": "996a701c6f153a692c69e9a45dbb9d203784cd007d4bad353fcbd5cf49284b77",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/config.identity.json": "c1dbd8d104714032aae5b3f9cd9055b632127226519e0b749af23f4fadeb9363",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/eval/selection_metrics.json": "a7c03c4677a93abf6fa76b2b72cbbb6c3f3842a48a9cfa08ffeb2c8b5df72264",
+      "/scratch/yy5919/pyro-revision15-records/configs/selector_ablation_contrasts.json": "e27889636b29317474d7d2c0ab6dfaea641ba36b52161b37045286913d3153ca",
+      "/scratch/yy5919/pyro-kd-derived/datasets/reframed/test.jsonl": "1e641456d72b953da4fbea8c539d0879fdbc3125d8afba3256be929c086aeb86",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/zM3TiMkJ_DDZ/manifest.json": "454756a3c44fd3af382534aeebfe74cfbe1f7aa91aa66aa9716bdcf8d30227cd",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/cWQi172fc4_p/manifest.json": "6f051083eb70f51e29b817aaf83a3a3ee6be4f4a7a14e612db9e27e63c7debf3",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/FCskdO_WFQ5e/manifest.json": "54dc8529d6d58c83fc9edf02ab4ade7393297c6fc42a4e7847a9f0c67c29a946",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/9TqVTYpf_Ndy/manifest.json": "413da20f315de82efdb4a3bd3ae178d59ac203f34586e5bf3d0382a3d63a776d",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/Wy_AaNCfzc_o/manifest.json": "9c4cb751baae57927867d73be26565090c2771562e51871786635a9e05f16247",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/mrEfJcER6AYY/manifest.json": "adda4e2dad65a728b14191dc892349dcf87144c0f345b52fde805090764f9dbc",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/LbrAzd5kfvof/manifest.json": "2e4bc640668e70fe09e586e103835ae67df11865c58d07ef30c70233305fe4ea",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/Fz8lDj3lgV58/manifest.json": "fecb51432f1aaed78fdd769c76976741479a7060115cf02a63f1586a49024845",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/XqL_Exul9JqE/manifest.json": "dc06156ee5fa449dba2dcb0c8d7d042be69c072d374b1ec05ce9b7f738c2094e",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/EdbtrdK5gZSC/manifest.json": "f6dbcd79f7b04767876a2fb76cf86d2501b0322f4ebb7a52b4eafe666587c0a5",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/URJKJijOnEs_/manifest.json": "590f90ea11eddca429a1463d0d7f29d756a34c46e5cd2c1dea26b5740dc418b7",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/_ZtvoOooXix5/manifest.json": "290f373e45e14e885bf542f8b782772e173baaa1ec8902b0a8c691bda426d177",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/VdeBUxmW0K_A/manifest.json": "77c1b283e4fbcec0cc8a08efa5742d898d4afab197ccf3a4e8a383957a149c5a",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/O_BiVwxyF17a/manifest.json": "05149b7a8e46653747c23f54a24f416872feba98af5ae50af940eff9f706b81a",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/_Iiy7W4NNteS/manifest.json": "52f3d2f792bad1f4698e4e9d75471fdf0c67a8f0a5a853cd68cf65325350f350",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/5G21L0_TC5K4/manifest.json": "199187c59fbecdbaa165d404e254ebb2c10dbda5e5273c3ff806e938dcee9830",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/_BjchgrAWAxM/manifest.json": "b6b8b413a9d3000223694f35dfa4369c46010ff1e7433e111473b86aa63f6226",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/1Q_Xlv2OQWsy/manifest.json": "206ee994b1a8d2354507dd75ed475e7ef102f51cf7f7d450071e5b91dc36edbd",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/jdaGqC2tmFl8/manifest.json": "5faca5801b83881c3082694083155f517567540597af8dab59567015430302f4",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/Bdg9hvz4obAD/manifest.json": "b68b492618097c6ccc99069958d933872d26346619fa4cb2bb3179509bd53357",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/ml1BV2SPaFSF/manifest.json": "4815c1b85345b8702a9b24887528e3853a455a51d346f1483ce63886c481d110",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/eqaPWbz_gqD8/manifest.json": "f2d297c553bc7b2959a10d1017a608f71a7eac5cd7b2fc4baec137399e897082",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/sDMuBUgC6SgW/manifest.json": "04e3fe323c3af642401ff3d82879a808965265149d73a6623940de5d744334ea",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/Y_VUFhPLVeJN/manifest.json": "23d059fdb3c691e259b51466c2951602fc2458f8c0df5e8fde680e4b39327615",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/yG0zJls2UJJe/manifest.json": "c566c061697fc9e5ffa639013ec6fbac07f9429b0f449d58a0728afb6f363a86",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/g8ew63BIIwEe/manifest.json": "0423d81b9fe3825be844eba4b257088200ae43312e4aeb90e0526653d6476ef5",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/SPFnjwnUECib/manifest.json": "a324e29f320865c35b2d912d78b2aa5db13b29baf741e4b5d14e7a0fa8b51022",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/mgjX94dRCtNB/manifest.json": "2082c07ca8c9a1b7827ef1d201da377d4daceeaf3092dd1955e7b307d8f487a2",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/Bz9iXZc3QVHs/manifest.json": "27628f7dcd508c06ce6087a27de99d1de3ff2ad57b172e226c75f7ba6a5769e1",
+      "/scratch/yy5919/pyro-kd-derived/cache/reframed-test-whisper-gated-v1/LnKORjoJDRZe/manifest.json": "d38ab720f73d47098c580bf1cf263f71a31d0e5090ec8f1add85e8000079e104",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/U-6907e39b.jsonl": "a1f0d70623d43a4c6096267f9589c643255f7cd410fb2f02ab7f907107f24cba",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/V-1cd0fb55.jsonl": "7add4805c1ae2ea34562dbcf0302720f84d9d36bf19a9b9ba595d8bd9f606aa1",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/A_cue-b8ed44b2.jsonl": "3f79fb2945ff8a4df2a8e451690b390ff003247f0d4a0067df425553c97b4f96",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/AV-0f9262d7.jsonl": "444aebd5097e57b7635824ab78289da637663c9043f1fc3b5ac0ee5f2b38d98c",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/O-3152817a.jsonl": "404d48519f1fd5ea749799009675401bef03f8d1607a5c8178618f0865c983d6",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/A_cue-speech-94571aea.jsonl": "0bc79ba52091d7fa7b1736376f8a143dcff57d22987349feae320f462a17c278",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/A_cue-nonspeech-98217f94.jsonl": "54c5ddc4c51902dd3db2f6de8e22350f69a68383e0dbf0571dfbf5322fbeb64f",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/A_cue-both-d2b9d60a.jsonl": "7cb673b7d34ead3ad3a401c585937d41a8758378ffb28b6c0223294fc52074cc",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/AV-trigger-5c2dd9f7.jsonl": "0fc934645062aba81554b3ddb3e12d343f859747009dc46d96009b778336491a",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/AV-suppress-23b9e291.jsonl": "2e2a1593846981a74e32ee1bbf8d77e70571fc7d20279404cca9e555748f1d46",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/AV-music-trig-ab0056be.jsonl": "c82fd80cfbb03282821a7fb799d7716d7ee21394fdfcb90047ffc839db436e3e",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/AV-music-supp-e31ad117.jsonl": "9e3132e4df2fd83c8a5224a56f2b7c1b64010d8fe01685e2991c1fcce7dc430f",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/AV-impulsive-trig-9cab1a1b.jsonl": "5159a087e9b4a47dc2f8d890c78ea8cb2a39be7f8f7506939c0dca1221b19369",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/AV-impulsive-supp-4ec0e1ca.jsonl": "33856ed623bc63899f70fd038cbc90c3391fe4a501ad243d10ff163071d5616f",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/AV-vocal_nonspeech-trig-fca59883.jsonl": "ffd87fe0c5495990d33ab98a89b510e2e220375899ae154125d0988262a5cddd",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/AV-vocal_nonspeech-supp-0152a712.jsonl": "aabf1671e309af4a537f832550bae442775a00953daafbcec78f94d4620fe253",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/AV-ambient-trig-755107f4.jsonl": "cd7412ffe538ac1e5dd234f72281a23b21f7f39c65531fe6ce5496cd72639924",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/AV-ambient-supp-5ca7dd7a.jsonl": "bdbc487f940631cc7d1ea859f94160aa4a5c805d3767b645dfe6b726d2ae2973",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/AV-other-trig-8893c1fc.jsonl": "40e8bea33d5a4acab7c8d36c3729742d988b935dc6e1c057f19d032c3488971b",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/AV-other-supp-af6419f2.jsonl": "8a541173af46f248d8607e2e00b5febdf2b3ee832fb007aed0a79b5efd780850",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/A_cue-tagger-fba4858d.jsonl": "3e9af3dbfeef079dfc64406ea0dae09e967efa6b4df963d2c3d33b7a4257837a",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/A_cue-whispertags-a2a4d50a.jsonl": "a79429d02470c6c3cd6231659a343361d1c46d8f68ac3481cfe266aa1ce4275f",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/AV-snap-e175aff0.jsonl": "d354c7cf67e5c04c000eb9e55f55eca74dbcefe014de9601e824373a895f74f6",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/AV-event-ea55b702.jsonl": "e9bfe3b8b3734b5c404eab5bb657043263034871a6a68772cfa10455229bed77",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/A_cue-music-only-d66a6586.jsonl": "89a15df9f59a861bd6121a7de713d6c6f2236d4275594c9e68845d675ddb5a1b",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/A_cue-impulsive-only-fbe81cab.jsonl": "9f1f624fefa91f8d7c7050498ce905cfef9b64bacefea01e1db9ba0d29ac812c",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/A_cue-ambient-only-bc973685.jsonl": "4a46f15e5bcbd8197a8f7a15e165f7722891176c651b417510123ee7d7e3368f",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/AV-memory-5d8af7fa.jsonl": "80438931f69bf8d4336d7b29552ce5fb773bc21f6623b04b6be00c88f7b94437",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/AV-memory-pure-125ce378.jsonl": "358c4f4b8431faea3c349bcb8f107031f7ef98a5403243bb56eb6ec33cbd34a3",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/AV-local-29e827a9.jsonl": "4118f22ebbdd58e3327d2884fc040d9993099352d20680d92df875c17ab0a3da",
+      "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/selections/V_mem-51036dd2.jsonl": "ba426d9825c9977564c76158f4fb60a5b2c53a180d3af9f4694f5618f5f2d03e"
+    },
+    "references": {
+      "zM3TiMkJ_DDZ": {
+        "movie_id": "tt21235248",
+        "reference_sha256": "44e9aa43ccabc31721e741169658ac50e78285da6af32550fd59bbd4e4192a6d",
+        "requested_k": 43,
+        "num_ground_truth": 57
+      },
+      "cWQi172fc4_p": {
+        "movie_id": "tt27534307",
+        "reference_sha256": "a3302f2dfe027a2c3fa8a7a8ac73399ecf82ee4900dc5446353d9077a11164cb",
+        "requested_k": 16,
+        "num_ground_truth": 31
+      },
+      "FCskdO_WFQ5e": {
+        "movie_id": "tt11145118",
+        "reference_sha256": "3f915cc56f0fa0579e5ca2d70bf7d93b690e8ddcec2d1853223dc3503ad7b342",
+        "requested_k": 3,
+        "num_ground_truth": 9
+      },
+      "9TqVTYpf_Ndy": {
+        "movie_id": "tt1684562",
+        "reference_sha256": "7665586998156d45fc48d2935806382a62b24f02ee8754034caa01b7066d08a0",
+        "requested_k": 7,
+        "num_ground_truth": 7
+      },
+      "Wy_AaNCfzc_o": {
+        "movie_id": "tt12299608",
+        "reference_sha256": "1b2e582eb4c4513d5424f92904a5d9d7157079ed6c9815351c053d972a4e8f79",
+        "requested_k": 5,
+        "num_ground_truth": 3
+      },
+      "mrEfJcER6AYY": {
+        "movie_id": "tt1448754",
+        "reference_sha256": "1a506fb5723aa82ff0fccc8a0dff0a98f07a627e6c332c324b77a1a26f50e0a9",
+        "requested_k": 25,
+        "num_ground_truth": 35
+      },
+      "LbrAzd5kfvof": {
+        "movie_id": "tt12261776",
+        "reference_sha256": "7f7426285e0cc7f7a9e2bc583e0929e82319fd4e1961574a803c9e8c36d9a180",
+        "requested_k": 15,
+        "num_ground_truth": 22
+      },
+      "Fz8lDj3lgV58": {
+        "movie_id": "tt10655524",
+        "reference_sha256": "e1748d40b21fba071d4b79d3f04ea226f73ff3a549b460f92a26dfc7a37e9cb1",
+        "requested_k": 15,
+        "num_ground_truth": 9
+      },
+      "XqL_Exul9JqE": {
+        "movie_id": "tt5433140",
+        "reference_sha256": "981be79cce8862e28989d3ba3bcf0c3ea6f6f9fca9c8102c9a3be29ae180c15a",
+        "requested_k": 3,
+        "num_ground_truth": 1
+      },
+      "EdbtrdK5gZSC": {
+        "movie_id": "tt17024450",
+        "reference_sha256": "c6ee1025974c6b98ce1c3dae183893f603452f1c4c7c62bd49984648eb57139b",
+        "requested_k": 20,
+        "num_ground_truth": 25
+      },
+      "URJKJijOnEs_": {
+        "movie_id": "tt21235248",
+        "reference_sha256": "65ad745738485359dced4e2e704e408294361d42a514b9e854c52a7bff154678",
+        "requested_k": 7,
+        "num_ground_truth": 9
+      },
+      "_ZtvoOooXix5": {
+        "movie_id": "tt27534307",
+        "reference_sha256": "985e5cd2c6d52aa65accb03e1fb49a255c386570ea0c481641256102452245ad",
+        "requested_k": 34,
+        "num_ground_truth": 43
+      },
+      "VdeBUxmW0K_A": {
+        "movie_id": "tt11145118",
+        "reference_sha256": "c6d6d2afc7d751a87896a6a506057ec8776e468e508d2699b719d0e9b63e09cd",
+        "requested_k": 2,
+        "num_ground_truth": 1
+      },
+      "O_BiVwxyF17a": {
+        "movie_id": "tt1684562",
+        "reference_sha256": "e1ab27db970ea6ab93fad398218cbb016c191c43d112d7da019a5c0039481b59",
+        "requested_k": 2,
+        "num_ground_truth": 1
+      },
+      "_Iiy7W4NNteS": {
+        "movie_id": "tt12299608",
+        "reference_sha256": "de6e3b2cb4b69d421a510917c13064f364521b4ac66627a9631c559d49475be1",
+        "requested_k": 4,
+        "num_ground_truth": 1
+      },
+      "5G21L0_TC5K4": {
+        "movie_id": "tt1448754",
+        "reference_sha256": "331eaee62053b69deb6c8ff7b2391188fe3ac414e35aef301eee4c4f456b57c9",
+        "requested_k": 6,
+        "num_ground_truth": 9
+      },
+      "_BjchgrAWAxM": {
+        "movie_id": "tt12261776",
+        "reference_sha256": "fd666857377c3a9cdeac3401505feadc10c7fe4097d0bd375aa9ad2ff1bad240",
+        "requested_k": 9,
+        "num_ground_truth": 16
+      },
+      "1Q_Xlv2OQWsy": {
+        "movie_id": "tt10655524",
+        "reference_sha256": "1960202ed24cab69f869ee135429bf4ad26d98094cdb502ed8d3ff97690ed22c",
+        "requested_k": 12,
+        "num_ground_truth": 6
+      },
+      "jdaGqC2tmFl8": {
+        "movie_id": "tt5433140",
+        "reference_sha256": "94e667bcf26f8a5c8ccf93eed63bb5b4c0fd2464228dfb21c7f1bc55b1c9cb4f",
+        "requested_k": 3,
+        "num_ground_truth": 5
+      },
+      "Bdg9hvz4obAD": {
+        "movie_id": "tt17024450",
+        "reference_sha256": "5a2610858c1b512a1f2b28c95e9d02708e304ed99f49e7cc6a04e5ea96ae7b0d",
+        "requested_k": 27,
+        "num_ground_truth": 48
+      },
+      "ml1BV2SPaFSF": {
+        "movie_id": "tt21235248",
+        "reference_sha256": "223a80a89a522b18636cfc6e3fff1524707ad8c701691f00acae8cd66e220810",
+        "requested_k": 20,
+        "num_ground_truth": 25
+      },
+      "eqaPWbz_gqD8": {
+        "movie_id": "tt27534307",
+        "reference_sha256": "eee93ee0b1c690b1fcba33f0eda4a34b967034baacf01a105f47e5b6d02606b3",
+        "requested_k": 13,
+        "num_ground_truth": 26
+      },
+      "sDMuBUgC6SgW": {
+        "movie_id": "tt11145118",
+        "reference_sha256": "1fc8083434d8fac4d3759a467f4d512009e2d2df09b324a63fc328312fe308bd",
+        "requested_k": 5,
+        "num_ground_truth": 4
+      },
+      "Y_VUFhPLVeJN": {
+        "movie_id": "tt1684562",
+        "reference_sha256": "e207fc7b47f1d8f1d00096b90c81cfd1182e8feb113af28501d9dedf75431e09",
+        "requested_k": 21,
+        "num_ground_truth": 21
+      },
+      "yG0zJls2UJJe": {
+        "movie_id": "tt12299608",
+        "reference_sha256": "ae1a5b8ba5af67a21552635f738485428bb073a10d30eb03184182070441a986",
+        "requested_k": 7,
+        "num_ground_truth": 10
+      },
+      "g8ew63BIIwEe": {
+        "movie_id": "tt1448754",
+        "reference_sha256": "aebb6955be90d02acc5c620d34220e897b5ea5528f6a12369590024eb8d4e7a3",
+        "requested_k": 11,
+        "num_ground_truth": 22
+      },
+      "SPFnjwnUECib": {
+        "movie_id": "tt12261776",
+        "reference_sha256": "0f70dbbaf230bf338184c3683a1769494d92d04f366902116042ee692770a1d1",
+        "requested_k": 17,
+        "num_ground_truth": 27
+      },
+      "mgjX94dRCtNB": {
+        "movie_id": "tt10655524",
+        "reference_sha256": "2035295d49a3278a9e214f072f705ac2051d93041d08eb7ead036fb2d82ccb53",
+        "requested_k": 12,
+        "num_ground_truth": 15
+      },
+      "Bz9iXZc3QVHs": {
+        "movie_id": "tt5433140",
+        "reference_sha256": "956b97e9e50b2a80b5c3c274ad167e79117b8e258e0c7661ed4099a27975624d",
+        "requested_k": 13,
+        "num_ground_truth": 26
+      },
+      "LnKORjoJDRZe": {
+        "movie_id": "tt17024450",
+        "reference_sha256": "626d3faea6edc40af5747cc2f4d5ce9f9458a2ba47c1f54d7aa0760134ff1b1f",
+        "requested_k": 11,
+        "num_ground_truth": 34
+      }
+    },
+    "script_sha256": "b362b0abfbf161a07168cfe52899b789bee764b658e1f45da911e8b6ef61562a",
+    "implementation": {
+      "/scratch/yy5919/pyro-revision15-records/src/evaluation/metrics.py": "fc4741f10869592ff00d0ee68264b9f35ca06f60c2a69f629f97798dbecdb282",
+      "/scratch/yy5919/pyro-revision15-records/src/evaluation/stats.py": "315f3c1b62fea166bc0da3929d9627cc33c34f3913089eb79d8bf1dcdf2d3cc7",
+      "/scratch/yy5919/pyro-revision15-records/scripts/analyze_paired.py": "b9434f215e1dbea6f6ef2cc33c7dfa9e7bd851be782438f3f85b1f23ac918f67",
+      "/scratch/yy5919/pyro-revision15-records/src/datasets/reframed.py": "d7335923494a02aaf0ae6c30cc93b3264e487be369962ca0ef4f2da5ba3186fc",
+      "/scratch/yy5919/pyro-revision15-records/src/datasets/adapters.py": "4585311dae2a7322a93aab4461bbc6701610c8573548f4217c08d3c3e564bb6e"
+    },
+    "reference_limitation": "historical report lacks original reference digest; every metric was recomputed and matched against currently bound references"
+  },
+  "results": [
+    {
+      "condition_a": "A_cue-speech",
+      "condition_b": "A_cue-both",
+      "metric": "temporal_f1",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "1Q_Xlv2OQWsy",
+        "5G21L0_TC5K4",
+        "9TqVTYpf_Ndy",
+        "Bdg9hvz4obAD",
+        "Bz9iXZc3QVHs",
+        "EdbtrdK5gZSC",
+        "FCskdO_WFQ5e",
+        "Fz8lDj3lgV58",
+        "LbrAzd5kfvof",
+        "LnKORjoJDRZe",
+        "O_BiVwxyF17a",
+        "SPFnjwnUECib",
+        "URJKJijOnEs_",
+        "VdeBUxmW0K_A",
+        "Wy_AaNCfzc_o",
+        "XqL_Exul9JqE",
+        "Y_VUFhPLVeJN",
+        "_BjchgrAWAxM",
+        "_Iiy7W4NNteS",
+        "_ZtvoOooXix5",
+        "cWQi172fc4_p",
+        "eqaPWbz_gqD8",
+        "g8ew63BIIwEe",
+        "jdaGqC2tmFl8",
+        "mgjX94dRCtNB",
+        "ml1BV2SPaFSF",
+        "mrEfJcER6AYY",
+        "sDMuBUgC6SgW",
+        "yG0zJls2UJJe",
+        "zM3TiMkJ_DDZ"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "tt10655524",
+          "n_examples": 3,
+          "a": 0.6049382716049383,
+          "b": 0.5555555555555555
+        },
+        {
+          "unit_id": "tt11145118",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.46296296296296297
+        },
+        {
+          "unit_id": "tt12261776",
+          "n_examples": 3,
+          "a": 0.45279279279279283,
+          "b": 0.4520229320229321
+        },
+        {
+          "unit_id": "tt12299608",
+          "n_examples": 3,
+          "a": 0.6176470588235294,
+          "b": 0.5784313725490197
+        },
+        {
+          "unit_id": "tt1448754",
+          "n_examples": 3,
+          "a": 0.4505050505050505,
+          "b": 0.3565656565656566
+        },
+        {
+          "unit_id": "tt1684562",
+          "n_examples": 3,
+          "a": 0.6349206349206349,
+          "b": 0.7142857142857143
+        },
+        {
+          "unit_id": "tt17024450",
+          "n_examples": 3,
+          "a": 0.39111111111111113,
+          "b": 0.4148148148148148
+        },
+        {
+          "unit_id": "tt21235248",
+          "n_examples": 3,
+          "a": 0.46685185185185185,
+          "b": 0.4994444444444444
+        },
+        {
+          "unit_id": "tt27534307",
+          "n_examples": 3,
+          "a": 0.48922708497176587,
+          "b": 0.4806399274484381
+        },
+        {
+          "unit_id": "tt5433140",
+          "n_examples": 3,
+          "a": 0.6047008547008547,
+          "b": 0.5363247863247863
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 10,
+        "mean_diff": -0.0005020122358461887,
+        "ci_low": -0.042374839481222455,
+        "ci_high": 0.03829644856261462
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "Holm across all16 contrasts",
+        "statistic": 25.0,
+        "pvalue": 0.845703125,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "holm_pvalue": 1.0
+      },
+      "ablation": "1"
+    },
+    {
+      "condition_a": "A_cue-nonspeech",
+      "condition_b": "A_cue-both",
+      "metric": "temporal_f1",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "1Q_Xlv2OQWsy",
+        "5G21L0_TC5K4",
+        "9TqVTYpf_Ndy",
+        "Bdg9hvz4obAD",
+        "Bz9iXZc3QVHs",
+        "EdbtrdK5gZSC",
+        "FCskdO_WFQ5e",
+        "Fz8lDj3lgV58",
+        "LbrAzd5kfvof",
+        "LnKORjoJDRZe",
+        "O_BiVwxyF17a",
+        "SPFnjwnUECib",
+        "URJKJijOnEs_",
+        "VdeBUxmW0K_A",
+        "Wy_AaNCfzc_o",
+        "XqL_Exul9JqE",
+        "Y_VUFhPLVeJN",
+        "_BjchgrAWAxM",
+        "_Iiy7W4NNteS",
+        "_ZtvoOooXix5",
+        "cWQi172fc4_p",
+        "eqaPWbz_gqD8",
+        "g8ew63BIIwEe",
+        "jdaGqC2tmFl8",
+        "mgjX94dRCtNB",
+        "ml1BV2SPaFSF",
+        "mrEfJcER6AYY",
+        "sDMuBUgC6SgW",
+        "yG0zJls2UJJe",
+        "zM3TiMkJ_DDZ"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "tt10655524",
+          "n_examples": 3,
+          "a": 0.5555555555555555,
+          "b": 0.5555555555555555
+        },
+        {
+          "unit_id": "tt11145118",
+          "n_examples": 3,
+          "a": 0.46296296296296297,
+          "b": 0.46296296296296297
+        },
+        {
+          "unit_id": "tt12261776",
+          "n_examples": 3,
+          "a": 0.4368714168714169,
+          "b": 0.4520229320229321
+        },
+        {
+          "unit_id": "tt12299608",
+          "n_examples": 3,
+          "a": 0.5784313725490197,
+          "b": 0.5784313725490197
+        },
+        {
+          "unit_id": "tt1448754",
+          "n_examples": 3,
+          "a": 0.40101010101010104,
+          "b": 0.3565656565656566
+        },
+        {
+          "unit_id": "tt1684562",
+          "n_examples": 3,
+          "a": 0.7619047619047619,
+          "b": 0.7142857142857143
+        },
+        {
+          "unit_id": "tt17024450",
+          "n_examples": 3,
+          "a": 0.38518518518518513,
+          "b": 0.4148148148148148
+        },
+        {
+          "unit_id": "tt21235248",
+          "n_examples": 3,
+          "a": 0.5477777777777778,
+          "b": 0.4994444444444444
+        },
+        {
+          "unit_id": "tt27534307",
+          "n_examples": 3,
+          "a": 0.512140341927576,
+          "b": 0.4806399274484381
+        },
+        {
+          "unit_id": "tt5433140",
+          "n_examples": 3,
+          "a": 0.5192307692307693,
+          "b": 0.5363247863247863
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 10,
+        "mean_diff": 0.011002207800080138,
+        "ci_low": -0.006074949479204806,
+        "ci_high": 0.02821804161165862
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "Holm across all16 contrasts",
+        "statistic": 6.0,
+        "pvalue": 0.21875,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "holm_pvalue": 1.0
+      },
+      "ablation": "1"
+    },
+    {
+      "condition_a": "AV-trigger",
+      "condition_b": "AV-suppress",
+      "metric": "temporal_f1",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "1Q_Xlv2OQWsy",
+        "5G21L0_TC5K4",
+        "9TqVTYpf_Ndy",
+        "Bdg9hvz4obAD",
+        "Bz9iXZc3QVHs",
+        "EdbtrdK5gZSC",
+        "FCskdO_WFQ5e",
+        "Fz8lDj3lgV58",
+        "LbrAzd5kfvof",
+        "LnKORjoJDRZe",
+        "O_BiVwxyF17a",
+        "SPFnjwnUECib",
+        "URJKJijOnEs_",
+        "VdeBUxmW0K_A",
+        "Wy_AaNCfzc_o",
+        "XqL_Exul9JqE",
+        "Y_VUFhPLVeJN",
+        "_BjchgrAWAxM",
+        "_Iiy7W4NNteS",
+        "_ZtvoOooXix5",
+        "cWQi172fc4_p",
+        "eqaPWbz_gqD8",
+        "g8ew63BIIwEe",
+        "jdaGqC2tmFl8",
+        "mgjX94dRCtNB",
+        "ml1BV2SPaFSF",
+        "mrEfJcER6AYY",
+        "sDMuBUgC6SgW",
+        "yG0zJls2UJJe",
+        "zM3TiMkJ_DDZ"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "tt10655524",
+          "n_examples": 3,
+          "a": 0.44753086419753085,
+          "b": 0.5308641975308642
+        },
+        {
+          "unit_id": "tt11145118",
+          "n_examples": 3,
+          "a": 0.46296296296296297,
+          "b": 0.38888888888888884
+        },
+        {
+          "unit_id": "tt12261776",
+          "n_examples": 3,
+          "a": 0.447010647010647,
+          "b": 0.31868959868959873
+        },
+        {
+          "unit_id": "tt12299608",
+          "n_examples": 3,
+          "a": 0.573529411764706,
+          "b": 0.6568627450980392
+        },
+        {
+          "unit_id": "tt1448754",
+          "n_examples": 3,
+          "a": 0.46565656565656566,
+          "b": 0.44343434343434346
+        },
+        {
+          "unit_id": "tt1684562",
+          "n_examples": 3,
+          "a": 0.6825396825396824,
+          "b": 0.6190476190476191
+        },
+        {
+          "unit_id": "tt17024450",
+          "n_examples": 3,
+          "a": 0.38814814814814813,
+          "b": 0.3970370370370371
+        },
+        {
+          "unit_id": "tt21235248",
+          "n_examples": 3,
+          "a": 0.4764814814814815,
+          "b": 0.3888888888888889
+        },
+        {
+          "unit_id": "tt27534307",
+          "n_examples": 3,
+          "a": 0.4428762726635067,
+          "b": 0.46549667826263574
+        },
+        {
+          "unit_id": "tt5433140",
+          "n_examples": 3,
+          "a": 0.5534188034188033,
+          "b": 0.4871794871794872
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 10,
+        "mean_diff": 0.024376535578663212,
+        "ci_low": -0.019767738565610916,
+        "ci_high": 0.06582130432130431
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "Holm across all16 contrasts",
+        "statistic": 19.0,
+        "pvalue": 0.416015625,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "holm_pvalue": 1.0
+      },
+      "ablation": "2"
+    },
+    {
+      "condition_a": "AV-music-trig",
+      "condition_b": "AV-music-supp",
+      "metric": "temporal_f1",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "1Q_Xlv2OQWsy",
+        "5G21L0_TC5K4",
+        "9TqVTYpf_Ndy",
+        "Bdg9hvz4obAD",
+        "Bz9iXZc3QVHs",
+        "EdbtrdK5gZSC",
+        "FCskdO_WFQ5e",
+        "Fz8lDj3lgV58",
+        "LbrAzd5kfvof",
+        "LnKORjoJDRZe",
+        "O_BiVwxyF17a",
+        "SPFnjwnUECib",
+        "URJKJijOnEs_",
+        "VdeBUxmW0K_A",
+        "Wy_AaNCfzc_o",
+        "XqL_Exul9JqE",
+        "Y_VUFhPLVeJN",
+        "_BjchgrAWAxM",
+        "_Iiy7W4NNteS",
+        "_ZtvoOooXix5",
+        "cWQi172fc4_p",
+        "eqaPWbz_gqD8",
+        "g8ew63BIIwEe",
+        "jdaGqC2tmFl8",
+        "mgjX94dRCtNB",
+        "ml1BV2SPaFSF",
+        "mrEfJcER6AYY",
+        "sDMuBUgC6SgW",
+        "yG0zJls2UJJe",
+        "zM3TiMkJ_DDZ"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "tt10655524",
+          "n_examples": 3,
+          "a": 0.46913580246913583,
+          "b": 0.49382716049382713
+        },
+        {
+          "unit_id": "tt11145118",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "tt12261776",
+          "n_examples": 3,
+          "a": 0.37852579852579854,
+          "b": 0.40733824733824736
+        },
+        {
+          "unit_id": "tt12299608",
+          "n_examples": 3,
+          "a": 0.5343137254901961,
+          "b": 0.5343137254901961
+        },
+        {
+          "unit_id": "tt1448754",
+          "n_examples": 3,
+          "a": 0.37878787878787884,
+          "b": 0.398989898989899
+        },
+        {
+          "unit_id": "tt1684562",
+          "n_examples": 3,
+          "a": 0.6825396825396824,
+          "b": 0.6825396825396824
+        },
+        {
+          "unit_id": "tt17024450",
+          "n_examples": 3,
+          "a": 0.40592592592592597,
+          "b": 0.39111111111111113
+        },
+        {
+          "unit_id": "tt21235248",
+          "n_examples": 3,
+          "a": 0.4305555555555556,
+          "b": 0.3955555555555555
+        },
+        {
+          "unit_id": "tt27534307",
+          "n_examples": 3,
+          "a": 0.4883390840837649,
+          "b": 0.4171242469114809
+        },
+        {
+          "unit_id": "tt5433140",
+          "n_examples": 3,
+          "a": 0.4871794871794872,
+          "b": 0.5042735042735043
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 10,
+        "mean_diff": 0.00302298078539216,
+        "ci_low": -0.013608929679851634,
+        "ci_high": 0.02284424913148319
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "Holm across all16 contrasts",
+        "statistic": 14.0,
+        "pvalue": 1.0,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "holm_pvalue": 1.0
+      },
+      "ablation": "2"
+    },
+    {
+      "condition_a": "AV-impulsive-trig",
+      "condition_b": "AV-impulsive-supp",
+      "metric": "temporal_f1",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "1Q_Xlv2OQWsy",
+        "5G21L0_TC5K4",
+        "9TqVTYpf_Ndy",
+        "Bdg9hvz4obAD",
+        "Bz9iXZc3QVHs",
+        "EdbtrdK5gZSC",
+        "FCskdO_WFQ5e",
+        "Fz8lDj3lgV58",
+        "LbrAzd5kfvof",
+        "LnKORjoJDRZe",
+        "O_BiVwxyF17a",
+        "SPFnjwnUECib",
+        "URJKJijOnEs_",
+        "VdeBUxmW0K_A",
+        "Wy_AaNCfzc_o",
+        "XqL_Exul9JqE",
+        "Y_VUFhPLVeJN",
+        "_BjchgrAWAxM",
+        "_Iiy7W4NNteS",
+        "_ZtvoOooXix5",
+        "cWQi172fc4_p",
+        "eqaPWbz_gqD8",
+        "g8ew63BIIwEe",
+        "jdaGqC2tmFl8",
+        "mgjX94dRCtNB",
+        "ml1BV2SPaFSF",
+        "mrEfJcER6AYY",
+        "sDMuBUgC6SgW",
+        "yG0zJls2UJJe",
+        "zM3TiMkJ_DDZ"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "tt10655524",
+          "n_examples": 3,
+          "a": 0.49382716049382713,
+          "b": 0.49382716049382713
+        },
+        {
+          "unit_id": "tt11145118",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "tt12261776",
+          "n_examples": 3,
+          "a": 0.38067158067158074,
+          "b": 0.38067158067158074
+        },
+        {
+          "unit_id": "tt12299608",
+          "n_examples": 3,
+          "a": 0.5343137254901961,
+          "b": 0.5343137254901961
+        },
+        {
+          "unit_id": "tt1448754",
+          "n_examples": 3,
+          "a": 0.33434343434343433,
+          "b": 0.398989898989899
+        },
+        {
+          "unit_id": "tt1684562",
+          "n_examples": 3,
+          "a": 0.6825396825396824,
+          "b": 0.6825396825396824
+        },
+        {
+          "unit_id": "tt17024450",
+          "n_examples": 3,
+          "a": 0.39111111111111113,
+          "b": 0.37333333333333335
+        },
+        {
+          "unit_id": "tt21235248",
+          "n_examples": 3,
+          "a": 0.46685185185185185,
+          "b": 0.44388888888888883
+        },
+        {
+          "unit_id": "tt27534307",
+          "n_examples": 3,
+          "a": 0.4399666527326102,
+          "b": 0.4313086440746015
+        },
+        {
+          "unit_id": "tt5433140",
+          "n_examples": 3,
+          "a": 0.4871794871794872,
+          "b": 0.5213675213675214
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 10,
+        "mean_diff": -0.004943574943574935,
+        "ci_low": -0.02183068783068783,
+        "ci_high": 0.008409960409960438
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "Holm across all16 contrasts",
+        "statistic": 6.0,
+        "pvalue": 0.8125,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "holm_pvalue": 1.0
+      },
+      "ablation": "2"
+    },
+    {
+      "condition_a": "AV-vocal_nonspeech-trig",
+      "condition_b": "AV-vocal_nonspeech-supp",
+      "metric": "temporal_f1",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "1Q_Xlv2OQWsy",
+        "5G21L0_TC5K4",
+        "9TqVTYpf_Ndy",
+        "Bdg9hvz4obAD",
+        "Bz9iXZc3QVHs",
+        "EdbtrdK5gZSC",
+        "FCskdO_WFQ5e",
+        "Fz8lDj3lgV58",
+        "LbrAzd5kfvof",
+        "LnKORjoJDRZe",
+        "O_BiVwxyF17a",
+        "SPFnjwnUECib",
+        "URJKJijOnEs_",
+        "VdeBUxmW0K_A",
+        "Wy_AaNCfzc_o",
+        "XqL_Exul9JqE",
+        "Y_VUFhPLVeJN",
+        "_BjchgrAWAxM",
+        "_Iiy7W4NNteS",
+        "_ZtvoOooXix5",
+        "cWQi172fc4_p",
+        "eqaPWbz_gqD8",
+        "g8ew63BIIwEe",
+        "jdaGqC2tmFl8",
+        "mgjX94dRCtNB",
+        "ml1BV2SPaFSF",
+        "mrEfJcER6AYY",
+        "sDMuBUgC6SgW",
+        "yG0zJls2UJJe",
+        "zM3TiMkJ_DDZ"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "tt10655524",
+          "n_examples": 3,
+          "a": 0.49382716049382713,
+          "b": 0.49382716049382713
+        },
+        {
+          "unit_id": "tt11145118",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "tt12261776",
+          "n_examples": 3,
+          "a": 0.38067158067158074,
+          "b": 0.38067158067158074
+        },
+        {
+          "unit_id": "tt12299608",
+          "n_examples": 3,
+          "a": 0.5343137254901961,
+          "b": 0.5343137254901961
+        },
+        {
+          "unit_id": "tt1448754",
+          "n_examples": 3,
+          "a": 0.398989898989899,
+          "b": 0.398989898989899
+        },
+        {
+          "unit_id": "tt1684562",
+          "n_examples": 3,
+          "a": 0.6825396825396824,
+          "b": 0.6825396825396824
+        },
+        {
+          "unit_id": "tt17024450",
+          "n_examples": 3,
+          "a": 0.39111111111111113,
+          "b": 0.39111111111111113
+        },
+        {
+          "unit_id": "tt21235248",
+          "n_examples": 3,
+          "a": 0.4290740740740741,
+          "b": 0.45870370370370367
+        },
+        {
+          "unit_id": "tt27534307",
+          "n_examples": 3,
+          "a": 0.43421826400549807,
+          "b": 0.4171242469114809
+        },
+        {
+          "unit_id": "tt5433140",
+          "n_examples": 3,
+          "a": 0.5042735042735043,
+          "b": 0.5042735042735043
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 10,
+        "mean_diff": -0.0012535612535612417,
+        "ci_low": -0.008888888888888868,
+        "ci_high": 0.005128205128205143
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "Holm across all16 contrasts",
+        "statistic": 1.0,
+        "pvalue": 1.0,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "holm_pvalue": 1.0
+      },
+      "ablation": "2"
+    },
+    {
+      "condition_a": "AV-ambient-trig",
+      "condition_b": "AV-ambient-supp",
+      "metric": "temporal_f1",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "1Q_Xlv2OQWsy",
+        "5G21L0_TC5K4",
+        "9TqVTYpf_Ndy",
+        "Bdg9hvz4obAD",
+        "Bz9iXZc3QVHs",
+        "EdbtrdK5gZSC",
+        "FCskdO_WFQ5e",
+        "Fz8lDj3lgV58",
+        "LbrAzd5kfvof",
+        "LnKORjoJDRZe",
+        "O_BiVwxyF17a",
+        "SPFnjwnUECib",
+        "URJKJijOnEs_",
+        "VdeBUxmW0K_A",
+        "Wy_AaNCfzc_o",
+        "XqL_Exul9JqE",
+        "Y_VUFhPLVeJN",
+        "_BjchgrAWAxM",
+        "_Iiy7W4NNteS",
+        "_ZtvoOooXix5",
+        "cWQi172fc4_p",
+        "eqaPWbz_gqD8",
+        "g8ew63BIIwEe",
+        "jdaGqC2tmFl8",
+        "mgjX94dRCtNB",
+        "ml1BV2SPaFSF",
+        "mrEfJcER6AYY",
+        "sDMuBUgC6SgW",
+        "yG0zJls2UJJe",
+        "zM3TiMkJ_DDZ"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "tt10655524",
+          "n_examples": 3,
+          "a": 0.49382716049382713,
+          "b": 0.49382716049382713
+        },
+        {
+          "unit_id": "tt11145118",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "tt12261776",
+          "n_examples": 3,
+          "a": 0.38067158067158074,
+          "b": 0.38067158067158074
+        },
+        {
+          "unit_id": "tt12299608",
+          "n_examples": 3,
+          "a": 0.5343137254901961,
+          "b": 0.5343137254901961
+        },
+        {
+          "unit_id": "tt1448754",
+          "n_examples": 3,
+          "a": 0.398989898989899,
+          "b": 0.398989898989899
+        },
+        {
+          "unit_id": "tt1684562",
+          "n_examples": 3,
+          "a": 0.6825396825396824,
+          "b": 0.6825396825396824
+        },
+        {
+          "unit_id": "tt17024450",
+          "n_examples": 3,
+          "a": 0.39111111111111113,
+          "b": 0.39111111111111113
+        },
+        {
+          "unit_id": "tt21235248",
+          "n_examples": 3,
+          "a": 0.45870370370370367,
+          "b": 0.45870370370370367
+        },
+        {
+          "unit_id": "tt27534307",
+          "n_examples": 3,
+          "a": 0.4313086440746015,
+          "b": 0.4313086440746015
+        },
+        {
+          "unit_id": "tt5433140",
+          "n_examples": 3,
+          "a": 0.4871794871794872,
+          "b": 0.5042735042735043
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 10,
+        "mean_diff": -0.0017094017094017033,
+        "ci_low": -0.00512820512820511,
+        "ci_high": 0.0
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "Holm across all16 contrasts",
+        "statistic": 0.0,
+        "pvalue": 1.0,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "holm_pvalue": 1.0
+      },
+      "ablation": "2"
+    },
+    {
+      "condition_a": "AV-other-trig",
+      "condition_b": "AV-other-supp",
+      "metric": "temporal_f1",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "1Q_Xlv2OQWsy",
+        "5G21L0_TC5K4",
+        "9TqVTYpf_Ndy",
+        "Bdg9hvz4obAD",
+        "Bz9iXZc3QVHs",
+        "EdbtrdK5gZSC",
+        "FCskdO_WFQ5e",
+        "Fz8lDj3lgV58",
+        "LbrAzd5kfvof",
+        "LnKORjoJDRZe",
+        "O_BiVwxyF17a",
+        "SPFnjwnUECib",
+        "URJKJijOnEs_",
+        "VdeBUxmW0K_A",
+        "Wy_AaNCfzc_o",
+        "XqL_Exul9JqE",
+        "Y_VUFhPLVeJN",
+        "_BjchgrAWAxM",
+        "_Iiy7W4NNteS",
+        "_ZtvoOooXix5",
+        "cWQi172fc4_p",
+        "eqaPWbz_gqD8",
+        "g8ew63BIIwEe",
+        "jdaGqC2tmFl8",
+        "mgjX94dRCtNB",
+        "ml1BV2SPaFSF",
+        "mrEfJcER6AYY",
+        "sDMuBUgC6SgW",
+        "yG0zJls2UJJe",
+        "zM3TiMkJ_DDZ"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "tt10655524",
+          "n_examples": 3,
+          "a": 0.49382716049382713,
+          "b": 0.49382716049382713
+        },
+        {
+          "unit_id": "tt11145118",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "tt12261776",
+          "n_examples": 3,
+          "a": 0.40155610155610155,
+          "b": 0.38067158067158074
+        },
+        {
+          "unit_id": "tt12299608",
+          "n_examples": 3,
+          "a": 0.5343137254901961,
+          "b": 0.5343137254901961
+        },
+        {
+          "unit_id": "tt1448754",
+          "n_examples": 3,
+          "a": 0.508080808080808,
+          "b": 0.398989898989899
+        },
+        {
+          "unit_id": "tt1684562",
+          "n_examples": 3,
+          "a": 0.6825396825396824,
+          "b": 0.6984126984126985
+        },
+        {
+          "unit_id": "tt17024450",
+          "n_examples": 3,
+          "a": 0.39111111111111113,
+          "b": 0.37629629629629635
+        },
+        {
+          "unit_id": "tt21235248",
+          "n_examples": 3,
+          "a": 0.4024074074074074,
+          "b": 0.4653703703703704
+        },
+        {
+          "unit_id": "tt27534307",
+          "n_examples": 3,
+          "a": 0.4310866438526013,
+          "b": 0.4313086440746015
+        },
+        {
+          "unit_id": "tt5433140",
+          "n_examples": 3,
+          "a": 0.5042735042735043,
+          "b": 0.4871794871794872
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 10,
+        "mean_diff": 0.00828262828262824,
+        "ci_low": -0.01423872423872426,
+        "ci_high": 0.036040256040255986
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "Holm across all16 contrasts",
+        "statistic": 10.0,
+        "pvalue": 0.578125,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "holm_pvalue": 1.0
+      },
+      "ablation": "2"
+    },
+    {
+      "condition_a": "A_cue-tagger",
+      "condition_b": "A_cue-whispertags",
+      "metric": "temporal_f1",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "1Q_Xlv2OQWsy",
+        "5G21L0_TC5K4",
+        "9TqVTYpf_Ndy",
+        "Bdg9hvz4obAD",
+        "Bz9iXZc3QVHs",
+        "EdbtrdK5gZSC",
+        "FCskdO_WFQ5e",
+        "Fz8lDj3lgV58",
+        "LbrAzd5kfvof",
+        "LnKORjoJDRZe",
+        "O_BiVwxyF17a",
+        "SPFnjwnUECib",
+        "URJKJijOnEs_",
+        "VdeBUxmW0K_A",
+        "Wy_AaNCfzc_o",
+        "XqL_Exul9JqE",
+        "Y_VUFhPLVeJN",
+        "_BjchgrAWAxM",
+        "_Iiy7W4NNteS",
+        "_ZtvoOooXix5",
+        "cWQi172fc4_p",
+        "eqaPWbz_gqD8",
+        "g8ew63BIIwEe",
+        "jdaGqC2tmFl8",
+        "mgjX94dRCtNB",
+        "ml1BV2SPaFSF",
+        "mrEfJcER6AYY",
+        "sDMuBUgC6SgW",
+        "yG0zJls2UJJe",
+        "zM3TiMkJ_DDZ"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "tt10655524",
+          "n_examples": 3,
+          "a": 0.5555555555555555,
+          "b": 0.4660493827160494
+        },
+        {
+          "unit_id": "tt11145118",
+          "n_examples": 3,
+          "a": 0.46296296296296297,
+          "b": 0.38888888888888884
+        },
+        {
+          "unit_id": "tt12261776",
+          "n_examples": 3,
+          "a": 0.4520229320229321,
+          "b": 0.377035217035217
+        },
+        {
+          "unit_id": "tt12299608",
+          "n_examples": 3,
+          "a": 0.5784313725490197,
+          "b": 0.6176470588235294
+        },
+        {
+          "unit_id": "tt1448754",
+          "n_examples": 3,
+          "a": 0.3565656565656566,
+          "b": 0.4545454545454546
+        },
+        {
+          "unit_id": "tt1684562",
+          "n_examples": 3,
+          "a": 0.7142857142857143,
+          "b": 0.7142857142857143
+        },
+        {
+          "unit_id": "tt17024450",
+          "n_examples": 3,
+          "a": 0.4148148148148148,
+          "b": 0.4207407407407408
+        },
+        {
+          "unit_id": "tt21235248",
+          "n_examples": 3,
+          "a": 0.4994444444444444,
+          "b": 0.4548148148148148
+        },
+        {
+          "unit_id": "tt27534307",
+          "n_examples": 3,
+          "a": 0.4806399274484381,
+          "b": 0.4548879016964123
+        },
+        {
+          "unit_id": "tt5433140",
+          "n_examples": 3,
+          "a": 0.5363247863247863,
+          "b": 0.5363247863247863
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 10,
+        "mean_diff": 0.016582820710271694,
+        "ci_low": -0.01802131202131203,
+        "ci_high": 0.04913030142441912
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "Holm across all16 contrasts",
+        "statistic": 12.0,
+        "pvalue": 0.4609375,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "holm_pvalue": 1.0
+      },
+      "ablation": "3"
+    },
+    {
+      "condition_a": "AV-snap",
+      "condition_b": "AV-event",
+      "metric": "temporal_f1",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "1Q_Xlv2OQWsy",
+        "5G21L0_TC5K4",
+        "9TqVTYpf_Ndy",
+        "Bdg9hvz4obAD",
+        "Bz9iXZc3QVHs",
+        "EdbtrdK5gZSC",
+        "FCskdO_WFQ5e",
+        "Fz8lDj3lgV58",
+        "LbrAzd5kfvof",
+        "LnKORjoJDRZe",
+        "O_BiVwxyF17a",
+        "SPFnjwnUECib",
+        "URJKJijOnEs_",
+        "VdeBUxmW0K_A",
+        "Wy_AaNCfzc_o",
+        "XqL_Exul9JqE",
+        "Y_VUFhPLVeJN",
+        "_BjchgrAWAxM",
+        "_Iiy7W4NNteS",
+        "_ZtvoOooXix5",
+        "cWQi172fc4_p",
+        "eqaPWbz_gqD8",
+        "g8ew63BIIwEe",
+        "jdaGqC2tmFl8",
+        "mgjX94dRCtNB",
+        "ml1BV2SPaFSF",
+        "mrEfJcER6AYY",
+        "sDMuBUgC6SgW",
+        "yG0zJls2UJJe",
+        "zM3TiMkJ_DDZ"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "tt10655524",
+          "n_examples": 3,
+          "a": 0.44753086419753085,
+          "b": 0.49382716049382713
+        },
+        {
+          "unit_id": "tt11145118",
+          "n_examples": 3,
+          "a": 0.46296296296296297,
+          "b": 0.46296296296296297
+        },
+        {
+          "unit_id": "tt12261776",
+          "n_examples": 3,
+          "a": 0.447010647010647,
+          "b": 0.447010647010647
+        },
+        {
+          "unit_id": "tt12299608",
+          "n_examples": 3,
+          "a": 0.573529411764706,
+          "b": 0.5009803921568627
+        },
+        {
+          "unit_id": "tt1448754",
+          "n_examples": 3,
+          "a": 0.46565656565656566,
+          "b": 0.43636363636363634
+        },
+        {
+          "unit_id": "tt1684562",
+          "n_examples": 3,
+          "a": 0.6825396825396824,
+          "b": 0.4603174603174603
+        },
+        {
+          "unit_id": "tt17024450",
+          "n_examples": 3,
+          "a": 0.38814814814814813,
+          "b": 0.3437037037037037
+        },
+        {
+          "unit_id": "tt21235248",
+          "n_examples": 3,
+          "a": 0.4764814814814815,
+          "b": 0.4214814814814815
+        },
+        {
+          "unit_id": "tt27534307",
+          "n_examples": 3,
+          "a": 0.4428762726635067,
+          "b": 0.45153428132151535
+        },
+        {
+          "unit_id": "tt5433140",
+          "n_examples": 3,
+          "a": 0.5534188034188033,
+          "b": 0.5534188034188033
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 10,
+        "mean_diff": 0.03685543106131342,
+        "ci_low": 0.000500000000000006,
+        "ci_high": 0.08574431995020229
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "Holm across all16 contrasts",
+        "statistic": 5.0,
+        "pvalue": 0.15625,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "holm_pvalue": 1.0
+      },
+      "ablation": "4"
+    },
+    {
+      "condition_a": "AV-memory",
+      "condition_b": "AV-local",
+      "metric": "temporal_f1",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "1Q_Xlv2OQWsy",
+        "5G21L0_TC5K4",
+        "9TqVTYpf_Ndy",
+        "Bdg9hvz4obAD",
+        "Bz9iXZc3QVHs",
+        "EdbtrdK5gZSC",
+        "FCskdO_WFQ5e",
+        "Fz8lDj3lgV58",
+        "LbrAzd5kfvof",
+        "LnKORjoJDRZe",
+        "O_BiVwxyF17a",
+        "SPFnjwnUECib",
+        "URJKJijOnEs_",
+        "VdeBUxmW0K_A",
+        "Wy_AaNCfzc_o",
+        "XqL_Exul9JqE",
+        "Y_VUFhPLVeJN",
+        "_BjchgrAWAxM",
+        "_Iiy7W4NNteS",
+        "_ZtvoOooXix5",
+        "cWQi172fc4_p",
+        "eqaPWbz_gqD8",
+        "g8ew63BIIwEe",
+        "jdaGqC2tmFl8",
+        "mgjX94dRCtNB",
+        "ml1BV2SPaFSF",
+        "mrEfJcER6AYY",
+        "sDMuBUgC6SgW",
+        "yG0zJls2UJJe",
+        "zM3TiMkJ_DDZ"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "tt10655524",
+          "n_examples": 3,
+          "a": 0.44753086419753085,
+          "b": 0.5679012345679012
+        },
+        {
+          "unit_id": "tt11145118",
+          "n_examples": 3,
+          "a": 0.46296296296296297,
+          "b": 0.38888888888888884
+        },
+        {
+          "unit_id": "tt12261776",
+          "n_examples": 3,
+          "a": 0.447010647010647,
+          "b": 0.4051924651924652
+        },
+        {
+          "unit_id": "tt12299608",
+          "n_examples": 3,
+          "a": 0.573529411764706,
+          "b": 0.573529411764706
+        },
+        {
+          "unit_id": "tt1448754",
+          "n_examples": 3,
+          "a": 0.46565656565656566,
+          "b": 0.40101010101010104
+        },
+        {
+          "unit_id": "tt1684562",
+          "n_examples": 3,
+          "a": 0.6825396825396824,
+          "b": 0.7301587301587302
+        },
+        {
+          "unit_id": "tt17024450",
+          "n_examples": 3,
+          "a": 0.38814814814814813,
+          "b": 0.41185185185185186
+        },
+        {
+          "unit_id": "tt21235248",
+          "n_examples": 3,
+          "a": 0.4764814814814815,
+          "b": 0.43203703703703705
+        },
+        {
+          "unit_id": "tt27534307",
+          "n_examples": 3,
+          "a": 0.4428762726635067,
+          "b": 0.4171242469114809
+        },
+        {
+          "unit_id": "tt5433140",
+          "n_examples": 3,
+          "a": 0.5534188034188033,
+          "b": 0.452991452991453
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 10,
+        "mean_diff": 0.015946941946941927,
+        "ci_low": -0.025685980685980714,
+        "ci_high": 0.051565841565841555
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "Holm across all16 contrasts",
+        "statistic": 15.0,
+        "pvalue": 0.42578125,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "holm_pvalue": 1.0
+      },
+      "ablation": "8"
+    },
+    {
+      "condition_a": "AV-memory-pure",
+      "condition_b": "AV-local",
+      "metric": "temporal_f1",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "1Q_Xlv2OQWsy",
+        "5G21L0_TC5K4",
+        "9TqVTYpf_Ndy",
+        "Bdg9hvz4obAD",
+        "Bz9iXZc3QVHs",
+        "EdbtrdK5gZSC",
+        "FCskdO_WFQ5e",
+        "Fz8lDj3lgV58",
+        "LbrAzd5kfvof",
+        "LnKORjoJDRZe",
+        "O_BiVwxyF17a",
+        "SPFnjwnUECib",
+        "URJKJijOnEs_",
+        "VdeBUxmW0K_A",
+        "Wy_AaNCfzc_o",
+        "XqL_Exul9JqE",
+        "Y_VUFhPLVeJN",
+        "_BjchgrAWAxM",
+        "_Iiy7W4NNteS",
+        "_ZtvoOooXix5",
+        "cWQi172fc4_p",
+        "eqaPWbz_gqD8",
+        "g8ew63BIIwEe",
+        "jdaGqC2tmFl8",
+        "mgjX94dRCtNB",
+        "ml1BV2SPaFSF",
+        "mrEfJcER6AYY",
+        "sDMuBUgC6SgW",
+        "yG0zJls2UJJe",
+        "zM3TiMkJ_DDZ"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "tt10655524",
+          "n_examples": 3,
+          "a": 0.49074074074074076,
+          "b": 0.5679012345679012
+        },
+        {
+          "unit_id": "tt11145118",
+          "n_examples": 3,
+          "a": 0.46296296296296297,
+          "b": 0.38888888888888884
+        },
+        {
+          "unit_id": "tt12261776",
+          "n_examples": 3,
+          "a": 0.33312039312039315,
+          "b": 0.4051924651924652
+        },
+        {
+          "unit_id": "tt12299608",
+          "n_examples": 3,
+          "a": 0.6568627450980392,
+          "b": 0.573529411764706
+        },
+        {
+          "unit_id": "tt1448754",
+          "n_examples": 3,
+          "a": 0.4212121212121212,
+          "b": 0.40101010101010104
+        },
+        {
+          "unit_id": "tt1684562",
+          "n_examples": 3,
+          "a": 0.6984126984126985,
+          "b": 0.7301587301587302
+        },
+        {
+          "unit_id": "tt17024450",
+          "n_examples": 3,
+          "a": 0.3940740740740741,
+          "b": 0.41185185185185186
+        },
+        {
+          "unit_id": "tt21235248",
+          "n_examples": 3,
+          "a": 0.3903703703703704,
+          "b": 0.43203703703703705
+        },
+        {
+          "unit_id": "tt27534307",
+          "n_examples": 3,
+          "a": 0.42287263563859306,
+          "b": 0.4171242469114809
+        },
+        {
+          "unit_id": "tt5433140",
+          "n_examples": 3,
+          "a": 0.5534188034188033,
+          "b": 0.452991452991453
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 10,
+        "mean_diff": 0.004336212467418138,
+        "ci_low": -0.03191289124622458,
+        "ci_high": 0.04322280215188015
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "Holm across all16 contrasts",
+        "statistic": 25.0,
+        "pvalue": 0.845703125,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "holm_pvalue": 1.0
+      },
+      "ablation": "8"
+    },
+    {
+      "condition_a": "V_mem",
+      "condition_b": "V",
+      "metric": "temporal_f1",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "1Q_Xlv2OQWsy",
+        "5G21L0_TC5K4",
+        "9TqVTYpf_Ndy",
+        "Bdg9hvz4obAD",
+        "Bz9iXZc3QVHs",
+        "EdbtrdK5gZSC",
+        "FCskdO_WFQ5e",
+        "Fz8lDj3lgV58",
+        "LbrAzd5kfvof",
+        "LnKORjoJDRZe",
+        "O_BiVwxyF17a",
+        "SPFnjwnUECib",
+        "URJKJijOnEs_",
+        "VdeBUxmW0K_A",
+        "Wy_AaNCfzc_o",
+        "XqL_Exul9JqE",
+        "Y_VUFhPLVeJN",
+        "_BjchgrAWAxM",
+        "_Iiy7W4NNteS",
+        "_ZtvoOooXix5",
+        "cWQi172fc4_p",
+        "eqaPWbz_gqD8",
+        "g8ew63BIIwEe",
+        "jdaGqC2tmFl8",
+        "mgjX94dRCtNB",
+        "ml1BV2SPaFSF",
+        "mrEfJcER6AYY",
+        "sDMuBUgC6SgW",
+        "yG0zJls2UJJe",
+        "zM3TiMkJ_DDZ"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "tt10655524",
+          "n_examples": 3,
+          "a": 0.3919753086419753,
+          "b": 0.36728395061728397
+        },
+        {
+          "unit_id": "tt11145118",
+          "n_examples": 3,
+          "a": 0.25925925925925924,
+          "b": 0.3148148148148148
+        },
+        {
+          "unit_id": "tt12261776",
+          "n_examples": 3,
+          "a": 0.354004914004914,
+          "b": 0.34535626535626535
+        },
+        {
+          "unit_id": "tt12299608",
+          "n_examples": 3,
+          "a": 0.4519607843137255,
+          "b": 0.3735294117647059
+        },
+        {
+          "unit_id": "tt1448754",
+          "n_examples": 3,
+          "a": 0.36767676767676766,
+          "b": 0.3878787878787879
+        },
+        {
+          "unit_id": "tt1684562",
+          "n_examples": 3,
+          "a": 0.23809523809523805,
+          "b": 0.5396825396825397
+        },
+        {
+          "unit_id": "tt17024450",
+          "n_examples": 3,
+          "a": 0.3762962962962963,
+          "b": 0.3644444444444444
+        },
+        {
+          "unit_id": "tt21235248",
+          "n_examples": 3,
+          "a": 0.4038888888888889,
+          "b": 0.3837037037037037
+        },
+        {
+          "unit_id": "tt27534307",
+          "n_examples": 3,
+          "a": 0.42265063541659287,
+          "b": 0.4257822555694896
+        },
+        {
+          "unit_id": "tt5433140",
+          "n_examples": 3,
+          "a": 0.4038461538461539,
+          "b": 0.3867521367521367
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 10,
+        "mean_diff": -0.021957406414436033,
+        "ci_low": -0.09161871289176256,
+        "ci_high": 0.02519487134193017
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "Holm across all16 contrasts",
+        "statistic": 25.0,
+        "pvalue": 0.845703125,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "holm_pvalue": 1.0
+      },
+      "ablation": "8"
+    },
+    {
+      "condition_a": "A_cue-music-only",
+      "condition_b": "A_cue",
+      "metric": "temporal_f1",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "1Q_Xlv2OQWsy",
+        "5G21L0_TC5K4",
+        "9TqVTYpf_Ndy",
+        "Bdg9hvz4obAD",
+        "Bz9iXZc3QVHs",
+        "EdbtrdK5gZSC",
+        "FCskdO_WFQ5e",
+        "Fz8lDj3lgV58",
+        "LbrAzd5kfvof",
+        "LnKORjoJDRZe",
+        "O_BiVwxyF17a",
+        "SPFnjwnUECib",
+        "URJKJijOnEs_",
+        "VdeBUxmW0K_A",
+        "Wy_AaNCfzc_o",
+        "XqL_Exul9JqE",
+        "Y_VUFhPLVeJN",
+        "_BjchgrAWAxM",
+        "_Iiy7W4NNteS",
+        "_ZtvoOooXix5",
+        "cWQi172fc4_p",
+        "eqaPWbz_gqD8",
+        "g8ew63BIIwEe",
+        "jdaGqC2tmFl8",
+        "mgjX94dRCtNB",
+        "ml1BV2SPaFSF",
+        "mrEfJcER6AYY",
+        "sDMuBUgC6SgW",
+        "yG0zJls2UJJe",
+        "zM3TiMkJ_DDZ"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "tt10655524",
+          "n_examples": 3,
+          "a": 0.6296296296296297,
+          "b": 0.5555555555555555
+        },
+        {
+          "unit_id": "tt11145118",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.46296296296296297
+        },
+        {
+          "unit_id": "tt12261776",
+          "n_examples": 3,
+          "a": 0.42899262899262897,
+          "b": 0.4520229320229321
+        },
+        {
+          "unit_id": "tt12299608",
+          "n_examples": 3,
+          "a": 0.6176470588235294,
+          "b": 0.5784313725490197
+        },
+        {
+          "unit_id": "tt1448754",
+          "n_examples": 3,
+          "a": 0.47474747474747475,
+          "b": 0.3565656565656566
+        },
+        {
+          "unit_id": "tt1684562",
+          "n_examples": 3,
+          "a": 0.746031746031746,
+          "b": 0.7142857142857143
+        },
+        {
+          "unit_id": "tt17024450",
+          "n_examples": 3,
+          "a": 0.37333333333333335,
+          "b": 0.4148148148148148
+        },
+        {
+          "unit_id": "tt21235248",
+          "n_examples": 3,
+          "a": 0.5298148148148148,
+          "b": 0.4994444444444444
+        },
+        {
+          "unit_id": "tt27534307",
+          "n_examples": 3,
+          "a": 0.5691707819367394,
+          "b": 0.4806399274484381
+        },
+        {
+          "unit_id": "tt5433140",
+          "n_examples": 3,
+          "a": 0.5534188034188033,
+          "b": 0.5363247863247863
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 10,
+        "mean_diff": 0.020507143808770844,
+        "ci_low": -0.023897405889896518,
+        "ci_high": 0.05976743906906612
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "Holm across all16 contrasts",
+        "statistic": 18.0,
+        "pvalue": 0.375,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "holm_pvalue": 1.0
+      },
+      "ablation": "6"
+    },
+    {
+      "condition_a": "A_cue-impulsive-only",
+      "condition_b": "A_cue",
+      "metric": "temporal_f1",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "1Q_Xlv2OQWsy",
+        "5G21L0_TC5K4",
+        "9TqVTYpf_Ndy",
+        "Bdg9hvz4obAD",
+        "Bz9iXZc3QVHs",
+        "EdbtrdK5gZSC",
+        "FCskdO_WFQ5e",
+        "Fz8lDj3lgV58",
+        "LbrAzd5kfvof",
+        "LnKORjoJDRZe",
+        "O_BiVwxyF17a",
+        "SPFnjwnUECib",
+        "URJKJijOnEs_",
+        "VdeBUxmW0K_A",
+        "Wy_AaNCfzc_o",
+        "XqL_Exul9JqE",
+        "Y_VUFhPLVeJN",
+        "_BjchgrAWAxM",
+        "_Iiy7W4NNteS",
+        "_ZtvoOooXix5",
+        "cWQi172fc4_p",
+        "eqaPWbz_gqD8",
+        "g8ew63BIIwEe",
+        "jdaGqC2tmFl8",
+        "mgjX94dRCtNB",
+        "ml1BV2SPaFSF",
+        "mrEfJcER6AYY",
+        "sDMuBUgC6SgW",
+        "yG0zJls2UJJe",
+        "zM3TiMkJ_DDZ"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "tt10655524",
+          "n_examples": 3,
+          "a": 0.6018518518518519,
+          "b": 0.5555555555555555
+        },
+        {
+          "unit_id": "tt11145118",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.46296296296296297
+        },
+        {
+          "unit_id": "tt12261776",
+          "n_examples": 3,
+          "a": 0.3028173628173628,
+          "b": 0.4520229320229321
+        },
+        {
+          "unit_id": "tt12299608",
+          "n_examples": 3,
+          "a": 0.6176470588235294,
+          "b": 0.5784313725490197
+        },
+        {
+          "unit_id": "tt1448754",
+          "n_examples": 3,
+          "a": 0.48181818181818176,
+          "b": 0.3565656565656566
+        },
+        {
+          "unit_id": "tt1684562",
+          "n_examples": 3,
+          "a": 0.746031746031746,
+          "b": 0.7142857142857143
+        },
+        {
+          "unit_id": "tt17024450",
+          "n_examples": 3,
+          "a": 0.3466666666666667,
+          "b": 0.4148148148148148
+        },
+        {
+          "unit_id": "tt21235248",
+          "n_examples": 3,
+          "a": 0.517962962962963,
+          "b": 0.4994444444444444
+        },
+        {
+          "unit_id": "tt27534307",
+          "n_examples": 3,
+          "a": 0.44667389348240416,
+          "b": 0.4806399274484381
+        },
+        {
+          "unit_id": "tt5433140",
+          "n_examples": 3,
+          "a": 0.6047008547008547,
+          "b": 0.5363247863247863
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 10,
+        "mean_diff": -0.005154425448543098,
+        "ci_low": -0.057654850948968585,
+        "ci_high": 0.044037086742969085
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "Holm across all16 contrasts",
+        "statistic": 27.0,
+        "pvalue": 1.0,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "holm_pvalue": 1.0
+      },
+      "ablation": "6"
+    },
+    {
+      "condition_a": "A_cue-ambient-only",
+      "condition_b": "A_cue",
+      "metric": "temporal_f1",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "1Q_Xlv2OQWsy",
+        "5G21L0_TC5K4",
+        "9TqVTYpf_Ndy",
+        "Bdg9hvz4obAD",
+        "Bz9iXZc3QVHs",
+        "EdbtrdK5gZSC",
+        "FCskdO_WFQ5e",
+        "Fz8lDj3lgV58",
+        "LbrAzd5kfvof",
+        "LnKORjoJDRZe",
+        "O_BiVwxyF17a",
+        "SPFnjwnUECib",
+        "URJKJijOnEs_",
+        "VdeBUxmW0K_A",
+        "Wy_AaNCfzc_o",
+        "XqL_Exul9JqE",
+        "Y_VUFhPLVeJN",
+        "_BjchgrAWAxM",
+        "_Iiy7W4NNteS",
+        "_ZtvoOooXix5",
+        "cWQi172fc4_p",
+        "eqaPWbz_gqD8",
+        "g8ew63BIIwEe",
+        "jdaGqC2tmFl8",
+        "mgjX94dRCtNB",
+        "ml1BV2SPaFSF",
+        "mrEfJcER6AYY",
+        "sDMuBUgC6SgW",
+        "yG0zJls2UJJe",
+        "zM3TiMkJ_DDZ"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "tt10655524",
+          "n_examples": 3,
+          "a": 0.6018518518518519,
+          "b": 0.5555555555555555
+        },
+        {
+          "unit_id": "tt11145118",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.46296296296296297
+        },
+        {
+          "unit_id": "tt12261776",
+          "n_examples": 3,
+          "a": 0.3388533988533989,
+          "b": 0.4520229320229321
+        },
+        {
+          "unit_id": "tt12299608",
+          "n_examples": 3,
+          "a": 0.6176470588235294,
+          "b": 0.5784313725490197
+        },
+        {
+          "unit_id": "tt1448754",
+          "n_examples": 3,
+          "a": 0.41717171717171714,
+          "b": 0.3565656565656566
+        },
+        {
+          "unit_id": "tt1684562",
+          "n_examples": 3,
+          "a": 0.746031746031746,
+          "b": 0.7142857142857143
+        },
+        {
+          "unit_id": "tt17024450",
+          "n_examples": 3,
+          "a": 0.37629629629629635,
+          "b": 0.4148148148148148
+        },
+        {
+          "unit_id": "tt21235248",
+          "n_examples": 3,
+          "a": 0.5046296296296297,
+          "b": 0.4994444444444444
+        },
+        {
+          "unit_id": "tt27534307",
+          "n_examples": 3,
+          "a": 0.42383148766127493,
+          "b": 0.4806399274484381
+        },
+        {
+          "unit_id": "tt5433140",
+          "n_examples": 3,
+          "a": 0.5705128205128206,
+          "b": 0.5363247863247863
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 10,
+        "mean_diff": -0.012088882680872649,
+        "ci_low": -0.05332251591826056,
+        "ci_high": 0.025781554189564238
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "Holm across all16 contrasts",
+        "statistic": 25.0,
+        "pvalue": 0.845703125,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "holm_pvalue": 1.0
+      },
+      "ablation": "6"
+    }
+  ],
+  "coverage": {
+    "selectors": 31,
+    "clips": 30,
+    "movies": 10
+  },
+  "scope": "selector placement only; no generated-text quality, rendered-speech overlap, or human detector accuracy inference"
+}

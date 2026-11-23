@@ -1,0 +1,93 @@
+{
+  "family": "selector_ablation_temporal_F1_16",
+  "declaration": "Newly declared 2026-11-23 after descriptive31-run results were available; structural contrasts, not selected by effects; not prospectively preregistered",
+  "metric": "temporal_f1",
+  "unit": "cluster",
+  "cluster": "movie_id",
+  "resamples": 10000,
+  "seed": 0,
+  "confidence_level": 0.95,
+  "adjustment": "Holm across all16 contrasts",
+  "contrasts": [
+    {
+      "ablation": "1",
+      "a": "A_cue-speech",
+      "b": "A_cue-both"
+    },
+    {
+      "ablation": "1",
+      "a": "A_cue-nonspeech",
+      "b": "A_cue-both"
+    },
+    {
+      "ablation": "2",
+      "a": "AV-trigger",
+      "b": "AV-suppress"
+    },
+    {
+      "ablation": "2",
+      "a": "AV-music-trig",
+      "b": "AV-music-supp"
+    },
+    {
+      "ablation": "2",
+      "a": "AV-impulsive-trig",
+      "b": "AV-impulsive-supp"
+    },
+    {
+      "ablation": "2",
+      "a": "AV-vocal_nonspeech-trig",
+      "b": "AV-vocal_nonspeech-supp"
+    },
+    {
+      "ablation": "2",
+      "a": "AV-ambient-trig",
+      "b": "AV-ambient-supp"
+    },
+    {
+      "ablation": "2",
+      "a": "AV-other-trig",
+      "b": "AV-other-supp"
+    },
+    {
+      "ablation": "3",
+      "a": "A_cue-tagger",
+      "b": "A_cue-whispertags"
+    },
+    {
+      "ablation": "4",
+      "a": "AV-snap",
+      "b": "AV-event"
+    },
+    {
+      "ablation": "8",
+      "a": "AV-memory",
+      "b": "AV-local"
+    },
+    {
+      "ablation": "8",
+      "a": "AV-memory-pure",
+      "b": "AV-local"
+    },
+    {
+      "ablation": "8",
+      "a": "V_mem",
+      "b": "V"
+    },
+    {
+      "ablation": "6",
+      "a": "A_cue-music-only",
+      "b": "A_cue"
+    },
+    {
+      "ablation": "6",
+      "a": "A_cue-impulsive-only",
+      "b": "A_cue"
+    },
+    {
+      "ablation": "6",
+      "a": "A_cue-ambient-only",
+      "b": "A_cue"
+    }
+  ]
+}
