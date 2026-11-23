@@ -1059,3 +1059,34 @@ versus missing event tracks, and ablation weights. Log:
 Prepared CPU-only selector config `configs/experiments/reframed_dev_ablation3.toml`.
 No selector evaluation or GPU job was launched by this agent. The limited
 Whisper emissions must be reported when interpreting the comparison.
+
+## 2026-11-23: controlled ablations and upcoming CPU/GPU work
+
+Integrated preparation commits69be198/a7e0e1a and verified the full merged suite:
+812passed,3skipped,5974subtests; log /scratch/yy5919/pyro-merged-readiness-tests.log.
+Then merged gated Whisper ablation e462ad8: focused29tests passed. It preserves
+VAD gating and shared speech/acoustic controls, removes AST/CLAP in the Whisper
+arm, and distinguishes zero tags from missing caches. Ten dev clips emit zero
+bracketed tags; selector F1 .512 versus tagger .514, descriptive dev-only result.
+
+Completed ablation5:95 attempts per condition; no-context76valid, timeline85,
+nativeOmni62. All rendered valid descriptions fit speech-free video at1.2x in
+this dev comparison; this does not erase19/10/33generation failures. Table:
+docs/results/reframed-dev-ablation5.md. Timeline-present95predictions reused
+through audited identical moments/prompt/settings/smoke outputs; provenance and
+original smoke saved in experiment timeline_reuse_audit.json. No paid calls.
+
+GPU40964 moved directly to frozen long U/V controls (session46045); dev-only
+15truncated-example token-ceiling512probe queued (session48319),15-minute bound,
+original pilot untouched. Long12/12speechcue report and cache bridge completed.
+Six label-free timeline input conditions are being built on frozena7e0e1a source:
+Uflat,Vlocalflat,Aflat,Ahierarchical,AVflat,AVhierarchical; no QA answer labels read.
+
+CPU test speech/feature bridge41034 depends afterok41017:41018. Ego extraction
+array41027 remains productive. Its wrapper falsely reported invalid embeddings:
+process_video returns a pre-publication dictionary, whereas the published JSON
+contains embedding paths. Independent disk check passed360x512normalization and
+novelty. Versioned v2 driver reloads committed features; resume test forbade model
+loading and verified unchanged files. Follow-up array41038 afterany41027 reuses
+all caches and produces fresh valid reports; original false failures preserved.
+No live source was edited. Detailed diagnosis /scratch/yy5919/pyro-egoschema-validation-repair.md.

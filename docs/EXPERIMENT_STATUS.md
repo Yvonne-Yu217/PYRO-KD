@@ -960,3 +960,13 @@ bracketed tags. Ready CPU command from the whisper-ablation branch:
 `python scripts/run_experiment.py --config configs/experiments/reframed_dev_ablation3.toml --stage selector-only`.
 No model labels are configured, so this config cannot accidentally generate paid
 or local model outputs. Human event-detector validation remains deferred.
+
+### Controlled dev ablations complete; queued work
+
+Ablation5 all285attempts accounted:223valid (including95reused timeline rows),
+62failures. Actual TTS and all text metrics complete; see results/reframed-dev-ablation5.md.
+Gated Whisper selector ablation3 complete10/10, zero emitted tags (not silence).
+Merged tests812passed+5974subtests; later gatedWhisper focused29passed.
+LongU/V controls active40964;15-example token-ceiling diagnostic queued.
+Long bridge complete12/12, audio-aware label-free input preparation active.
+CPU41034 waits41017:41018; Ego41027 extracts caches,41038 validates/resumes afterany41027.
