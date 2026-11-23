@@ -1,0 +1,12 @@
+{
+  "scope": "Integrated results-branch code including completion and reproduction guards; no GPU or paid calls",
+  "tested_commit": "7fe412d",
+  "command": "source hpc/config.sh; in_env ro 'CUDA_VISIBLE_DEVICES=\"\" OMP_NUM_THREADS=2 OPENBLAS_NUM_THREADS=2 /scratch/yy5919/pyro-test-env/bin/python -m pytest -q'",
+  "passed": 847,
+  "skipped": 3,
+  "warnings": 2,
+  "subtests_passed": 5974,
+  "seconds": 103.11,
+  "log_source": "/scratch/yy5919/pyro-results-final-tests.log",
+  "log_sha256": "c29d55d83291eb866c0470b9fc8bd916a2ba05e05a50dc528b3acedb5335c5de"
+}

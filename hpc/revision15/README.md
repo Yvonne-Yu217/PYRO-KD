@@ -39,3 +39,5 @@ snapshot is retained as execution history. CPU continuation controller41245
 waits afterany41197 and submits an Ego-only GPU continuation only for unfinished
 U/V work after validated inputs exist. No GPU is allocated by that controller
 when both conditions are already complete.
+
+Final CPU closeout snapshots include the corrected v2 report finalizers, the completion-to-reproduction queue, and the artifact-retention utility. They are copies of the executed external drivers, not replacements for running files. Retention requires a passing completion manifest and completed table reproduction, and verifies every archive member before atomic publication outside Git.

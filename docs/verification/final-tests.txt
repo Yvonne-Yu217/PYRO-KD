@@ -1,0 +1,17 @@
+.............................................................................................................................................................................................................................................................................................................................................................................................. [ 44%]
+...................................................................................................................................... [ 60%]
+............................................................................................... [ 71%]
+................................................................................... [ 81%]
+..................................................................sss............................................. [ 95%]
+..........................................                                                                                      [100%]
+==================================================================== warnings summary =====================================================================
+tests/test_experiment_integration.py::PipelineTest::test_01_selector_only_never_builds_a_backend
+  /ext3/miniforge3/lib/python3.12/site-packages/torch/jit/_serialization.py:176: FutureWarning: `torch.jit.load` is deprecated. Please switch to `torch.export`.
+    warnings.warn(
+
+tests/test_experiment_integration.py::PipelineTest::test_03_moments_generate_resume_evaluate_report
+  /ext3/miniforge3/lib/python3.12/site-packages/huggingface_hub/constants.py:302: FutureWarning: The `HF_HUB_ENABLE_HF_TRANSFER` environment variable is deprecated as 'hf_transfer' is not used anymore. Please use `HF_XET_HIGH_PERFORMANCE` instead to enable high performance transfer with Xet. Visit https://huggingface.co/docs/huggingface_hub/package_reference/environment_variables#hfxethighperformance for more details.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+847 passed, 3 skipped, 2 warnings, 5974 subtests passed in 103.11s (0:01:43)

@@ -146,3 +146,20 @@ verification, frozen formal runs, failures, fixes, source commits and HPC jobs.
 Current research results are under `docs/results/`; reproduction commands and
 artifact locations are in `docs/RESULTS_REPRODUCTION.md`. The historical entries
 above remain unchanged. Paid API and human-label work is explicitly deferred.
+
+## Authorized local completion — 2026-11-23 18:43 UTC
+
+All25 local conditions completed5,996 unique attempts:4,166AD,360longQA and
+1,470EgoQA. AD has3,783valid captions and383explicit failures; no missing IDs.
+All1,830QA predictions arevalid with noerrors/missing IDs. Ego accuracy is
+U319/490,Vlocal311/490,Vmemory309/490; allthreeHolm comparisons nonsignificant.
+Completion inventory passes175artifact hashes, zeroerrors. Cached-table
+reproduction completed12commands/51artifacts; ninecanonicalCSV comparisons are
+byte-identical. Fullproposal remains incomplete: API/human/Cue2Narrate and
+research limitations are explicit in docs/REVISION15_DELIVERY.md.
+
+GPU41197completed0:0 and released. CPU41245completed0:0 in2s with noGPU
+submitted. PrimaryVmemory completed on40964; userallocation left intact. Our
+additional GPU utilization monitor was stopped; the user-owned monitor/session
+was preserved. No dummykeepalive and no paidcalls. Final report/archive closeout
+uses CPU only. Resume from verified artifacts, never duplicate these runs.

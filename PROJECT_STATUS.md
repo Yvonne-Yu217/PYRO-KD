@@ -4,15 +4,18 @@
 
 The authoritative live experiment record is [docs/EXPERIMENT_STATUS.md](docs/EXPERIMENT_STATUS.md),
 with verification and failures in [docs/AGENT_LOG.md](docs/AGENT_LOG.md).
-Real-data smoke tests, development pilots and formal selector evaluation have
-completed. Frozen local caption and QA experiments are running from isolated
-worktrees; the audio-context ablation has completed. See the current record for
-exact coverage, source hashes, job IDs and remaining stages.
+The authorized local pipeline is complete: real-data smoke tests, development
+pilots, frozen configurations, 31 selector variants, 4,166 formal AD attempts,
+360 long-QA and 1,470 EgoSchema predictions. Completion verification binds175
+artifacts with no errors; cached-table reproduction completes12commands and51
+outputs. See [delivery](docs/REVISION15_DELIVERY.md) for results, limits and paths.
 
-Paid API calls and human annotations/peer ratings remain deferred by the user.
-The [report draft](docs/report/main.pdf) and [presentation draft](docs/slides/main.pdf)
-mark unfinished results explicitly. The older readiness snapshot below is retained
-as historical evidence, not the current execution state.
+Secondary GPU41197 and CPUcontroller41245 completed successfully; the controller
+submitted no continuation. User-owned40964 remains allocated, with all requested
+local inference finished. No dummy workload was used. Tests:847passed,3skipped,
+5,974subtests. Paid/API, human validation and unavailable Cue2Narrate requirements
+remain incomplete. The paper and slides report local evidence and its limits.
+The older readiness snapshot below is historical, not the current state.
 
 ## Historical readiness snapshot
 

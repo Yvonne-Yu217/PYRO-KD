@@ -1,0 +1,71 @@
+{
+  "dataset": "egoschema",
+  "scope": "490frozen heldout questions,10pilot questions excluded. Visual-only diagnostic; no audio-aware claim.",
+  "rows": [
+    {
+      "condition": "U",
+      "videos": 490,
+      "expected": 490,
+      "attempted": 490,
+      "valid": 490,
+      "correct": 319,
+      "accuracy": 0.6510204081632653,
+      "ci_low": 0.6081632653061224,
+      "ci_high": 0.6918367346938775,
+      "generation_errors": 0,
+      "invalid_answers": 0,
+      "missing": 0
+    },
+    {
+      "condition": "V_local",
+      "videos": 490,
+      "expected": 490,
+      "attempted": 490,
+      "valid": 490,
+      "correct": 311,
+      "accuracy": 0.6346938775510204,
+      "ci_low": 0.5918367346938775,
+      "ci_high": 0.6775510204081633,
+      "generation_errors": 0,
+      "invalid_answers": 0,
+      "missing": 0
+    },
+    {
+      "condition": "V_memory",
+      "videos": 490,
+      "expected": 490,
+      "attempted": 490,
+      "valid": 490,
+      "correct": 309,
+      "accuracy": 0.6306122448979592,
+      "ci_low": 0.5877551020408164,
+      "ci_high": 0.673469387755102,
+      "generation_errors": 0,
+      "invalid_answers": 0,
+      "missing": 0
+    }
+  ],
+  "sources": [
+    {
+      "condition": "U",
+      "path": "/scratch/yy5919/pyro-resume-results/egoschema-heldout/evaluation/U.evaluation.json",
+      "sha256": "de9009763c786124771c8e59e79d7b86a30f55cd173673c07e0134cdc9ab9450"
+    },
+    {
+      "condition": "V_local",
+      "path": "/scratch/yy5919/pyro-resume-results/egoschema-heldout/evaluation/V_local.evaluation.json",
+      "sha256": "64e5f7fbd1389a75304a7a1f72c83804d079198265359c8883404ccc6253a815"
+    },
+    {
+      "condition": "V_memory",
+      "path": "/scratch/yy5919/pyro-resume-results/egoschema-heldout/evaluation/V_memory.evaluation.json",
+      "sha256": "3cf57ebe43444c8fa00db50156f0d1af8568d863499c379d41de94b37b9c12ca"
+    }
+  ],
+  "failed_or_missing": {
+    "U": [],
+    "V_local": [],
+    "V_memory": []
+  },
+  "interval": "Pointwise95% percentile bootstrap over videos,10000 resamples,seed0; not simultaneous intervals. Failed/missing/invalid predictions count incorrect."
+}

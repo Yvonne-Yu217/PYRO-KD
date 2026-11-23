@@ -98,5 +98,20 @@
     "file": "pyro-finalize-qa-reports-v2.py",
     "original": "/scratch/yy5919/pyro-finalize-qa-reports-v2.py",
     "sha256": "3ec30a9f9d8324f4d4086e86021081d2bc0a5c1fb5b7a6344076771e1cfc3061"
+  },
+  {
+    "file": "pyro-verify-and-reproduce-final.py",
+    "original": "/scratch/yy5919/pyro-verify-and-reproduce-final.py",
+    "sha256": "031ec48a446c3426dc4cf60d2388ee7208862238de363ebb4ccc47f864bd6368"
+  },
+  {
+    "file": "pyro-retain-revision15-artifacts.py",
+    "original": "/scratch/yy5919/pyro-retain-revision15-artifacts.py",
+    "sha256": "420a1f56f75538f003f9abfe0f60007012286c3b99997e7612e5b33caca0d092"
+  },
+  {
+    "file": "pyro-compute-accounting-export.py",
+    "original": "/scratch/yy5919/pyro-compute-accounting-export.py",
+    "sha256": "0bf51abd09cd44f00a23081db1f36dcd90c30b30f6c1424809723633c704ed53"
   }
 ]

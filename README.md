@@ -10,6 +10,11 @@ This project compares uniform (U), video-only (V), audio-only (A), fused audio+v
 
 ## Revision 1.5 experiment records
 
+Authorized local runs are complete: 4,166 AD attempts, 360 long-QA predictions,
+and 1,470 EgoSchema predictions. The completion inventory and cached-table
+reproduction pass; 847 tests and 5,974 subtests pass. Paid/API and human
+validation requirements remain deferred; this is not full proposal completion.
+
 The current experiment source is frozen at `09abb6c` on
 `work/revision15-formal-runs`; long-video inference uses the recorded frozen
 worktrees. Progress and reports are maintained on `work/revision15-results`.
@@ -24,7 +29,8 @@ change without the provenance checks.
 - [Selector results](docs/results/reframed-selectors/selector-results.md) and
   [movie-clustered ablations](docs/results/reframed-selector-ablations/selector-ablation-stats.md)
 - [Development coverage and failures](docs/results/dev-failure-analysis.md)
-- [Report draft (PDF)](docs/report/main.pdf), with unfinished results marked
+- [Research report (PDF)](docs/report/main.pdf) and [12-slide deck](docs/slides/main.pdf)
+- [Verified local delivery and remaining requirements](docs/REVISION15_DELIVERY.md)
 - [Recorded HPC queue drivers](hpc/revision15/README.md)
 
 The frozen subsets are 30 REFRAMED test clips, 490 heldout EgoSchema questions,

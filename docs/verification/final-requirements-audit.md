@@ -1,4 +1,4 @@
-# Final requirements audit — EgoSchema ongoing
+# Final requirements audit — local results verified
 
 Audit date: 2026-11-23. Read the locally archived `docs/PROPOSAL_REVISION_1_5.txt`, `docs/REVISION_1_5_REQUIREMENTS.md`, and `/scratch/yy5919/pyro-course-project.html` before comparing current artifacts. The historical older-tab audit is explicitly superseded. This is a requirements review, not a completion certificate. No inference settings, labels, paid services or jobs were changed.
 
@@ -8,11 +8,11 @@ Audit date: 2026-11-23. Read the locally archived `docs/PROPOSAL_REVISION_1_5.tx
 - Proposal A is `A_cue`, not the historical gap-only A. Source/config/model/split identities and training-only P1 exemplars are recorded. Development diagnostics precede the formal freeze.
 - Selection ablations, audio-onset/reference associations and silent-event diagnostics have artifacts. Detector-defined association is not human detector precision/recall. Native Omni changes architecture as well as modality.
 - All ten audio-bearing long-QA conditions have completed and have fixed-denominator scores,13 paired contrasts and accuracy-by-length plots. Hierarchical/flat allocation evidence is retained. Realized audio-condition budgets differ from visual controls; the report correctly labels these constrained-budget diagnostics.
-- EgoSchema remains ongoing:490 heldout questions per U/V_local/V_memory condition, visual-only. Do not publish its scores until the whole-dataset completion gate passes.
+- EgoSchema completed all three conditions: 490 heldout questions each, 1,470 valid predictions and no errors/missing IDs. The whole-dataset gate passed before labels were read. All three paired comparisons are nonsignificant after Holm correction.
 - Actual1.2x TTS overlap, measured gap utilization, conditional BERTScore/OpenCLIP and paired temporal statistics are published. Individual speech fit is not joint narration schedulability, and semantic metrics conditioned on successful temporal matches do not establish complete-output quality.
 - LaTeX report and slides exist. Current report verification records8 total pages,6 before the Agent Log appendix, no undefined references or overfull boxes; the course asks for4–9 research-report pages excluding references, plus the Agent Log appendix outside the limit. Agent Track and research format are stated. Twelve slides have compile verification. Incremental commits and an English chronological Agent Log are present.
 
-## Feasible remaining CPU-only closeout
+## Closeout checklist and verification
 
 1. When Ego finishes, run fixed-denominator scoring/statistics and the completion verifier, then run the one-command cached-table reproduction wrapper into a fresh directory. Its reproduction manifest must finish successfully; a tested wrapper alone is not an end-to-end reproduction result.
 2. Refresh report/slides/README/status with the verified Ego results and final failure totals; rebuild PDFs, inspect their rendered output, and refresh hashes/page counts. Replace stale “ongoing/pending” language only for work actually completed. Preserve deferred proposal requirements.
@@ -31,3 +31,5 @@ Audit date: 2026-11-23. Read the locally archived `docs/PROPOSAL_REVISION_1_5.tx
 ## Completion language
 
 Use “authorized local experiments complete” only after the final verifier passes. Never “all Proposal Revision1.5 requirements complete.” Preserve the distinction between20 planned core cells and10 executed local cells;30 frozen REFRAMED clips and the downloaded corpus; known decoded word-cap violations and unknown truncated decodes; pre-scoring QA contrast declarations and post-descriptive AD contrast declarations. Current report wording largely preserves these distinctions. The full integrated test result reported by the coordinator is847 passed,3 skipped,5974 subtests; unit success is verification of implementation, not replacement for experimental or human evidence.
+
+Closeout update (18:43 UTC): completion audit passed175bound artifacts with noerrors; cached-table reproduction completed12commands/51outputs; nine canonical CSV comparisons were byte-identical. Report refresh and retention publication are recorded in the final delivery and retention manifest. The earlier numbered checklist describes the required checks, not unfinished GPU work.
