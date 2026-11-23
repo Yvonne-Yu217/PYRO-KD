@@ -461,3 +461,14 @@ Evidence outputs/verification/reframed-dev-event-alignment.json/.log and indepen
 count/phi arithmetic audit reframed-dev-event-alignment-check.json. Preserves all
 classes and undefined correlations, avoiding selective reporting of favorable
 classes. Actual long event616 now2400/2646windows; longASR continues.
+
+
+Second long event video616 completed2646windows; independent verifier34564exit0
+passed pinned model/sourceWAV/array hashes, exact time grid, finite527-class
+probabilities, normalized512-D embeddings, RMS and reconstructed cues. Evidence
+outputs/verification/video-mme-events-616-check.json (1selected of12, explicit
+partialcoverage). Combined independently verified event coverage now604+616:
+4478windows,2/12videos. Live handle27774/process115097 moved to710 (1982windows);
+no restart or duplicate writer. ProcessorRSS dropped after completing616, and
+saved batch checkpoints are retained. Original ASR96112 remains active.
+Actual full event extraction is still incomplete; final12video audit required.
