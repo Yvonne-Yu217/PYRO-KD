@@ -495,3 +495,5 @@ new reusable scripts/verify_onset_cache.py supports explicit recompute IDs.
 Existing onset tests11596exit0:3passed. Same development parameters, no threshold
 or normalization tuning, no QA labels inspected. This is spectral-flux consistency,
 not human onset accuracy. Learned event/ASR stillactive; event710 now200/1982windows.
+
+Registered full pinned Qwen2.5Omni7B asset download onCPU40036 after successful actual multimodal processor check and runtime API review. Same ae9e1690543ffd5c0221dc27f79834d0294cba00 revision; includes five model shards and speaker data required by the installed wrapper. Reuses processor snapshot. No GPU job, paid API or model instantiation. Config configs/qwen25_omni_model.json; log outputs/verification/qwen25-omni-model-download.log and report qwen25-omni-model-download.json. Intended to make later GPU ablation smoke offline; config warnings and real GPU feasibility remain unresolved.

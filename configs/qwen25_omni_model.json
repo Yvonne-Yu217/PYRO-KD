@@ -1,0 +1,87 @@
+{
+  "scope": "full pinned audio-native model assets including speaker data; GPU load/inference unverified",
+  "models": [
+    {
+      "repo_id": "Qwen/Qwen2.5-Omni-7B",
+      "revision": "ae9e1690543ffd5c0221dc27f79834d0294cba00",
+      "files": [
+        {
+          "name": "LICENSE",
+          "bytes": 11343
+        },
+        {
+          "name": "README.md",
+          "bytes": 36838
+        },
+        {
+          "name": "added_tokens.json",
+          "bytes": 579
+        },
+        {
+          "name": "chat_template.json",
+          "bytes": 1313
+        },
+        {
+          "name": "config.json",
+          "bytes": 13186
+        },
+        {
+          "name": "generation_config.json",
+          "bytes": 74
+        },
+        {
+          "name": "merges.txt",
+          "bytes": 1671853
+        },
+        {
+          "name": "model-00001-of-00005.safetensors",
+          "bytes": 4985055504
+        },
+        {
+          "name": "model-00002-of-00005.safetensors",
+          "bytes": 4991496800
+        },
+        {
+          "name": "model-00003-of-00005.safetensors",
+          "bytes": 4991496904
+        },
+        {
+          "name": "model-00004-of-00005.safetensors",
+          "bytes": 4969489824
+        },
+        {
+          "name": "model-00005-of-00005.safetensors",
+          "bytes": 2425322160
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "bytes": 233160
+        },
+        {
+          "name": "preprocessor_config.json",
+          "bytes": 667
+        },
+        {
+          "name": "special_tokens_map.json",
+          "bytes": 832
+        },
+        {
+          "name": "spk_dict.pt",
+          "bytes": 259544
+        },
+        {
+          "name": "tokenizer.json",
+          "bytes": 11421870
+        },
+        {
+          "name": "tokenizer_config.json",
+          "bytes": 6469
+        },
+        {
+          "name": "vocab.json",
+          "bytes": 2776833
+        }
+      ]
+    }
+  ]
+}
