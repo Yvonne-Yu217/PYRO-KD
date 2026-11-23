@@ -15,9 +15,12 @@ def main():
     parser.add_argument('--cache-dir', type=Path, required=True)
     parser.add_argument('--split-config', type=Path, default=Path('configs/reframed_splits.json'))
     parser.add_argument('--report', type=Path, required=True)
+    parser.add_argument('--pilot-config',type=Path,help='use frozen EgoSchema pilot IDs instead of REFRAMED clips')
     args = parser.parse_args()
     splits = json.loads(args.split_config.read_text())
-    ids = [r['video_id'] for r in splits['clips']]
+    ids = (json.loads(args.pilot_config.read_text())['pilot_q_uids'] if args.pilot_config
+           else [r['video_id'] for r in splits['clips']])
+    if not ids or len(set(ids))!=len(ids): raise ValueError('unique nonempty frozen IDs required')
     records = []
     for video_id in ids:
         cache = args.cache_dir / video_id
@@ -56,6 +59,8 @@ def main():
         except Exception as exc:
             records.append({'video_id': video_id, 'verified': False, 'error': repr(exc)})
     report = {'complete': bool(records) and all(r['verified'] for r in records),
+              'budget_config_sha256':hashlib.sha256(args.split_config.read_bytes()).hexdigest(),
+              'pilot_config_sha256':hashlib.sha256(args.pilot_config.read_bytes()).hexdigest() if args.pilot_config else None,
               'expected': len(ids), 'verified': sum(r['verified'] for r in records), 'videos': records,
               'note': 'Cache and ranking invariants only; no accuracy or gap-placement claim.'}
     args.report.parent.mkdir(parents=True, exist_ok=True)

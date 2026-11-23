@@ -74,7 +74,8 @@ def main():
     with args.output.open('a') as handle:
         for row in todo:
             base={k:row.get(k) for k in ('id','video_id','dataset','split','selector','audio_context',
-                  'k_requested','k_realized','selected_times','frame_times','protocol_status','source_sha256')}
+                  'k_requested','k_realized','k_shortfall','selected_times','frame_times','protocol_status','source_sha256',
+                  'selection_condition','visual_features_sha256')}
             base.update(model_id=model_id,temperature=0.,run_fingerprint=provenance['run_fingerprint'])
             try:
                 images,prompt=prepare(row,args.max_side)
