@@ -1,9 +1,9 @@
 {
-  "captured_utc": "2026-11-23T18:16:17.377801+00:00",
-  "status": "partial",
+  "captured_utc": "2026-11-23T18:43:03.758201+00:00",
+  "status": "experiments_complete_allocation_snapshot",
   "api_spend_usd": 0,
   "notes": [
-    "Partial accounting snapshot; running allocations and EgoSchema processes continue.",
+    "Completed experiment accounting snapshot; user-owned 40964 remains allocated and its allocation time is measured only to this snapshot.",
     "Allocation elapsed GPU-hours are not GPU-busy hours or model inference time. Job 40964 is user-owned; no release is authorized by this report.",
     "Only this Slurm query window is inventoried; it is not lifetime project accounting. Unattributed user allocation jobs are listed separately and are not charged to these experiments.",
     "Process wall includes interpreter/container startup, model loading, I/O and inference. Primary wall times are process-monitor estimates with 15-second completion-poll uncertainty. File modification spans are not used as substitutes.",
@@ -12,12 +12,13 @@
     "Utilization snapshots are sampled observations over limited time windows, not integrated GPU-busy duration.",
     "Paid API calls remain unauthorized; API spend is $0. No monetary estimate for local compute."
   ],
-  "scheduler_command": "sacct -u yy5919 -S 2026-11-23T00:00:00 --allocations --format=JobID,JobName,State,Start,End,ElapsedRaw,AllocTRES -P",
+  "scheduler_command": "sacct -u yy5919 -S 2026-11-23T00:00:00 --allocations --format=JobID,JobName,State,ExitCode,Start,End,ElapsedRaw,AllocTRES -P",
   "scheduler_allocations": [
     {
       "JobID": "40036",
       "JobName": "ood-jupyter",
       "State": "TIMEOUT",
+      "ExitCode": "0:0",
       "Start": "2026-11-22T22:22:47",
       "End": "2026-11-23T04:22:54",
       "ElapsedRaw": "21607",
@@ -29,6 +30,7 @@
       "JobID": "40363",
       "JobName": "pyro-long-cpu",
       "State": "COMPLETED",
+      "ExitCode": "0:0",
       "Start": "2026-11-23T04:23:54",
       "End": "2026-11-23T05:00:30",
       "ElapsedRaw": "2196",
@@ -40,6 +42,7 @@
       "JobID": "40408",
       "JobName": "pyro-long-events",
       "State": "COMPLETED",
+      "ExitCode": "0:0",
       "Start": "2026-11-23T04:23:54",
       "End": "2026-11-23T08:01:26",
       "ElapsedRaw": "13052",
@@ -51,6 +54,7 @@
       "JobID": "40876",
       "JobName": "ood-jupyter",
       "State": "CANCELLED by 4645820",
+      "ExitCode": "0:0",
       "Start": "2026-11-23T13:24:03",
       "End": "2026-11-23T13:24:10",
       "ElapsedRaw": "7",
@@ -62,6 +66,7 @@
       "JobID": "40877",
       "JobName": "ood-jupyter",
       "State": "CANCELLED by 4645820",
+      "ExitCode": "0:0",
       "Start": "None",
       "End": "2026-11-23T13:24:16",
       "ElapsedRaw": "0",
@@ -73,6 +78,7 @@
       "JobID": "40878",
       "JobName": "ood-jupyter",
       "State": "CANCELLED by 4645820",
+      "ExitCode": "0:0",
       "Start": "None",
       "End": "2026-11-23T13:24:22",
       "ElapsedRaw": "0",
@@ -84,6 +90,7 @@
       "JobID": "40879",
       "JobName": "ood-jupyter",
       "State": "CANCELLED by 4645820",
+      "ExitCode": "0:0",
       "Start": "2026-11-23T13:25:29",
       "End": "2026-11-23T13:42:27",
       "ElapsedRaw": "1018",
@@ -95,6 +102,7 @@
       "JobID": "40880",
       "JobName": "ood-jupyter",
       "State": "CANCELLED by 0",
+      "ExitCode": "0:0",
       "Start": "2026-11-23T13:26:29",
       "End": "2026-11-23T13:51:01",
       "ElapsedRaw": "1472",
@@ -106,6 +114,7 @@
       "JobID": "40886",
       "JobName": "ood-jupyter",
       "State": "CANCELLED by 4645820",
+      "ExitCode": "0:0",
       "Start": "2026-11-23T13:52:37",
       "End": "2026-11-23T13:52:42",
       "ElapsedRaw": "5",
@@ -117,6 +126,7 @@
       "JobID": "40887",
       "JobName": "ood-jupyter",
       "State": "CANCELLED by 4645820",
+      "ExitCode": "0:0",
       "Start": "None",
       "End": "2026-11-23T13:52:50",
       "ElapsedRaw": "0",
@@ -128,6 +138,7 @@
       "JobID": "40889",
       "JobName": "ood-jupyter",
       "State": "CANCELLED by 4645820",
+      "ExitCode": "0:0",
       "Start": "None",
       "End": "2026-11-23T13:52:56",
       "ElapsedRaw": "0",
@@ -139,6 +150,7 @@
       "JobID": "40890",
       "JobName": "ood-jupyter",
       "State": "CANCELLED by 4645820",
+      "ExitCode": "0:0",
       "Start": "2026-11-23T13:52:59",
       "End": "2026-11-23T13:53:03",
       "ElapsedRaw": "4",
@@ -150,6 +162,7 @@
       "JobID": "40891",
       "JobName": "ood-jupyter",
       "State": "CANCELLED by 0",
+      "ExitCode": "0:0",
       "Start": "2026-11-23T13:54:29",
       "End": "2026-11-23T14:31:01",
       "ElapsedRaw": "2192",
@@ -161,6 +174,7 @@
       "JobID": "40892",
       "JobName": "ood-jupyter",
       "State": "CANCELLED by 4645820",
+      "ExitCode": "0:0",
       "Start": "2026-11-23T13:54:59",
       "End": "2026-11-23T14:38:38",
       "ElapsedRaw": "2619",
@@ -172,17 +186,19 @@
       "JobID": "40964",
       "JobName": "ood-jupyter",
       "State": "RUNNING",
+      "ExitCode": "0:0",
       "Start": "2026-11-23T14:40:29",
       "End": "Unknown",
-      "ElapsedRaw": "12947",
+      "ElapsedRaw": "14554",
       "AllocTRES": "billing=12,cpu=12,gres/gpu=1,mem=85000M,node=1",
       "allocated_gpu_count": 1,
-      "elapsed_gpu_hours": 3.596388888888889
+      "elapsed_gpu_hours": 4.042777777777777
     },
     {
       "JobID": "40988",
       "JobName": "pyro-test-media",
       "State": "FAILED",
+      "ExitCode": "1:0",
       "Start": "2026-11-23T15:18:30",
       "End": "2026-11-23T15:18:34",
       "ElapsedRaw": "4",
@@ -194,6 +210,7 @@
       "JobID": "41016",
       "JobName": "pyro-test-media",
       "State": "COMPLETED",
+      "ExitCode": "0:0",
       "Start": "2026-11-23T15:22:00",
       "End": "2026-11-23T15:23:34",
       "ElapsedRaw": "94",
@@ -205,6 +222,7 @@
       "JobID": "41017",
       "JobName": "pyro-test-speech-visual",
       "State": "COMPLETED",
+      "ExitCode": "0:0",
       "Start": "2026-11-23T15:25:00",
       "End": "2026-11-23T15:42:46",
       "ElapsedRaw": "1066",
@@ -216,6 +234,7 @@
       "JobID": "41018",
       "JobName": "pyro-test-events",
       "State": "COMPLETED",
+      "ExitCode": "0:0",
       "Start": "2026-11-23T15:25:00",
       "End": "2026-11-23T16:15:19",
       "ElapsedRaw": "3019",
@@ -227,6 +246,7 @@
       "JobID": "41027_1",
       "JobName": "pyro-ego-heldout",
       "State": "FAILED",
+      "ExitCode": "1:0",
       "Start": "2026-11-23T15:37:30",
       "End": "2026-11-23T16:07:27",
       "ElapsedRaw": "1797",
@@ -238,6 +258,7 @@
       "JobID": "41027_2",
       "JobName": "pyro-ego-heldout",
       "State": "FAILED",
+      "ExitCode": "1:0",
       "Start": "2026-11-23T15:47:30",
       "End": "2026-11-23T16:18:19",
       "ElapsedRaw": "1849",
@@ -249,6 +270,7 @@
       "JobID": "41027_3",
       "JobName": "pyro-ego-heldout",
       "State": "FAILED",
+      "ExitCode": "1:0",
       "Start": "2026-11-23T16:08:30",
       "End": "2026-11-23T16:39:03",
       "ElapsedRaw": "1833",
@@ -260,6 +282,7 @@
       "JobID": "41034",
       "JobName": "pyro-test-cue-bridge",
       "State": "COMPLETED",
+      "ExitCode": "0:0",
       "Start": "2026-11-23T16:16:30",
       "End": "2026-11-23T16:17:40",
       "ElapsedRaw": "70",
@@ -271,6 +294,7 @@
       "JobID": "41038_0",
       "JobName": "pyro-ego-heldout",
       "State": "COMPLETED",
+      "ExitCode": "0:0",
       "Start": "2026-11-23T16:55:00",
       "End": "2026-11-23T16:59:33",
       "ElapsedRaw": "273",
@@ -282,6 +306,7 @@
       "JobID": "41038_2",
       "JobName": "pyro-ego-heldout",
       "State": "COMPLETED",
+      "ExitCode": "0:0",
       "Start": "2026-11-23T16:56:31",
       "End": "2026-11-23T17:01:50",
       "ElapsedRaw": "319",
@@ -293,6 +318,7 @@
       "JobID": "41038_3",
       "JobName": "pyro-ego-heldout",
       "State": "COMPLETED",
+      "ExitCode": "0:0",
       "Start": "2026-11-23T17:00:30",
       "End": "2026-11-23T17:05:14",
       "ElapsedRaw": "284",
@@ -304,6 +330,7 @@
       "JobID": "41027_0",
       "JobName": "pyro-ego-heldout",
       "State": "FAILED",
+      "ExitCode": "1:0",
       "Start": "2026-11-23T16:19:30",
       "End": "2026-11-23T16:54:07",
       "ElapsedRaw": "2077",
@@ -315,6 +342,7 @@
       "JobID": "41116",
       "JobName": "pyro-formal-prepare",
       "State": "COMPLETED",
+      "ExitCode": "0:0",
       "Start": "2026-11-23T16:19:00",
       "End": "2026-11-23T16:20:38",
       "ElapsedRaw": "98",
@@ -325,18 +353,20 @@
     {
       "JobID": "41197",
       "JobName": "pyro-parallel-eval",
-      "State": "RUNNING",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
       "Start": "2026-11-23T16:41:00",
-      "End": "Unknown",
-      "ElapsedRaw": "5716",
+      "End": "2026-11-23T18:33:41",
+      "ElapsedRaw": "6761",
       "AllocTRES": "billing=12,cpu=12,gres/gpu=1,mem=80G,node=1",
       "allocated_gpu_count": 1,
-      "elapsed_gpu_hours": 1.5877777777777777
+      "elapsed_gpu_hours": 1.8780555555555556
     },
     {
       "JobID": "41038_1",
       "JobName": "pyro-ego-heldout",
       "State": "CANCELLED by 4645820",
+      "ExitCode": "0:0",
       "Start": "None",
       "End": "2026-11-23T16:57:38",
       "ElapsedRaw": "0",
@@ -348,6 +378,7 @@
       "JobID": "41216_1",
       "JobName": "pyro-ego-heldout",
       "State": "COMPLETED",
+      "ExitCode": "0:0",
       "Start": "2026-11-23T17:06:30",
       "End": "2026-11-23T17:12:23",
       "ElapsedRaw": "353",
@@ -359,15 +390,28 @@
       "JobID": "41217",
       "JobName": "pyro-ego-inputs",
       "State": "COMPLETED",
+      "ExitCode": "0:0",
       "Start": "2026-11-23T17:13:30",
       "End": "2026-11-23T17:23:35",
       "ElapsedRaw": "605",
       "AllocTRES": "billing=24,cpu=24,mem=12G,node=1",
       "allocated_gpu_count": 0,
       "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "41245",
+      "JobName": "pyro-ego-controller",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Start": "2026-11-23T18:35:03",
+      "End": "2026-11-23T18:35:05",
+      "ElapsedRaw": "2",
+      "AllocTRES": "billing=24,cpu=24,mem=2G,node=1",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
     }
   ],
-  "tracked_gpu_hours_40964_41197": 5.184166666666666,
+  "tracked_gpu_hours_40964_41197": 5.9208333333333325,
   "secondary_completed_stages": {
     "job_id": "41197",
     "stages": [
@@ -395,6 +439,11 @@
         "name": "EgoSchema-U",
         "exit_code": 0,
         "seconds": 2129.478
+      },
+      {
+        "name": "EgoSchema-V_local",
+        "exit_code": 0,
+        "seconds": 2157.977
       }
     ],
     "scope": "no paid API calls; separate outputs from primary GPU"
@@ -433,13 +482,14 @@
         "pid": 159792,
         "command": "python -u scripts/run_qa_vlm.py --input /scratch/yy5919/pyro-kd-derived/moments/egoschema-heldout-V_memory-v1.jsonl --output /scratch/yy591",
         "start_epoch_approx": 1795457191.227,
-        "first_observed_utc": "2026-11-23T18:06:37.226825+00:00"
+        "first_observed_utc": "2026-11-23T18:06:37.226825+00:00",
+        "completion_observed_utc": "2026-11-23T18:42:12.483997+00:00",
+        "process_wall_seconds_approx": 2141.257,
+        "completion_uncertainty_seconds": 15
       }
     ]
   },
-  "active_primary_process_snapshot": [
-    " 159792 Mon Nov 23 18:06:30 2026     587 python -u scripts/run_qa_vlm.py --input /scratch/yy5919/pyro-kd-derived/moments/egoschema-heldout-V_memory-v1.json"
-  ],
+  "active_primary_process_snapshot": [],
   "frozen_counts": {
     "formal_core": 3398,
     "formal_ablation5_incremental": 768,
@@ -772,59 +822,59 @@
       "condition": "V_local",
       "task": "EgoSchema QA",
       "expected": 490,
-      "rows": 229,
-      "unique": 229,
+      "rows": 490,
+      "unique": 490,
       "partial_tail_excluded": false,
       "latency_field": "batch_latency_s",
-      "recorded_model_call_seconds": 914.5869999999995,
-      "rows_with_latency": 229,
-      "complete_unique_coverage": false,
-      "model_load_seconds": null,
-      "completed_process_attempt_records": 0,
-      "questions_in_completed_process_records": 0
+      "recorded_model_call_seconds": 1929.7509999999993,
+      "rows_with_latency": 490,
+      "complete_unique_coverage": true,
+      "model_load_seconds": 15.010979828999552,
+      "completed_process_attempt_records": 1,
+      "questions_in_completed_process_records": 490
     },
     {
       "condition": "V_memory",
       "task": "EgoSchema QA",
       "expected": 490,
-      "rows": 106,
-      "unique": 106,
+      "rows": 490,
+      "unique": 490,
       "partial_tail_excluded": false,
       "latency_field": "batch_latency_s",
-      "recorded_model_call_seconds": 424.88100000000003,
-      "rows_with_latency": 106,
-      "complete_unique_coverage": false,
-      "model_load_seconds": null,
-      "completed_process_attempt_records": 0,
-      "questions_in_completed_process_records": 0
+      "recorded_model_call_seconds": 1921.1719999999973,
+      "rows_with_latency": 490,
+      "complete_unique_coverage": true,
+      "model_load_seconds": 12.63819394299935,
+      "completed_process_attempt_records": 1,
+      "questions_in_completed_process_records": 490
     }
   ],
   "utilization_samples": [
     {
       "job_id": "40964",
-      "samples": 177,
+      "samples": 230,
       "first": "2026/11/23 16:48:07.667",
-      "last": "2026/11/23 18:16:08.337",
+      "last": "2026/11/23 18:42:38.538",
       "gpu": "NVIDIA A100-SXM4-40GB",
-      "sample_mean_gpu_utilization_percent": 54.6045197740113,
-      "zero_utilization_samples": 11,
-      "peak_sampled_memory_mib": 29890.0
+      "sample_mean_gpu_utilization_percent": 53.78260869565217,
+      "zero_utilization_samples": 20,
+      "peak_sampled_memory_mib": 32828.0
     },
     {
       "job_id": "41197",
-      "samples": 191,
+      "samples": 226,
       "first": "2026/11/23 16:41:02.828",
-      "last": "2026/11/23 18:16:03.600",
+      "last": "2026/11/23 18:33:33.736",
       "gpu": "NVIDIA A100-SXM4-40GB",
-      "sample_mean_gpu_utilization_percent": 48.86910994764398,
-      "zero_utilization_samples": 30,
+      "sample_mean_gpu_utilization_percent": 51.36283185840708,
+      "zero_utilization_samples": 33,
       "peak_sampled_memory_mib": 34910.0
     }
   ],
   "sources": {
     "/scratch/yy5919/pyro-resume-results/secondary-gpu-41197.json": {
-      "sha256": "47a8f45ea27ff2162462c1a378064f4a4443b81401feff940443e21a57fb5987",
-      "bytes": 580
+      "sha256": "17c51b3ed792f95f263e8d6108cea1e85516768946fb7aabec69f7273cbf2e8c",
+      "bytes": 676
     },
     "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/preparation_counts.json": {
       "sha256": "93601ae1375a726d0c9623daea593385529f5b398b1dae2580b9ea1e60aaf380",
@@ -967,28 +1017,36 @@
       "bytes": 5133730
     },
     "/scratch/yy5919/pyro-resume-results/egoschema-heldout/V_local.jsonl": {
-      "sha256": "da5a215a3b5aee1a073a01d613dc68c230a7d19500f25e49c2d0a2491c8b88d7",
-      "bytes": 727951
+      "sha256": "f1f1ae186a62787db378f64a21ff3a41d5ed67f471ea41edd5c8bd8ece1a764a",
+      "bytes": 1545343
+    },
+    "/scratch/yy5919/pyro-resume-results/egoschema-heldout/V_local.jsonl.attempts.jsonl": {
+      "sha256": "02a3c687feb4ca8543fc0b3e13c285cee8d1f4af48d045b86bff84eda959305e",
+      "bytes": 5010364
     },
     "/scratch/yy5919/pyro-resume-results/egoschema-heldout/V_memory.jsonl": {
-      "sha256": "f4617018fa54daa63312dc04dd9b5619f3fce045f36d749e61f93f28a21307d3",
-      "bytes": 339069
+      "sha256": "51e11f6aad5401f767b914d570e7e657c83f44ed2b8e49f61242186d05b78202",
+      "bytes": 1544668
+    },
+    "/scratch/yy5919/pyro-resume-results/egoschema-heldout/V_memory.jsonl.attempts.jsonl": {
+      "sha256": "127d9549070d70020a4a4777e53cc918b7c9d94cc63718ad9018df5590c00a30",
+      "bytes": 5022717
     },
     "/scratch/yy5919/pyro-primary-util-40964.csv": {
-      "sha256": "732974a990498c9d539d7cf0330bfa7177be6fc2165d8639ca3dfb1b5985323d",
-      "bytes": 11299
+      "sha256": "b3bd0c45e035e8985297872ed377b51bb836e0aa8b07fe71a3c35d0de4c55af4",
+      "bytes": 14683
     },
     "/scratch/yy5919/pyro-secondary-util-41197.csv": {
-      "sha256": "7d5a12e36431b78ab759b1d0cfda1b10b10b0d175e68a3a716c8d0108b3b8f81",
-      "bytes": 12205
+      "sha256": "63f280c8eb0e7c7db3c22ceaea53be6eddb68d69b262dce0f7fc40ad8047ca9c",
+      "bytes": 14454
     },
     "/scratch/yy5919/pyro-resume-results/primary-process-timing.json": {
-      "sha256": "04e9b93c91f3c16456eb6c9340d46aa3f871f96aec42b1f6825d7202ed360e8c",
-      "bytes": 1815
+      "sha256": "3d45ff360c08e5004c8e426ce5e0726e37e4c1cea99a822a08398618ef2440a7",
+      "bytes": 1975
     }
   },
   "export_driver": {
     "path": "/scratch/yy5919/pyro-compute-accounting-export.py",
-    "sha256": "5e210f861ca9bb6380f26e9c1425cdb9edf647ecf32df0546afebbec90d4aef7"
+    "sha256": "0bf51abd09cd44f00a23081db1f36dcd90c30b30f6c1424809723633c704ed53"
   }
 }
