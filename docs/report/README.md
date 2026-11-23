@@ -1,49 +1,41 @@
-# Research report draft
+# Research report for team review
 
-`main.tex` is a conference-style Agent Track research report draft; `main.pdf`
-is the compiled snapshot. It contains verified development and frozen selector
-results, verified final local caption metrics and explicit pending EgoSchema slots, and an Agent
-Log appendix. It is not a finished submission or evidence of completed jobs.
+`main.tex` and `main.pdf` contain the completed authorized local experiment
+results: development diagnostics, all31selector configurations, the20-cell core
+matrix (10local evaluated and10APIdeferred), formal audio-context ablations,
+ten long-QA conditions, and three EgoSchema conditions. There are no pending
+local-result slots. The English Agent Log appendix summarizes failures and
+verification; the chronological log remains `docs/AGENT_LOG.md`.
 
-Human author names and individual contributions must be supplied by the team.
-Paid-model results, human event labels, peer ratings and rubric judgments remain
-deferred. The draft deliberately makes no human-quality claim from automated
-metrics. Long A/AV QA is labeled a constrained-budget diagnostic because realized
-frame counts differ from visual controls.
+Human author names, individual contributions, and the original track declaration
+still require truthful team confirmation. Paid-model/rubric comparisons, human
+detector labels and blinded peer ratings remain deferred. Cue2Narrate is
+unavailable. Long A/AV comparisons have unequal realized frame budgets and are
+explicitly diagnostics, not equal-budget causal evidence. The report is for team
+review, not a claim that every original proposal requirement is complete.
 
-The two small TeX tables were generated from checked-in
-`docs/results/reframed-local-dev.csv` and
-`docs/results/reframed-selectors/selector-results.json`. The coverage figure
-comes from `docs/results/reframed-dev-coverage.pdf`. Run `python docs/report/refresh_tables.py` from the repository root to refresh
-those tables and their source-hash receipt. This does not fill pending EgoSchema
-result slots.
+`python docs/report/refresh_tables.py` regenerates all paper/deck tables from
+checked-in canonical JSON/CSV sources and records their hashes. It verifies
+3398local core attempts,3108valid captions,3024individual speech fits,360valid
+long-QA answers and three fixed490-question EgoSchema conditions. Correctness,
+confidence intervals and comparisons are taken from canonical exports; no new
+inference, human annotation or statistical tuning occurs during typesetting.
 
-The host lacks a TeX engine, but the existing read-only container has
-`/usr/bin/pdflatex`; no package installation is needed. From the repository root:
+Build from the repository root with existing read-only container TeX:
 
 ```bash
 source hpc/config.sh
 in_env ro 'cd docs/report && pdflatex -interaction=nonstopmode -halt-on-error main.tex && pdflatex -interaction=nonstopmode -halt-on-error main.tex'
 ```
 
-Compile intermediates are ignored. Main-text page count and the appendix start
-are recorded in `verification.json`. Before final submission, fill the
-pending EgoSchema result slot from verified formal exports, update conclusions using the
-fixed comparison families, check all captions/denominators, confirm human roles,
-and inspect the rendered PDF. The complete chronological Agent Log remains
-`docs/AGENT_LOG.md`; the appendix summarizes major failures and verification.
+The host lacks TeX; the existing container has `/usr/bin/pdflatex`. No software
+installation is needed. Compile intermediates are ignored. `verification.json`
+records source/PDF hashes, page counts and layout checks. Before submission,
+confirm team attribution, inspect the PDF, rehearse the code walkthrough, and
+preserve the documented scope limits and deferred human/API requirements.
 
-Formal caption refresh: all20matrix rows remain visible (10local,10APIdeferred).
-The formal coverage totals3398attempts,3108valid captions and3024individual
-TTSfits. Core17-contrast and audio-context3-contrast families were declared after
-descriptive results, not preregistered. Timeline-vs-none uses identical selected
-timestamps, so temporalF1 differences reflect valid-output availability rather
-than a selection change or semantic-quality proof. EgoSchema remains pending.
-
-Long QA refresh: all10conditions completed360valid answers, with no missing,
-invalid or generation-error rows. All13Holm-adjusted comparison p-values are1.0.
-Matched-frame timeline controls scoreA_cue20/36versus21/36without andAV18/36versus
-20/36without. This does not establish absence of an effect on a12-video subset.
-Cross-selector A/AV results remain constrained-budget diagnostics. Canonical
-sources: `docs/results/video-mme-long/qa-results.json` and `comparisons.json`.
-Only EgoSchema results remain pending in the local quantitative report.
+Development CV is specifically five folds on ten movies over the eight-point
+global NSE/SC/GF grid. Superclass variants are fixed±0.5 ablations; learned
+superclass coefficients and VN/OP grid tuning were not completed. The frozen
+inference source passed817tests; the later integrated report branch passed847,
+with3skips and5974subtests. Tests do not replace scientific or human evidence.

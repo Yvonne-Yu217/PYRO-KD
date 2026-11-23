@@ -1,4 +1,4 @@
-"""Regenerate the draft's completed development, selector and formal caption tables."""
+"""Regenerate the draft's completed development, selector, caption and QA tables."""
 import csv, hashlib, json
 from pathlib import Path
 
@@ -28,7 +28,7 @@ lines.extend([r'\bottomrule', r'\end{tabular}'])
     'scope': 'completed development and selector results; no formal caption or QA result substitution',
     'development_cells': 10, 'selector_core_cells': 5,
 }, indent=2)+'\n')
-print('Generated10development and5selector rows; QA slots untouched.')
+print('Generated10development and5selector rows.')
 
 formal_path = ROOT/'docs/results/reframed-formal-core/core-results.json'
 if formal_path.exists():
@@ -86,3 +86,22 @@ if long_path.exists():
     provenance.update(long_qa_conditions=10,long_qa_attempts=360,scope='completed development, selector, formal caption and long QA results; EgoSchema pending')
     (OUT/'table_provenance.json').write_text(json.dumps(provenance,indent=2)+'\n')
     print('Generated10long QA conditions;360valid answers andzero missing/errors verified.')
+
+ego_path = ROOT/'docs/results/egoschema-heldout/qa-results.json'
+if ego_path.exists():
+    qa = json.loads(ego_path.read_text())['rows']
+    assert len(qa) == 3 and all(r['expected'] == r['valid'] == 490 for r in qa)
+    assert all(r['missing'] == r['invalid_answers'] == r['generation_errors'] == 0 for r in qa)
+    lines = [r'\begin{tabular}{lrrrl}', r'\toprule Condition & Valid/490 & Correct & Accuracy & 95\% CI \\', r'\midrule']
+    for r in qa:
+        label = r['condition'].replace('_', r'\_')
+        lines.append(f"{label} & {r['valid']} & {r['correct']} & {r['accuracy']:.3f} & [{r['ci_low']:.3f},{r['ci_high']:.3f}] " + r'\\')
+    lines.extend([r'\bottomrule', r'\end{tabular}'])
+    table='\n'.join(lines)+'\n'
+    (OUT/'ego_qa_table.tex').write_text(table)
+    (ROOT/'docs/slides/ego_qa_table.tex').write_text(table)
+    provenance = json.loads((OUT/'table_provenance.json').read_text())
+    provenance['sources'][str(ego_path.relative_to(ROOT))] = hashlib.sha256(ego_path.read_bytes()).hexdigest()
+    provenance.update(ego_qa_conditions=3,ego_qa_expected=1470,scope='completed authorized local development, selector, caption, long QA and EgoSchema results')
+    (OUT/'table_provenance.json').write_text(json.dumps(provenance,indent=2)+'\n')
+    print('Generated3EgoSchema conditions; fixed490denominator verified.')

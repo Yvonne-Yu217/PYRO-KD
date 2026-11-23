@@ -7,14 +7,13 @@
 \setlength{\parskip}{3pt}
 \setlength{\parindent}{0pt}
 \newcommand{\Acue}{A\textsubscript{cue}}
-\newcommand{\pending}[1]{\textcolor{red!65!black}{[Pending: #1]}}
 \title{Cue-Driven Keyframe Selection for Audio Description and Video QA\\\large PYRO-KD: Revision 1.5 experimental report draft}
-\author{PYRO-KD team\\\small Agent Track; research project\\\small Human author names and individual contributions require team confirmation}
+\author{PYRO-KD team\\\small Agent Track workflow; research project\\\small Human author names, contributions, and original track declaration require team confirmation}
 \date{Evidence snapshot: 23 November 2026}
 \begin{document}
 \maketitle
 \begin{abstract}
-Audio description requires selecting informative visual moments while fitting narration into dialogue gaps. PYRO-KD separates cue salience from placement feasibility, combining visual novelty, speech content, non-speech audio events, and voice-activity-derived gaps. We evaluate five selectors with two prompt priors and a planned two-model matrix, using REFRAMED as the primary benchmark. The authorized local portion uses a frozen Qwen2.5-VL model; paid API and human-label conditions are explicitly deferred. All 31 selector configurations have completed on 30 frozen test clips. Descriptive selector F1 is 0.311 for uniform, 0.389 for visual, 0.505 for audio-cue, 0.494 for fused selection, and 0.839 for the timestamp oracle. These are placement results before caption generation. A development pilot reveals material losses between requested moments, feasible inputs, valid captions, and individually speech-fitting narration. The formal local caption matrix completes 3,398 attempts with 3,108 valid captions and 3,024 individually speech-fitting renders. Audio-cue P0 reaches placement F1 0.521 versus 0.351 for V and 0.275 for U. All ten long-video QA conditions complete 360 valid answers; their thirteen video-clustered contrasts have Holm-adjusted $p=1.0$. EgoSchema heldout QA remains pending in this draft. The long-video audio conditions also have lower realized frame budgets than visual controls; they support constrained-budget diagnostics, not an equal-budget causal claim.
+Audio description requires selecting informative visual moments while fitting narration into dialogue gaps. PYRO-KD separates cue salience from placement feasibility, combining visual novelty, speech content, non-speech audio events, and voice-activity-derived gaps. We evaluate five selectors with two prompt priors and a planned two-model matrix, using REFRAMED as the primary benchmark. The authorized local portion uses a frozen Qwen2.5-VL model; paid API and human-label conditions are explicitly deferred. All 31 selector configurations have completed on 30 frozen test clips. Descriptive selector F1 is 0.311 for uniform, 0.389 for visual, 0.505 for audio-cue, 0.494 for fused selection, and 0.839 for the timestamp oracle. These are placement results before caption generation. A development pilot reveals material losses between requested moments, feasible inputs, valid captions, and individually speech-fitting narration. The formal local caption matrix completes 3,398 attempts with 3,108 valid captions and 3,024 individually speech-fitting renders. Audio-cue P0 reaches placement F1 0.521 versus 0.351 for V and 0.275 for U. All ten long-video QA conditions complete 360 valid answers; their thirteen video-clustered contrasts have Holm-adjusted $p=1.0$. EgoSchema visual-only accuracy is 319/490 for U, 311/490 for V-local, and 309/490 for V-memory; none of its three corrected contrasts is significant. The long-video audio conditions also have lower realized frame budgets than visual controls; they support constrained-budget diagnostics, not an equal-budget causal claim.
 \end{abstract}
 
 \section{Problem and experimental questions}
@@ -47,6 +46,8 @@ Cue2Narrate access and comparability remain unverified. No comparison against it
 
 \subsection{Models, development decisions, and controls}
 The local core uses Qwen2.5-VL-7B snapshot \texttt{cc594898...}. The native-audio ablation uses Qwen2.5-Omni-7B snapshot \texttt{ae9e169...}. Full model paths and revisions are recorded in the frozen TOML and provenance files. Models run with bfloat16 and SDPA on A100 GPUs. Caption and EgoSchema frames use a 768-pixel maximum side; long-video QA uses 224 pixels following resource-only smokes with 612 and 1,012 frames. These different task resolutions are disclosed rather than treated as equivalent inputs.
+
+Development tuning used an eight-point grid over global signed non-speech-event weight $\{-0.5,0.5\}$, speech-cue weight $\{0.5,1.0\}$, and gap-feasibility weight $\{0,0.5\}$. Five folds held out two of ten distinct development movies each; every development clip was held out exactly once and all were disjoint from test. Mean heldout-fold F1 was 0.495162 for \Acue{} and 0.472262 for AV. Full-development selection then chose the nonzero nuisance weights below. This verifies global signed-weight cross-validation, not cross-validated per-superclass learning: superclass variants are fixed $\pm0.5$ component ablations, and visual-novelty/overlap-penalty weights were not grid axes. No test retuning was performed.
 
 Development tuning selected nonzero nuisance weights. For \Acue{}, non-speech-event, speech-cue, and gap-feasibility weights are each 0.5; for AV they are 0.5, 1.0, and 0.0. The chosen selector for audio-context ablation 5 is \Acue{}, based on development evidence. No test tuning is permitted.
 
@@ -148,11 +149,22 @@ All ten long-video conditions complete 36/36 valid answers: 360 predictions with
 
 Flat and hierarchical \Acue{} both score 20/36; their individual outcomes need not be identical, and their paired interval is [$-0.0833$,0.0833]. Flat and hierarchical AV both score 18/36 with a zero observed paired difference interval. The largest descriptive score, 21/36 for \Acue{} without a timeline, does not become a validated winner after the declared multiplicity correction. Per-video duration/frame-count results are retained in the exported length analysis rather than used to retune selection.
 
-\pending{Insert the three490-question EgoSchema heldout results and their declared paired comparisons once all conditions finish.}
+
 
 Long \Acue{} and AV cannot realize the same moment budget as U/V under the frozen safe-gap rule. Flat \Acue{} selects 1,497 of 2,314 requested moments (5,988 frames versus 9,256 for U). Other audio variants select 1,484--1,494 moments. A read-only capacity audit attributes most losses to eligible VAD-gap scarcity: video 604 requests 153 moments but has capacity 14, while VAD marks 97.4\% of its duration as speech. Greedy packing contributes only 15 further missing selections across the seven capacity-limited videos.
 
 Therefore these audio-aware long-video results are constrained-budget diagnostics. Differences can reflect selection, audio context, and unequal realized frame count. They do not establish improved QA at equal realized visual budget. Arbitrary filling, relaxing the feasibility rule, or tuning on correctness would alter the research design. The present report retains the shortfall and identifies the unmet controlled comparison.
+
+\subsection{EgoSchema visual-only diagnostic}
+All three conditions complete 490/490 valid heldout answers, excluding the ten pilot questions: 1,470 predictions with zero missing, invalid, or generation-error rows. Table~\ref{tab:egoqa} reports fixed-denominator accuracies and pointwise video-bootstrap intervals. The distributed videos contain no audio, so these results test visual selection only.
+
+\begin{table}[h]
+\centering\scriptsize
+\input{ego_qa_table.tex}
+\caption{EgoSchema: the same 490 heldout questions per condition, all answered validly. Intervals are pointwise 95\% video-bootstrap intervals; missing/error rows would remain incorrect in the denominator.}\label{tab:egoqa}
+\end{table}
+
+The predeclared three-contrast family gives V-local minus U a difference of $-0.0163$ (95\% paired CI [$-0.0408$,0.0102], Holm $p=0.5443$); V-memory minus U is $-0.0204$ ([$-0.0469$,0.0061], $p=0.5003$); V-memory minus V-local is $-0.0041$ ([$-0.0245$,0.0163], $p=0.8337$). No visual-selection advantage is detected after the declared correction. This is not evidence that the methods are equivalent, nor evidence about audio-aware QA. Both QA benchmarks retain all frozen examples; there are zero QA failure or missing rows across the combined 1,830 requests.
 
 \subsection{Threats to validity}
 The 30-clip REFRAMED subset and 12-video long subset are small. Clips from the same movie and questions from the same video are dependent, motivating clustered analysis. Bootstrap intervals do not cure limited representativeness. Reference placement is not unique: disagreement with a professional timestamp may still be usable AD, and agreement alone does not establish usefulness.
@@ -164,7 +176,7 @@ EgoSchema's silent distribution cannot support audio claims. Cue2Narrate access 
 \section{Reproducibility and current conclusion}
 Frozen inference uses immutable worktrees and source/config/input fingerprints. The formal caption source is \texttt{09abb6c}; long audio QA uses \texttt{a7e0e1a}, and its visual controls use \texttt{1f5fb60}. Existing weights and feature caches are reused only after compatibility checks. Incremental changes and failures are recorded in the Agent Log; large data, weights, and raw outputs remain outside Git. The reproduction guide records commands, artifact roots, and stage prerequisites.
 
-The completed evidence shows higher descriptive mean placement agreement for cue-driven selectors than uniform sampling on this frozen subset, while generation and narration introduce substantial additional failure modes. It does not yet establish better human-perceived AD or controlled-budget long-video QA. Formal caption results show a timeline-related improvement in valid-output availability under identical selected moments, without establishing semantic superiority. Long-video QA shows no contrast surviving its declared Holm family; matched-frame timeline controls do not improve descriptive accuracy. EgoSchema conclusions remain pending. All deferred human/API requirements and budget limitations remain explicit.
+The completed evidence shows higher descriptive mean placement agreement for cue-driven selectors than uniform sampling on this frozen subset, while generation and narration introduce substantial additional failure modes. It does not yet establish better human-perceived AD or controlled-budget long-video QA. Formal caption results show a timeline-related improvement in valid-output availability under identical selected moments, without establishing semantic superiority. Long-video QA shows no contrast surviving its declared Holm family; matched-frame timeline controls do not improve descriptive accuracy. EgoSchema likewise shows no detected visual-selection advantage over uniform sampling after its declared correction. All deferred human/API requirements and budget limitations remain explicit.
 
 \begin{thebibliography}{9}\small
 \bibitem{proposal} PYRO-KD team. \emph{Cue-Driven Keyframe Selection for Long-Video Audio Description \& QA: Revision 1.5}. Project proposal. Local snapshot: \texttt{docs/PROPOSAL\_REVISION\_1\_5.txt}.
@@ -204,9 +216,11 @@ Tools included shell/Python, Git and GitHub, Slurm, Singularity read-only enviro
 \textbf{Missing timeline controls.} An audit of the initial long-QA queue found missing timeline-absent controls for audio-only and fused selection. The queue was expanded from eight to ten conditions before correctness scoring, adding 72 requests with exactly the same frame lists, times, questions, and options as their timeline counterparts. The contrast family was expanded from nine to thirteen before labels were opened. This repairs experimental completeness; it is not outcome-driven tuning.
 
 \subsection{Verification evidence and remaining work}
-The exact formal source passed 817 tests, with three skips and 5,974 subtests, recorded in \path{/scratch/yy5919/pyro-formal-source-full-tests.log}. Focused regressions additionally exercised budget denominators, JSONL recovery, coverage, identity guards, QA error handling, and cache validation. Development GPU smokes used real data, followed by the complete local pilot and actual 1.2$\times$ TTS evaluation. Long-QA resource tests validated 612- and 1,012-frame inference without inspecting correctness.
+The exact formal inference source passed 817 tests, with three skips and 5,974 subtests, recorded in \path{/scratch/yy5919/pyro-formal-source-full-tests.log}. Focused regressions additionally exercised budget denominators, JSONL recovery, coverage, identity guards, QA error handling, and cache validation. Development GPU smokes used real data, followed by the complete local pilot and actual 1.2$\times$ TTS evaluation. Long-QA resource tests validated 612- and 1,012-frame inference without inspecting correctness.
+
+The later integrated reporting branch passed 847 tests, three skips, and 5,974 subtests, recorded in \texttt{docs/verification/final-test-results.json}. This adds reporting/export verification without changing the frozen inference source.
 
 Verification also includes raw prediction counts, unique IDs, source hashes, frozen split checks, expected-video denominators, and separate accounting of zero-feasible and failed examples. GPU telemetry and Slurm job records establish execution, but are not substitutes for output validation. Test counts alone likewise do not establish scientific validity.
 
-Human detector labels, blinded peer judgments, paid-model comparisons, and rubric calibration remain outstanding by explicit authorization limits. Human contribution attribution and a team code walkthrough remain submission responsibilities. The team should inspect the final tables, explain the fixes above, and replace every pending result slot only with verified artifacts.
+Human detector labels, blinded peer judgments, paid-model comparisons, and rubric calibration remain outstanding by explicit authorization limits. Human contribution attribution and a team code walkthrough remain submission responsibilities. The team should inspect the final tables, explain the fixes above, and confirm all final result tables against the verified artifacts. Human/API deferrals remain outstanding.
 \end{document}

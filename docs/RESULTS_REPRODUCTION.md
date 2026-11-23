@@ -2,7 +2,7 @@
 
 This guide describes the frozen local experiment. It does not authorize paid API
 calls. Human event labels, blinded ratings and rubric judging remain deferred.
-Formal local caption generation, metrics and TTS are complete; long QA is also complete and EgoSchema remains in progress. Consult
+Formal local caption generation, metrics, TTS, long QA and EgoSchema scoring are complete. Consult
 [EXPERIMENT_STATUS.md](EXPERIMENT_STATUS.md) and artifact coverage before calling
 any stage complete. Do not rerun a live job or alter its source worktree.
 
@@ -127,17 +127,17 @@ must remain explicit in interpretation.
 | EgoSchema heldout and scoring | `/scratch/yy5919/pyro-resume-results/egoschema-heldout` |
 | Human-label requirements | Deferred; no fabricated artifact |
 
-Primary allocation40964 runs formal core and its ready queue. Secondary41197
-runs independent prepared tasks with separate output ownership and a four-hour
-allocation cap. Ego CPU dependency41027→41038→41198 extracts, revalidates/reuses,
-and publishes inputs. These are recorded historical job IDs, not instructions
+Historical primary allocation40964 ran formal core and its ready queue. Secondary41197
+ran independent prepared tasks with separate output ownership and a four-hour
+allocation cap. Ego CPU preparation recovered through41038_{0,2,3},41216_1
+and41217; the earlier41198dependency was replaced. These are recorded historical job IDs, not instructions
 to duplicate submission. Inspect `squeue`, `sacct`, logs, provenance and actual
 coverage to determine current state. No dummy keepalive workloads are permitted.
 
 ## Report PDF
 
-The report is explicitly a draft until all pending slots are replaced and human
-authorship/contributions are confirmed. Build with the existing container TeX:
+The report contains completed local-result tables and remains for team review
+until human authorship/contributions and original track declaration are confirmed. Build with the existing container TeX:
 
 ```bash
 source hpc/config.sh
@@ -166,7 +166,7 @@ are separate artifacts; neither substitutes for human labels.
 
 Refresh paper and deck AD tables from the canonical artifacts with
 `python docs/report/refresh_tables.py`, then compile each LaTeX source twice.
-The generator also refreshes completed long QA tables; EgoSchema result slots remain pending.
+The generator also refreshes completed long QA and EgoSchema tables; no local-result slots remain pending.
 
 ## Completed long-video QA exports
 
@@ -177,4 +177,39 @@ All13Holm-adjusted p-values are1.0. Same-frame timeline A_cue scores20/36versus
 21/36without; AV18/36versus20/36without. This is not evidence that timelines help,
 and the small sample does not prove no effect. A/AV versus U/V remains a
 constrained-realized-budget diagnostic. The frozen subset is12videos, not the
-wholeVideo-MME benchmark. EgoSchema aggregation remains pending.
+wholeVideo-MME benchmark. EgoSchema aggregation is also complete.
+
+## Verified tuning and implementation scope
+
+`docs/verification/development-cv-evidence.json` binds the existing five-fold
+cross-validation on ten distinct development movies, each held out exactly once
+and disjoint from test. The eight-point grid varied global signed NSE±0.5,
+SC0.5/1.0 and GF0/0.5; mean heldout-fold F1 was0.495162 for A_cue and0.472262
+for AV. Superclass variants are fixed±0.5 component ablations, not learned
+per-superclass CV weights. VN and OP were not grid axes. Do not claim all five
+weights or class-specific coefficients were cross-validated, and do not retune
+on heldout results.
+
+The frozen inference source passed817tests; the later integrated report branch
+passed847tests,3skips and5974subtests. The latter is bound in
+`docs/verification/final-test-results.json` to tested commit7fe412d and its log
+hash. Reporting checks do not change historical inference provenance or replace
+human validation. Team names, original track declaration, individual human
+contributions, code walkthrough and submission remain human responsibilities.
+
+## Completed EgoSchema exports
+
+`docs/results/egoschema-heldout/qa-results.json` contains three490-question
+conditions, all490answers valid percondition and zero missing/invalid/generation
+errors. U scores319/490 (65.10%), V_local311/490 (63.47%), and V_memory309/490
+(63.06%). The predeclared three-contrast family gives Holm p-values0.5443,
+0.5003 and0.8337 for V_local−U, V_memory−U, and V_memory−V_local. None supports
+a detected visual-selection advantage; absence of significance is not equivalence.
+All distributed clips lack audio, so there is no audio-aware claim. Combined
+QA coverage is1830/1830valid answers across the frozen subsets.
+
+See the final delivery record and completion/reproduction manifests for the
+final verifier outcome, artifact retention location, current commit and job
+accounting. These manifests, not historical queue prose, define final operational
+status. No new API authorization or human annotations are implied by local
+experiment completion.
