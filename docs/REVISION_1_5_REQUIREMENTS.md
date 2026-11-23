@@ -2,12 +2,18 @@
 
 Source: Google document 1dYGXJJ-MJxmJtZV02U4IrkQVXLPTdev9soelen7Ltyw,
 tab **t.ickd261ntenp**, titled **Revision 1.5**. Retrieved 2026-11-22.
-Full text: PROPOSAL_REVISION_1_5.txt. The user URL selects a different, older
-tab. Earlier audit was consequently incomplete. No experiments were run under
-that mistaken scope.
+Full text: PROPOSAL_REVISION_1_5.txt. An earlier agent audit read an older
+tab by mistake; the current user URL correctly selects Revision1.5. The older
+audit is retained as an error record, not the current specification. No
+experiments were run under that mistaken scope.
 
-All requirements below remain unverified or incomplete unless evidence is
-explicitly linked. Passing unit tests is not experiment evidence.
+The numbered list below preserves the original requirements inventory; its
+historical progress notes are not current execution status. See
+[final requirements audit](verification/final-requirements-audit.md) and
+[experiment status](EXPERIMENT_STATUS.md) for completed evidence and remaining
+work. Current execution uses the proposal-permitted30-clip REFRAMED scope, ten
+local core cells with ten paid API cells explicitly deferred, and ongoing
+EgoSchema completion. Passing unit tests is not experiment evidence.
 
 1. Pre-commitment gates: inspect EgoSchema audio; verify Cue2Narrate access and
    comparable official baselines; verify audio, license and download size for
@@ -53,6 +59,9 @@ explicitly linked. Passing unit tests is not experiment evidence.
 Execution order: verify data/gates and environment, implement/cache audio and
 visual tracks, real ten-development-video U/P0 smoke with evaluated output,
 finish selectors and freeze dev-tuned protocol, full supported matrix and
-ablations, human inputs, statistics and deliverables. No cut-list reduction
-has been applied. Existing official splits remain intact. New evaluation
-subsets must be chosen before inspecting held-out outcomes.
+ablations, human inputs, statistics and deliverables. This was the planned execution order at the time
+of the requirements inventory. The current30-clip evaluation and deferred
+API/human work are explicitly recorded in the frozen protocol and final audit;
+do not interpret this historical snapshot as a claim that no scope reduction
+occurred. Existing official splits remain intact. New evaluation subsets must
+be chosen before inspecting held-out outcomes.
