@@ -26,6 +26,7 @@ from src.generation.hf_vlm import MODELS, generate_batch, load_model, resolve_mo
 from src.generation.outputs import merge_meta, read_rows, settled_ids, status_counts  # noqa: E402
 from src.generation.prompts import PROMPTS, build_prompt, word_limit_for_gap  # noqa: E402
 from src.generation.exemplars import check_resume_prior, load_exemplars  # noqa: E402
+from src.generation.audio_timeline import check_audio_resume, render_timeline, timeline_hash  # noqa: E402
 
 
 def read_jsonl(path: Path) -> list[dict]:
@@ -99,9 +100,13 @@ def prepare(row: dict, args) -> tuple[list, str, int]:
     from PIL import Image
 
     images = [resize_max_side(Image.open(p).convert("RGB"), args.max_side) for p in row["frames"]]
+    audio_context = getattr(args, "audio_context", "legacy")
+    transcript = row.get("transcript", "") if audio_context == "legacy" else ""
+    timeline = render_timeline(row.get("audio_timeline")) if audio_context == "timeline" else None
     prompt = build_prompt(
-        args.prior, row["time"], len(images), args.span, word_limit, row.get("transcript", ""),
+        args.prior, row["time"], len(images), args.span, word_limit, transcript,
         exemplars=getattr(args, "exemplar_texts", ()),
+        audio_timeline_text=timeline,
     )
     return images, prompt, word_limit
 
@@ -115,6 +120,8 @@ def parse_args():
                    help="default: outputs/<model>/<input stem>_<prior>.jsonl")
     p.add_argument("--prior", choices=sorted(PROMPTS), default="P0")
     p.add_argument("--exemplars", help="frozen training-only bundle required for P1")
+    p.add_argument("--audio-context", choices=("legacy", "none", "timeline"), default="legacy",
+                   help="legacy transcript; no audio text; or cached speech/event timeline")
     p.add_argument("--span", type=float, default=2.0, help="seconds covered by each frame window")
     p.add_argument("--batch-size", type=int, default=4)
     p.add_argument("--max-new-tokens", type=int, default=64)
@@ -147,6 +154,10 @@ def main():
         rows = rows[: args.limit]
     rows_on_disk = read_rows(out_path)
     check_resume_prior(rows_on_disk, args.prior, args.exemplar_sha256)
+    check_audio_resume(rows_on_disk, rows, args.audio_context)
+    if args.audio_context == "timeline":
+        for row in rows:
+            render_timeline(row.get("audio_timeline"))
     finished, repeats = settled_ids(rows_on_disk, args.max_new_tokens, args.temperature)
     finished &= {r["id"] for r in rows}
     todo = [r for r in rows if r["id"] not in finished]
@@ -188,7 +199,9 @@ def main():
                         "model_id": model_id, "quant": args.quant, "prior": args.prior,
                         "exemplar_sha256": args.exemplar_sha256,
                         "gap_seconds": row.get("gap_seconds"),
-                        "word_budget_rule": row.get("word_budget_rule")}
+                        "word_budget_rule": row.get("word_budget_rule"),
+                        "audio_context": args.audio_context,
+                        "audio_timeline_sha256": timeline_hash(row["audio_timeline"]) if args.audio_context == "timeline" else None}
                 try:
                     images, prompt, word_limit = prepare(row, args)
                     prepared.append((images, prompt))

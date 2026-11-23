@@ -79,6 +79,7 @@ def build_prompt(
     word_limit: int,
     transcript_text: str = "",
     exemplars: Sequence[str] = (),
+    audio_timeline_text: str | None = None,
 ) -> str:
     if prior not in PROMPTS:
         raise ValueError(f"unknown prior {prior!r}; available: {sorted(PROMPTS)}")
@@ -89,6 +90,10 @@ def build_prompt(
         "Do not repeat what is said.\n"
         if transcript_text else ""
     )
+    if audio_timeline_text is not None:
+        if transcript_text:
+            raise ValueError("timeline and legacy transcript context must not be mixed")
+        context = audio_timeline_text + "\nDo not repeat information already conveyed by audio.\n"
     if prior == "P1" and (
         len(exemplars) != 3 or any(not isinstance(x, str) or not x.strip() for x in exemplars)
     ):

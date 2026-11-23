@@ -45,3 +45,38 @@ Correction: the earlier requirements inventory said “validation exemplars.”
 The authoritative Revision 1.5 source only specifies three professional
 examples. Training-only examples are the implementation choice; the source
 requirement was not changed.
+
+## Audio context controls
+
+`run_ad_vlm.py --audio-context` accepts `legacy` (existing annotation transcript
+behavior), `none` (no audio text), or `timeline` (derived ASR/event estimates).
+The backward-compatible default is legacy; new timeline experiments must set
+the mode explicitly. P0 and P1 share the same selected audio context. Timeline
+mode ignores the old annotation transcript field and rejects missing timeline
+data before loading a model. Empty detected context is explicit and is not a
+substitute for missing audio. Separate outputs are required for different
+modes or changed timeline hashes; resume checks enforce this.
+
+Prepare a development-only exploratory timeline input:
+
+```bash
+source hpc/config.sh
+in_env ro 'python scripts/attach_audio_timeline.py --input /scratch/yy5919/pyro-kd-derived/moments/reframed_U_dev_revision15.jsonl --output /scratch/yy5919/pyro-kd-derived/moments/reframed_U_dev_timeline_exploratory.jsonl --cache-dir /scratch/yy5919/pyro-kd-derived/cache/reframed --min-score 0.5 --min-rise 0.1'
+```
+
+The tool requires both current speech and event caches from the same WAV and
+VAD gates. It uses class-rise local maxima, excludes speech/silence labels,
+and attaches nearby detected speech/events within15s each side of a moment.
+Speech words are grouped into at most12-word phrases, breaking at gaps>0.7s.
+At most40 entries nearest the moment are retained, then sorted chronologically;
+omissions and feature/config hashes are recorded. Events are model estimates,
+not ground truth. The explicit0.5 score/0.1 rise thresholds are initial
+exploratory settings, not tuned or detector-validated final settings.
+
+Actual development attachment preserved all original fields of66 moments:
+129 speech entries and92 event estimates, no omitted entries. Both P0/P1
+four-input CPU dry runs passed with `--audio-context timeline`. Targeted
+verification passed68 tests/17 subtests. Evidence:
+outputs/verification/reframed-dev-timeline-check.json,
+reframed-timeline-{p0,p1}-dry-run.log, and pytest-audio-timeline.log.
+No caption quality, QA utility or detector-accuracy result is claimed.
