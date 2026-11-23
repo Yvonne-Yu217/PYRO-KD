@@ -234,3 +234,5 @@ The already-running long pilot predates this code and still saves per video;
 subsequent runs gain batch recovery. Synthetic interruption tests prove exact
 cue-array equality after reconstruction; a real interrupted model run has not
 yet been exercised.
+
+Real-data recovery follow-up: isolated 73.2s development clip CxWby8RuUwU6 produced 74 windows and 19 checkpoints; rebuilding without final cache files reused all 19 batches, yielded seven bit-identical arrays and an identical NPZ SHA256, and passed the independent event cache verifier. Evidence: outputs/verification/event-checkpoint-real-comparison.json and event-checkpoint-real-audit.json. No OS-kill test or human detector-accuracy claim.

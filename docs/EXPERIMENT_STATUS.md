@@ -293,3 +293,21 @@ batches and reconstructs bit-identical cue arrays. No real interrupted model run
 yet. Agent mistake: initial test command76673 referenced nonexistent
  tests/test_event_cache_audit.py, exit4/no tests; corrected to actual test files.
 Visual extraction reached8/12 (through808); ASR and event pilot remain active.
+
+Registered isolated real development event-checkpoint validation at /scratch/yy5919/pyro-kd-derived/checkpoint-validation-e233432, clip CxWby8RuUwU6 (73.2s). Source manifest copied unchanged with absolute references to existing raw/frame/audio data; only new event/checkpoint outputs written to isolated root. Source e233432, pinned AST/CLAP, batch4/CPU4. No duplicate writer to production caches. Plan: complete actual extraction, preserve final outputs, replay checkpoints and compare every array; human detector scores and GPU inference are not part of this check.
+
+
+Real CPU event-checkpoint validation COMPLETE on isolated development clip
+CxWby8RuUwU6, source e233432: initial extraction36888exit0 produced74windows and
+19batch checkpoints. Final metadata/NPZ were preserved as .first files, then
+replay94626exit0 rebuilt final caches reusing19/19batches. Comparison42573exit0
+confirmed all7arrays bit-identical and both NPZ SHA256 equal
+ e43bf89fab55d1b6fdc6e3a1fe5b9a4a468e642814425015474e073ca2bed69c.
+Independent numerical/source verifier91709exit0 passed1/1selected development
+clip, explicitly not10/10coverage. Evidence outputs/verification/
+event-checkpoint-real-{first,replay}.log, event-checkpoint-real-comparison.json,
+and event-checkpoint-real-audit.json. Actual artifacts at
+/scratch/yy5919/pyro-kd-derived/checkpoint-validation-e233432/CxWby8RuUwU6.
+This exercises real model outputs and missing-final-file recovery, not an OS-kill
+experiment or detector accuracy. Production caches/raw data were untouched.
+Long ASR96112, visual102860 and event pilot106092 continue; visual9/12logged.
