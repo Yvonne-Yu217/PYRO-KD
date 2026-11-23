@@ -114,3 +114,26 @@ as incomplete rather than silently removing them. Recovery subsequently verified
 
 Reproduce after transfers: inside the read-only environment, run
 `python scripts/verify_video_mme_subset.py --members /scratch/yy5919/pyro-kd-derived/video-mme/selected-archive-members-complete.json --videos /scratch/yy5919/pyro-kd-derived/video-mme/videos --report outputs/verification/video-mme-subset-check.json --decode-samples`.
+
+## Long-form data gate passed — final checkpoint
+
+All12 frozen Video-MME selections are now downloaded and independently verified:
+3,221,846,667bytes,7.715hours total, durations30.518–50.501minutes. Every file has
+video and audio streams, matches its pinned ZIP size/CRC and recorded SHA256,
+and decoded nonzero audio samples at10%,50%,90%. This is stream availability
+plus sampled decode, not full-file decode or semantic-quality certification.
+Final evidence: outputs/verification/video-mme-subset-check.json (complete=true,
+verified=expected12,audio_gate_passed=true). Raw selected media remain local at
+/scratch/yy5919/pyro-kd-derived/video-mme/videos. No selected questions or answers
+have been inspected; this remains held-out evaluation data, not a tuning set.
+
+Full archive membership is reproducible with scripts/map_video_mme_subset.py
+--inventory <archive-inventory-complete.json> --output <new-member-map.json>.
+The reproduced mapping matches all12original mappings exactly; missing IDs or
+ambiguous matches fail unless explicitly requesting a partial map. Final
+videos/download-report.json was reconciled from individual verified records
+and the independent audit; earlier failed-attempt reports/logs are retained.
+Remaining work is preprocessing and QA experiment integration under a frozen
+protocol, including handling the multilingual domain; English-only ASR must not
+be silently assumed adequate. This gate completion is not long-form QA accuracy
+or completion of the full Revision1.5 experiment goal.
