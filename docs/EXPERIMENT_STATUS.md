@@ -619,3 +619,18 @@ Seventh longASR802 verified32201exit0:7964words/711VADwindows,
  e4e22eccefd41daef9dd51e58da7811dd9771154d248c640afd28d4896d89747;
 evidence outputs/verification/video-mme-asr-802-check.json. Language codes remain
 model estimates. Long speech/event extraction continues onCPU40036; no GPU request.
+
+
+Native waveform development-input adapter validated: scripts/attach_native_audio.py
+and src/generation/native_audio.py preserve existing selections and attach mono16k
+waveform spans centered on frame_center_time +/-15s. Full WAV and decoded slice
+SHA256, sample boundaries, declared seconds/rate and finite samples are checked.
+Actual U snapped development export:76moments/9videos, all original fields including
+frames and word budgets unchanged. Output /scratch/yy5919/pyro-kd-derived/moments/reframed_U_snapped_placed_event_dev_exploratory_native.jsonl.
+Evidence outputs/verification/reframed-native-input-check.json records input/output,
+source and split hashes; focused tests5passed. First independent audit incorrectly
+assumed a strict480000sample ceiling: outward floor/ceil rounding adds one sample
+for fractional centers. Corrected audit checks exact floor/ceil and <2sample rounding
+tolerance; no data rewritten. No model inference or native runner integration yet.
+Verified running ASR96112/event115097 on40036; continuation40363/40408 pending
+Dependency. GPU hold remains. Full proposal experiments are incomplete.
