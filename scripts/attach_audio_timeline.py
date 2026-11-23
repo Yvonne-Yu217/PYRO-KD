@@ -59,10 +59,11 @@ def main():
     output=[]
     for row in rows:
         source=sources[row['video_id']]
-        entries,truncated=contextual_timeline(source['words'],source['events'],row['time'])
+        center=row.get('frame_center_time',row['time'])
+        entries,truncated=contextual_timeline(source['words'],source['events'],center)
         output.append({**row,'audio_timeline':entries,'audio_timeline_sha256':timeline_hash(entries),
                        'audio_timeline_provenance':{**source['provenance'],'min_score':args.min_score,'min_rise':args.min_rise,
-                                                    'context_seconds_each_side':15.0,'max_entries':40,'omitted_entries':truncated}})
+                                                    'context_center_time':center,'context_seconds_each_side':15.0,'max_entries':40,'omitted_entries':truncated}})
     args.output.parent.mkdir(parents=True,exist_ok=True)
     with args.output.open('x') as handle:
         for row in output: handle.write(json.dumps(row,allow_nan=False)+'\n')

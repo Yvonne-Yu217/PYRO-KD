@@ -105,7 +105,7 @@ def prepare(row: dict, args) -> tuple[list, str, int]:
     transcript = row.get("transcript", "") if audio_context == "legacy" else ""
     timeline = render_timeline(row.get("audio_timeline")) if audio_context == "timeline" else None
     prompt = build_prompt(
-        args.prior, row["time"], len(images), args.span, word_limit, transcript,
+        args.prior, row.get("frame_center_time", row["time"]), len(images), args.span, word_limit, transcript,
         exemplars=getattr(args, "exemplar_texts", ()),
         audio_timeline_text=timeline,
     )
@@ -222,6 +222,12 @@ def main():
                         "audio_context": args.audio_context,
                         "run_fingerprint": provenance["run_fingerprint"],
                         "audio_timeline_sha256": timeline_hash(row["audio_timeline"]) if args.audio_context == "timeline" else None}
+                for key in ("event_time", "placement_lag_seconds", "frame_center_policy",
+                            "frame_center_time", "selection_condition", "selection_rank",
+                            "selection_score", "selection_report_sha256", "protocol_status",
+                            "k_requested", "k_shortfall", "gap_start", "gap_end"):
+                    if key in row:
+                        base[key] = row[key]
                 try:
                     images, prompt, word_limit = prepare(row, args)
                     prepared.append((images, prompt))
