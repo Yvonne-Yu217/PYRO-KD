@@ -57,6 +57,7 @@ FEATURE_VERSION = 1
 DEFAULT_CONFIG: dict[str, Any] = {
     "clip_model": "ViT-B-32",
     "clip_pretrained": "laion2b_s34b_b79k",
+    "clip_revision": "1a25a446712ba5ee05982a381eed697ef9b435cf",
     "shot_detector": "ContentDetector",
     "shot_threshold": 27.0,
     "shot_min_scene_seconds": 1.0,
@@ -118,6 +119,11 @@ def clip_embedder(
 
     from src.utils.visual_selector import VisualSelector
 
+    if model_name == DEFAULT_CONFIG["clip_model"] and pretrained == DEFAULT_CONFIG["clip_pretrained"]:
+        from huggingface_hub import hf_hub_download
+        pretrained = hf_hub_download(
+            "laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
+            "open_clip_model.safetensors", revision=DEFAULT_CONFIG["clip_revision"])
     selector = VisualSelector(model_name, pretrained, device)
 
     def embed(paths: Sequence[str]):
