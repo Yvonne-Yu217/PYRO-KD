@@ -1186,3 +1186,40 @@ derive gated Whisper view, validate data,31selector runs/evaluation, then core
 moments. GPU generation awaits actual-count and coverage review. Binary reference
 availability audit confirmed30/30US tracks; timing audit maximum metadata/media
 difference0.049322seconds. No reference text or score was used to alter configs.
+
+## 2026-11-23: productive GPU queue and parallel CPU evaluation
+
+Exact frozen source09abb6c passed817tests,3skips and5974subtests;
+log /scratch/yy5919/pyro-formal-source-full-tests.log. CPU41116 completed
+all31selector variants on30frozen testclips. Prepared core counts perprompt:
+U283,V305,A_cue384,AV384,O343:3398local model calls total. All20planned
+cells remain listed; ten paid API cells are deferred (authorized budget0).
+
+Primary interactive40964 runs coregeneration with one reused Qwen model,
+source /scratch/yy5919/pyro-revision15-formal, logpyro-formal-local-generation.log.
+Additional bounded batch41197 runs72remaining longQA requests,384no-context
+and384native-audio AD requests, then EgoU/Vlocal if CPUinputs are ready.
+Four-hour allocation cap; no dummy workloads or waiting for unavailable inputs.
+Separate GPU locks and outputfiles prevent duplicate work. Original waiting
+longaudio queue was stopped before41197submission, after confirming no child
+inference was active. Primary V_memory queue waits for490inputs and the core
+GPUlock, never holding a GPUlock during input preparation. CPU41198 builds
+three Ego inputfiles after successful41038validation. Existing41027cache outputs
+are reused despite its known false-negative return-object validator.
+
+Core CPU text scorer runs concurrently. Core TTS watcher initially failed on
+a development-cache path after rendering U/P0. Preserved failurelog
+pyro-formal-tts.log and originaldriver; corrected externaldriver to reframed-test,
+restartedlogpyro-formal-tts-resume.log, reused rendered audio, and verified255
+rendered predictions across27nonzero-output videos. This does not remove the
+three zero-feasible videos from the30-video metric denominator. Frozen inference
+source remained untouched. Agent long_inputs launched separate CPU text/TTS
+watchers for only no-context/native runIDs, preventing shared evaluation writes.
+
+Added development failure-analysis and coverage figure; export now includes
+narration self-overlap separately from original-speech overlap. Recomputed
+1110requested→1008selected→804prepared→705valid→688individualspeech-fitting.
+First export invocation used an incorrect absent TTSroot, producing null derived
+fields; corrected to local-dev-pilot-v1 and existing OpenCLIP overlay. Raw outputs
+were never changed. Python/plot execution validated actual development artifacts.
+No human annotations were invented and no paid API requests were made.

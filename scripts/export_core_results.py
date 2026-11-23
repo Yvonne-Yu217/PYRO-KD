@@ -21,7 +21,7 @@ def main():
  a=p.parse_args();cfg=load_config(a.config);root=Path(cfg['paths']['output_root'])/cfg['experiment']['name']
  rows=[];evidence=[]
  for run in core_generation_runs(cfg):
-  row=dict(selector=run.selection.name,prior=run.prior,model=run.model_label,status='pending',requested_moments=None,selected_moments=None,valid=None,expected=None,failed=None,missing=None,zero_output_videos=None,budget_overruns=None,budget_known=None,budget_unknown=None,f1=None,bertscore=None,openclip=None,tts_fit=None,tts_rendered=None,tts_overlap_seconds=None,generation_latency_seconds=None)
+  row=dict(selector=run.selection.name,prior=run.prior,model=run.model_label,status='pending',requested_moments=None,selected_moments=None,valid=None,expected=None,failed=None,missing=None,zero_output_videos=None,budget_overruns=None,budget_known=None,budget_unknown=None,f1=None,bertscore=None,openclip=None,tts_fit=None,tts_rendered=None,tts_overlap_seconds=None,tts_narration_excess_seconds=None,generation_latency_seconds=None)
   if run.model_label in a.deferred_model:
    row['status']='deferred: no paid authorization';rows.append(row);continue
   expected={x['id'] for x in read_jsonl(moments_path(root,run.selection))};final=final_rows(read_jsonl(generations_path(root,run)));preds={x['id']:x for x in final}
@@ -53,11 +53,11 @@ def main():
   if tp.exists():
    t=json.loads(tp.read_text());assert t['complete'] and t['playback_speed']==1.2;sources.append(tp)
    tr=[x for v in t['videos'] for x in v['rows']];assert len(tr)==row['valid']
-   row.update(tts_fit=sum(x['fits_speech_free_video'] for x in tr),tts_rendered=len(tr),tts_overlap_seconds=sum(v['speech_overlap_seconds_timeline']['union'] for v in t['videos']))
+   row.update(tts_fit=sum(x['fits_speech_free_video'] for x in tr),tts_rendered=len(tr),tts_overlap_seconds=sum(v['speech_overlap_seconds_timeline']['union'] for v in t['videos']),tts_narration_excess_seconds=sum(v['narration_excess_layer_seconds'] for v in t['videos']))
   evidence.append({'run_id':run.run_id,'failed_ids':[k for k,x in preds.items() if not is_success(x)],'missing_ids':sorted(expected-set(preds)),'source_sha256':{str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in sources}})
   rows.append(row)
  a.output_dir.mkdir(parents=True,exist_ok=True)
- (a.output_dir/'core-results.json').write_text(json.dumps({'scope':a.scope,'rows':rows,'evidence':evidence,'notes':'Text metrics condition on temporally matched valid outputs. F1 includes expected videos. TTS covers rendered valid outputs only. Latency sums model calls, not allocated GPU wall time.'},indent=2)+'\n')
+ (a.output_dir/'core-results.json').write_text(json.dumps({'scope':a.scope,'rows':rows,'evidence':evidence,'notes':'Text metrics condition on temporally matched valid outputs. F1 includes expected videos. TTS covers rendered valid outputs only; individual speech fit does not exclude narration self-overlap, reported separately. Latency sums model calls, not allocated GPU wall time.'},indent=2)+'\n')
  with (a.output_dir/'core-results.csv').open('w') as f:
   writer=csv.DictWriter(f,fieldnames=rows[0]);writer.writeheader();writer.writerows(rows)
  def val(x):return '—' if x is None else f'{x:.3f}' if isinstance(x,float) else str(x)

@@ -988,3 +988,16 @@ requires successful preparation and count review. APIs remain capped at0.
 Long visualU/V complete36/36each without inference errors; timelineU also
 complete, remainingtimeline conditions running through sharedGPU lock40964.
 Scoring waitsall8conditions; nine video-clustered contrasts predeclared.
+
+### Active productive queue (2026-11-23 16:44 UTC)
+
+-40964: formal local AD3398requests, frozen09abb6c, one model reused.
+-41197: secondary A100, four-hour cap; AVflat/AVhier longQA72requests,
+  AD no-context384/native384, then EgoU/Vlocal490each if ready; exits if blocked.
+-41027→41038→41198: CPU Ego extraction, corrected validation/reuse, three inputfiles.
+-Primary V_memory490 queued after input readiness and core GPUlock release.
+-Core and ablation5 text/TTS evaluation run on CPU with separate per-cell writes.
+-LongQA scoring waits for all8conditions; no outcome-driven protocol changes.
+
+Full formal source checks817passed,3skipped,5974subtests. GPU pipeline remains
+active; results are incomplete. PaidAPI and human labels remain deferred.
