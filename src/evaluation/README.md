@@ -183,3 +183,24 @@ failures, selector shortfalls and missing videos need separate coverage reportin
 It is not a selector OP score: candidate narration is not yet available during
 selection. GF/OP selection mechanics and their development calibration remain
 outstanding. No actual project TTS/overlap results have been produced yet.
+
+## EgoSchema QA accuracy
+
+Use `scripts/evaluate_egoschema_qa.py --input PREDICTIONS.jsonl --answers
+/scratch/yy5919/pyro-kd-derived/datasets/egoschema/subset_answers.json --split
+pilot --output NEW_SCORE.json` (or `--split heldout`). The frozen config defines
+10 pilot and490 held-out IDs and the label-file SHA. The generation input builder
+and QA runner never load these labels. Evaluation refuses absent/empty predictions,
+changed label membership, pilot/held-out contamination, mixed run fingerprints or
+selectors, duplicate successes, and an index inconsistent with the strict letter
+parser. Malformed JSON lines fail explicitly; interrupted files require recovery.
+
+Primary accuracy uses every ID in the declared partition as the denominator.
+Missing, invalid, truncated and failed predictions count incorrect. Valid-only
+accuracy is a separate diagnostic and never replaces the primary figure. Error
+attempts superseded by a successful retry are counted separately; they do not add
+questions. Per-question outcomes retain IDs for later paired analysis. Incomplete
+coverage/invalid outputs are saved with `complete=false` and exit status1.
+
+This implementation has been tested with synthetic unit fixtures only. No actual
+EgoSchema predictions or accuracy results exist yet; GPU smoke remains required.
