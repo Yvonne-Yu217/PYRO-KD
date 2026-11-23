@@ -149,3 +149,37 @@ All normal tests use injected/mock judges and encoders, with no network calls
 or pretrained-model downloads. `--no-sync` permits these standard-library tests
 to run in the existing macOS environment despite the project's CUDA PyTorch
 wheel incompatibility; it does not validate real model/provider integration.
+
+## Rendered speech overlap (Revision 1.5)
+
+`scripts/evaluate_rendered_overlap.py` measures actual TTS audio after ffmpeg
+`atempo=1.2`, using the resulting 16 kHz PCM sample count. It does not estimate
+speech duration from a word cap or remove leading/trailing silence. Provide JSONL
+with `id`, `video_id`, `time` (playback placement), `output` (generated text),
+`tts_audio` (unaccelerated waveform path), `tts_playback_speed: 1.0`,
+`tts_audio_sha256`, and `tts_text_sha256` (SHA256 of the exact UTF-8 output text).
+The TTS producer must bind the audio to that text; hashes verify artifact
+consistency, not spoken semantic content. No TTS provider is invoked here.
+
+```bash
+python scripts/evaluate_rendered_overlap.py --input rendered_predictions.jsonl \
+  --cache-dir /scratch/yy5919/pyro-kd-derived/cache/reframed \
+  --output-dir NEW_OVERLAP_DIRECTORY
+```
+
+The output directory must be new. It retains accelerated WAVs and `report.json`;
+a failed run leaves artifacts without a complete report, never a partial success.
+Current media/VAD caches and Whisper waveform/gate provenance are checked first.
+Per-description and per-video results report VAD collision, Whisper word collision,
+and their union separately. Per-description summed collisions and unique timeline
+collisions differ when narrations overlap. `narration_excess_layer_seconds` measures
+extra narration layers (three simultaneous narrations count two extra layers), not
+just the duration with at least two narrations. Out-of-video playback is explicitly
+reported and cannot count as successful silence usage. Zero-length Whisper words
+contribute no duration. Empty evaluation has undefined fit fraction.
+
+This evaluates only the supplied successful rendered predictions. Generation
+failures, selector shortfalls and missing videos need separate coverage reporting.
+It is not a selector OP score: candidate narration is not yet available during
+selection. GF/OP selection mechanics and their development calibration remain
+outstanding. No actual project TTS/overlap results have been produced yet.
