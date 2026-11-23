@@ -77,7 +77,8 @@ class GapTests(unittest.TestCase):
         self.assertEqual(word_limit_for_gap(0.2), 0)
         self.assertEqual(word_limit_for_gap(0.4), 1)
         self.assertEqual(word_limit_for_gap(4.0), 12)
-        self.assertEqual(word_limit_for_gap(60.0), MAX_WORDS)
+        self.assertEqual(word_limit_for_gap(60.0), 180)
+        self.assertEqual(word_limit_for_gap(60.0, max_words=MAX_WORDS), MAX_WORDS)
 
     def test_features_round_trip(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -410,7 +411,9 @@ class BuildMomentsTests(unittest.TestCase):
         rows, report, stdout = self.run_batch("U", [("v", 60, [])], {"v": features})
         # Uniform timestamps are 15, 30, 45. First two have zero-word budgets.
         self.assertEqual([r["time"] for r in rows], [45])
-        self.assertEqual(rows[0]["word_limit"], 30)
+        self.assertEqual(rows[0]["word_limit"], 45)
+        self.assertEqual(rows[0]["gap_seconds"], 15)
+        self.assertEqual(rows[0]["word_budget_rule"], "floor-gap-times-3-v1")
         entry = report["videos"][0]
         self.assertEqual(entry["num_selected"], 3)
         self.assertEqual(entry["selection_shortfall"], 0)

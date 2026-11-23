@@ -9,7 +9,7 @@ obtains their GPU session. No GPU inference has run during this CPU preparation.
 - Ten development clips have current frame/audio caches under
   `/scratch/yy5919/pyro-kd-derived/cache/mtg-ad`.
 - Existing U builder produced 78 positive-budget moments (111 exclusions).
-  This is a pipeline smoke input, not the final Revision 1.5 comparison protocol.
+  The word budget now follows floor(gap*3) exactly. The selector shortfall still makes this a pipeline smoke input, not the final comparison protocol.
 - Four real moments passed `run_ad_vlm.py --dry-run`, opening their images and
   constructing P0 prompts. Log: `outputs/verification/mtg-real-dev-dry-run.log`.
 - Existing Qwen2.5-VL-7B snapshot has all five indexed weight shards present
@@ -31,7 +31,7 @@ is lifted. This command has not been executed with GPU inference:
 
 ```bash
 source hpc/config.sh
-in_env ro 'python scripts/run_ad_vlm.py --model /home/yy5919/.cache/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5 --input /scratch/yy5919/pyro-kd-derived/moments/mtg-ad_U_dev.jsonl --output outputs/real-data-smoke/qwen25-mtg-U-P0.jsonl --prior P0 --limit 4 --batch-size 2 --max-new-tokens 128 --quant none'
+in_env ro 'python scripts/run_ad_vlm.py --model /home/yy5919/.cache/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5 --input /scratch/yy5919/pyro-kd-derived/moments/mtg-ad_U_dev_revision15.jsonl --output outputs/real-data-smoke/qwen25-mtg-U-P0.jsonl --prior P0 --limit 4 --batch-size 2 --max-new-tokens 128 --quant none'
 ```
 
 The exact local snapshot matches the proposal's Qwen2.5-VL-7B open-model class
@@ -43,3 +43,13 @@ outputs against the appropriate development references before scaling.
 A successful dry run or model load alone does not pass the end-to-end smoke gate.
 The shortfall in U moments and wide transcript contexts require protocol review
 before using these inputs for confirmatory selector comparisons.
+
+Word-budget correction (2026-11-23): the new revision15 input preserves the
+78 IDs, timestamps and frame windows but removes the historical cap30.
+53 budgets changed; the largest upper limit is 793 words. Keep generations
+concise and inspect token-limit failures; this upper limit is not a target
+length. The old input is preserved for provenance. Use fresh output files
+when comparing budgets; do not resume historical outputs under a new protocol.
+Evidence: outputs/verification/mtg-revision15-word-budget.json and
+mtg-revision15-p0-dry-run.log. Unknown-gap fallback remains historical behavior
+and is not proof of gap fit. All 78 rebuilt inputs have known gap lengths.

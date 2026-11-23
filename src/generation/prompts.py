@@ -9,7 +9,8 @@ from src.datasets.srt import SubtitleItem
 
 WORDS_PER_SECOND = 3  # proposal: word limit = floor(gap seconds * 3)
 DEFAULT_WORD_LIMIT = 15
-MAX_WORDS = 30  # concision cap so long silences do not license long descriptions
+MAX_WORDS = 30  # historical cap; only used when explicitly requested
+WORD_BUDGET_RULE = "floor-gap-times-3-v1"
 CONTEXT_SECONDS = 15.0
 
 P0 = (
@@ -53,19 +54,21 @@ def transcript_context(
     return " ".join(lines)
 
 
-def word_limit_for_gap(gap_seconds: float | None, max_words: int = MAX_WORDS) -> int:
-    """min(max_words, floor(gap * 3)); nonpositive gaps have a zero budget.
+def word_limit_for_gap(gap_seconds: float | None, max_words: int | None = None) -> int:
+    """Revision 1.5: floor(gap * 3); nonpositive gaps have a zero budget.
 
     A positive gap shorter than 1/3 s also fits no whole word. Unknown gaps
-    use the explicit 15-word fallback, capped by max_words, not a fit estimate.
+    use the explicit 15-word fallback, not a fit estimate. An optional cap is
+    retained for explicit historical comparisons; core runs leave it unset.
     """
-    if max_words < 0:
+    if max_words is not None and max_words < 0:
         raise ValueError("max_words must be nonnegative")
     if gap_seconds is None:
-        return min(max_words, DEFAULT_WORD_LIMIT)
+        return DEFAULT_WORD_LIMIT if max_words is None else min(max_words, DEFAULT_WORD_LIMIT)
     if not math.isfinite(gap_seconds):
         raise ValueError("gap_seconds must be finite or None")
-    return min(max_words, math.floor(max(0.0, gap_seconds) * WORDS_PER_SECOND))
+    budget = math.floor(max(0.0, gap_seconds) * WORDS_PER_SECOND)
+    return budget if max_words is None else min(max_words, budget)
 
 
 def build_prompt(

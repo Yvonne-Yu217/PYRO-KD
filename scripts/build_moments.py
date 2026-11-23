@@ -9,7 +9,7 @@ Selectors so far: U (uniform), A (audio-only) and V (video-only). A needs
 audio_features.json (scripts/cache_audio_features.py); V needs
 visual_features.json (scripts/cache_visual_features.py). All selectors use
 validated audio features for word limits and report unusable features.
-The word limit is floor(gap * 3), capped,
+The word limit is floor(gap * 3), without an additional concision cap,
 where gap is the time from the moment to the next speech onset, computed the
 same way for every selector from the cached VAD segments.
 Zero-word moments are skipped and recorded as not safely speakable in a
@@ -30,7 +30,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.datasets import mtg_ad, reframed  # noqa: E402
-from src.generation.prompts import transcript_context, word_limit_for_gap  # noqa: E402
+from src.generation.prompts import WORD_BUDGET_RULE, transcript_context, word_limit_for_gap  # noqa: E402
 from src.utils.audio_features import (  # noqa: E402
     InvalidAudioPath, available_gap, load_current_features, owned_media_manifest, speech_of,
 )
@@ -186,6 +186,8 @@ def main() -> None:
                     "transcript": transcript_context(transcript, t),
                     "k_requested": k,
                     "word_limit": word_limit,
+                    "gap_seconds": gap,
+                    "word_budget_rule": WORD_BUDGET_RULE if gap is not None else "unknown-gap",
                 }) + "\n")
                 rows += 1
                 report["num_written"] += 1
@@ -195,6 +197,7 @@ def main() -> None:
     report_path = output.with_suffix(".report.json")
     report_path.write_text(json.dumps({
         "dataset": name, "selector": args.selector, "videos": reports,
+        "word_budget_rule": WORD_BUDGET_RULE,
     }, indent=2) + "\n", encoding="utf-8")
     print(f"wrote {rows} moments to {output}")
     if shortfalls:

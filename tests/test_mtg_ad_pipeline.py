@@ -410,7 +410,7 @@ class PromptTests(unittest.TestCase):
             build_prompt("P0", 1.0, 4, 2.0, 0)
 
     def test_word_cap_has_no_minimum_and_rejects_unknown_nonfinite_capacity(self):
-        for gap, expected in ((0.0, 0), (-2.0, 0), (0.2, 0), (0.4, 1), (1.0, 3), (20.0, 30)):
+        for gap, expected in ((0.0, 0), (-2.0, 0), (0.2, 0), (0.4, 1), (1.0, 3), (20.0, 60)):
             with self.subTest(gap=gap):
                 self.assertEqual(word_limit_for_gap(gap), expected)
         for gap in (float("nan"), float("inf")):

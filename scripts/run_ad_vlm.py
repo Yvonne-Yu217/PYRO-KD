@@ -186,7 +186,9 @@ def main():
                         "selector": row.get("selector"), "time": row["time"],
                         "frame_times": row.get("frame_times"), "model": args.model,
                         "model_id": model_id, "quant": args.quant, "prior": args.prior,
-                        "exemplar_sha256": args.exemplar_sha256}
+                        "exemplar_sha256": args.exemplar_sha256,
+                        "gap_seconds": row.get("gap_seconds"),
+                        "word_budget_rule": row.get("word_budget_rule")}
                 try:
                     images, prompt, word_limit = prepare(row, args)
                     prepared.append((images, prompt))
