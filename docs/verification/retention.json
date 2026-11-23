@@ -1,0 +1,17 @@
+{
+  "verified": true,
+  "archive_sha256": "eae9ab224c4e906d9fee53ba1a083486e0660bef81a1d7a586f881cb1e952720",
+  "archive_bytes": 26038719,
+  "files": 456,
+  "completion_manifest_sha256": "1369be50792ab255c075cd669efc17b4a6dbaa4d7bdd364d19d631b6f0ffc92c",
+  "source_shas": {
+    "/scratch/yy5919/pyro-revision15-records": "d4e53bbd68e36657683684634a1548bef2e1aa04",
+    "/scratch/yy5919/pyro-revision15-formal": "09abb6c0512e5e97549ad4e66d3bae05a68c42c8",
+    "/scratch/yy5919/pyro-revision15-long-prep": "a7e0e1abfb697403b16a3fa325c82d29dc03fac7",
+    "/scratch/yy5919/pyro-revision15-next": "1f5fb60cb3f5f5d0519cebb8d96d5099ff41453b"
+  },
+  "archive_path": "/home/yy5919/pyro-kd-artifacts/revision15-20261123/artifacts.tar.gz",
+  "inventory_path": "/home/yy5919/pyro-kd-artifacts/revision15-20261123/inventory.json",
+  "inventory_sha256": "fe60ce89694e050f73e42b6afacaee61a6a0ca94f2d0c700a430531cb3c8f055",
+  "scope": "Verified local result archive; excludes media, model weights and large caches. This publication receipt was added after the archived snapshot and is not claimed to be inside it."
+}

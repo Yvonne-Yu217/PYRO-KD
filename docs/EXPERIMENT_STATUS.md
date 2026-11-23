@@ -1073,3 +1073,18 @@ submitted. PrimaryVmemory completed on40964; userallocation left intact. Our
 additional GPU utilization monitor was stopped; the user-owned monitor/session
 was preserved. No dummykeepalive and no paidcalls. Final report/archive closeout
 uses CPU only. Resume from verified artifacts, never duplicate these runs.
+
+## Final publication and retention
+
+All authorized local inference, scoring, paired analyses and cached-table
+reproduction are complete. The final paper has8pages(6beforeappendix), and the
+deck12slides; both compile cleanly in two passes and were visually inspected.
+The archive at /home/yy5919/pyro-kd-artifacts/revision15-20261123/artifacts.tar.gz
+contains456verified files (26,038,719bytes), excluding media/models/caches.
+SHA256:eae9ab224c4e906d9fee53ba1a083486e0660bef81a1d7a586f881cb1e952720.
+Inventory and publication receipt sit beside it; docs/verification/retention.json
+links this evidence. Every member and all bound completion inputs were checked
+again before publication. Archived results source:d4e53bb; later receipt/log
+commits do not claim to be part of the archived snapshot. No remaining agent
+GPU jobs; user-owned40964 remains intact. APIspend$0; human/API/Cue2Narrate
+and disclosed design limitations remain requirements, not fabricated results.
