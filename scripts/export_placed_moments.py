@@ -15,6 +15,18 @@ from src.utils.visual_features import media_cache_problem
 from src.utils.media import load_manifest,frame_window
 from src.generation.prompts import WORD_BUDGET_RULE
 
+CONDITIONS = ('U_snapped', 'O_snapped', 'V_local', 'V_memory',
+              'A_trigger', 'A_suppress', 'AV_trigger', 'AV_suppress')
+
+
+def report_selection(report, video, condition):
+    """Resolve the explicit report formats without guessing a selector variant."""
+    if condition not in CONDITIONS:
+        raise ValueError('unsupported selection condition')
+    if condition.startswith('V_'):
+        return video['modes'][condition[2:]], report['settings']
+    return video['conditions'][condition], report
+
 
 def make_row(video_id, condition, selected, selection, manifest, frame_center, report_hash):
     placement=selected['placement']
@@ -45,7 +57,7 @@ def make_row(video_id, condition, selected, selection, manifest, frame_center, r
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--selection-report',type=Path,required=True)
-    p.add_argument('--condition',choices=('A_trigger','A_suppress','AV_trigger','AV_suppress'),required=True)
+    p.add_argument('--condition',choices=CONDITIONS,required=True)
     p.add_argument('--cache-dir',type=Path,required=True)
     p.add_argument('--frame-center',choices=('event','placement'),required=True)
     p.add_argument('--output',type=Path,required=True)
@@ -65,7 +77,7 @@ def main():
         if problem: raise ValueError(f'{video_id}: {problem}')
         audio,reason=load_current_features(cache,manifest)
         if audio is None: raise ValueError(f'{video_id}: {reason}')
-        selection=video['conditions'][args.condition]
+        selection,constraints=report_selection(report,video,args.condition)
         if selection['shortfall']!=selection['requested']-len(selection['selected']):
             raise ValueError('invalid selection budget accounting')
         times=[s['placement']['time'] for s in selection['selected']]
@@ -74,7 +86,7 @@ def main():
             a=selected['placement']
             if not any(a['gap_start']==g['start'] and a['gap_end']==g['end'] for g in audio['gaps']):
                 raise ValueError('placement gap not in current VAD cache')
-            if not -report['max_advance']<=a['time']-a['event_time']<=report['max_lag']:
+            if not -constraints['max_advance']<=a['time']-a['event_time']<=constraints['max_lag']:
                 raise ValueError('placement exceeds declared bounds')
             rows.append(make_row(video_id,args.condition,selected,selection,manifest,args.frame_center,digest))
         coverage.append({'video_id':video_id,'requested':selection['requested'],
