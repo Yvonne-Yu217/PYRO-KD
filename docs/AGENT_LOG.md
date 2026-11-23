@@ -1259,3 +1259,18 @@ only in timeline-related fields. Newprimary GPUqueue waits behindcore inference,
 sourcea7e0e1a, outputlogpyro-primary-long-controls.log, estimate15–25GPUminutes
 (max45percondition), API$0. EgoVmemory remains queued independently. Restarted
 CPUscorer with10conditions inpyro-long-qa-scoring-v2.log; waitsall360predictions.
+
+## Reporting checks and paired-analysis preparation
+
+Agent long_inputs added current-schema core temporal export and17contrast
+movie-clustered analysis (3a632c0), with6synthetic regressiontests passing.
+It validates all30clips, rawattemptcoverage, bound references/sourcehashes and
+recomputed temporalcounts; zero-output clips remain in the denominator. Analysis
+family is newlydeclared while earlycoreoutputs existed, not retrospectively
+called preregistered. No statisticalexecutionuntilall10cells finish.
+
+Extended coverageexporter to ablation5 without changing itsdefaultcoremode.
+Validated on all3existingdevelopmentcells: Qwenno-context76/95valid,
+Qwentimeline85/95,Omninative62/95; allvalidactualTTSreports andOpenCLIPpresent.
+The native condition changes both model and inputmodality; it is not a clean
+within-model audioeffect. Generated derivedfiles in scratch/dev-ablation5-report.
