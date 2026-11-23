@@ -941,3 +941,16 @@ conditions, explicitly deferred at zero spending authorization.
 Long-QA resource smokes passed612 and1012 frames on40964 with224px resolution;
 no held-out outcome scoring. Ablation5 smoke follows on04491e1, serial GPU lock.
 CPU41016 complete30 clips;41017 speech/visual and41018 event/onset active.
+## Long A_cue/AV preparation interface (not launched)
+
+From the long-prep branch, after the long cue bridge is verified:
+
+```bash
+source hpc/config.sh
+in_env ro 'CUDA_VISIBLE_DEVICES="" OMP_NUM_THREADS=2 OPENBLAS_NUM_THREADS=2 /scratch/yy5919/pyro-data-env/bin/python scripts/build_long_qa_inputs.py --annotations /scratch/yy5919/pyro-kd-derived/video-mme/annotations.parquet --cache-dir /scratch/yy5919/pyro-kd-derived/cache/video-mme --cue-cache-dir /scratch/yy5919/pyro-kd-derived/cache/video-mme-pr22-bridge --selector AV --budget-allocation hierarchical --selection-config configs/experiments/reframed_local_dev_pilot.toml --audio-context timeline --output /scratch/yy5919/pyro-kd-derived/moments/video-mme-long-AV-hier-timeline-v1.jsonl'
+```
+
+Use distinct output names for flat/hierarchical and A_cue/AV conditions. All
+conditions inherit identical development-frozen nuisance weights. The bridge
+path above is the intended destination, not evidence of existing complete data.
+No GPU allocation or generation was launched by this agent.
