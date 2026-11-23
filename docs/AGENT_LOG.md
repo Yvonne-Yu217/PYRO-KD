@@ -434,3 +434,17 @@ reproducer check_live_event_checkpoints.py beside it. Live writer was not change
 or restarted; later batches are explicitly outside this snapshot. This is not
 complete616coverage or detector accuracy. Both longASR96112 and event115097 remain
 live; CPU40036 had~41minutes left at the initial check, continuation jobs unchanged.
+
+
+Prepared development-only per-class event/AD association analysis in
+scripts/analyze_dev_event_alignment.py and src/evaluation/event_alignment.py.
+Uses frozen10REFRAMEDvalidation clips, mergedUS AD starts (.5s merge), existing
+AST probability>=.5/positive rise>=.1 and +/-2s AD proximity on the1sgrid.
+Reports2x2counts, conditional proximity rates and phi per video/class, with
+undefined correlations and support explicit; excludes predefined speech classes.
+No test data, p-values, detector-accuracy interpretation or automatic weight/sign
+tuning. Tests12801exit0:6passed including known+1/-1/undefined correlations and
+inclusive boundaries. Next actual CPU diagnostic uses existing cached events and
+output outputs/verification/reframed-dev-event-alignment.json. Initial exploratory
+file reads guessed two nonexistent fused-audit names; corrected via rg discovery
+to audit_fused_selectors.py before implementing the missing association path.
