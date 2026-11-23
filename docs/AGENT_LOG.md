@@ -352,3 +352,16 @@ in docs/REAL_DATA_SMOKE.md. Shared-template Transformers kwargs-placement warnin
 recorded; actual encoding passed. Initial read tried nonexistent check_vlm_inputs.py;
 corrected discovery found debug_processor.py and the actual shared generation path.
 Long ASR96112 and event115097 remain active; no duplicate writers or GPU request.
+
+
+Processor warning audit85969exit0 inspected installed Transformers
+ProcessorMixin.apply_chat_template source (outputs/verification/
+processor-template-source.txt). The compatibility branch collects processing
+kwargs from **kwargs, warns, then merges them into processor_kwargs before calling
+self(..., **processor_kwargs). Thus padding=True is forwarded, not ignored;
+the successful QA encoding is not evidence of a padding failure. No generation
+code change was made. This resolves the warning concern without altering the
+shared AD/QA recipe. Actual GPU feasibility remains untested. Live process check:
+ASR96112 and events115097 active at~4CPUthreads each; event616 reached1100/2646
+windows with batch checkpoints. CPU40036 has~51minutes remaining; dependent
+CPU40363/40408 still queued. No restart, duplicate submission or GPU allocation.

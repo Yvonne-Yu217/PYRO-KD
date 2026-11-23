@@ -111,3 +111,5 @@ The processor emitted a Transformers kwargs-placement warning with the shared
 chat-template invocation; the actual one-question encoding succeeded. No frame
 truncation or automatic budget reduction was applied. A real GPU `--limit 1`
 QA smoke is still required before scaling.
+
+Warning follow-up: inspection of the installed ProcessorMixin implementation confirmed that processing kwargs passed through **kwargs are merged into processor_kwargs despite the warning. Padding remains applied; no generation-path fix was necessary. Evidence: outputs/verification/processor-template-source.txt.
