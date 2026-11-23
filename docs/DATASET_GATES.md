@@ -137,3 +137,12 @@ Remaining work is preprocessing and QA experiment integration under a frozen
 protocol, including handling the multilingual domain; English-only ASR must not
 be silently assumed adequate. This gate completion is not long-form QA accuracy
 or completion of the full Revision1.5 experiment goal.
+
+Video-MME media preprocessing gate passed: all12 frozen long test videos now have
+2fps/max-side768 JPEG caches and16k mono PCM audio. Independent verification decoded
+every55549JPEG, read all444395013 PCM samples (7.715191hours), checked source and WAV
+hashes and frame/audio duration coverage. Source A/V streams all begin at0.
+Evidence: outputs/verification/video-mme-preprocessing.json,
+video-mme-cache-check.json and video-mme-stream-timing.json. This is label-blind
+media preparation, not multilingual transcription, detector validation, selection
+or QA evaluation. Those experiment gates remain open.
