@@ -250,3 +250,15 @@ address. No form was submitted or message sent. Standard LSMDC access alone does
 not establish availability of LongLSMDC paired windows or Cue2Narrate weights.
 Direct reproduction remains pending those artifacts; the baseline is retained
 in scope, and published scores are not substituted for our own evaluation.
+
+
+Long visual progress audit69272 finished with exit1, explicitly incomplete:
+6/12 frozen IDs verified (604,616,710,729,753,763), 26482 frames total.
+The other six reported no_visual_features, consistent with the live writer;
+no completed cache failed numerical/provenance checks. Evidence:
+outputs/verification/video-mme-visual-progress-check.json. Audit checks current
+source hashes, 512-dimensional normalized embeddings, reconstructed novelty,
+shot bounds and local/memory ranking budget/separation. It is not model accuracy.
+Original visual process102860, ASR96112 and event pilot106092 remain live;
+no duplicate jobs were started. CPU40036 ends04:22:47UTC;40363 still pending its
+afterany dependency. Full final visual audit remains required after completion.
