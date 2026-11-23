@@ -8,6 +8,7 @@ def main():
  source=a.input_dir/'measured-gap-utilization.json';raw=source.read_bytes();data=json.loads(raw)
  for result in data['results']:
   for video in result['videos']:
+   video['original_collision_metrics'].pop('rows',None)
    for track in video['tracks'].values():
     track['gap_count']=len(track.pop('gaps'));track['caption_ratio_count']=len(track.pop('per_caption_remaining_gap_ratios'))
  data['full_details']={'path':str(source.resolve()),'sha256':hashlib.sha256(raw).hexdigest()}
