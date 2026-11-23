@@ -18,6 +18,7 @@ compared as if they were deployable.
 from __future__ import annotations
 
 import math
+import json
 from pathlib import Path
 import traceback
 from typing import Any, Sequence
@@ -26,7 +27,7 @@ from src.evaluation import audio_diagnostics, placement
 from src.evaluation.metrics import temporal_precision_recall_f1
 from src.evaluation.significance import holm, wilcoxon_signed_rank
 from src.evaluation.stats import bootstrap_mean_ci, paired_bootstrap_diff
-from src.experiments.config import get
+from src.experiments.config import get, stable_hash
 from src.experiments.data import ground_truth, k_for, load_context
 from src.experiments.io import append_jsonl, latest_by_key, read_jsonl, update_status, write_json
 from src.experiments.matrix import SelectionRun
@@ -60,16 +61,25 @@ def run_selection(cfg: dict, run: SelectionRun, records, exp_dir: Path, retry_fa
     counts = {"written": 0, "skipped": 0, "errors": 0}
     for record in records:
         previous = done.get(record.video_id)
-        if previous and not _recompute(previous["status"], retry_failed):
-            counts["skipped"] += 1
-            continue
+        fingerprint = None
         try:
             context, available = load_context(record, cfg, cue_set, need_visual=needs_visual)
+            k = k_for(record, context.duration, cfg) if context.duration else None
+            inputs = {"spec": spec, "k": k, "duration": context.duration,
+                      "bundle": context.bundle_config, "ground_truth": context.ground_truth,
+                      "audio": context.audio_features, "cues": context.audio_cues,
+                      "visual": context.visual_features, "embeddings": context.embeddings,
+                      "available": available}
+            # Arrays must be hashed in full, not through NumPy's truncated repr.
+            fingerprint = stable_hash(json.loads(json.dumps(inputs, default=lambda v: v.tolist())), 64)
+            if (previous and previous.get("input_fingerprint") == fingerprint
+                    and not _recompute(previous["status"], retry_failed)):
+                counts["skipped"] += 1
+                continue
             if not context.duration:
                 row = {"video_id": record.video_id, "status": "missing_duration", "times": [], "k": None,
                        "available": available}
             else:
-                k = k_for(record, context.duration, cfg)
                 selection = run_selector(spec, context, k)
                 row = {"video_id": record.video_id, "k": k, "duration": context.duration, "times": selection.times,
                        "status": selection.status, "available": available, "details": selection.details,
@@ -78,8 +88,9 @@ def run_selection(cfg: dict, run: SelectionRun, records, exp_dir: Path, retry_fa
             row = {"video_id": record.video_id, "status": "error", "times": [], "k": None,
                    "error": f"{exc!r}", "traceback": traceback.format_exc(limit=3)}
             counts["errors"] += 1
-        row.update(selector=run.name, run_id=run.run_id, oracle=run.is_oracle, ablation=run.ablation)
-        if previous and previous["status"] == row["status"] and previous.get("times") == row.get("times"):
+        row.update(selector=run.name, run_id=run.run_id, oracle=run.is_oracle, ablation=run.ablation,
+                   input_fingerprint=fingerprint)
+        if previous == row:
             counts["skipped"] += 1  # a retried row that came out the same adds nothing to the file
             continue
         append_jsonl(path, [row])

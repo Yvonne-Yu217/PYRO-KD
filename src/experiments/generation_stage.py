@@ -289,7 +289,12 @@ def _optional_scorer(name: str, cfg: dict):
 def evaluate_generation(cfg: dict, run: GenerationRun, records, exp_dir: Path, scorers: dict | None = None) -> dict:
     """Placement with real word counts, budget compliance and matched-pair text metrics."""
     by_id = {r.video_id: r for r in records}
-    rows = final_rows(_current_generation_rows(generations_path(exp_dir, run), _ad_inputs(cfg, run, exp_dir, records)))
+    inputs = _ad_inputs(cfg, run, exp_dir, records)
+    rows = final_rows(_current_generation_rows(generations_path(exp_dir, run), inputs))
+    expected_by_video: dict[str, set[str]] = {}
+    for moment_id, (moment, _, _) in inputs.items():
+        expected_by_video.setdefault(moment["video_id"], set()).add(moment_id)
+    missing_ids = sorted(set(inputs) - {r["id"] for r in rows})
     tol = float(get(cfg, "selection.tolerance_seconds", 2.0))
     slack = float(get(cfg, "selection.duration_slack_seconds", 1.0))
     wps, speed = float(get(cfg, "evaluation.tts_words_per_second", 2.5)), float(get(cfg, "evaluation.tts_speed", 1.2))
@@ -302,10 +307,10 @@ def evaluate_generation(cfg: dict, run: GenerationRun, records, exp_dir: Path, s
     by_video: dict[str, list[dict]] = {}
     for row in rows:
         by_video.setdefault(row.get("video_id"), []).append(row)
-    for video_id, vrows in by_video.items():
-        record = by_id.get(video_id)
-        if record is None:
-            continue
+    for video_id, record in by_id.items():
+        vrows = by_video.get(video_id, [])
+        expected_ids = expected_by_video.get(video_id, set())
+        missing = sorted(expected_ids - {r["id"] for r in vrows})
         ok = [r for r in vrows if is_success(r) and r.get("output")]
         context, _ = load_context(record, cfg, need_visual=False)
         truth, _ = ground_truth(record, context.duration, slack)
@@ -313,7 +318,9 @@ def evaluate_generation(cfg: dict, run: GenerationRun, records, exp_dir: Path, s
         primary = temporal_precision_recall_f1(times, truth, tol)
         speech = [tuple(s) for s in context.audio_features["speech"]] if context.audio_features else None
         placements = [(r["time"], len(r["output"].split())) for r in ok]
-        entry = {"video_id": video_id, "n_moments": len(vrows), "n_ok": len(ok), "n_error": len(vrows) - len(ok),
+        entry = {"video_id": video_id, "n_expected": len(expected_ids), "n_missing": len(missing),
+                 "missing_ids": missing, "no_prepared_moments": not expected_ids,
+                 "n_moments": len(vrows), "n_ok": len(ok), "n_error": len(vrows) - len(ok),
                  "precision": primary["precision"], "recall": primary["recall"], "f1": primary["f1"],
                  "mean_words": (sum(n for _, n in placements) / len(placements)) if placements else None,
                  "over_budget_rate": (sum(bool(r.get("over_budget")) for r in ok) / len(ok)) if ok else None,
@@ -342,7 +349,15 @@ def evaluate_generation(cfg: dict, run: GenerationRun, records, exp_dir: Path, s
         except Exception as exc:
             text_metrics[name] = {"status": f"failed: {exc!r}"}
     resamples, seed = int(get(cfg, "evaluation.resamples", 10000)), int(get(cfg, "experiment.seed", 0))
+    no_inputs = sorted(v for v in by_id if not expected_by_video.get(v))
+    n_errors = sum(v["n_error"] for v in per_video)
+    status = "incomplete" if missing_ids or no_inputs else ("complete_with_errors" if n_errors else "complete")
     result = {
+        "status": status, "n_expected": sum(len(expected_by_video.get(v, set())) for v in by_id),
+        "n_observed": sum(v["n_moments"] for v in per_video), "n_missing": len(missing_ids),
+        "missing_ids": missing_ids, "videos_without_prepared_moments": no_inputs,
+        "n_videos_expected": len(by_id), "n_videos_observed": sum(bool(by_video.get(v)) for v in by_id),
+        "n_error": n_errors,
         "run_id": run.run_id, "selector": run.selection.name, "prior": run.prior, "model": run.model_label,
         "timeline": run.timeline, "audio_context": run.audio_context, "oracle": run.selection.is_oracle, "n_videos": len(per_video),
         "macro_f1": bootstrap_mean_ci([v["f1"] for v in per_video], resamples, seed),

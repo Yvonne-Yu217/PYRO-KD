@@ -136,3 +136,25 @@ Project venv: 482 tests, OK, 8 skipped (ffmpeg x7, PySceneDetect x1); baseline w
 ### Blockers and deviations
 
 See `docs/readiness_report.md` (deviations 1-10) and `PROJECT_STATUS.md`. Open question for the team: Cloud Bursting vs Torch.
+
+### 2026-11-23: selection resume and generation coverage review fixes
+
+- Selection rows now record the resolved input identity (including K, duration,
+  selector settings and validated feature/annotation inputs). Only matching
+  inputs resume; legacy rows are recomputed once. Identical timestamps no longer
+  suppress an updated budget or provenance record.
+- Generation evaluation retains every requested video, including videos with no
+  output. It reports expected/observed/missing moments, absent prepared inputs,
+  and explicit generation errors. Tables distinguish incomplete runs from
+  completed attempts with errors; zero-output videos stay in macro F1.
+- Six focused regressions cover changed K, legacy rows, unchanged timestamps,
+  incomplete smoke outputs, empty outputs, unprepared videos and error accounting.
+  All six fail/error on the prior commit and pass with these fixes. The existing
+  generation-input, JSONL and API-spend suites also pass (23 tests).
+- Raw generations are preserved. After a selection input changes, rerun the
+  moments stage; existing generation fingerprint checks require a fresh output
+  directory when successful prior requests no longer match.
+- Full validation: `uv run --no-project --with numpy --with pillow --with
+  soundfile --with librosa --with torch --with silero-vad python -m unittest
+  discover -s tests` ran 535 tests in 29.795s: OK, one skipped. No paid API or HPC
+  inference was launched for this review fix.
