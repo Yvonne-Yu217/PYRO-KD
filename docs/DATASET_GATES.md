@@ -82,3 +82,24 @@ end-record reads and surface BadZipFile. The reader now wraps exhausted network
 failures explicitly as transport errors. Complete parts are durable; the partial
 inventory and selected-archive-members.json remain under the scratch metadata
 root. No selected media payload has been downloaded, and audio gate remains open.
+
+Actual long-video pilot verified: frozen ID857 is92,269,189bytes and1988.998095s
+(~33.15min), with H264640x360 video and AAC44.1kHzstereo audio. SHA256
+34af0d3faf68073450ba019f2181b3694626a6fb54ef737d8f4f7ed4732de9b5;
+ZIP CRC32 498150852. This passes stream/duration availability for one selected
+file only, not all12 or audio semantic quality. Evidence videos/857.verified.json
+under the scratch Video-MME root. No QA inference or answer inspection occurred.
+
+`scripts/download_video_mme_subset.py` downloads exact member ranges, checkpoints
+compressed bytes, verifies decompressed size/CRC/SHA and probes streams; existing
+verified media are reused. Run inside the read-only container because host shell
+has no ffprobe. Full located subset transfer is active with2workers; unlocated
+ID864 is retained as a failure. Initial17range probe succeeded with a refreshed
+resolver query; refreshed four-archive indexing is active, so transport failure
+must not be described as proven archive corruption. Do not duplicate either job.
+
+Recovery update: refreshed index run completed20/20 archives,900members with
+96,834bytes of index data. All12frozen IDs are now located in
+selected-archive-members-complete.json. Earlier failures were access-path
+failures, not evidence of corrupt ZIP releases. The initial payload job still
+uses the original map, so ID864 needs the recovered map in a later download.

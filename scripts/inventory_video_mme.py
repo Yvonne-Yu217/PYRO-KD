@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import urllib.request
 import urllib.error
+import urllib.parse
 import zipfile
 
 
@@ -28,7 +29,10 @@ class HTTPRangeFile(io.RawIOBase):
         start=self.position
         if not self.buffer_start<=start or start+n>self.buffer_start+len(self.buffer):
             end=min(self.size,start+max(n,65536))-1
-            request=urllib.request.Request(self.url,headers={'Range':f'bytes={start}-{end}'})
+            separator='&' if urllib.parse.urlsplit(self.url).query else '?'
+            # Refresh resolver redirects for this byte range; stale CDN redirects can time out.
+            url=self.url+separator+f'download=true&pyro_range={start}-{end}'
+            request=urllib.request.Request(url,headers={'Range':f'bytes={start}-{end}'})
             for attempt in range(3):
                 try:
                     with urllib.request.urlopen(request,timeout=20) as response:
