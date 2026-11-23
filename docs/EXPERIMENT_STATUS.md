@@ -634,3 +634,23 @@ for fractional centers. Corrected audit checks exact floor/ceil and <2sample rou
 tolerance; no data rewritten. No model inference or native runner integration yet.
 Verified running ASR96112/event115097 on40036; continuation40363/40408 pending
 Dependency. GPU hold remains. Full proposal experiments are incomplete.
+
+
+Added explicit --backend omni to scripts/run_ad_vlm.py. It requires batch-size1,
+no quantization and no reasoning-strength; native context requires this backend.
+Existing frame/text modes remain available on the same Omni backend for later
+controlled comparisons. Native rows validate full WAV/slice hashes before resume
+and again before generation, reject transcript/timeline mixtures and mismatched
+visual centers. Output records retain exact native sample metadata; provenance
+includes backend and full input JSON. Shared error/truncation/recovery paths remain.
+src/generation/omni.py uses local pinned assets, disables talker after model load,
+requests generation_mode=text with thinker-specific decoding arguments, and
+rejects unexpected audio-output tuples. GPU loading/inference remains untested.
+Tests39460exit0:41passed (backend mocked-model contract, native spans, generation
+truncation/provenance). Tests75806exit0:16passed+11subtests for recovery/audio
+context/prior. Actual native CLI dry-run passed, no prediction file/model load.
+Actual shared native processor check29796exit0 encoded the first real frozen dev
+U moment:2390tokens, image+audio tensors present. Scope1/76moments only; noGPU
+memory or quality claim. Evidence outputs/verification/reframed-native-ad-processor-check.json/.log
+and native-ad-dry-run.log. Existing talker config token warnings persist and must
+be evaluated in the later real GPU smoke. No GPU submission or paid API usage.

@@ -29,6 +29,7 @@ from src.generation.exemplars import check_resume_prior, load_exemplars  # noqa:
 from src.generation.audio_timeline import check_audio_resume, render_timeline, timeline_hash  # noqa: E402
 from src.generation.jsonl_recovery import read_resume_rows,apply_tail_recovery
 from src.generation.provenance import capture_provenance, check_resume_fingerprint  # noqa: E402
+from src.generation.native_audio import load_native_audio
 
 
 def read_jsonl(path: Path) -> list[dict]:
@@ -110,6 +111,11 @@ def prepare(row: dict, args) -> tuple[list, str, int]:
         exemplars=getattr(args, "exemplar_texts", ()),
         audio_timeline_text=timeline,
     )
+    if audio_context == 'native':
+        audio = row['native_audio']
+        prompt += (f"\nThe supplied audio covers {audio['start_seconds']:.6f} to "
+                   f"{audio['end_seconds']:.6f} seconds of the clip. Use it as context "
+                   "for the visible scene; do not transcribe dialogue.")
     return images, prompt, word_limit
 
 
@@ -122,7 +128,8 @@ def parse_args():
                    help="default: outputs/<model>/<input stem>_<prior>.jsonl")
     p.add_argument("--prior", choices=sorted(PROMPTS), default="P0")
     p.add_argument("--exemplars", help="frozen training-only bundle required for P1")
-    p.add_argument("--audio-context", choices=("legacy", "none", "timeline"), default="legacy",
+    p.add_argument('--backend', choices=('vlm', 'omni'), default='vlm')
+    p.add_argument("--audio-context", choices=("legacy", "none", "timeline", "native"), default="legacy",
                    help="legacy transcript; no audio text; or cached speech/event timeline")
     p.add_argument("--span", type=float, default=2.0, help="seconds covered by each frame window")
     p.add_argument("--batch-size", type=int, default=4)
@@ -141,6 +148,10 @@ def parse_args():
 
 def main():
     args = parse_args()
+    if args.audio_context == 'native' and args.backend != 'omni':
+        raise ValueError('native waveform context requires --backend omni')
+    if args.backend == 'omni' and (args.batch_size != 1 or args.quant != 'none' or args.reasoning_strength):
+        raise ValueError('Omni requires --batch-size 1, --quant none, and no reasoning-strength')
     if (args.prior == "P1") != bool(args.exemplars):
         raise ValueError("--exemplars is required for P1 and forbidden for P0")
     args.exemplar_texts, args.exemplar_sha256 = (
@@ -152,12 +163,20 @@ def main():
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     rows = read_jsonl(Path(args.input))
+    if args.audio_context == 'native':
+        for row in rows:
+            if row.get('transcript') or row.get('audio_timeline'):
+                raise ValueError('native input must not include transcript/timeline context')
+            if row['native_audio']['frame_center_time'] != row.get('frame_center_time', row['time']):
+                raise ValueError('native audio and visual center differ')
+            load_native_audio(row['native_audio'])
     provenance = capture_provenance(Path(__file__).resolve().parents[1], Path(args.input), rows, {
         "model_id": model_id, "quant": args.quant, "attn_impl": args.attn_impl,
         "prior": args.prior, "exemplar_sha256": args.exemplar_sha256,
         "audio_context": args.audio_context, "span": args.span, "max_side": args.max_side,
         "temperature": args.temperature, "top_p": args.top_p,
         "reasoning_strength": args.reasoning_strength,
+        "backend": args.backend,
     })
     if args.limit:
         rows = rows[: args.limit]
@@ -206,7 +225,11 @@ def main():
     import transformers
 
     t0 = time.time()
-    processor, model, cls_name = load_model(model_id, args.attn_impl, args.quant)
+    if args.backend == 'omni':
+        from src.generation.omni import load_model as load_omni
+        processor, model, cls_name = load_omni(model_id, args.attn_impl)
+    else:
+        processor, model, cls_name = load_model(model_id, args.attn_impl, args.quant)
     load_s = time.time() - t0
     print(f"[run_ad] loaded {model_id} via {cls_name} in {load_s:.0f}s", flush=True)
     if torch.cuda.is_available():
@@ -227,6 +250,7 @@ def main():
                         "gap_seconds": row.get("gap_seconds"),
                         "word_budget_rule": row.get("word_budget_rule"),
                         "audio_context": args.audio_context,
+                        "backend": args.backend,
                         "run_fingerprint": provenance["run_fingerprint"],
                         "audio_timeline_sha256": timeline_hash(row["audio_timeline"]) if args.audio_context == "timeline" else None}
                 for key in ("event_time", "placement_lag_seconds", "frame_center_policy",
@@ -235,6 +259,8 @@ def main():
                             "k_requested", "k_shortfall", "gap_start", "gap_end"):
                     if key in row:
                         base[key] = row[key]
+                if args.audio_context == 'native':
+                    base['native_audio'] = row['native_audio']
                 try:
                     images, prompt, word_limit = prepare(row, args)
                     prepared.append((images, prompt))
@@ -252,12 +278,21 @@ def main():
                 idx = chunks.pop(0)
                 try:
                     t = time.time()
-                    texts, raws, n_new = generate_batch(
-                        processor, model,
-                        [prepared[i][0] for i in idx], [prepared[i][1] for i in idx],
-                        max_new_tokens=args.max_new_tokens, temperature=args.temperature,
-                        top_p=args.top_p, reasoning_strength=args.reasoning_strength,
-                    )
+                    if args.backend == 'omni':
+                        from src.generation.omni import generate_one
+                        i = idx[0]
+                        waveform = (load_native_audio(records[i]['native_audio'])
+                                    if args.audio_context == 'native' else None)
+                        texts, raws, n_new = generate_one(
+                            processor, model, prepared[i][0], prepared[i][1], waveform,
+                            args.max_new_tokens, args.temperature, args.top_p)
+                    else:
+                        texts, raws, n_new = generate_batch(
+                            processor, model,
+                            [prepared[i][0] for i in idx], [prepared[i][1] for i in idx],
+                            max_new_tokens=args.max_new_tokens, temperature=args.temperature,
+                            top_p=args.top_p, reasoning_strength=args.reasoning_strength,
+                        )
                     dt = time.time() - t
                     gen_s += dt
                     for j, i in enumerate(idx):
