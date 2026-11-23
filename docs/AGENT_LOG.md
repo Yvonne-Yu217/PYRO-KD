@@ -1390,3 +1390,17 @@ The accumulated reporting/analysis branch passed the full test suite:837passed,
 source changed and no paidAPI was called. The frozenformal09abb6c source had
 previously passed817tests before launch; these additionalchecks cover the new
 analysis/reporting code without replacing the originalrunprovenance.
+
+## Independent completion inventory
+
+Agent audit_remaining added a CPU-only completion verifier for4166AD attempts,
+360longQA and1470EgoQA attempts. Exactfinal IDs, source/config/inputprovenance,
+alltextmetrics, valid-caption TTScoverage, measured-gap evidence and pairedQA
+fixeddenominators/declaredHolm families are required. Historicalretryerrors stay
+counted separately; finalgeneration failures are allowed but enumerated. QA
+scores are notopened until allrawconditions for thatdataset are complete.
+
+Fourfocused tests passed; a livepartialaudit correctlyreturnednotready andleft
+QA scoring artifacts unopened. Manifest always distinguisheslocalcompletion
+from deferredAPI/human/Cue2Narrate work, and records unequal longrealizedbudgets.
+No models, largeweight/framecache hashing, GPUjobs ornewlabels are involved.
