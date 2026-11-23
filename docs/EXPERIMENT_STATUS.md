@@ -836,3 +836,30 @@ validated. Evidence /scratch/yy5919/pyro-kd-derived/tts/reframed-ten-smoke/repor
 Actual1.2xoverlapaudit37593running whileGPUQAproceeds. TTSqualitynotyetlistened.
 Sources: https://github.com/OHF-Voice/piper1-gpl/blob/main/docs/API_PYTHON.md and
 https://huggingface.co/rhasspy/piper-voices/blob/e9c8a39444359388adaa94255becb37a5a2b8e51/en/en_US/ljspeech/medium/MODEL_CARD.
+
+
+Ten-question EgoSchema U pilot49979completed10/10validanswers,noerrors. Actual
+accuracy evaluation now running againstfrozenpilotlabels only; noheldoutlabels.
+Registered next bounded10question V_local thenV_memory pilot GPUqueue on40891,
+samefrozeninputs/60frames/Qwen/bf16/sdpa/16tokens/temp0; outputs
+outputs/real-data-smoke/egoschema-V_local-ten.jsonl andegoschema-V_memory-ten.jsonl.
+One GPUwriter atatime. Stopsqueueif inferencefails. CPUevaluation overlaps.
+REFRAMEDsemantic evaluation28180exit1 dueonebudgetfailure:9valid,3matches,
+BERTScoreF1.85656785965over3pairs,cosine.26599191647. Limitedone-moment-per-clip
+coverage against110references meansnotfinalselectorquality. Renderedoverlap37593
+exit0:9WAVs,48.7391875renderedseconds,8fit,one0.052875sunionVAD/Whispercollision,
+0out-of-video. Failedonewordcaseexcludedexplicitly. TTSintelligibilitynotyetreviewed.
+
+
+REFRAMED ten-clip visual inspection savedreframed-ten.visual-review.json plus2frame
+contact sheets. Broadscenecontent oftenvisible, but repetition and unsupported
+motion/details remain; no invented calibrated ratings. This is agentinspection,
+not60humanpeercomparisons. Actualsemanticmetrics9valid/1budgetfailure,3matches,
+BERTScoreF1.85657 andsentencecosine.26599 over3pairs only. Rendered overlap8/9fit,
+0.052875scollision; one excludedbudgetfailure keptincoverage. Nofinalbenchmarkclaim.
+EgoSchema U tenpilot accuracy58284exit0:10/10, independently checked frozenIDs,
+strictletter mapping anddirectpilotanswercomparisons. Predictions vary acrossA-E;
+top-levelgoldfields absent ininput. Evidence egoschema-U-ten.independent-check.json.
+Noheldout490accuracy. V_localcompleted10answers; CPUevaluationlaunched. V_memory
+GPUqueue44349continues sequentially, no simultaneousGPUmodels. Userrequest for
+usefulGPUactivity handled with independentQAwork whileCPUAD/TTS auditsrun.
