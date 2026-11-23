@@ -1111,3 +1111,11 @@ Queue watchdog correction before any audio-aware QA launch: stopped the waiting
 queue process (no GPU child yet), replaced Python-only timeout with GNU timeout
 and30-second forced-kill grace to bound its subprocess group, then restarted.
 Current session36268 replaces54677; no inference source or active model changed.
+
+Long input audit exposed major target/achievedK differences before audio-aware
+GPU inference. All12source checks passed; safe-gap scarcity dominates, with
+minor greedy-packing loss. A realizes1497/2314moments. Full table and interpretation:
+docs/results/long-selection-budget-audit.md. Retain the proposal's constrained
+selectors and explicit shortfalls; label long audio-aware scores as constrained-
+budget diagnostics. Equal-realized-frame-budget RQ4 evidence remains unmet.
+No protocol was changed based on correctness or fabricated annotations.
