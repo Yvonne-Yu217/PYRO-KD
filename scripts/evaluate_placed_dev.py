@@ -31,6 +31,7 @@ def main():
     p.add_argument('--data-dir',type=Path,required=True)
     p.add_argument('--fused-report',type=Path,required=True)
     p.add_argument('--visual-report',type=Path,required=True)
+    p.add_argument('--baseline-report',type=Path)
     p.add_argument('--split-config',type=Path,default=Path('configs/reframed_splits.json'))
     p.add_argument('--output',type=Path,required=True)
     args=p.parse_args()
@@ -38,10 +39,14 @@ def main():
     splits=json.loads(args.split_config.read_text())
     ids=[r['video_id'] for r in splits['clips']]
     fused=json.loads(args.fused_report.read_text()); visual=json.loads(args.visual_report.read_text())
-    for report in (fused,visual):
+    baseline=json.loads(args.baseline_report.read_text()) if args.baseline_report else None
+    for report in ([fused,visual]+([baseline] if baseline else [])):
         if report['split_sha256']!=digest(args.split_config): raise ValueError('selection split mismatch')
         if len(report['videos'])!=len(ids) or {r['video_id'] for r in report['videos']}!=set(ids):
             raise ValueError('incomplete or duplicate selection coverage')
+    if baseline and any(baseline[k]!=fused[k] for k in ('required_words','max_advance','max_lag')):
+        raise ValueError('baseline placement settings differ')
+    baseline_by={r['video_id']:r for r in baseline['videos']} if baseline else {}
     vsettings=visual['settings']
     if any(fused[k]!=vsettings[k] for k in ('required_words','max_advance','max_lag')):
         raise ValueError('placement settings differ between reports')
@@ -57,6 +62,8 @@ def main():
         truth=[item.start for item in reframed.merge_cues(clip.ad_us,max_gap=.5)]
         conditions={**fused_by[video_id]['conditions'],
                     **{'V_'+name:value for name,value in visual_by[video_id]['modes'].items()}}
+        if baseline:
+            conditions.update(baseline_by[video_id]['conditions'])
         if len({c['requested'] for c in conditions.values()})!=1: raise ValueError('requested K differs')
         for name,selected in conditions.items():
             times=[s['placement']['time'] for s in selected['selected']]
@@ -72,6 +79,7 @@ def main():
             'selected':sum(r['selected'] for r in group),'shortfall':sum(r['shortfall'] for r in group),
             'tp':tp,'fp':fp,'fn':fn,'micro_precision':tp/(tp+fp) if tp+fp else 0,
             'micro_recall':tp/(tp+fn) if tp+fn else 0,'micro_f1':2*tp/(2*tp+fp+fn) if 2*tp+fp+fn else None,
+            'macro_matched_per_requested':bootstrap_mean_ci([r['matched_per_requested'] for r in group],resamples=10000,seed=0),
             'macro_f1':bootstrap_mean_ci([r['f1'] for r in group],resamples=10000,seed=0)}
     pairs={}
     for a,b in (('A_trigger','A_suppress'),('AV_trigger','AV_suppress'),('V_memory','V_local')):
@@ -80,7 +88,7 @@ def main():
     report={'scope':'exploratory development-only diagnostics; untuned selectors; not confirmatory results',
             'reference':'US AD starts after merging cue gaps <=0.5s; retain all annotations; report bounds anomalies',
             'tolerance_seconds':2,'bootstrap':'10000 resamples, seed0; one clip per unique movie verified',
-            'source_sha256':{str(path):digest(path) for path in (args.fused_report,args.visual_report,args.split_config)},
+            'source_sha256':{str(path):digest(path) for path in ([args.fused_report,args.visual_report,args.split_config]+([args.baseline_report] if args.baseline_report else []))},
             'summaries':summaries,'exploratory_paired_differences':pairs,'rows':rows}
     args.output.parent.mkdir(parents=True,exist_ok=True)
     with args.output.open('x') as handle: json.dump(report,handle,indent=2,allow_nan=False)
