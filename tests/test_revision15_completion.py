@@ -3,7 +3,7 @@ from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
-from scripts.verify_revision15_completion import coverage, exact, read_rows, Audit, audit_qa
+from scripts.verify_revision15_completion import coverage, exact, read_rows, Audit, audit_qa, check_bound_sources, check_family
 from types import SimpleNamespace
 
 class CompletionTests(unittest.TestCase):
@@ -20,6 +20,26 @@ class CompletionTests(unittest.TestCase):
             for data in ('{"id":"a"}', '{bad}\n'):
                 p.write_text(data)
                 with self.assertRaises(ValueError):read_rows(p)
+    def test_missing_and_stale_selection_or_contrast_source(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            p=Path(tmp)/'selection.jsonl';p.write_text('{}\n')
+            from scripts.verify_revision15_completion import sha
+            digest=sha(p)
+            with self.assertRaisesRegex(ValueError,'absent'):
+                check_bound_sources(Audit(),{},[p])
+            check_bound_sources(Audit(),{str(p):digest},[p])
+            p.write_text('{"changed":true}\n')
+            with self.assertRaisesRegex(ValueError,'stale'):
+                check_bound_sources(Audit(),{str(p):digest},[p])
+    def test_missing_or_wrong_contrast_family_refused(self):
+        good=dict(condition_a='a',condition_b='b',excluded=[],units=[{'unit_id':str(x)} for x in range(10)],included_example_ids=[str(x) for x in range(30)],wilcoxon={'holm_pvalue':1.0})
+        check_family(Audit(),[good],[('a','b')])
+        with self.assertRaisesRegex(ValueError,'size'):
+            check_family(Audit(),[],[('a','b')])
+        with self.assertRaisesRegex(ValueError,'frozen plan'):
+            check_family(Audit(),[good],[('b','a')])
+        with self.assertRaisesRegex(ValueError,'cluster'):
+            check_family(Audit(),[{**good,'units':good['units'][:-1]}],[('a','b')])
     def test_incomplete_qa_never_opens_scoring_artifacts(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp);(root/'configs').mkdir()

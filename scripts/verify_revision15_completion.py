@@ -119,6 +119,70 @@ def audit_ad(a, args):
     a.attempt('measured-gap coverage', lambda: a.check(gap_ids>={r.run_id for r in runs},'detailed measured-gap exporter evidence required for all twelve cells'))
     return result
 
+def check_family(a, comparisons, pairs, clips=30):
+    a.check(len(comparisons)==len(pairs), 'contrast family size mismatch')
+    a.check([(r['condition_a'],r['condition_b']) for r in comparisons]==pairs, 'contrast family differs from frozen plan')
+    for r in comparisons:
+        a.check(not r['excluded'] and len(r['units'])==10 and len({u['unit_id'] for u in r['units']})==10, 'contrast cluster coverage mismatch')
+        a.check(len(r['included_example_ids'])==clips and len(set(r['included_example_ids']))==clips, 'contrast clip coverage mismatch')
+        a.check('holm_pvalue' in r['wilcoxon'], 'contrast Holm correction missing')
+
+
+def check_bound_sources(a, sources, required):
+    normalized={str(Path(p).resolve()):h for p,h in sources.items()}
+    for path in required:
+        path=Path(path).resolve()
+        a.check(str(path) in normalized, 'required source absent from evidence: '+str(path))
+        a.check(sha(a.bind(path))==normalized[str(path)], 'stale source evidence: '+str(path))
+
+
+def audit_selection_and_contrasts(a,args):
+    from src.experiments.matrix import all_selection_runs
+    from src.experiments.selection_stage import selections_path
+    repo=Path(__file__).resolve().parents[1]
+    cfgpath=args.formal_repo/'configs/experiments/reframed_test_local.toml'
+    cfg=load_config(cfgpath);root=args.results_root/'experiments/reframed_test_local_v1'
+    splits=a.obj(args.formal_repo/'configs/reframed_splits.json')
+    expected=set(splits['test']['video_ids'])
+    metricpath=root/'eval/selection_metrics.json';metric=a.obj(metricpath)
+    runs=all_selection_runs(cfg)
+    a.check(len(expected)==30 and len(runs)==31 and len(metric['runs'])==31,'selector coverage must be31 x30')
+    a.check(set(metric['runs'])=={r.name for r in runs},'selector names differ from frozen plan')
+    a.check(set(metric['common_video_ids'])==expected,'selector common membership mismatch')
+    paths=[]
+    for run in runs:
+        path=selections_path(root,run);paths.append(path)
+        rows=a.rows(path);latest={r['video_id']:r for r in rows}
+        a.check(set(latest)==expected,'selection membership mismatch: '+run.name)
+        report=metric['runs'][run.name];ids=[v['video_id'] for v in report['videos']]
+        a.check(report['complete'] and not report['missing_video_ids'] and not report['unexpected_video_ids'] and len(ids)==30 and set(ids)==expected,'selector metric coverage mismatch: '+run.name)
+    evidence=a.obj(args.selector_evidence)
+    a.check(evidence['coverage']==dict(selectors=31,clips=30,movies=10),'selector analysis coverage mismatch')
+    check_bound_sources(a,evidence['provenance']['sources'],[metricpath,*paths])
+    core=args.results_root/'formal-core-temporal'
+    c=a.obj(core/'contrasts.json');planpath=repo/'configs/core_temporal_contrasts.json';plan=a.obj(planpath)
+    paired=core/'paired.jsonl';side=core/'paired.jsonl.provenance.json'
+    provenance=a.obj(side)
+    a.check(c['input_sha256']==sha(a.bind(paired))==provenance['output_sha256'],'stale core paired input')
+    a.check(c['export_provenance_sha256']==sha(side) and c['plan_sha256']==sha(planpath) and c['plan']==plan,'stale core contrast provenance/plan')
+    a.check(len(read_rows(paired))==300,'core paired row count mismatch')
+    check_family(a,c['results'],[(r['a'],r['b']) for r in plan['contrasts']])
+    ab=a.obj(args.results_root/'formal-ablation5-temporal/contrasts.json')
+    planpath=repo/'configs/ablation5_temporal_contrasts.json';plan=a.obj(planpath)
+    a.check(ab['plan']==plan,'ablation plan mismatch')
+    required=[cfgpath,side,planpath]
+    for run in ablation5_runs(cfg):
+        required += [moments_path(root,run.selection),generations_path(root,run),root/'eval'/f'generation_{run.run_id}.json']
+    check_bound_sources(a,ab['sources'],required)
+    rows=ab['paired_rows'];a.check(len(rows)==90,'ablation paired row count mismatch')
+    a.check({r['condition'] for r in rows}=={'timeline','native','no_context'},'ablation conditions mismatch')
+    for condition in ('timeline','native','no_context'):
+        ids=[r['example_id'] for r in rows if r['condition']==condition]
+        a.check(len(ids)==30 and set(ids)==expected,'ablation paired membership mismatch')
+    check_family(a,ab['comparisons'],[tuple(r) for r in plan['contrasts']])
+    return dict(selector_configurations=31,selector_videos=30,core_contrasts=17,ablation_contrasts=3)
+
+
 def audit_qa(a,args,kind):
     repo=Path(__file__).resolve().parents[1]
     is_ego=kind=='egoschema'
@@ -183,12 +247,13 @@ def main(argv=None):
     p.add_argument('--formal-repo',type=Path,default=Path('/scratch/yy5919/pyro-revision15-formal'))
     p.add_argument('--results-root',type=Path,default=Path('/scratch/yy5919/pyro-resume-results'))
     p.add_argument('--tts-root',type=Path,default=Path('/scratch/yy5919/pyro-kd-derived/tts/formal-local-v1'))
+    p.add_argument('--selector-evidence',type=Path,default=Path(__file__).resolve().parents[1]/'docs/results/reframed-selector-ablations/selector-ablation-stats.json')
     p.add_argument('--gap-evidence',type=Path,action='append',default=[])
     p.add_argument('--temporal-evidence',type=Path,required=True,help='Detailed temporal exporter JSONL provenance sidecar')
     p.add_argument('--output',type=Path,required=True)
     args=p.parse_args(argv);a=Audit()
     sections={}
-    for name,fn in [('ad',lambda:audit_ad(a,args)),('long_qa',lambda:audit_qa(a,args,'long')),('egoschema',lambda:audit_qa(a,args,'egoschema'))]:
+    for name,fn in [('ad',lambda:audit_ad(a,args)),('selection_and_contrasts',lambda:audit_selection_and_contrasts(a,args)),('long_qa',lambda:audit_qa(a,args,'long')),('egoschema',lambda:audit_qa(a,args,'egoschema'))]:
         sections[name]=a.attempt(name,fn)
     def temporal():
         obj=a.evidence(args.temporal_evidence)
