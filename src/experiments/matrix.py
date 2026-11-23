@@ -174,7 +174,8 @@ def ablation_selections(name: str, cfg: dict) -> list[SelectionRun]:
     if name == "3":  # Whisper-only audio events vs the tagger (needs both cue sets cached)
         return [
             select({"base": "A_cue", "name": "A_cue-tagger", "cue_set": "audio_cues.json"}, a),
-            select({"base": "A_cue", "name": "A_cue-whispertags", "cue_set": "audio_cues.whisper_tags.json"}, a),
+            select({"base": "A_cue", "name": "A_cue-whispertags", "cue_set": "audio_cues.whisper_tags.json",
+                    "options": {"nse_components": {"clap_change": 0.0}}}, a),
         ]
     if name == "4":  # event-time vs snap-to-gap placement
         return [

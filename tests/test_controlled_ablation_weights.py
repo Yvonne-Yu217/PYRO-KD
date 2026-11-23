@@ -8,7 +8,8 @@ def config():
 
 def test_event_source_ablation_preserves_all_frozen_weights():
     runs=ablation_selections('3',config())
-    assert runs[0].spec['options']==runs[1].spec['options']
+    assert runs[0].spec['options']['weights']==runs[1].spec['options']['weights']
+    assert runs[1].spec['options']['nse_components']['clap_change']==0.0
     assert runs[0].spec['options']['weights']['gf']==.9
     assert runs[0].spec['cue_set']!=runs[1].spec['cue_set']
 

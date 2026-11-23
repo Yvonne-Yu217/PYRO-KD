@@ -1034,3 +1034,28 @@ passed. No live inference source was edited. Dev gated-Whisper tag extraction
 found zero bracketed event tags in all ten cached clips; this is a measured
 limitation, not evidence of no real audio events. Log:
 `/scratch/yy5919/pyro-gated-whisper-tag-sparsity.log`.
+
+## 2026-11-23: gated Whisper event-source ablation
+
+Implemented a source-bound derivative of the existing VAD-gated ASR. The
+comparison replaces AST events with Whisper bracketed tags and removes CLAP
+change, while preserving acoustic, speech, VAD and placement controls. Core
+selector weights remain the development-tuned values. No ASR inference, ungated
+regions, manual event labels, or paid model calls were used. The empty-tag case
+has explicit successful extraction status and zero class tracks, distinguishing
+no emitted tags from a missing input stream. This does not establish acoustic
+silence or detector precision/recall.
+
+Verified separate dev view at
+`/scratch/yy5919/pyro-kd-derived/cache/reframed-whisper-gated-dev` contains all ten
+frozen dev clips, with zero emitted tags on every clip. Parent cue files are
+symlinked and retained; the derivative hashes the exact parent record and retains
+all existing source hashes. Stale/conflicting reuse is rejected. Real derivation
+log: `/scratch/yy5919/pyro-whisper-ablation-real.log`. Tests: 29 passed, including
+source immutability, gated-only inputs, unchanged acoustic/speech controls, zero
+versus missing event tracks, and ablation weights. Log:
+`/scratch/yy5919/pyro-whisper-ablation-final-tests.log`.
+
+Prepared CPU-only selector config `configs/experiments/reframed_dev_ablation3.toml`.
+No selector evaluation or GPU job was launched by this agent. The limited
+Whisper emissions must be reported when interpreting the comparison.
