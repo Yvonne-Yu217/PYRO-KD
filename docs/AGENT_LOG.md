@@ -550,3 +550,18 @@ U moment:2390tokens, image+audio tensors present. Scope1/76moments only; noGPU
 memory or quality claim. Evidence outputs/verification/reframed-native-ad-processor-check.json/.log
 and native-ad-dry-run.log. Existing talker config token warnings persist and must
 be evaluated in the later real GPU smoke. No GPU submission or paid API usage.
+
+
+Long event710 independently verified85596exit0:1982windows, current source/model/
+configuration/array checks passed. Evidence video-mme-events-710-check.json/.log,
+explicit1/12auditcoverage; cumulative604+616+710verified6460windows. Live extraction
+has advanced to729. ASR remains7/12verified. Scheduler recheck:40036RUNNING,
+ends04:22:47UTC;40363and40408PENDINGafterany40036. Both detached source worktrees
+remain clean at9e20099a7dcae76a457da2222b18e64e8be15fe4 and65258e9458db0b8a94c468eb682f5eba984b213f.
+No duplicate jobs submitted; completion and full audits still pending.
+Native AD runner integration test2716exit0 passed with temporary synthetic
+waveform/frame and mocked inference. It verifies waveform delivery, exact output
+metadata, settled resume without loading and rejection of changed WAV even when
+output is already settled. No actual AD prediction generated. Added exact later
+same-Omni none/native GPU smoke commands to docs/REAL_DATA_SMOKE.md; unexecuted
+under GPU hold. This does not resolve GPU memory, configuration warnings or quality.

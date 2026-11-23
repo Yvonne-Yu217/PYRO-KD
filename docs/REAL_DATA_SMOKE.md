@@ -113,3 +113,31 @@ truncation or automatic budget reduction was applied. A real GPU `--limit 1`
 QA smoke is still required before scaling.
 
 Warning follow-up: inspection of the installed ProcessorMixin implementation confirmed that processing kwargs passed through **kwargs are merged into processor_kwargs despite the warning. Padding remains applied; no generation-path fix was necessary. Evidence: outputs/verification/processor-template-source.txt.
+
+## Native audio backend preflight (GPU execution pending)
+
+The native input adapter preserves all 76 U development selections and their frame
+paths/word budgets across 9 videos. It attaches mono16k waveform context centered
+at the frame center, +/-15 seconds clipped at media boundaries, with outward sample
+rounding. Full source WAV and decoded sample hashes are verified by the runner.
+The first actual development moment passed CPU processor encoding (2390 tokens,
+image and audio tensors present), not model inference or GPU-memory validation.
+
+The explicit Omni backend supports `--audio-context none` for a same-model visual
+control and `--audio-context native` for waveform input. It requires batch size 1,
+unquantized weights and no reasoning-strength argument. Both runs must use the
+same frozen input, prompt prior and generation settings. A later GPU smoke can use
+these commands from a recorded clean source commit:
+
+```bash
+source hpc/config.sh
+in_env ro '/scratch/yy5919/pyro-audio-env/bin/python scripts/run_ad_vlm.py --backend omni --model /scratch/yy5919/hf_cache/hub/models--Qwen--Qwen2.5-Omni-7B/snapshots/ae9e1690543ffd5c0221dc27f79834d0294cba00 --audio-context none --batch-size 1 --input /scratch/yy5919/pyro-kd-derived/moments/reframed_U_snapped_placed_event_dev_exploratory_native.jsonl --output outputs/real-data-smoke/omni-U-P0-none.jsonl --prior P0 --limit 1 --max-new-tokens 128 --attn-impl sdpa'
+in_env ro '/scratch/yy5919/pyro-audio-env/bin/python scripts/run_ad_vlm.py --backend omni --model /scratch/yy5919/hf_cache/hub/models--Qwen--Qwen2.5-Omni-7B/snapshots/ae9e1690543ffd5c0221dc27f79834d0294cba00 --audio-context native --batch-size 1 --input /scratch/yy5919/pyro-kd-derived/moments/reframed_U_snapped_placed_event_dev_exploratory_native.jsonl --output outputs/real-data-smoke/omni-U-P0-native.jsonl --prior P0 --limit 1 --max-new-tokens 128 --attn-impl sdpa'
+```
+
+These commands have not been run with model weights. GPU execution is on user
+hold. The backend disables talker after loading and requests text-only generation;
+peak loading memory remains unmeasured. Existing talker token configuration
+warnings require review during the GPU smoke. Inspect actual output, truncation,
+word budget, source evidence and memory before expanding coverage. This pair is
+an integration smoke, not the final balanced selector or audio-ablation result.
