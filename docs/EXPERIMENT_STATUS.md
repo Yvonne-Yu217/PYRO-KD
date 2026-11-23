@@ -342,3 +342,22 @@ revalidates604pilot before extraction, resumes batch checkpoints, audits all12,
 per-attempt logs/status and nonzero failures. Plan full event extraction now
 insideCPU40036 plus immutable continuation afterany40036; no GPU use. All ordinary
 CPU work stays on the compute allocation; no duplicate active cache writers.
+
+
+Full long event extraction started handle27774 insideCPU40036 from source
+65258e9458db0b8a94c468eb682f5eba984b213f, explicit12frozen IDs, batch4/CPU4,
+using verified604pilot and per-batch checkpoints. Log
+outputs/verification/video-mme-events-full.log. CPU-only continuation40408
+SUBMITTED and Slurm-verified PENDING Dependency afterany:40036(unfulfilled),
+4CPUs/12GB/6h, noGPU, immutable detached worktree
+/scratch/yy5919/pyro-long-events-resume-65258e9 at aboveSHA. VerifiedWorkDir/Command
+point there. Submit command from frozenworktree: sbatch --parsable
+--dependency=afterany:40036 --output=/home/yy5919/PYRO-KD/logs/pyro-long-events-%j.out
+hpc/long_events_resume.sbatch /home/yy5919/PYRO-KD/outputs/verification.
+Logs: /home/yy5919/PYRO-KD/logs/pyro-long-events-40408.out; reports:
+outputs/verification/long-events-resume-40408-attempt-0/. Pilot is revalidated
+before scaling in the continuation, and final12video audit required. Queue
+submission is not completion; continue monitoring. Separate pending40363 resumes
+ASR/visual and does not write event caches. No duplicate active event writer.
+Latest originaljobs: visual11/12logged through891; ASR729computed7361words,
+619VADwindows,0rejected (independent729audit stillpending). No GPU inference.
