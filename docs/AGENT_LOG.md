@@ -186,3 +186,20 @@ shot bounds and local/memory ranking budget/separation. It is not model accuracy
 Original visual process102860, ASR96112 and event pilot106092 remain live;
 no duplicate jobs were started. CPU40036 ends04:22:47UTC;40363 still pending its
 afterany dependency. Full final visual audit remains required after completion.
+
+
+Human event-detector scoring implementation added: src/evaluation/event_detection.py
+and scripts/evaluate_event_detector.py. Requires explicit human-origin annotations,
+annotator attribution, reviewed classes/intervals, unknown-region exclusions,
+source WAV hashes, development protocol IDs and model/window/threshold settings.
+Reports per-class/per-video/pooled window-presence P/R/F1, excludes incomplete
+review coverage, and checks current source/array/protocol identity and time grid.
+Exact boundary contact is not event overlap; undefined ratios are null. This is
+not onset accuracy, authentication of human identity, or the completed ~10x10min
+human gate. No real labels or experiment scores created. Proposed convention and
+input contract appended to docs/AUDIO_STACK.md; protocol/source selection remains
+to be frozen before human scoring. Tests18138exit0:19passed, including boundary,
+partial/unknown coverage, invalid data, empty input, and changed-WAV rejection.
+Initial tests52591exit0:15passed before adding the full CLI provenance regression.
+Synthetic labels stay inside temporary tests. GPU hold and human-data question
+remain pending; this preparation does not remove those gates.

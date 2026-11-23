@@ -173,3 +173,50 @@ outputs/verification/multilingual-speech-download.json --output NEW_CHECK.json`
 using /scratch/yy5919/pyro-audio-env/bin/python inside the container, OMP_NUM_THREADS=4.
 Artifacts multilingual-speech-{download,offline-check}.json/log are in
 outputs/verification. No long held-out ASR output or QA answers inspected.
+
+## Human detector scoring interface (labels still pending)
+
+`src/evaluation/event_detection.py` and `scripts/evaluate_event_detector.py`
+provide window-level class-presence precision/recall/F1, per class, per video,
+and pooled across videos. This is a proposed scoring convention to freeze before
+collecting/scoring labels, not an onset-localization metric or a completed human
+gate. A class is present when a labeled interval overlaps a tagger window for
+positive duration; exact boundary contact does not count. The real, unpadded
+window must be fully covered by reviewed intervals. Any overlap with an unknown
+interval excludes that window. Unreviewed audio is never a negative label.
+Overlapping 10-second windows are correlated; do not treat them as independent
+samples for confidence intervals. Undefined precision/recall is JSON null.
+
+The annotation JSON must have `origin: "human"` and nonempty `videos`. Each video
+has `video_id`, a nonempty `annotator_id`, `audio_sha256` (the listened-to cached
+WAV), `duration`, explicit `reviewed_classes`, `reviewed_intervals` as [start,end]
+pairs, optional `unknown_intervals`, and `events` objects with `label`, `start`,
+`end`. Reviewing an interval means checking every declared class throughout it;
+an empty event list represents reviewed negatives, not unfinished annotation.
+Annotators should listen without model suggestions. An ID records attribution;
+the evaluator cannot authenticate that the labels were actually made by a human.
+
+The separate protocol JSON specifies `split: "development"`, the exact
+`video_ids`, `models` mapping of repository IDs to pinned revisions,
+`window_seconds: 10.0`, `hop_seconds: 1.0`, and explicit per-class `thresholds`.
+Use the exact AST class names from the cache. Source selection must be checked
+against official splits before freezing this protocol; a split field alone is
+not proof of development membership. No actual annotation set or thresholds have
+been frozen by adding this interface. About ten ten-minute movie-audio clips and
+real human labels are still required by the proposal.
+
+Run after annotations and a protocol exist:
+
+```bash
+python scripts/evaluate_event_detector.py --annotations <human-json> \
+  --protocol <frozen-protocol-json> --cache-dir <event-cache-root> \
+  --output <new-score-json>
+```
+
+The CLI requires all protocol IDs, preserves existing outputs, verifies current
+source/WAV and feature-array hashes, model/window provenance and the full time
+grid, and records annotation/protocol/cache hashes. `complete` describes supplied
+protocol coverage only; it does not certify the proposal's annotation volume,
+label quality, or human gate. Run `verify_event_cache.py` first for the broader
+numerical cache audit. No experiment detector scores have been produced: unit
+tests use temporary synthetic fixtures only.
