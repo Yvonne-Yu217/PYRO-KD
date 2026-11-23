@@ -449,3 +449,42 @@ class BoundsPolicyTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class PlacementDiagnosticsTests(unittest.TestCase):
+    """Diagnostics folded in from scripts/validate_selectors.py (cb7ce5c); these
+    reproduce the two open review findings on A without changing A."""
+
+    def talky_features(self, duration=300.0):
+        speech, t = [], 0.0
+        while t < duration:
+            speech.append((t, min(t + 9.0, duration)))
+            t += 9.0 + (12.0 if len(speech) % 7 == 0 else 3.0)
+        from src.utils.audio_features import invert_to_gaps
+
+        return make_features(speech, invert_to_gaps(speech, duration))
+
+    def test_a_clusters_where_u_spreads(self):
+        duration = 300.0
+        features = self.talky_features(duration)
+        video = make_video("talky", duration, ad_times=(30.0, 150.0, 270.0))
+        a = ev.evaluate_video("A", video, 17, features, 2.0)
+        u = ev.evaluate_video("U", video, 17, features, 2.0)
+        self.assertGreater(a["busiest_gap_share"], u["busiest_gap_share"])
+        self.assertGreater(a["densest_decile_share"], u["densest_decile_share"])
+        self.assertEqual(a["overlap_seconds"], 0.0)  # A only uses gaps, with the full budget
+        self.assertGreater(u["picks_in_speech"], 0)
+
+    def test_speech_free_video_puts_a_at_the_start(self):
+        duration = 240.0
+        features = make_features([], [(0.0, duration)])
+        a = ev.evaluate_video("A", make_video("quiet", duration, ad_times=(60.0, 180.0)), 14, features, 2.0)
+        self.assertLess(max(a["times"]), duration / 4)
+        self.assertLess(a["span_fraction"], 0.25)
+        self.assertEqual(a["gt_in_gap_fraction"], 1.0)
+
+    def test_fields_are_none_without_features(self):
+        row = ev.evaluate_video("U", make_video(), 3, None, 2.0)
+        for key in ("busiest_gap_share", "picks_in_speech", "gt_in_gap_fraction", "overlap_seconds"):
+            self.assertIsNone(row[key])
+        self.assertIsNotNone(row["span_fraction"])

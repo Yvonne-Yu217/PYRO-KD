@@ -51,6 +51,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.datasets import mtg_ad  # noqa: E402
 from src.evaluation.metrics import temporal_precision_recall_f1  # noqa: E402
+from src.evaluation import placement  # noqa: E402
 from src.evaluation.stats import DEFAULT_RESAMPLES, bootstrap_mean_ci, paired_bootstrap_diff  # noqa: E402
 from src.utils.audio_features import available_gap, speech_of  # noqa: E402
 from src.utils.audio_selector import AudioSelector  # noqa: E402
@@ -180,8 +181,27 @@ def evaluate_video(
             mean_pairwise_similarity(embeddings, visual["frame_times"], times)
             if embeddings is not None and visual is not None else None
         ),
+        **_placement_fields(times, video.duration_seconds, truth, features),
         "times": times,
     }
+
+
+def _placement_fields(times, duration, truth, features) -> dict[str, Any]:
+    """Placement diagnostics (from the U-vs-A validation work, folded in here):
+    span, densest-tenth share, busiest-gap share, picks in speech, the share of
+    GT starts outside speech, and speech overlap / silence utilization of ADs
+    rendered at 1.2x with the full word budget. Audio-dependent fields are None
+    without validated VAD features."""
+    speech = speech_of(features) if features is not None else None
+    gaps = [(g["start"], g["end"]) for g in features["gaps"]] if features is not None else None
+    out: dict[str, Any] = placement.placement_diagnostics(times, duration, speech, gaps)
+    out["gt_in_gap_fraction"] = placement.gt_in_gap_fraction(truth, speech, duration)
+    out["overlap_seconds"] = out["silence_utilization"] = None
+    if speech is not None:
+        budgets = placement.budget_placements(times, speech, duration)
+        out["overlap_seconds"] = placement.speech_overlap(budgets, speech)["overlap_seconds"]
+        out["silence_utilization"] = placement.silence_utilization(budgets, speech, duration)["mean"]
+    return out
 
 
 def _mean(values: Sequence[float | None]) -> float | None:
@@ -220,6 +240,12 @@ def summarize(rows: Sequence[dict], resamples: int, seed: int) -> dict[str, Any]
         "n_with_audio_features": sum(r["in_speech_rate"] is not None for r in rows),
         "visual_redundancy": _mean([r["visual_redundancy"] for r in rows]),
         "n_with_embeddings": sum(r["visual_redundancy"] is not None for r in rows),
+        "span_fraction": _mean([r.get("span_fraction") for r in rows]),
+        "densest_decile_share": _mean([r.get("densest_decile_share") for r in rows]),
+        "busiest_gap_share": _mean([r.get("busiest_gap_share") for r in rows]),
+        "gt_in_gap_fraction": _mean([r.get("gt_in_gap_fraction") for r in rows]),
+        "overlap_seconds": _mean([r.get("overlap_seconds") for r in rows]),
+        "silence_utilization": _mean([r.get("silence_utilization") for r in rows]),
     }
 
 
@@ -298,6 +324,14 @@ def format_report(result: dict) -> str:
                 f"  {c['selector']} - {c['baseline']}: {_fmt(c['mean_diff'])} "
                 f"[{_fmt(c['ci_low'])}, {_fmt(c['ci_high'])}]  (n={c['n_shared_videos']})"
             )
+    lines += ["", "Placement diagnostics (means over videos; audio columns need VAD features):",
+              f"{'sel':<4}{'span':>7}{'dense10%':>10}{'busiestgap':>12}{'GTinGap':>9}{'overlap s':>11}{'silence':>9}"]
+    for name, s in result["selectors"].items():
+        lines.append(
+            f"{name:<4}{_fmt(s.get('span_fraction')):>7}{_fmt(s.get('densest_decile_share')):>10}"
+            f"{_fmt(s.get('busiest_gap_share')):>12}{_fmt(s.get('gt_in_gap_fraction')):>9}"
+            f"{_fmt(s.get('overlap_seconds'), 2):>11}{_fmt(s.get('silence_utilization')):>9}"
+        )
     lines += ["", "Macro F1 by tolerance (seconds):"]
     taus = next(iter(result["selectors"].values()))["macro_f1_by_tolerance"].keys() if result["selectors"] else []
     lines.append(f"{'sel':<4}" + "".join(f"{'+/-' + t:>9}" for t in taus))
@@ -397,6 +431,22 @@ def run(
     }
 
 
+def write_timeline_svg(result: dict, videos, cache_dir: Path, path: Path, slack: float, max_videos: int = 20) -> None:
+    rows = []
+    by_video: dict[str, list[dict]] = {}
+    for row in result["videos"]:
+        by_video.setdefault(row["video_id"], []).append(row)
+    for video in videos[:max_videos]:
+        features, _ = load_audio_features(cache_dir / video.video_id)
+        truth, _ = ground_truth_times(video, "exclude", slack)
+        for row in by_video.get(video.video_id, []):
+            rows.append({"label": f"{video.video_id} {row['selector']}", "duration": video.duration_seconds,
+                         "speech": speech_of(features) if features else [], "gt": truth, "times": row["times"]})
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(placement.timeline_svg(rows, title="picks (red) vs human AD starts (green); speech shaded"),
+                    encoding="utf-8")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--set", dest="video_set", choices=["dev", "test", "validation"], default="dev")
@@ -413,6 +463,8 @@ def main() -> None:
     parser.add_argument("--duration-slack", type=float, default=DURATION_SLACK_SECONDS,
                         help="seconds past the declared duration still counted as inside the clip")
     parser.add_argument("--output", type=Path, default=None)
+    parser.add_argument("--timeline-svg", type=Path, default=None,
+                        help="also draw per-video lanes (speech, GT starts, picks) for the first 20 videos")
     args = parser.parse_args()
 
     splits = json.loads(args.splits.read_text())
@@ -428,6 +480,9 @@ def main() -> None:
         bounds="keep" if args.keep_out_of_bounds else "exclude", slack=args.duration_slack,
     )
     result["set"] = args.video_set
+    if args.timeline_svg:
+        write_timeline_svg(result, videos, args.cache_dir, args.timeline_svg, args.duration_slack)
+        print(f"wrote {args.timeline_svg}")
     output = args.output or Path(f"outputs/selector_eval_{args.video_set}.json")
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")

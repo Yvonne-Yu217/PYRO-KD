@@ -28,3 +28,6 @@ logs/
 
 # Local copy of the proposal
 *.docx
+
+# Per-user HPC settings (see hpc/env.example.sh)
+hpc/env.sh

@@ -10,6 +10,11 @@ Examples:
 
     # preprocess videos you already placed in data/mtg-ad/videos/<video_id>.mp4
     python scripts/prepare_mtg_ad.py --preprocess --videos dev
+
+    # a read-only local copy (e.g. the Globus transfer on HPC scratch): no network,
+    # nothing written into the dataset directory, committed splits kept
+    python scripts/prepare_mtg_ad.py --offline --data-dir "$MTG_AD_ROOT" \
+        --cache-dir "$PYRO_CACHE/mtg-ad" --preprocess --videos dev
 """
 
 import argparse
@@ -30,19 +35,20 @@ from src.utils.selection import k_for_duration  # noqa: E402
 
 def prepare_targets(
     targets, data_dir, cache_dir, download_videos, preprocess, fps,
-    cookies=None, cookies_from_browser=None, extractor_args=None,
+    cookies=None, cookies_from_browser=None, extractor_args=None, video_dir=None,
 ):
     """Download/preprocess a batch, continuing after per-video failures."""
     results = []
+    video_dir = Path(video_dir) if video_dir is not None else data_dir / "videos"
     for video in targets:
-        path = data_dir / "videos" / video.video_filename
+        path = video_dir / video.video_filename
         item = {"video_id": video.video_id, "source": str(path)}
         existed = path.is_file() and path.stat().st_size > 0
         source_mtime = path.stat().st_mtime_ns if existed else None
         if download_videos:
             try:
                 path = download_video(
-                    video, data_dir / "videos",
+                    video, video_dir,
                     cookies=cookies,
                     cookies_from_browser=cookies_from_browser,
                     extractor_args=extractor_args,
@@ -124,9 +130,21 @@ def main() -> None:
     parser.add_argument("--fps", type=float, default=2.0)
     parser.add_argument(
         "--report", type=Path, default=None,
-        help="JSON status report (default: <data-dir>/preprocess_report.json)",
+        help="JSON status report (default: <data-dir>/preprocess_report.json; "
+             "<cache-dir>/preprocess_report.json with --offline)",
     )
+    parser.add_argument(
+        "--offline", action="store_true",
+        help="read-only dataset copy: no annotation download, keep the existing splits file, "
+             "and write nothing into --data-dir",
+    )
+    parser.add_argument("--video-dir", type=Path, default=None, help="default: <data-dir>/videos")
     args = parser.parse_args()
+    if args.offline and args.download_videos:
+        parser.error("--offline cannot be combined with --download-videos")
+    if args.offline:
+        run_offline(args)
+        return
 
     download_annotations(args.data_dir)
     validation = load_split(args.data_dir, "validation")
@@ -202,6 +220,40 @@ def main() -> None:
         "num_ready": len(targets) - len(failures),
         "num_failed": len(failures),
         "videos": results,
+    }, indent=2) + "\n", encoding="utf-8")
+    print(f"wrote {report_path}")
+    if failures:
+        print(f"{len(failures)} videos unavailable: {' '.join(failures)}")
+        sys.exit(1)
+
+
+def run_offline(args) -> None:
+    """Preprocess from a read-only local copy using the committed splits."""
+    if not args.splits_out.is_file():
+        sys.exit(f"--offline needs the existing splits file {args.splits_out}")
+    splits = json.loads(args.splits_out.read_text(encoding="utf-8"))
+    validation = {v.video_id: v for v in load_split(args.data_dir, "validation")}
+    test = {v.video_id: v for v in load_split(args.data_dir, "test")}
+    print(f"validation: {len(validation)} videos, test: {len(test)} videos (offline, splits kept)")
+    wanted = {
+        "dev": [("validation", v["video_id"]) for v in splits["dev"]["videos"]],
+        "test": [("test", i) for i in splits["test"]["video_ids"]],
+    }
+    wanted["all"] = wanted["dev"] + wanted["test"]
+    missing = [i for split, i in wanted[args.videos] if i not in (validation if split == "validation" else test)]
+    if missing:
+        sys.exit(f"splits name videos absent from {args.data_dir}: {' '.join(missing)}")
+    targets = [(validation if split == "validation" else test)[i] for split, i in wanted[args.videos]]
+    if not args.preprocess:
+        return
+    results = prepare_targets(targets, args.data_dir, args.cache_dir, False, True, args.fps, video_dir=args.video_dir)
+    failures = [item["video_id"] for item in results if item["status"] != "ready"]
+    report_path = args.report or args.cache_dir / "preprocess_report.json"
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(json.dumps({
+        "dataset": "mtg-ad", "selection": args.videos, "offline": True, "data_dir": str(args.data_dir),
+        "num_requested": len(targets), "num_ready": len(targets) - len(failures),
+        "num_failed": len(failures), "videos": results,
     }, indent=2) + "\n", encoding="utf-8")
     print(f"wrote {report_path}")
     if failures:
