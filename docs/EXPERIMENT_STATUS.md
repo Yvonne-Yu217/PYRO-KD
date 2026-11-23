@@ -311,3 +311,17 @@ and event-checkpoint-real-audit.json. Actual artifacts at
 This exercises real model outputs and missing-final-file recovery, not an OS-kill
 experiment or detector accuracy. Production caches/raw data were untouched.
 Long ASR96112, visual102860 and event pilot106092 continue; visual9/12logged.
+
+
+Long-video QA question membership frozen in configs/video_mme_long_questions.json:
+36 unique questions, exactly3 for each of12 frozen videos. New script
+scripts/freeze_video_mme_questions.py reads only video_id/videoID/duration/domain/
+question_id columns after checking the original annotation-file SHA256. It
+rejects mismatched video metadata, missing video coverage, duplicate IDs and any
+extra content columns. No question text, options or answers inspected. This
+freezes the evaluation denominator, not selection/inference settings. Tests52280
+exit0:6passed; actual freeze32693exit0; independent membership/source-link checks
+passed in outputs/verification/video-mme-question-membership-check.json. Agent
+mistake: first attempted the data venv interpreter on the host (exit127); it
+requires the container's /ext3 interpreter, and the corrected in_env invocation
+succeeded. Visual extraction now10/12logged (through864); longASR/eventpilot live.
