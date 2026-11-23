@@ -2,7 +2,7 @@
 
 This guide describes the frozen local experiment. It does not authorize paid API
 calls. Human event labels, blinded ratings and rubric judging remain deferred.
-Formal inference and QA were still running when this guide was drafted; consult
+Formal local caption generation, metrics and TTS are complete; QA remains in progress. Consult
 [EXPERIMENT_STATUS.md](EXPERIMENT_STATUS.md) and artifact coverage before calling
 any stage complete. Do not rerun a live job or alter its source worktree.
 
@@ -145,3 +145,25 @@ in_env ro 'cd docs/report && pdflatex -interaction=nonstopmode -halt-on-error ma
 ```
 
 See [report/README.md](report/README.md) for verification and remaining edits.
+
+## Completed formal AD exports
+
+Canonical local core results are `docs/results/reframed-formal-core/core-results.json`
+and its CSV/Markdown/coverage figure. There are20planned rows,10local evaluated
+and10APIdeferred;3398attempts,3108valid,3024individualspeechfits. The complete
+movie-clustered core comparison family is
+`docs/results/reframed-core-temporal/contrasts.json`; the context family is
+`docs/results/reframed-ablation5-temporal/contrasts.json`. Both are newly declared
+structural families after descriptive results, not prospective preregistrations.
+The context comparison holds selected timestamps fixed, so its temporalF1
+change reflects valid-output availability, not improved placement selection.
+
+Measured all-gap occupancy is recorded in
+`docs/results/reframed-formal-gap-utilization/measured-gap-utilization.json`;
+all30clips, unused gaps, and zero-output clips remain in each denominator.
+Detector-defined diagnostics and traceable development frame/playback examples
+are separate artifacts; neither substitutes for human labels.
+
+Refresh paper and deck AD tables from the canonical artifacts with
+`python docs/report/refresh_tables.py`, then compile each LaTeX source twice.
+This leaves pending QA result slots untouched.

@@ -2,7 +2,7 @@
 
 `main.tex` and `main.pdf` contain a12-slide Beamer draft. The deck includes
 verified development, formal selector, and formal audio-context ablation results.
-Final core and QA aggregation are explicitly pending. Human authorship and
+The formal local core and audio-context metrics are complete; QA aggregation remains explicitly pending. Human authorship and
 contribution attribution require team confirmation; paid APIs and human labels
 remain deferred. No human-quality, Cue2Narrate, or equal-realized-budget long-QA
 claim is made.
@@ -33,8 +33,15 @@ compile exposed incorrectly escaped line-break commands in the coverage slide;
 those were corrected before the successful two-pass build. Final compile has no
 overfull boxes or undefined references.
 
-Before presentation, replace the pending-result slide only with completed,
+Before presentation, replace the pending-QA slide only with completed,
 validated formal exports; update conclusions and status consistently with the
 paper; add confirmed human author names/contributions; rehearse the code
 walkthrough and the distinctions between selection, caption validity, individual
 speech fit and combined playback quality.
+
+Formal caption refresh: all20matrix rows remain visible (10local,10APIdeferred).
+The formal coverage totals3398attempts,3108valid captions and3024individual
+TTSfits. Core17-contrast and audio-context3-contrast families were declared after
+descriptive results, not preregistered. Timeline-vs-none uses identical selected
+timestamps, so temporalF1 differences reflect valid-output availability rather
+than a selection change or semantic-quality proof. QA remains pending.

@@ -1,9 +1,13 @@
 {
   "sources": {
     "docs/results/reframed-local-dev.csv": "5b77a0b6ec5e436dc7d9b060f0d5ea97f49ec1798d54012bbeabbef8fdb4d5ae",
-    "docs/results/reframed-selectors/selector-results.json": "0b55f202cae0f65e263856d3a18dfb0263acff3d160182dcb6a925daeef347b1"
+    "docs/results/reframed-selectors/selector-results.json": "0b55f202cae0f65e263856d3a18dfb0263acff3d160182dcb6a925daeef347b1",
+    "docs/results/reframed-formal-core/core-results.json": "b840ee38c996f34653f971d1b4c39a8eedc39460c356124eede1266569b3b1c6"
   },
-  "scope": "completed development and selector results; no formal caption or QA result substitution",
+  "scope": "completed development, selector and formal caption results; QA pending",
   "development_cells": 10,
-  "selector_core_cells": 5
+  "selector_core_cells": 5,
+  "formal_core_cells": 20,
+  "formal_local_cells": 10,
+  "formal_deferred_cells": 10
 }

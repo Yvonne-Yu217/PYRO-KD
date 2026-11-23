@@ -21,7 +21,7 @@
 \begin{frame}
 \titlepage
 \vspace{-4mm}
-\begin{center}\small Formal core and QA aggregation remain pending.\newline Paid APIs and human labels are deferred; no human-quality claim.\end{center}
+\begin{center}\small Formal local caption results complete; QA aggregation pending.\newline Paid APIs and human labels are deferred; no human-quality claim.\end{center}
 \end{frame}
 
 \begin{frame}{Separate what matters from where narration fits}
@@ -35,7 +35,7 @@ VAD gaps; two-second separation;\newline word cap $\lfloor3\Delta t\rfloor$.
 \end{block}
 \column{.48\textwidth}
 \begin{block}{Frozen generation}
-Four frames across two seconds.\newline P0 plain / P1 guidelines + three training exemplars.\newline Qwen2.5-VL; temperature zero.
+Four frames across two seconds.\newline P0 plain / P1 guidelines + three training exemplars.\newline Qwen2.5-VL; temperature zero.\newline 192-token ceiling chosen on dev only.
 \end{block}
 \begin{alertblock}{Evaluate every transition}
 Requested $\rightarrow$ selected $\rightarrow$ prepared $\rightarrow$ valid $\rightarrow$ rendered.
@@ -63,33 +63,32 @@ Long Video-MME & 12 videos; 36 questions & 10 conditions; 360 requests \\
 \source{Frozen split/config hashes; all 5,031 EgoSchema distributed videos probed; Cue2Narrate comparison unavailable.}
 \end{frame}
 
-\begin{frame}{Development losses remain visible}
+\begin{frame}{Formal local coverage: losses remain visible}
 \begin{columns}[c]
 \column{.68\textwidth}
-\includegraphics[width=\linewidth]{../results/reframed-dev-coverage.pdf}
+\includegraphics[width=\linewidth]{../results/reframed-formal-core/coverage.pdf}
 \column{.30\textwidth}
-\large 804 attempts\\[2mm]
-\normalsize 705 valid captions\\
-84 word-budget failures\\
-15 token-limit failures\\[4mm]
-\textbf{688 fit individually}\\
+\large 3,398 attempts\\[2mm]
+\normalsize 3,108 valid captions\\
+256 word-budget failures\\
+34 token-limit failures\\[4mm]
+\textbf{3,024 fit individually}\\
 This does not exclude narration self-overlap.
 \end{columns}
-\source{Ten local development cells; actual Piper speech at 1.2$\times$; original 128-token pilot preserved.}
+\source{Ten formal local cells; actual Piper at 1.2$\times$. Dev pilot:804 attempts/705 valid; formal settings frozen before test.}
 \end{frame}
 
-\begin{frame}{Development evidence froze the formal protocol}
+\begin{frame}{Formal captions: complete local matrix, explicit failures}
+\centering\small
+\input{core_table.tex}
+\vspace{4mm}
 \begin{itemize}
-\item Dev-only selector tuning; no heldout tuning or exemplar leakage.
-\item Fifteen truncated dev cases probed at 512 tokens:\newline five finish at 128--139; ten continue looping.
-\item Formal ceiling: 192 tokens, with failures retained rather than silently truncated into valid captions.
-\item Long-QA resource smokes: 612 and 1,012 frames; resolution 224 px fixed before correctness scoring.
-\item Formal AD source 09abb6c: 817 tests passed, 3 skipped, 5,974 subtests.
+\item Ten API cells remain deferred, not missing from the 20-cell plan.
+\item \Acue{}--V under P0: movie-clustered difference .1698, Holm17 $p=.0332$.
+\item Four of 17 structural contrasts meet adjusted $p<.05$; all P1--P0 contrasts have $p=1.0$.
+\item Family declared after descriptive results; not preregistered. Temporal F1 is not semantic quality.
 \end{itemize}
-\begin{block}{Reuse after validation}
-Pinned weights, compatible feature caches, immutable worker sources, and disjoint output ownership. No duplicate timeline-present ablation inference.
-\end{block}
-\source{Formal freeze record; token-ceiling diagnostic; real-data smoke logs; full formal-source pytest log.}
+\source{All 30 clips and 10 movie clusters. Full matrix and 17 contrasts in canonical formal-core/core-temporal exports.}
 \end{frame}
 
 \begin{frame}{Heldout selector agreement before caption generation}
@@ -129,12 +128,12 @@ Native audio (Omni) & 326 & .465 & 324/326 \\
 \end{tabular}
 \vspace{5mm}
 \begin{itemize}
-\item Same 384 prepared moments; selector chosen on development data.
-\item All 30 test clips remain in temporal denominators.
+\item Same 384 prepared moments and selected timestamps; selector chosen on dev.
+\item Timeline minus none: $\Delta F1=.0519$, 95\% CI[.0107,.1189], Holm3 $p=.0410$.
 \item Native audio changes the model as well as modality.
-\item Conditional text similarity and individual speech fit do not establish human preference or combined playback quality.
+\item Identical timestamps: F1 changes through valid-output availability, not selection or demonstrated semantic improvement.
 \end{itemize}
-\source{Verified formal ablation 5 exports; core timeline predictions reused; no significance claim on this slide.}
+\source{Newly declared structural family, not preregistered; all 30 clips/10 movies; native minus none Holm p=.7344.}
 \end{frame}
 
 \begin{frame}{A valid caption can still fail during playback}
@@ -176,18 +175,18 @@ Both avoid machine-labeled original speech.\\[2mm]
 \source{Long selection-capacity audit; frozen ten-condition/13 contrast QA family; no arbitrary filling or test tuning.}
 \end{frame}
 
-\begin{frame}{Final core and QA results: pending verified aggregation}
+\begin{frame}{QA remains pending; audio diagnostics are not human labels}
 \begin{alertblock}{Do not substitute development numbers}
-Fill the ten local core rows and the QA results only after prediction coverage, text metrics, actual speech checks, and paired exports finish.
+Fill QA results only after every frozen condition and paired export completes. Local caption metrics are complete; ten paid cells remain deferred.
 \end{alertblock}
 \begin{itemize}
-\item Core: 3,398 prepared requests; retain all 30clips, missing/failed IDs, and zero-output videos.
+\item Machine low-audio-change subset: 9/548 reference starts; not truly silent-event labels. \Acue{} matches 0/9, U 5/9.
 \item EgoSchema: 490 questions per condition; failures count incorrect.
 \item Long QA: 36 questions per condition across 12 video clusters.
 \item Paired bootstrap intervals, Wilcoxon tests, Holm within declared families.
 \item Report all deferred paid rows and unvalidated human requirements.
 \end{itemize}
-\source{Frozen protocols and comparison families; this slide intentionally contains no pending-result estimates.}
+\source{Frozen QA protocols; detector-defined diagnostics only. Event precision/recall requires deferred human labels.}
 \end{frame}
 
 \begin{frame}{Agent verification: failures that changed the workflow}
@@ -202,15 +201,15 @@ Wrong formal TTS cache & Correct external watcher; reuse existing renders \\
 \bottomrule
 \end{tabular}
 \vspace{4mm}
-\small Tests, real-data smokes, raw-ID accounting, hashes, and measured speech checks complement each other. Scheduler success alone is not scientific validation.
+\small Exact formal source: 817 tests passed, 3 skipped, 5,974 subtests. Real-data smokes, raw-ID accounting, hashes, and measured speech checks complement tests. Scheduler success alone is not scientific validation.
 \source{Agent Log appendix and chronological English log; human contributions require team confirmation.}
 \end{frame}
 
 \begin{frame}{What the evidence supports—and what remains open}
 \begin{itemize}
 \item Cue-driven selectors have higher descriptive placement means than U on the frozen subset; selection alone does not guarantee usable narration.
-\item The audio-context ablation exposes coverage and playback tradeoffs.
-\item Final core/QA conclusions await completed verification.
+\item Text timelines improve valid-output availability at identical selected moments; playback self-overlap remains substantial.
+\item All prompt-prior temporal contrasts have Holm $p=1.0$; human-quality effects remain unmeasured. QA conclusions are pending.
 \item No Cue2Narrate baseline claim, equal-realized-budget long-audio claim, or human-quality claim.
 \end{itemize}
 \begin{block}{Remaining requirements}

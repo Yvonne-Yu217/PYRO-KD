@@ -1,24 +1,30 @@
 {
-  "status": "draft; final core/QA metrics and human attribution pending",
+  "status": "draft; formal local AD complete; QA and human attribution pending",
   "slides": 12,
   "engine": "existing read-only container /usr/bin/pdflatex",
   "compile_passes": 2,
   "overfull_boxes": 0,
   "undefined_references": 0,
   "visual_inspection": [
-    7,
-    11
+    5,
+    7
   ],
   "source_sha256": {
-    "docs/slides/main.tex": "560754c2a427ef572fbfb180d976b9226aed4d689eca1036db77ab3ebeb884b5",
+    "docs/slides/main.tex": "36afa6fc675762e44ebc3896209b061ed216321cf15987d4c840ffaa3a3114af",
     "docs/results/reframed-dev-coverage.pdf": "3e9d0ebec2f9a7cb9a0cffe007303fbe715811963f69e36b9ea666ae9ae3bcd3",
     "docs/results/reframed-selectors/selector-results.json": "0b55f202cae0f65e263856d3a18dfb0263acff3d160182dcb6a925daeef347b1",
     "docs/results/reframed-selector-ablations/selector-ablation-stats.json": "36dee956f1f910f6231a0a7f59ab980f6768dc95deb8aa826338be4757f82c9c",
     "docs/results/reframed-formal-ablation5/ablation5-results.json": "0c4c128a57f33bb5d20405a59644771d0d856246c6169a13608fa0f9217cf426",
     "docs/results/reframed-formal-ablation5/interpretation.md": "0f94ee40ba8a983d636264132532d5f27e063f09c7a90a020ef997f9a4fd6fb8",
     "docs/results/qualitative-agent-review.md": "a860958e7cbd679dcef87c8a3850569b45ad92b7a6f10acf765a50ce3f35cf55",
-    "docs/results/long-selection-budget-audit.md": "7e1a729cf5dbff421e48deee825c95b836e66373c85570f32ebc1ab599182faa"
+    "docs/results/long-selection-budget-audit.md": "7e1a729cf5dbff421e48deee825c95b836e66373c85570f32ebc1ab599182faa",
+    "docs/results/reframed-formal-core/core-results.json": "b840ee38c996f34653f971d1b4c39a8eedc39460c356124eede1266569b3b1c6",
+    "docs/results/reframed-core-temporal/contrasts.json": "4fa615074223bc7c50c0849b012527874abad32e7fff00e3020c2b4d6d0858a4",
+    "docs/results/reframed-ablation5-temporal/contrasts.json": "80239f8bcffe1360af413ee5e0d62fb9881a7c9dbf3c05573b3470079209d8a4",
+    "docs/results/reframed-formal-gap-utilization/measured-gap-utilization.json": "191c187a3028fb689eea9897e9b9f9663ce77c1b3592614a3346e647649ffda6",
+    "docs/results/reframed-audio-cue-diagnostics/audio-cue-diagnostics.json": "35956dc1120515870af06b774ab27ac9d6da3ba55e0c83b18c4031c4abf215bc",
+    "docs/slides/core_table.tex": "ebc36a4fbe79f53c11ac3cf43678a8993eb31fc1f2bc19d19f5c225be8f65dcc"
   },
-  "pdf_sha256": "bf7917f1a22ad4f51c65d8f197896d0dcdb3bb08a002872d7eec4706230b48bc",
+  "pdf_sha256": "a8138bdab42c2bd58618c51778e9f9a942fedcc0741274352299da86a9aa1053",
   "no_new_software_installation": true
 }

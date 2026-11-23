@@ -1,4 +1,4 @@
-"""Regenerate the draft's completed development and selector tables only."""
+"""Regenerate the draft's completed development, selector and formal caption tables."""
 import csv, hashlib, json
 from pathlib import Path
 
@@ -28,4 +28,37 @@ lines.extend([r'\bottomrule', r'\end{tabular}'])
     'scope': 'completed development and selector results; no formal caption or QA result substitution',
     'development_cells': 10, 'selector_core_cells': 5,
 }, indent=2)+'\n')
-print('Generated10development and5selector rows; pending formal slots untouched.')
+print('Generated10development and5selector rows; QA slots untouched.')
+
+formal_path = ROOT/'docs/results/reframed-formal-core/core-results.json'
+if formal_path.exists():
+    data = json.loads(formal_path.read_text()); formal = data['rows']
+    local = [r for r in formal if r['model'] == 'qwen']
+    deferred = [r for r in formal if r['model'] == 'api']
+    assert len(formal) == 20 and len(local) == len(deferred) == 10
+    assert all(r['missing'] == 0 and r['tts_rendered'] == r['valid'] for r in local)
+    assert sum(r['expected'] for r in local) == 3398
+    assert sum(r['valid'] for r in local) == 3108
+    assert sum(r['tts_fit'] for r in local) == 3024
+    lines = [r'\begin{tabular}{lllrrrrrr}', r'\toprule Selector & Prior & Model & Valid/input & Failed & F1 & BERT & TTS fit/rendered & Zero-output clips \\', r'\midrule']
+    for r in formal:
+        name = r['selector'].replace('_', r'\_')
+        if r['model'] == 'api':
+            lines.append(f"{name} & {r['prior']} & API & \\multicolumn{{6}}{{l}}{{Deferred: no paid authorization}} " + r'\\')
+        else:
+            lines.append(f"{name} & {r['prior']} & Qwen & {r['valid']}/{r['expected']} & {r['failed']} & {r['f1']:.3f} & {r['bertscore']:.3f} & {r['tts_fit']}/{r['tts_rendered']} & {r['zero_output_videos']} " + r'\\')
+    lines.extend([r'\bottomrule', r'\end{tabular}'])
+    (OUT/'formal_core_table.tex').write_text('\n'.join(lines)+'\n')
+    lines = [r'\begin{tabular}{lrrrr}', r'\toprule Selector & P0 valid/input & P0 F1 & P1 valid/input & P1 F1 \\', r'\midrule']
+    for name in ['U', 'V', 'A_cue', 'AV', 'O']:
+        a = next(r for r in local if r['selector'] == name and r['prior'] == 'P0')
+        b = next(r for r in local if r['selector'] == name and r['prior'] == 'P1')
+        texname = name.replace('_', r'\_')
+        lines.append(f"{texname} & {a['valid']}/{a['expected']} & {a['f1']:.3f} & {b['valid']}/{b['expected']} & {b['f1']:.3f} " + r'\\')
+    lines.extend([r'\bottomrule', r'\end{tabular}'])
+    (ROOT/'docs/slides/core_table.tex').write_text('\n'.join(lines)+'\n')
+    provenance = json.loads((OUT/'table_provenance.json').read_text())
+    provenance['sources'][str(formal_path.relative_to(ROOT))] = hashlib.sha256(formal_path.read_bytes()).hexdigest()
+    provenance.update(formal_core_cells=20, formal_local_cells=10, formal_deferred_cells=10, scope='completed development, selector and formal caption results; QA pending')
+    (OUT/'table_provenance.json').write_text(json.dumps(provenance, indent=2)+'\n')
+    print('Generated20formal core rows and5paired slide rows;3108valid/3024TTSfit verified.')

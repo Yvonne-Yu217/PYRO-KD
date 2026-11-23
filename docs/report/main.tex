@@ -14,7 +14,7 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-Audio description requires selecting informative visual moments while fitting narration into dialogue gaps. PYRO-KD separates cue salience from placement feasibility, combining visual novelty, speech content, non-speech audio events, and voice-activity-derived gaps. We evaluate five selectors with two prompt priors and a planned two-model matrix, using REFRAMED as the primary benchmark. The authorized local portion uses a frozen Qwen2.5-VL model; paid API and human-label conditions are explicitly deferred. All 31 selector configurations have completed on 30 frozen test clips. Descriptive selector F1 is 0.311 for uniform, 0.389 for visual, 0.505 for audio-cue, 0.494 for fused selection, and 0.839 for the timestamp oracle. These are placement results before caption generation. A development pilot reveals material losses between requested moments, feasible inputs, valid captions, and individually speech-fitting narration. Formal caption and downstream QA results remain pending in this draft. The long-video audio conditions also have lower realized frame budgets than visual controls; they support constrained-budget diagnostics, not an equal-budget causal claim.
+Audio description requires selecting informative visual moments while fitting narration into dialogue gaps. PYRO-KD separates cue salience from placement feasibility, combining visual novelty, speech content, non-speech audio events, and voice-activity-derived gaps. We evaluate five selectors with two prompt priors and a planned two-model matrix, using REFRAMED as the primary benchmark. The authorized local portion uses a frozen Qwen2.5-VL model; paid API and human-label conditions are explicitly deferred. All 31 selector configurations have completed on 30 frozen test clips. Descriptive selector F1 is 0.311 for uniform, 0.389 for visual, 0.505 for audio-cue, 0.494 for fused selection, and 0.839 for the timestamp oracle. These are placement results before caption generation. A development pilot reveals material losses between requested moments, feasible inputs, valid captions, and individually speech-fitting narration. The formal local caption matrix completes 3,398 attempts with 3,108 valid captions and 3,024 individually speech-fitting renders. Audio-cue P0 reaches placement F1 0.521 versus 0.351 for V and 0.275 for U. Downstream QA remains pending in this draft. The long-video audio conditions also have lower realized frame budgets than visual controls; they support constrained-budget diagnostics, not an equal-budget causal claim.
 \end{abstract}
 
 \section{Problem and experimental questions}
@@ -90,7 +90,7 @@ The development pilot executed all ten local selector--prompt cells. Across them
 \subsection{Prompt audio-context diagnostic}
 The development audio-context ablation holds the \Acue{}/P0 selected moments fixed at 95 and uses 30-second context windows. The no-audio-context condition produces 76 valid descriptions, the text-timeline condition 85, and native Omni 62. Corresponding placement F1 is 0.433, 0.477, and 0.408. Conditional BERTScore is 0.861, 0.864, and 0.867. All valid descriptions in this small ablation fit individually against original speech after rendering.
 
-The native comparison changes both input modality and model architecture; it cannot identify an isolated effect of raw audio. Higher conditional similarity for a lower-coverage condition also does not establish better overall descriptions. Formal results should repeat the complete coverage table before discussing score differences.
+The native comparison changes both input modality and model architecture; it cannot identify an isolated effect of raw audio. Higher conditional similarity for a lower-coverage condition also does not establish better overall descriptions. The formal analysis below repeats the complete coverage accounting before interpreting score differences.
 
 \subsection{Failure analysis}
 Longer token ceilings do not repair all failures. Ten probe examples repeated phrases through 512 tokens; repeated bigrams appeared 39--111 times in individual outputs. Their text remains invalid and is excluded from semantic-quality summaries while remaining visible in coverage.
@@ -108,13 +108,34 @@ All 31 frozen selector configurations cover all 30 test clips. Table~\ref{tab:se
 \caption{Heldout selector agreement, before caption generation. O is a reference timestamp upper bound. Scores are descriptive clip means.}\label{tab:selectors}
 \end{table}
 
-\section{Formal result slots and limitations}
-\subsection{Core captions and audio-context ablation}
-\pending{Insert the final 20-cell matrix after generation, CPU metrics, and actual TTS complete. Ten paid cells remain explicitly deferred. Do not copy development metrics into this table.}
+\section{Formal caption results and limitations}
+\subsection{Core matrix and output availability}
+All ten authorized local cells completed, with zero missing prepared IDs. Across them, 3,398 attempts yield 3,108 valid captions and 290 failures: 256 word-budget violations and 34 token-limit failures. Actual TTS renders all 3,108 valid captions; 3,024 fit individually against machine speech bounds. The complete 20-cell matrix retains ten API conditions as deferred (Table~\ref{tab:formal}). All 30 expected clips remain in each temporal denominator, including zero-output clips. Figure~\ref{fig:formalcoverage} separates the successive coverage losses.
 
-For each available core cell, the final table must include all 30 expected videos, requested/selected/prepared counts, valid and failed generations, zero-output videos, known word-budget failures and unknown statuses, temporal F1, conditional semantic scores, and rendered fit/overlap. Any missing examples must be named in the evidence manifest. The no-context and native ablations require the same denominator controls, with the identical core timeline condition reused rather than rerun.
+\begin{table*}[t]
+\centering\scriptsize
+\input{formal_core_table.tex}
+\caption{Formal REFRAMED core matrix: 30 frozen test clips per condition. F1 is clip-mean temporal placement of valid outputs; BERTScore is conditional on valid temporal matches. TTS fit is individual, not joint playback compatibility. O is an oracle upper bound. All paid cells remain visible as deferred.}\label{tab:formal}
+\end{table*}
 
-The selector-only ordering does not predict the final caption ordering automatically: feasibility filtering, generation failures, and word-budget limits can change which moments survive. P1 can also increase verbosity, making conditional semantic improvement and end-to-end success diverge. No blinded preference conclusion follows without the deferred human study.
+\begin{figure}[h]
+\centering\includegraphics[width=\columnwidth]{../results/reframed-formal-core/coverage.pdf}
+\caption{Formal local coverage across ten cells. Failures and feasibility losses are not dropped from the preceding stage's denominator.}\label{fig:formalcoverage}
+\end{figure}
+
+Audio-cue P0 obtains descriptive temporal F1 0.521 versus V at 0.351 and U at 0.275. The structural core family contains 17 contrasts over 10 movie clusters, declared after descriptive results were available rather than prospectively preregistered. Four contrasts have Holm-adjusted $p<0.05$: \Acue{}--V under P0; \Acue{}--U, \Acue{}--V, and AV--V under P1 (each adjusted $p=0.0332$). \Acue{}--U under P0 is $p=0.0508$, so it does not meet that cutoff. All five P1--P0 contrasts have adjusted $p=1.0$. These tests concern placement of valid outputs, not semantic or human quality. Pointwise bootstrap intervals are not familywise intervals, and separate families are not globally corrected.
+
+\subsection{Formal audio-context ablation}
+At the same 384 prepared \Acue{}/P0 moments, no-context Qwen produces 349 valid captions, timeline Qwen 372, and native Omni 326. Their temporal F1 values are 0.469, 0.521, and 0.465; individual speech-fit counts are 345/349, 370/372, and 324/326. The newly declared three-contrast movie-clustered family gives timeline minus no-context a mean F1 difference of 0.0519, pointwise 95\% interval [0.0107,0.1189], and Holm-adjusted $p=0.0410$. Native minus no-context has $p=0.7344$; native minus timeline has $p=0.0625$.
+
+Crucially, timeline and no-context conditions use \emph{identical selected timestamps}. Their temporal-F1 difference therefore reflects which descriptions survive generation validity checks, not a change in selection or evidence of improved semantics. Native contrasts additionally change model architecture and modality. Conditional BERTScore is 0.860/0.867/0.871 for none/timeline/native, respectively, but cannot be promoted to a human preference claim.
+
+\subsection{Measured gap use and targeted diagnostics}
+Across all 30 clips, the machine VAD/Whisper-union gap denominator is 3,739.112 seconds per cell, including unused gaps and zero-output clips. Unique narration occupancy for \Acue{}/P0 is 54.56\%; its P1 condition occupies 61.46\%. These are measured speech-free occupancy fractions, not human-validated silence utilization. Individual fit also hides self-overlap: timeline \Acue{}/P0 has 729.971 excess narration seconds despite 370 individually fitting captions, and the ten local cells total 7,651.939 excess seconds. No revised scheduler was silently applied.
+
+Targeted development frame inspection found a bounded grounding discrepancy: at \texttt{l5lLQICPOcnb\_A\_cue\_003}, the actual four images show men in a car, a plane releasing an object, the plane over a road, and a ground explosion. P0 describes standing men and a plane exploding, neither supported by those inputs. Separate traceable cases show a 0.325-second machine-speech collision for a word-compliant caption and a 0.429-second collision between two individually fitting narrations. These are agent-reviewed examples with source/frame/WAV hashes, not human labels or prevalence estimates.
+
+Detector-defined audio associations identify 121 music onsets across 27 clips and 28 impulsive onsets across 12 clips, with descriptive reference-onset association lifts 1.317 and 1.258. Different weighting of reference starts and timeline duration prevents causal interpretation of those ratios. Only 9/548 reference starts fall in the predefined low-modeled-change subset; this is not a count of truly silent events. \Acue{} matches 0/9 of those starts, U 5/9, and V/AV 1/9 each. Human labels remain necessary for sound-event precision and missed-event claims. The 16 selector-ablation contrasts across 10 movies all have Holm-adjusted $p=1.0$; their family was also declared after descriptive results.
 
 \subsection{QA and realized budget}
 \pending{Insert fixed-denominator EgoSchema and long-video QA tables after every frozen condition completes, followed by the declared paired comparisons.}
@@ -133,7 +154,7 @@ EgoSchema's silent distribution cannot support audio claims. Cue2Narrate access 
 \section{Reproducibility and current conclusion}
 Frozen inference uses immutable worktrees and source/config/input fingerprints. The formal caption source is \texttt{09abb6c}; long audio QA uses \texttt{a7e0e1a}, and its visual controls use \texttt{1f5fb60}. Existing weights and feature caches are reused only after compatibility checks. Incremental changes and failures are recorded in the Agent Log; large data, weights, and raw outputs remain outside Git. The reproduction guide records commands, artifact roots, and stage prerequisites.
 
-The completed evidence shows higher descriptive mean placement agreement for cue-driven selectors than uniform sampling on this frozen subset, while generation and narration introduce substantial additional failure modes. It does not yet establish better human-perceived AD or controlled-budget long-video QA. Final conclusions must be updated only after the pending local metrics and predefined comparisons are verified, retaining the exclusions and limitations above.
+The completed evidence shows higher descriptive mean placement agreement for cue-driven selectors than uniform sampling on this frozen subset, while generation and narration introduce substantial additional failure modes. It does not yet establish better human-perceived AD or controlled-budget long-video QA. Formal caption results show a timeline-related improvement in valid-output availability under identical selected moments, without establishing semantic superiority. QA conclusions remain pending; all deferred human/API requirements and budget limitations remain explicit.
 
 \begin{thebibliography}{9}\small
 \bibitem{proposal} PYRO-KD team. \emph{Cue-Driven Keyframe Selection for Long-Video Audio Description \& QA: Revision 1.5}. Project proposal. Local snapshot: \texttt{docs/PROPOSAL\_REVISION\_1\_5.txt}.
