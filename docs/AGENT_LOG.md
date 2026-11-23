@@ -807,3 +807,25 @@ passes, then independent ten-clip Qwen P1 diagnostic. All reuse pinned cached
 weights and inputs;15-minute timeout each, one GPU model at a time, exclusive
 queue lock. Outputs omni-thinker-{none,native} and qwen25-reframed-ten-P1 under
 outputs/real-data-smoke. No formal-grid launch or claim that human gates passed.
+
+## Concurrent CPU preparation while GPU smoke queue runs
+
+Created a separate worktree /scratch/yy5919/pyro-revision15-prep so the running
+GPU checkout stays unchanged. Added a development-only bridge from the existing
+HPC speech/event/onset caches into PR22's cue schema. Reuses cached probabilities,
+CLAP changes, loudness rises, onset strengths and semantic/deictic tracks; extracts
+onsets with declared PR22 defaults (not yet tuned). Original caches remain intact;
+a separate directory contains symlinks and newly derived cue files. Every input
+hash is recorded and consumer reads reject changed or missing source files.
+No feature-model inference/download was repeated. Actual bridge completed10/10.
+Existing training-only REFRAMED P1 bundles now pass through their original strict
+split validator before adapting the interface. Tests51passed +49subtests.
+
+Registered CPU-only selector diagnostics on the ten frozen development clips:
+/scratch/yy5919/pyro-bridged-selectors.log; results under
+/scratch/yy5919/pyro-resume-results/experiments/reframed_dev_bridged_v1.
+29 unique selectors cover core and ablations1,2,4,6,8; ablation3 still needs its
+Whisper-tag derivative, and7 belongs to long videos. No held-out outcomes opened.
+The original task attachment path was unavailable on this host; explicit current
+user instructions and the connected proposal were used. User explicitly deferred
+human labels/ratings and forbade paid APIs; do not represent either as completed.

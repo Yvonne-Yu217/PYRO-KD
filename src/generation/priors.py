@@ -47,6 +47,10 @@ def load_exemplars(path: str | Path = DEFAULT_EXEMPLARS_PATH) -> dict:
         record = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise MissingAsset(f"P1 exemplars at {path} are unreadable: {exc}") from exc
+    if isinstance(record, dict) and record.get("schema") == "reframed-train-exemplars-v1":
+        from src.generation.exemplars import load_exemplars as validate_training_bundle
+        validate_training_bundle(path)
+        record = {**record, "exemplars": record["examples"]}
     exemplars = record.get("exemplars") if isinstance(record, dict) else None
     if (
         not isinstance(exemplars, list) or len(exemplars) != NUM_EXEMPLARS

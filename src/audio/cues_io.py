@@ -369,6 +369,12 @@ def load_cues_for_selection(
         return None, "missing_wav"
     if record.get("audio_sha256") != digest or record.get("vad_hash") != vad_features.get("config_hash"):
         return None, STALE_CUES
+    for source, expected in record.get("bridge_sources", {}).items():
+        try:
+            if hashlib.sha256(Path(source).read_bytes()).hexdigest() != expected:
+                return None, STALE_CUES
+        except OSError:
+            return None, STALE_CUES
     return record, None
 
 
