@@ -970,3 +970,10 @@ Merged tests812passed+5974subtests; later gatedWhisper focused29passed.
 LongU/V controls active40964;15-example token-ceiling diagnostic queued.
 Long bridge complete12/12, audio-aware label-free input preparation active.
 CPU41034 waits41017:41018; Ego41027 extracts caches,41038 validates/resumes afterany41027.
+
+Word-budget reporting correction prepared on branchwork/revision15-metric-fix:
+old generated reports can understate over-budget rate aszero under flag policy.
+Re-evaluate/replace derived metric reports from preserved predictions using the
+corrected evaluator; raw generations remain valid. New records expose known
+complete-decode denominator, overrun numerator, unknown-generated and missing
+coverage. Do not interpret token-limit unknowns as budget-compliant predictions.

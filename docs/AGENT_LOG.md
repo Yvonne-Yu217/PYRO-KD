@@ -1111,3 +1111,37 @@ Queue watchdog correction before any audio-aware QA launch: stopped the waiting
 queue process (no GPU child yet), replaced Python-only timeout with GNU timeout
 and30-second forced-kill grace to bound its subprocess group, then restarted.
 Current session36268 replaces54677; no inference source or active model changed.
+
+## 2026-11-23: word-budget metric denominator correction
+
+Delegated agent audit in isolated worktree
+`/scratch/yy5919/pyro-revision15-metric-fix` found that `evaluate_generation`
+computed over-budget rate only from successful predictions. With the flag
+policy, every overrun is an error and was excluded, incorrectly yielding zero.
+
+Corrected compliance denominator to complete decodes carrying an explicit
+boolean `over_budget` flag, including flagged word-budget errors. Token-limited
+and backend-failed outputs are unknown, as are legacy rows without a flag;
+missing expected predictions are counted separately. Per-video and aggregate
+records now expose known, over-budget, unknown-generated and missing counts,
+plus known coverage. Existing `over_budget_rate` remains the macro per-video
+bootstrap statistic; `budget_compliance.rate` is the pooled observed-row rate.
+Observed unexpected rows retain existing evaluator semantics and remain exposed
+by the pre-existing unexpected-ID fields. F1, text matching, mean valid words
+and overlap still use successful predictions only.
+
+Report CSV/Markdown adds budget numerator/denominator/unknown/missing columns;
+legacy JSON lacking the new coverage object remains readable. No existing raw
+predictions or active worker sources were changed. No inference or paid APIs.
+
+Verification: focused suite30tests and38subtests passed; log
+`/scratch/yy5919/pyro-generation-budget-tests.log`. Regression includes flagged
+overruns, token-limit outputs carrying misleading flags, backend failures,
+missing flags, superseded errors, missing moments/videos and valid-only F1/text
+matching. The report reader is exercised with both new and legacy records.
+A read-only recomputation of existing dev pilot compliance is recorded at
+`/scratch/yy5919/pyro-dev-budget-metric-audit.json`; no text scorer was rerun.
+Real dev audit:789 known complete decodes,84 over-budget,15 token/backend unknowns
+across the ten cells (804 final rows). Pooled overrun rate84/789=10.6464%, rather
+than the erroneous zero. Final report-compatibility rerun2tests passed after
+adding the numerator column; logpyro-generation-budget-report-tests.log.
