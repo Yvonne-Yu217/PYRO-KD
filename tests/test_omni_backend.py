@@ -28,7 +28,7 @@ class Processor:
         return ['A person walks.']
 
 
-class Model:
+class Thinker:
     device = 'cpu'
 
     def generate(self, **kwargs):
@@ -36,16 +36,24 @@ class Model:
         return torch.tensor([[1, 2, 3, 4]])
 
 
+class Model:
+    def __init__(self):
+        self.thinker = Thinker()
+
+    def generate(self, **kwargs):
+        raise AssertionError('disabled-talker wrapper must never be called')
+
+
 @pytest.mark.parametrize('waveform', [None, [0., .1, -.1]])
 def test_waveform_is_explicit_and_output_is_text_only(waveform):
     processor, model = Processor(), Model()
     text, raw, count = generate_one(processor, model, ['frame'], 'prompt', waveform)
     assert text == raw == ['A person walks.'] and count == [2]
-    assert model.kwargs['generation_mode'] == 'text'
-    assert model.kwargs['thinker_max_new_tokens'] == 64
-    assert model.kwargs['thinker_do_sample'] is False
+    assert model.thinker.kwargs['use_audio_in_video'] is False
+    assert model.thinker.kwargs['max_new_tokens'] == 64
+    assert model.thinker.kwargs['do_sample'] is False
     assert ('audio' in processor.kwargs) == (waveform is not None)
-    assert ('input_features' in model.kwargs) == (waveform is not None)
+    assert ('input_features' in model.thinker.kwargs) == (waveform is not None)
     if waveform is not None:
         assert processor.kwargs['sampling_rate'] == 16000
         assert processor.kwargs['audio'] == [waveform]
@@ -62,8 +70,10 @@ def test_rejects_processor_that_drops_audio():
 
 
 def test_rejects_audio_output_tuple():
-    class AudioModel(Model):
+    class AudioThinker(Thinker):
         def generate(self, **kwargs):
             return super().generate(**kwargs), torch.zeros(16000)
+    model = Model()
+    model.thinker = AudioThinker()
     with pytest.raises(ValueError, match='text token sequence'):
-        generate_one(Processor(), AudioModel(), ['frame'], 'prompt')
+        generate_one(Processor(), model, ['frame'], 'prompt')

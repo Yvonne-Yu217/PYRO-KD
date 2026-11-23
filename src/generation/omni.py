@@ -33,13 +33,16 @@ def encode(processor, images, prompt, waveform=None):
 def generate_one(processor, model, images, prompt, waveform=None,
                  max_new_tokens=64, temperature=0., top_p=.9):
     import torch
-    inputs = encode(processor, images, prompt, waveform).to(model.device, dtype=torch.bfloat16)
-    kwargs = dict(generation_mode='text', thinker_max_new_tokens=max_new_tokens,
-                  thinker_do_sample=temperature > 0)
+    # The installed wrapper accesses self.talker even after disable_talker().
+    # Its text-only path delegates to this same multimodal thinker.
+    thinker = model.thinker
+    inputs = encode(processor, images, prompt, waveform).to(thinker.device, dtype=torch.bfloat16)
+    kwargs = dict(max_new_tokens=max_new_tokens, do_sample=temperature > 0,
+                  use_audio_in_video=False)
     if temperature > 0:
-        kwargs.update(thinker_temperature=temperature, thinker_top_p=top_p)
+        kwargs.update(temperature=temperature, top_p=top_p)
     with torch.inference_mode():
-        output = model.generate(**inputs, **kwargs)
+        output = thinker.generate(**inputs, **kwargs)
     if not isinstance(output, torch.Tensor) or output.ndim != 2 or output.shape[0] != 1:
         raise ValueError('expected one text token sequence from Omni')
     new = output[:, inputs['input_ids'].shape[-1]:]

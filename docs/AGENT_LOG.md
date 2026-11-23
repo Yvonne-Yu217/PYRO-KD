@@ -789,3 +789,21 @@ Draft REFRAMED plan enumerates 20 cells with proposal A_cue, timeline present,
 raw over-budget output retained, batch1 and zero API cap. Human detector labels,
 peer ratings, formal protocol freeze and cache-schema reconciliation remain.
 See docs/RESUME_2026_11_23.md for evidence, cost assumptions and next steps.
+
+Omni real GPU control on allocation40891 failed after132s loading: the installed
+Transformers wrapper reads self.talker.codec_pad_token unconditionally although
+disable_talker deletes that attribute. Inspected installed generate/disable_talker
+source, preserved at /scratch/yy5919/omni-installed-generate.txt. Fixed text output
+to call the same multimodal thinker directly with normal generation kwargs; no
+speech synthesis is needed. Regression fake now rejects wrapper.generate calls.
+Tests:9passed in16.37s (Omni/native runner/bounded repair). Failed prediction and
+metadata retained in outputs/real-data-smoke/omni-control-resume.*.
+Full integrated suite before this fix:790passed,3skipped,5964subtests in80.74s.
+
+User confirmed no paid APIs and deferred human labels/ratings. Continue local
+work with those outputs explicitly pending. Registered serial GPU queue in
+/scratch/yy5919/pyro-resume-gpu-queue.sh: one Omni control, native only if control
+passes, then independent ten-clip Qwen P1 diagnostic. All reuse pinned cached
+weights and inputs;15-minute timeout each, one GPU model at a time, exclusive
+queue lock. Outputs omni-thinker-{none,native} and qwen25-reframed-ten-P1 under
+outputs/real-data-smoke. No formal-grid launch or claim that human gates passed.
