@@ -39,6 +39,10 @@ ten planned API cells and human-label/peer-rating requirements remain deferred.
 Proposal A means `A_cue`. Long A/AV realized frame budgets are smaller than the
 visual controls, so those comparisons are constrained-budget diagnostics.
 
+## Human review workspace
+
+Use the [English review webpage and preparation guide](review/README.md) to build blinded X/Y assignments for Yvonne, Daksh, Rishabh, Kiran, and Prajanya: 24 comparisons each, with two reviewers per item. Includes a synthetic practice clip, local progress saving, JSON export, frozen-artifact media preparation, and descriptive review aggregation. Real media and human labels stay outside Git.
+
 ## Local setup and tests
 
 ```bash

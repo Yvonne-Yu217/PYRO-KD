@@ -1,0 +1,4 @@
+generated/
+private/
+__pycache__/
+*.pyc

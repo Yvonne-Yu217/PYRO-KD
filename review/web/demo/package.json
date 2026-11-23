@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "study_id": "practice-synthetic-v1",
+  "package_id": "practice-v1",
+  "reviewer": "Practice reviewer",
+  "demo": true,
+  "items": [{"id": "PRACTICE-001", "media": {"original": "demo/original.mp4", "X": "demo/x.mp4", "Y": "demo/y.mp4"}}]
+}

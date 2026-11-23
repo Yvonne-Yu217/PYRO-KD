@@ -1088,3 +1088,8 @@ again before publication. Archived results source:d4e53bb; later receipt/log
 commits do not claim to be part of the archived snapshot. No remaining agent
 GPU jobs; user-owned40964 remains intact. APIspend$0; human/API/Cue2Narrate
 and disclosed design limitations remain requirements, not fabricated results.
+
+
+## Human review tooling branch — 2026-11-23
+
+Added `review/` on `feature/human-review-portal` for the user-requested five-person peer review. It prepares 60 movie-balanced X/Y items with two reviewers each (24 per teammate; eight per contrast), a separate coordinator key, portable browser-local forms, draft/export/restore validation, an HPC frozen-artifact exporter, and a CPU media mixer. No human ratings, real study media, new inference, or changes to frozen selectors/results were produced. Synthetic practice footage and speech are labeled and excluded by the summarizer. Checks: Python and Node review-tool tests, JS syntax, synthetic ffmpeg playback preparation, and local HTTP serving. Browser UI verification could not run because the browser access host was unavailable. Actual HPC artifact export and real-media playback preparation remain for the coordinator on the artifact-owning machine.

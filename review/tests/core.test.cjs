@@ -1,0 +1,11 @@
+const test=require('node:test');
+const assert=require('node:assert/strict');
+const c=require('../web/core.js');
+const p={schema_version:1,study_id:'study',package_id:'p',reviewer:'Yvonne',demo:false,items:[{id:'PAIR-001',media:{original:'media/a.mp4',X:'media/b.mp4',Y:'media/c.mp4'}}]};
+const rating=()=>({item_id:'PAIR-001',completed:true,preference:'X',evidence:'At 00:05, X describes the action.',independent:true,...Object.fromEntries(['X','Y'].map(v=>[v,{...Object.fromEntries(c.criteria.map(k=>[k,4])),dialogue_overlap:'No',narration_overlap:'Uncertain'}]))});
+test('valid package and completed review',()=>{assert.equal(c.validatePackage(p),p);assert.equal(c.validateRating(rating()),'');});
+test('reject duplicate items and executable media paths',()=>{assert.throws(()=>c.validatePackage({...p,items:[...p.items,...p.items]}));for(const path of ['javascript:alert(1)','../private/key.json','//example.org/a.mp4'])assert.throws(()=>c.validatePackage({...p,items:[{id:'a',media:{original:path,X:'x.mp4',Y:'y.mp4'}}]}));});
+test('ratings require criteria, overlap checks, evidence and independent confirmation',()=>{for(const change of [r=>r.X.accuracy=null,r=>r.Y.narration_overlap='',r=>r.evidence=' ',r=>r.independent=false,r=>r.preference='']){const r=rating();change(r);assert.ok(c.validateRating(r));}});
+test('cannot assess permits absent scores but requires reason',()=>{const r=rating();r.preference='Cannot assess';delete r.X;delete r.Y;assert.equal(c.validateRating(r),'');r.evidence='';assert.ok(c.validateRating(r));});
+test('restore rejects foreign identity, practice flags and duplicate ratings',()=>{const data={...p,ratings:[rating()]};assert.equal(c.validateImport(data,p).length,1);for(const patch of [{reviewer:'Daksh'},{package_id:'other'},{demo:true},{ratings:[rating(),rating()]}])assert.throws(()=>c.validateImport({...data,...patch},p));});
+test('incomplete completed record rejected but draft retained',()=>{const r=rating();r.preference='';assert.throws(()=>c.validateImport({...p,ratings:[r]},p));r.completed=false;assert.equal(c.validateImport({...p,ratings:[r]},p).length,1);});
