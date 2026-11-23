@@ -448,3 +448,16 @@ inclusive boundaries. Next actual CPU diagnostic uses existing cached events and
 output outputs/verification/reframed-dev-event-alignment.json. Initial exploratory
 file reads guessed two nonexistent fused-audit names; corrected via rg discovery
 to audit_fused_selectors.py before implementing the missing association path.
+
+
+Development event/AD association34065exit0 COMPLETE10clips/1336windows/517included
+classes, source5d0833b. Only11classes have detected onset windows at the existing
+probability.5/rise.1 thresholds;10of those occur in just1clip. There are51class-window
+detections total. Music appears in all10clips (31windows), equal-video mean phi
+0.017814021769080805; this is descriptive, not a significance or causal result.
+Sparse support does not justify fitting unconstrained per-class signs from these
+clips. No thresholds/weights changed and human detector validation is still needed.
+Evidence outputs/verification/reframed-dev-event-alignment.json/.log and independent
+count/phi arithmetic audit reframed-dev-event-alignment-check.json. Preserves all
+classes and undefined correlations, avoiding selective reporting of favorable
+classes. Actual long event616 now2400/2646windows; longASR continues.
