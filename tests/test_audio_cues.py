@@ -12,8 +12,12 @@ import unittest
 
 import numpy as np
 
+from cache_fixtures import make_media_cache
 from src.audio import asr, cues_io, salience, speech_cues, tagging, timeline
 from src.audio.taxonomy import superclass_of
+from src.datasets.adapters import ADEvent, VideoRecord
+from src.experiments import io, matrix, selection_stage
+from src.utils import audio_features as af
 
 
 class TaxonomyTests(unittest.TestCase):
@@ -255,6 +259,52 @@ class CueFileTests(unittest.TestCase):
                                                               "events": [{"time": "x", "strength": 1}], "speech_cues": []}))
         self.assertEqual(cues_io.read_cues(self.dir)[1], cues_io.MALFORMED_CUES)
         self.assertEqual(cues_io.read_cues(self.dir / "nope")[1], cues_io.NO_CUES)
+
+    def test_malformed_tagger_labels_are_rejected_even_with_current_fingerprints(self):
+        record = {
+            "version": cues_io.CUES_VERSION, "duration": 12.0, "streams": {}, "events": [],
+            "speech_cues": [], "audio_sha256": af.wav_digest(self.wav), "vad_hash": self.vad["config_hash"],
+        }
+        for labels in (7, True, 0, None, "X", {"Music": 0}, [7]):
+            with self.subTest(labels=labels):
+                record["tagger"] = {"times": [1.0], "labels": labels, "posteriors": [[0.2] if labels else []]}
+                cues_io.write_cues(self.dir, record)
+                self.assertEqual(cues_io.load_cues_for_selection(self.dir, self.wav, self.vad),
+                                 (None, cues_io.MALFORMED_CUES))
+
+
+class CueEvaluationTests(unittest.TestCase):
+    def test_malformed_tagger_labels_do_not_abort_selector_evaluation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            cache_root, exp = root / "cache", root / "experiment"
+            cfg = {"paths": {"cache_root": str(cache_root)}, "matrix": {"selectors": ["U"]},
+                   "evaluation": {"resamples": 10}}
+            run, = matrix.core_selections(cfg)
+            records = []
+            rows = []
+            for video_id, labels in (("broken", 7), ("healthy", ["Music"])):
+                media = make_media_cache(cache_root, video_id)
+                cache, wav = media["cache"], media["wav"]
+                vad = {"speech": [], "gaps": [], "config_hash": af.features_config_hash(wav)}
+                af.write_features(cache, vad)
+                cues_io.write_cues(cache, {
+                    "version": cues_io.CUES_VERSION, "duration": 12.0, "streams": {}, "events": [],
+                    "speech_cues": [], "audio_sha256": af.wav_digest(wav), "vad_hash": vad["config_hash"],
+                    "tagger": {"times": [1.0], "labels": labels, "posteriors": [[0.2]]},
+                })
+                records.append(VideoRecord("mtg-ad", video_id, "validation", 12.0, media["source"],
+                                           [ADEvent(6.0, None, "A person waves.")]))
+                rows.append({"video_id": video_id, "duration": 12.0, "status": "ok", "k": 1, "times": [6.0]})
+            io.append_jsonl(selection_stage.selections_path(exp, run), rows)
+
+            result = selection_stage.evaluate_selections(cfg, [run], records, exp)
+
+            broken, healthy = result["runs"]["U"]["videos"]
+            self.assertEqual((broken["video_id"], healthy["video_id"]), ("broken", "healthy"))
+            self.assertEqual((broken["f1"], healthy["f1"]), (1.0, 1.0))
+            self.assertNotIn("n_silent_gt", broken)
+            self.assertIn("n_silent_gt", healthy)
 
 
 if __name__ == "__main__":

@@ -296,11 +296,13 @@ def malformed_cues(record: Any) -> str | None:
             return f"{name} tracks differ in length"
     tagger = record.get("tagger")
     if tagger is not None:
+        labels = tagger.get("labels")
+        if not isinstance(labels, list) or not all(isinstance(label, str) for label in labels):
+            return "tagger.labels must be a list of strings"
         post = tagger.get("posteriors")
         if not isinstance(post, list) or len(post) != len(tagger["times"]):
             return "tagger.posteriors must have one row per time"
-        width = len(tagger.get("labels") or [])
-        if any(not isinstance(r, list) or len(r) != width or not all(_finite(v) for v in r) for r in post):
+        if any(not isinstance(r, list) or len(r) != len(labels) or not all(_finite(v) for v in r) for r in post):
             return "tagger.posteriors rows must match labels and be finite"
     asr = record.get("asr")
     if asr is not None:

@@ -52,3 +52,10 @@ submitted. PrimaryVmemory completed on40964; userallocation left intact. Our
 additional GPU utilization monitor was stopped; the user-owned monitor/session
 was preserved. No dummykeepalive and no paidcalls. Final report/archive closeout
 uses CPU only. Resume from verified artifacts, never duplicate these runs.
+
+## 2026-11-24 — Post-PR22 integration
+
+PR #22 has merged into main. Current integration/review work belongs on PR #24's
+work/revision15-results branch, incorporating main c2698a1. Earlier branch
+instructions above describe historical runs. Preserve their immutable source
+and artifacts; use fresh experiment identities for changed code/input runs.

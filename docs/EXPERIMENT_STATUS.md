@@ -1088,3 +1088,11 @@ again before publication. Archived results source:d4e53bb; later receipt/log
 commits do not claim to be part of the archived snapshot. No remaining agent
 GPU jobs; user-owned40964 remains intact. APIspend$0; human/API/Cue2Narrate
 and disclosed design limitations remain requirements, not fabricated results.
+
+## 2026-11-24 — Code integration, no new experiments
+
+PR #22 is merged into main at c2698a1. PR #24 is being synchronized with that
+commit. Existing formal runs and archived results retain their original code
+provenance; no inference or metric rerun was performed for this integration.
+Use a new experiment directory for new-code runs when identity guards reject
+older artifacts. See the integration entry in docs/AGENT_LOG.md for validation.

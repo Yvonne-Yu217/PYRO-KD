@@ -13,9 +13,11 @@
 from __future__ import annotations
 
 import contextlib
+import hashlib
 import json
 import os
 from pathlib import Path
+from stat import S_IMODE
 import tempfile
 from typing import Any, Iterable
 
@@ -73,23 +75,93 @@ def write_json(path: Path, data: Any) -> Path:
     return path
 
 
+def _inspect_jsonl(path: Path, raw: bytes) -> tuple[list[dict], int]:
+    """Return records and the byte offset where a malformed final fragment starts."""
+    rows = []
+    offset = 0
+    lines = raw.split(b"\n")
+    for number, line in enumerate(lines, start=1):
+        line_offset = offset
+        offset += len(line) + 1
+        if not line.strip():
+            continue
+        try:
+            row = json.loads(line.decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+            if number == len(lines):  # Complete records always have a following split entry.
+                return rows, line_offset
+            raise ValueError(f"{path}: malformed JSONL at line {number}") from exc
+        if not isinstance(row, dict):
+            raise ValueError(f"{path}: expected a JSON object at line {number}")
+        rows.append(row)
+    return rows, len(raw)
+
+
 def read_jsonl(path: Path) -> list[dict]:
-    """Read strictly, allowing only a recoverable unterminated tail."""
-    from src.generation.jsonl_recovery import read_resume_rows
-    rows, _ = read_resume_rows(path)
+    """Read records in order, ignoring only a malformed unterminated final line."""
+    try:
+        raw = path.read_bytes()
+    except FileNotFoundError:
+        return []
+    rows, _ = _inspect_jsonl(path, raw)
     return rows
 
 
+def _write_bytes_atomic(path: Path, data: bytes, mode: int) -> None:
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(prefix=f".{path.name}.", suffix=".tmp", dir=path.parent,
+                                         delete=False) as handle:
+            temporary = Path(handle.name)
+            handle.write(data)
+            handle.flush()
+            os.fsync(handle.fileno())
+        temporary.chmod(mode)
+        os.replace(temporary, path)
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
+
+
+def _prepare_jsonl_append(path: Path) -> bool:
+    """Repair an unterminated file under the caller's lock, or flag a missing separator."""
+    try:
+        with path.open("rb") as handle:
+            if handle.seek(0, os.SEEK_END) == 0:
+                return False
+            handle.seek(-1, os.SEEK_END)
+            if handle.read(1) == b"\n":
+                return False  # The stage's resume read validates complete records.
+            handle.seek(0)
+            raw = handle.read()
+    except FileNotFoundError:
+        return False
+
+    _, valid_end = _inspect_jsonl(path, raw)
+    if valid_end == len(raw):
+        return True
+
+    mode = S_IMODE(path.stat().st_mode)
+    digest = hashlib.sha256(raw).hexdigest()
+    backup = path.with_name(f"{path.name}.before-recovery-{digest}.bin")
+    if not backup.exists():
+        _write_bytes_atomic(backup, raw, mode)
+    elif backup.read_bytes() != raw:
+        raise ValueError(f"{path}: recovery backup {backup} differs from the original file")
+    _write_bytes_atomic(path, raw[:valid_end], mode)
+    return False
+
+
 def append_jsonl(path: Path, rows: Iterable[dict]) -> None:
-    from src.generation.jsonl_recovery import read_resume_rows, apply_tail_recovery
+    """Preserve any torn tail before appending complete records under a sidecar lock."""
     path.parent.mkdir(parents=True, exist_ok=True)
     with _locked(path):
-        _, recovery = read_resume_rows(path)
-        if recovery is not None:
-            apply_tail_recovery(path, recovery)
-        with path.open("a", encoding="utf-8") as handle:
+        needs_separator = _prepare_jsonl_append(path)
+        with path.open("ab") as handle:
+            if needs_separator:
+                handle.write(b"\n")
             for row in rows:
-                handle.write(json.dumps(row, default=str) + "\n")
+                handle.write((json.dumps(row, default=str) + "\n").encode("utf-8"))
             handle.flush()
             os.fsync(handle.fileno())
 

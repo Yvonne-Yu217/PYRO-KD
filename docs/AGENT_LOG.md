@@ -1505,3 +1505,38 @@ again before publication. Archived results source:d4e53bb; later receipt/log
 commits do not claim to be part of the archived snapshot. No remaining agent
 GPU jobs; user-owned40964 remains intact. APIspend$0; human/API/Cue2Narrate
 and disclosed design limitations remain requirements, not fabricated results.
+
+## 2026-11-24 — PR #24 integration with merged PR #22
+
+User requested synchronizing the results branch with main and resolving merge
+conflicts before review. Integrated main c2698a1 (including 2a00ae7 and b503964)
+into the 6f90fca results snapshot in a separate local worktree; no HPC jobs,
+paid APIs, raw predictions, frozen protocols or published result artifacts were
+changed.
+
+Resolved generation conflicts by preserving request/media fingerprints and
+missing-input rejection from main alongside the HPC branch's matched native
+window, subtitle exclusion, word-budget failure accounting and fixed coverage
+fields. Kept both the experiment-directory identity guard and main's locked,
+backed-up JSONL tail recovery. Kept both development histories and documented
+resume behavior in README.
+
+The initial integrated test pass exposed old synthetic fixtures without the
+new required media fingerprints (ablation context and budget coverage tests).
+Updated fixtures with actual temporary source/frame/audio files and request
+fingerprints rather than weakening runtime checks. Added a core-timeline
+assertion that supplied subtitles remain excluded. Targeted validation:
+33 passed, 16 subtests. Full integrated validation is recorded below.
+
+Legacy experiment artifacts must continue to be read/reproduced under their
+recorded immutable source versions. New fingerprint/identity guards deliberately
+reject unverified legacy outputs; this integration does not rewrite scientific
+results or certify a new real-GPU run.
+
+Final integrated suite: 880 passed, 1 skipped, 1 warning, 5,997 subtests passed
+in 17.55s. Command: `uv run --no-project --with numpy --with pillow --with
+soundfile --with librosa --with torch --with silero-vad --with pytest --with
+pytest-subtests --with scipy --with matplotlib --with pandas --with pyarrow
+python -m pytest -q`. The warning is Silero's deprecated importlib resource API.
+Validation was on macOS/CPU with synthetic or injected backends, not HPC GPU.
+`git diff --check --cached` passed; no unresolved merge paths remain.

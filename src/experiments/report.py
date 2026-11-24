@@ -87,6 +87,9 @@ def generation_table(results: Sequence[dict], out_dir: Path) -> None:
 
         rows.append({"selector": r["selector"] + (" (oracle)" if r.get("oracle") else ""), "prior": r["prior"],
                      "model": r["model"], "timeline": r["timeline"], "videos": r["n_videos"],
+                     "status": r.get("status", "unverified legacy coverage"),
+                     "missing": r.get("n_missing"), "errors": r.get("n_error"),
+                     "videos_without_moments": len(r.get("videos_without_prepared_moments", [])),
                      "macro_F1": _ci(r["macro_f1"]), "overlap_s": _ci(r["overlap_seconds"], 2),
                      "over_budget": _ci(r["over_budget_rate"]),
                      "budget_known": r.get("budget_compliance", {}).get("n_known"),

@@ -8,6 +8,7 @@ from unittest import TestCase
 from src.experiments.generation_stage import moments_path, run_generation
 from src.experiments.matrix import ablation5_runs
 from src.generation.backends import GenResult
+from src.utils.media import _source_fingerprint
 
 
 class CapturingBackend:
@@ -39,6 +40,15 @@ class AblationContextTests(TestCase):
                   'audio_clip': {'path': 'audio.wav', 'start': 0., 'end': 4.}}
         with TemporaryDirectory() as directory:
             root = Path(directory)
+            source = root / 'source.mp4'
+            source.write_bytes(b'synthetic source')
+            frame = root / 'frame.jpg'
+            frame.write_bytes(b'synthetic frame')
+            audio = root / 'audio.wav'
+            audio.write_bytes(b'synthetic audio')
+            moment.update(media_fingerprint=_source_fingerprint(source), timeline_status='ok',
+                          frames=[str(frame)])
+            moment['audio_clip']['path'] = str(audio)
             path = moments_path(root, runs[0].selection)
             path.parent.mkdir(parents=True)
             path.write_text(json.dumps(moment) + '\n')
@@ -53,10 +63,16 @@ class AblationContextTests(TestCase):
                     self.assertEqual(request.audio, moment['audio_clip'] if native else None)
                     self.assertEqual(request.images, moment['frames'])
             # Legacy non-ablation calls intentionally retain their old context.
-            legacy = replace(runs[0], model_label='legacy', ablation=None)
+            legacy = replace(runs[0], model_label='legacy', ablation=None, audio_context=None)
             backend = CapturingBackend(False)
             run_generation(cfg, legacy, root, lambda _: backend)
             self.assertIn('SUBTITLE_SENTINEL', backend.requests[0].prompt)
+            # The HPC core timeline condition also excludes supplied subtitles.
+            core_timeline = replace(legacy, model_label='core-timeline', timeline=True)
+            backend = CapturingBackend(False)
+            run_generation(cfg, core_timeline, root, lambda _: backend)
+            self.assertNotIn('SUBTITLE_SENTINEL', backend.requests[0].prompt)
+            self.assertIn('TIMELINE_SENTINEL', backend.requests[0].prompt)
 
     def test_explicit_native_window_matches_timeline_and_clips_to_media(self):
         from src.experiments.generation_stage import native_audio_clip

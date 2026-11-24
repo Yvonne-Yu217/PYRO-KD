@@ -5,7 +5,7 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 from src.experiments.generation_stage import (
-    budget_compliance, evaluate_generation, generations_path, moments_path,
+    budget_compliance, evaluate_generation, generations_path, moments_path, _ad_inputs,
 )
 from src.experiments.matrix import core_generation_runs
 from src.experiments.report import generation_table
@@ -36,7 +36,13 @@ def test_flagged_failure_counts_but_f1_and_text_remain_valid_only(tmp_path):
     records=[SimpleNamespace(video_id='v',ad=[SimpleNamespace(start=1.,text='Tree reference'),
                                             SimpleNamespace(start=2.,text='Other reference')]),
              SimpleNamespace(video_id='missing_video',ad=[])]
-    moments=[{'id':f'm{i}','video_id':'v'} for i in range(6)] + [{'id':'absent','video_id':'missing_video'}]
+    from src.utils.media import _source_fingerprint
+    source = tmp_path / 'source.mp4'; source.write_bytes(b'synthetic media')
+    frame = tmp_path / 'frame.jpg'; frame.write_bytes(b'synthetic frame')
+    template = {'selector':'U', 'time':1., 'frames':[str(frame)], 'frame_times':[1.],
+                'word_limit':3, 'media_fingerprint':_source_fingerprint(source)}
+    moments=[{**template,'id':f'm{i}','video_id':'v','time':2. if i == 1 else 1.}
+             for i in range(6)] + [{**template,'id':'absent','video_id':'missing_video'}]
     path=moments_path(tmp_path,run.selection);path.parent.mkdir(parents=True)
     path.write_text(''.join(json.dumps(row)+'\n' for row in moments))
     base={'video_id':'v','time':1.,'word_limit':3}
@@ -49,6 +55,9 @@ def test_flagged_failure_counts_but_f1_and_text_remain_valid_only(tmp_path):
         {**base,'id':'m3','output':'', 'error':'generate: failed'},
         {**base,'id':'m4','output':'', 'error':'legacy missing budget flag'},
     ]
+    inputs = _ad_inputs(cfg, run, tmp_path, records)
+    for row in rows:
+        row['input_fingerprint'] = inputs[row['id']][2]
     output=generations_path(tmp_path,run);output.parent.mkdir(parents=True)
     output.write_text(''.join(json.dumps(row)+'\n' for row in rows))
     seen=[]

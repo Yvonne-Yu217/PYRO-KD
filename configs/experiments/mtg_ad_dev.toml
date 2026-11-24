@@ -53,7 +53,7 @@ request_batch = 8
 backend = "openai"            # or "gemini" with model = "gemini-2.0-flash" (check current names)
 model = "gpt-4o-mini"
 api_key_env = "OPENAI_API_KEY"
-spend_cap_usd = 20.0          # hard cap across all API runs sharing the ledger
+spend_cap_usd = 20.0          # preflight budget across API attempts sharing the ledger
 ledger_path = "${PYRO_OUTPUTS:-outputs}/api_spend_ledger.json"
 request_batch = 8
 # Prices are required and deliberately not built in: copy them from the provider's

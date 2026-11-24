@@ -87,9 +87,13 @@ python scripts/run_experiment.py --config $CFG --stage report           # tables
 
 Outputs go to `$PYRO_OUTPUTS/experiments/<name>/` (`selections/`, `moments/`, `generations/`, `eval/`, `tables/`, `plots/`, `status.json`). Selector-only stages never build a model backend. O is always labeled an oracle upper bound and is excluded from the Holm-corrected comparison family. Summary tables compare selectors on the videos every core selector could score; a second table lists each selector on all its videos.
 
+AD generation resumes and evaluates results only when their request fingerprints match the prepared inputs. If the inputs change or the existing results predate fingerprints, keep the old outputs, rebuild moments as needed, and use a fresh experiment directory. If interrupted JSONL output ends with a partial record, the next append saves an exact backup before repairing the tail.
+
 Selectors: `U`, `V` and `A` are the team's implementations, called unchanged. `AV` is the proposal's two-stage selector (`src/selection/two_stage.py`): candidates from VN/NSE/SC peaks, snapping to VAD gaps long enough for the word budget, then K picks with t_min = 2 s (and optional MMR) and running-memory novelty. `A_cue` is the proposal's A (speech cues + NSE, no visual input) and `V_mem` is V with running memory. `matrix.a_selector` chooses which A fills the matrix (team decision; default `A`). Registry defaults are generic; Revision 1.5 configs freeze development-selected weights and explicitly map proposal A to A_cue.
 
-Models: `hf_vlm` (Qwen2.5-VL / Qwen3-VL via transformers), `openai` / `gemini` (keys from environment variables only; a persistent spend ledger with a hard cap; per-token prices must be set in the config), `qwen_omni` (audio-native ablation) and `echo` (dry runs and tests only). Temperature is fixed at 0.
+Models: `hf_vlm` (Qwen2.5-VL / Qwen3-VL via transformers), `openai` / `gemini` (keys from environment variables only, with configured per-token prices and a shared spend ledger), `qwen_omni` (audio-native ablation) and `echo` (dry runs and tests only). The ledger checks the estimated cost of each API attempt, including retries, before dispatch. Actual provider charges can exceed the estimate. Temperature is fixed at 0.
+
+AD ablation 5 uses frames in all three conditions. It compares frames alone, frames with cached timeline text, and frames with a native waveform. Raw transcript context is excluded from these prompts. A missing timeline or waveform is recorded as an unavailable input for its condition.
 
 QA: datasets with questions (EgoSchema, or a long-form set converted to the canonical JSONL) run `--stage qa`, which asks each model with the timeline off and on and reports accuracy, accuracy by video length, and paired McNemar tests.
 

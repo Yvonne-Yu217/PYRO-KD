@@ -59,6 +59,7 @@ class GenerationRun:
     task: str = "ad"  # ad | qa
     ablation: str | None = None
     generation_json: str = "{}"
+    audio_context: str | None = None  # AD ablation: none | timeline | native
 
     @property
     def model(self) -> dict:
@@ -67,8 +68,11 @@ class GenerationRun:
     @property
     def run_id(self) -> str:
         public = {k: v for k, v in self.model.items() if not k.endswith("_env") and k not in NON_RESULT_MODEL_KEYS}
-        h = stable_hash([self.selection.run_id, self.prior, public, self.timeline, self.task,
-                         json.loads(self.generation_json)], 8)
+        identity = [self.selection.run_id, self.prior, public, self.timeline, self.task,
+                    json.loads(self.generation_json)]
+        if self.audio_context is not None:
+            identity.append(self.audio_context)
+        h = stable_hash(identity, 8)
         return f"{self.task}-{self.selection.name}-{self.prior}-{self.model_label}-tl{int(self.timeline)}-{h}"
 
 
@@ -225,14 +229,12 @@ def ablation5_runs(cfg: dict, task: str = "ad") -> list[GenerationRun]:
     custom = get(cfg, f"selectors.{selector}")
     sel = _selection({"name": selector, **custom} if isinstance(custom, dict) else selector)
     gen = _gen_identity(get(cfg, "generation", {}))
-    runs = [
-        GenerationRun(sel, prior, model_label, json.dumps(models[model_label], sort_keys=True), False, task, "ablation5", json.dumps(gen)),
-        GenerationRun(sel, prior, model_label, json.dumps(models[model_label], sort_keys=True), True, task, "ablation5", json.dumps(gen)),
-    ]
+    conditions = [(model_label, False, "none"), (model_label, True, "timeline")]
     if native_label:
-        runs.append(GenerationRun(sel, prior, native_label, json.dumps(models[native_label], sort_keys=True), False, task,
-                                  "ablation5", json.dumps(gen)))
-    return runs
+        conditions.append((native_label, False, "native"))
+    return [GenerationRun(sel, prior, label, json.dumps(models[label], sort_keys=True), timeline, task,
+                          "ablation5", json.dumps(gen), audio_context=context if task == "ad" else None)
+            for label, timeline, context in conditions]
 
 
 def all_selection_runs(cfg: dict) -> list[SelectionRun]:
