@@ -34,7 +34,26 @@ P1_GUIDELINES = (
     "Professional descriptions below illustrate style only. Their people, "
     "objects and events are unrelated to the current frames.\n"
 )
-PROMPTS = {"P0": P0, "P1": P0}
+_STYLE_ONLY = (
+    "Professional descriptions below illustrate style only. Their people, "
+    "objects and events are unrelated to the current frames.\n"
+)
+# Development-only variants that separate the parts of P1 (P0 and P1 themselves are frozen):
+# P1G = P1's guidelines without examples; P1E = the examples without guidelines;
+# P1S = a one-short-sentence instruction plus the examples, to test whether P1 loses on length.
+P1S_GUIDELINES = (
+    "Describe only the single most important visible action, in one short sentence. "
+    "Use as few words as that needs; the word limit is a maximum, not a target.\n"
+)
+PRIOR_PREFIX = {
+    "P0": "",
+    "P1": P1_GUIDELINES,
+    "P1G": P1_GUIDELINES.replace(_STYLE_ONLY, ""),
+    "P1E": _STYLE_ONLY,
+    "P1S": P1S_GUIDELINES + _STYLE_ONLY,
+}
+EXAMPLE_PRIORS = frozenset({"P1", "P1E", "P1S"})
+PROMPTS = {name: P0 for name in PRIOR_PREFIX}
 
 
 def format_clock(seconds: float) -> str:
@@ -104,12 +123,12 @@ def build_prompt(
         if transcript_text:
             raise ValueError("timeline and legacy transcript context must not be mixed")
         context = audio_timeline_text + "\nDo not repeat information already conveyed by audio.\n"
-    if prior == "P1" and (
+    if prior in EXAMPLE_PRIORS and (
         len(exemplars) != 3 or any(not isinstance(x, str) or not x.strip() for x in exemplars)
     ):
-        raise ValueError("P1 requires exactly three nonempty professional exemplars")
-    if prior == "P0" and exemplars:
-        raise ValueError("P0 must not receive exemplars")
+        raise ValueError(f"{prior} requires exactly three nonempty professional exemplars")
+    if prior not in EXAMPLE_PRIORS and exemplars:
+        raise ValueError(f"{prior} must not receive exemplars")
     plain = PROMPTS[prior].format(
         num_frames=num_frames, span=span, time=format_clock(time),
         context=context, word_limit=word_limit,
@@ -117,7 +136,7 @@ def build_prompt(
     if prior == "P0":
         return plain
     examples = "\n".join(f"Example {i}: {text}" for i, text in enumerate(exemplars, 1))
-    return P1_GUIDELINES + examples + "\n\nCurrent video:\n" + plain
+    return PRIOR_PREFIX[prior] + examples + "\n\nCurrent video:\n" + plain
 
 
 QA_PROMPT = (

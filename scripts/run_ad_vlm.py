@@ -24,7 +24,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.generation.hf_vlm import MODELS, generate_batch, load_model, resolve_model  # noqa: E402
 from src.generation.outputs import merge_meta, read_rows, settled_ids, status_counts  # noqa: E402
-from src.generation.prompts import PROMPTS, build_prompt, word_limit_for_gap  # noqa: E402
+from src.generation.prompts import EXAMPLE_PRIORS, PROMPTS, build_prompt, word_limit_for_gap  # noqa: E402
 from src.generation.exemplars import check_resume_prior, load_exemplars  # noqa: E402
 from src.generation.audio_timeline import check_audio_resume, render_timeline, timeline_hash  # noqa: E402
 from src.generation.jsonl_recovery import read_resume_rows,apply_tail_recovery
@@ -134,7 +134,7 @@ def parse_args():
     p.add_argument("--output", default=None,
                    help="default: outputs/<model>/<input stem>_<prior>.jsonl")
     p.add_argument("--prior", choices=sorted(PROMPTS), default="P0")
-    p.add_argument("--exemplars", help="frozen training-only bundle required for P1")
+    p.add_argument("--exemplars", help="frozen training-only bundle, required for priors with examples (P1, P1E, P1S)")
     p.add_argument('--backend', choices=('vlm', 'omni'), default='vlm')
     p.add_argument('--word-budget-retries', type=int, choices=(0, 1), default=0,
                    help='optional one model repair of an over-budget draft; all attempts retained')
@@ -161,8 +161,8 @@ def main():
         raise ValueError('native waveform context requires --backend omni')
     if args.backend == 'omni' and (args.batch_size != 1 or args.quant != 'none' or args.reasoning_strength):
         raise ValueError('Omni requires --batch-size 1, --quant none, and no reasoning-strength')
-    if (args.prior == "P1") != bool(args.exemplars):
-        raise ValueError("--exemplars is required for P1 and forbidden for P0")
+    if (args.prior in EXAMPLE_PRIORS) != bool(args.exemplars):
+        raise ValueError(f"--exemplars is required for {sorted(EXAMPLE_PRIORS)} and forbidden otherwise")
     args.exemplar_texts, args.exemplar_sha256 = (
         load_exemplars(args.exemplars) if args.exemplars else ([], None)
     )

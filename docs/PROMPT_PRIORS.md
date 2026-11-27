@@ -80,3 +80,21 @@ verification passed68 tests/17 subtests. Evidence:
 outputs/verification/reframed-dev-timeline-check.json,
 reframed-timeline-{p0,p1}-dry-run.log, and pytest-audio-timeline.log.
 No caption quality, QA utility or detector-accuracy result is claimed.
+
+## Development variants (not part of the frozen matrix)
+
+P0 and P1 are unchanged. To find which part of P1 drives its longer, more often
+over-budget captions, `run_ad_vlm.py` also accepts, on development inputs only:
+
+| Prior | Guidelines | Examples | Question |
+|---|---|---|---|
+| P1G | P1's | none | Do the guidelines alone lengthen captions? |
+| P1E | none | three | Do the examples alone change length or leak content? |
+| P1S | one-short-sentence instruction | three | Does a length target recover the loss? |
+
+P1E and P1S need `--exemplars`; P1G rejects it. Use one output file per prior, then
+compare moment by moment:
+
+```bash
+python scripts/compare_prior_outputs.py --baseline <p0.jsonl> --variant <p1.jsonl>
+```

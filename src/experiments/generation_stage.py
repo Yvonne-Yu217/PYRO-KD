@@ -33,7 +33,7 @@ from src.experiments.matrix import GenerationRun, SelectionRun
 from src.experiments.selection_stage import selections_path
 from src.generation.backends import GenRequest, GenResult
 from src.generation.outputs import final_rows, is_success, settled_ids
-from src.generation.prompts import build_prompt, build_qa_prompt, enforce_word_limit, transcript_context, word_limit_for_gap
+from src.generation.prompts import EXAMPLE_PRIORS, build_prompt, build_qa_prompt, enforce_word_limit, transcript_context, word_limit_for_gap
 from src.utils.audio_features import available_gap, owned_media_manifest
 from src.utils.cache_checks import MEDIA_INCOMPLETE, media_cache_problem, read_manifest
 from src.utils.media import cache_is_current, frame_window
@@ -147,7 +147,7 @@ def _ad_inputs(cfg: dict, run: GenerationRun, exp_dir: Path, records) -> dict[st
     path = moments_path(exp_dir, run.selection)
     moments = read_jsonl(path)
     exemplars = None
-    if run.prior == "P1":
+    if run.prior in EXAMPLE_PRIORS:
         from src.generation.priors import load_exemplars
 
         exemplars = load_exemplars(get(cfg, "generation.exemplars_path", "configs/p1_exemplars.json"))
