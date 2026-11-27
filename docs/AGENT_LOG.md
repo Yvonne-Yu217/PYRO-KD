@@ -1540,3 +1540,26 @@ pytest-subtests --with scipy --with matplotlib --with pandas --with pyarrow
 python -m pytest -q`. The warning is Silero's deprecated importlib resource API.
 Validation was on macOS/CPU with synthetic or injected backends, not HPC GPU.
 `git diff --check --cached` passed; no unresolved merge paths remain.
+
+## 2026-11-27 — review fixes for PR #24
+
+Agent: Claude Code, at Prajanya's request. Fixes for review findings: temperature-0
+word-budget and invalid-answer failures are settled on resume (failed repairs stay
+retryable); the experiment guard hashes only output-determining code with
+repo-relative paths, and plan/validate-data/evaluate-selection/evaluate-generation/
+report require only the same configuration and inputs; core AD and QA timeline runs
+record unavailable_audio_timeline instead of running without audio context; V memory
+moments record missing_visual_embeddings per video instead of aborting mid-write;
+bridge_sources is validated; .meta.json keeps provenance; the offline OpenCLIP error
+names the prefetch command. Not changed: the run_ad_vlm provenance fingerprint (still
+covers all of src, scripts and configs) and the bridge semantic-shift documentation
+(Kiran's finding 3). Existing experiment directories refuse writing stages under the
+changed code, as before for any code change; published results were not rerun or
+re-evaluated. Verification: 891 passed, 4 skipped on macOS/CPU (uv environment);
+each fix was reverted in turn and its tests failed. No HPC or GPU run.
+
+Follow-up (same day): documented the bridged speech-cue method and the results
+that used it (docs/AUDIO_STACK.md, docs/REVISION15_DELIVERY.md), and changed the
+bridge to record the settings that ran instead of the native defaults. Cue values
+are unchanged. Existing bridge outputs were not rewritten; Kiran's development
+numbers are cited from the PR comment, not re-run. No HPC access.

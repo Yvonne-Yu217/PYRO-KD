@@ -21,10 +21,14 @@ def openclip_text_encoder(model_name: str = "ViT-B-32", pretrained: str = "laion
     from src.utils.visual_features import DEFAULT_CONFIG
     if model_name == DEFAULT_CONFIG["clip_model"] and pretrained == DEFAULT_CONFIG["clip_pretrained"]:
         from huggingface_hub import hf_hub_download
-        pretrained = hf_hub_download(
-            "laion/CLIP-ViT-B-32-laion2B-s34B-b79K", "open_clip_model.safetensors",
-            revision=DEFAULT_CONFIG["clip_revision"], local_files_only=True,
-        )
+        repo, revision = "laion/CLIP-ViT-B-32-laion2B-s34B-b79K", DEFAULT_CONFIG["clip_revision"]
+        try:
+            pretrained = hf_hub_download(repo, "open_clip_model.safetensors", revision=revision, local_files_only=True)
+        except OSError as exc:  # LocalEntryNotFoundError: evaluation runs offline on purpose
+            raise RuntimeError(
+                f"OpenCLIP weights are not in the local Hugging Face cache; prefetch them with "
+                f"`hf download {repo} open_clip_model.safetensors --revision {revision}`"
+            ) from exc
     model, _, _ = open_clip.create_model_and_transforms(model_name, pretrained=pretrained, device=device)
     tokenizer = open_clip.get_tokenizer(model_name)
     model.eval()

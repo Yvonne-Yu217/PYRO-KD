@@ -107,6 +107,7 @@ def main() -> None:
     output = args.output or Path(f"data/moments/{name}_{args.selector}_{args.videos}.jsonl")
     output.parent.mkdir(parents=True, exist_ok=True)
     rows, missing, shortfalls, no_audio, no_visual, unsafe = 0, [], [], [], [], []
+    no_embeddings = []
     stale = []
     unusable_features = []
     reports = []
@@ -151,6 +152,8 @@ def main() -> None:
             if feature_problem not in (None, "no_audio_stream", "no_audio_features"):
                 unusable_features.append(f"{video_id} ({feature_problem})")
             speech = speech_of(features) if features else None
+            memory = args.selector == "V" and args.visual_novelty == "memory"
+            embeddings = load_embeddings(cache, visual) if memory and visual is not None else None
             if args.selector == "A" and features is None:
                 no_audio.append(video_id)
                 report["status"] = "missing_audio_features"
@@ -159,16 +162,24 @@ def main() -> None:
                 report["status"] = "missing_visual_features"
             else:
                 report["status"] = "ok"
-            if args.selector == "V" and args.visual_novelty == "memory" and visual is not None:
-                embeddings = load_embeddings(cache, visual)
-                if embeddings is None:
-                    raise ValueError(f"{video_id}: memory novelty requires valid cached embeddings")
-                times = [c.time for c in VisualCueSelector().select_memory(visual, embeddings, k)]
-            else:
+            times = None
+            if memory and visual is not None:
+                # One video with unusable embeddings is recorded and skipped; it must not leave a
+                # partial moments file without a report behind.
+                try:
+                    if embeddings is None:
+                        raise ValueError("no valid cached embeddings")
+                    times = [c.time for c in VisualCueSelector().select_memory(visual, embeddings, k)]
+                except ValueError as exc:
+                    no_embeddings.append(f"{video_id} ({exc})")
+                    report["status"] = "missing_visual_embeddings"
+                    times = []
+            if times is None:
                 times = SELECTORS[args.selector](duration, k, visual if args.selector == "V" else features)
             report["num_selected"] = len(times)
             report["selection_shortfall"] = (
-                0 if report["status"] in ("missing_audio_features", "missing_visual_features")
+                0 if report["status"] in ("missing_audio_features", "missing_visual_features",
+                                          "missing_visual_embeddings")
                 else k - len(times)
             )
             if report["selection_shortfall"]:
@@ -216,6 +227,8 @@ def main() -> None:
         print(f"no audio/features; zero A moments: {' '.join(no_audio)} (run scripts/cache_audio_features.py)")
     if no_visual:
         print(f"no visual features; zero V moments: {' '.join(no_visual)} (run scripts/cache_visual_features.py)")
+    if no_embeddings:
+        print(f"unusable visual embeddings; zero V memory moments: {', '.join(no_embeddings)}")
     if unsafe:
         print(f"not safely speakable; skipped {len(unsafe)} zero-word moments; details: {report_path}")
     if missing:

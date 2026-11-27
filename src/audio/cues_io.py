@@ -266,6 +266,9 @@ def malformed_cues(record: Any) -> str | None:
         return "duration must be a finite non-negative number"
     if not isinstance(record.get("streams"), dict):
         return "streams is not an object"
+    bridge = record.get("bridge_sources", {})
+    if not isinstance(bridge, dict) or not all(isinstance(k, str) and isinstance(v, str) for k, v in bridge.items()):
+        return "bridge_sources must map source paths to hashes"
     for name in ("events", "speech_cues"):
         rows = record.get(name)
         if not isinstance(rows, list):

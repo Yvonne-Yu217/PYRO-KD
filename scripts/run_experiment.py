@@ -40,6 +40,8 @@ from src.experiments.io import experiment_dir, write_json  # noqa: E402
 
 STAGES = ("plan", "validate-data", "select", "evaluate-selection", "selector-only", "moments", "generate",
           "ablation5", "evaluate-generation", "qa", "report")
+# These read existing outputs (or nothing), so a later code fix must not block them.
+READ_ONLY_STAGES = frozenset({"plan", "validate-data", "evaluate-selection", "evaluate-generation", "report"})
 
 
 def _filter(runs, patterns):
@@ -93,8 +95,10 @@ def main(argv: list[str] | None = None) -> int:
 
     cfg = load_config(args.config, args.overrides)
     _seed_everything(int(get(cfg, "experiment.seed", 0)))
-    exp = experiment_dir(cfg)
-    write_json(exp / "config.resolved.json", {k: v for k, v in cfg.items()})
+    writes = args.stage not in READ_ONLY_STAGES
+    exp = experiment_dir(cfg, writes_outputs=writes)
+    if writes or not (exp / "config.resolved.json").exists():
+        write_json(exp / "config.resolved.json", {k: v for k, v in cfg.items()})
     clear_context_cache()
 
     ledger = exp / "api_spend_ledger.json"
