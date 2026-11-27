@@ -1,0 +1,76 @@
+# Development ablation 5, local models only. No formal-test claims.
+# Select A_cue by development placement F1; retain P0 and the dev-pilot weights.
+# Prepare: --stage select, then --stage moments. Smoke: --stage ablation5 --limit 2.
+# Full run only after inspecting all three smoke conditions.
+[experiment]
+name = "reframed_dev_ablation5_v1"
+seed = 0
+task = "ad"
+allow_test = false
+
+[dataset]
+name = "reframed"
+root = "${REFRAMED_ROOT:-/scratch/yy5919/pyro-kd-derived/datasets/reframed}"
+split = "validation"
+subset = "dev"
+splits_config = "configs/reframed_splits.json"
+
+[paths]
+cache_root = "${PYRO_CACHE:-/scratch/yy5919/pyro-kd-derived/cache/reframed-pr22-bridge}"
+output_root = "${PYRO_OUTPUTS:-/scratch/yy5919/pyro-resume-results}/experiments"
+
+[k_rule]
+
+[selection]
+tolerance_seconds = 2.0
+duration_slack_seconds = 1.0
+num_frames = 4
+span_seconds = 2.0
+
+[matrix]
+selectors = ["A_cue"]
+priors = ["P0"]
+models = ["qwen"]
+
+[selectors.A_cue]
+base = "A_cue"
+[selectors.A_cue.options.weights]
+gf = 0.5
+nse = 0.5
+sc = 0.5
+
+[models.qwen]
+backend = "hf_vlm"
+model = "/home/yy5919/.cache/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5"
+batch_size = 1
+request_batch = 1
+attn_impl = "sdpa"
+
+[models.omni]
+backend = "qwen_omni"
+model = "/scratch/yy5919/hf_cache/hub/models--Qwen--Qwen2.5-Omni-7B/snapshots/ae9e1690543ffd5c0221dc27f79834d0294cba00"
+request_batch = 1
+attn_impl = "sdpa"
+
+[generation]
+max_new_tokens = 128
+temperature = 0.0
+word_limit_policy = "flag"
+timeline = true
+timeline_window_seconds = 30.0
+native_audio_window_seconds = 30.0
+
+[evaluation]
+baseline = "A_cue"
+resamples = 10000
+tts_words_per_second = 2.5
+tts_speed = 1.2
+text_metrics = ["bertscore", "sentence_cosine", "clip_text"]
+
+[ablations]
+enabled = ["5"]
+[ablations.timeline]
+selector = "A_cue"
+model = "qwen"
+audio_native_model = "omni"
+prior = "P0"

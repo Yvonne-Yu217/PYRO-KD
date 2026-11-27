@@ -1,0 +1,50 @@
+{
+  "all_equal": true,
+  "comparisons": [
+    {
+      "reproduced": "/scratch/yy5919/pyro-resume-results/reproduced-tables-v1/reframed-formal-core/core-results.csv",
+      "canonical": "docs/results/reframed-formal-core/core-results.csv",
+      "sha256": "aeb7784a9c23178187b26272457031e2517693a4a103408c738b40dbdac10d8d"
+    },
+    {
+      "reproduced": "/scratch/yy5919/pyro-resume-results/reproduced-tables-v1/reframed-formal-ablation5/ablation5-results.csv",
+      "canonical": "docs/results/reframed-formal-ablation5/ablation5-results.csv",
+      "sha256": "181b585fa65ae95b6cfc7732c93e977ca00664f6ec5b11e107efae84da9696c8"
+    },
+    {
+      "reproduced": "/scratch/yy5919/pyro-resume-results/reproduced-tables-v1/long-qa-frozen/qa-results.csv",
+      "canonical": "docs/results/video-mme-long/qa-results.csv",
+      "sha256": "2c3dcf25347827fedcf40562ed9eb847fe6303095154d5deaa61801542db9ab1"
+    },
+    {
+      "reproduced": "/scratch/yy5919/pyro-resume-results/reproduced-tables-v1/long-qa-frozen/qa-by-length.csv",
+      "canonical": "docs/results/video-mme-long/qa-by-length.csv",
+      "sha256": "82b96dad359c9678cb9f63659985bf044c9924ff233173d90c4f5ff98983d260"
+    },
+    {
+      "reproduced": "/scratch/yy5919/pyro-resume-results/reproduced-tables-v1/egoschema-heldout/qa-results.csv",
+      "canonical": "docs/results/egoschema-heldout/qa-results.csv",
+      "sha256": "2deff9f85c4cda50c75d0c9747fcee673ddbeddab5ec1aa5bed1e0ab42096e5b"
+    },
+    {
+      "reproduced": "/scratch/yy5919/pyro-resume-results/reproduced-tables-v1/reframed-core-temporal/paired-contrasts.csv",
+      "canonical": "docs/results/reframed-core-temporal/paired-contrasts.csv",
+      "sha256": "a368b56792de1c32ed68cf631fbf155c7a8fad672ccdc4cf8951d7d7026bf0ca"
+    },
+    {
+      "reproduced": "/scratch/yy5919/pyro-resume-results/reproduced-tables-v1/reframed-ablation5-temporal/paired-contrasts.csv",
+      "canonical": "docs/results/reframed-ablation5-temporal/paired-contrasts.csv",
+      "sha256": "c065e861a8892361ef889454e2825f584182d93a7c098d480ea9e01d20fb9c5f"
+    },
+    {
+      "reproduced": "/scratch/yy5919/pyro-resume-results/reproduced-tables-v1/long-qa-paired/paired-contrasts.csv",
+      "canonical": "docs/results/video-mme-long/paired-contrasts.csv",
+      "sha256": "b81246f86b5e827a219e920a9bbcabc55a1734fe165eb39adc0e4cad27722305"
+    },
+    {
+      "reproduced": "/scratch/yy5919/pyro-resume-results/reproduced-tables-v1/egoschema-paired/paired-contrasts.csv",
+      "canonical": "docs/results/egoschema-heldout/paired-contrasts.csv",
+      "sha256": "2b5af31db300fe2d0b954029a5e05775be8e74ff54170a54eb824824315ad7a1"
+    }
+  ]
+}

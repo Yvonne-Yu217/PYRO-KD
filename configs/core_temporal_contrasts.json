@@ -1,0 +1,99 @@
+{
+  "family": "core_Qwen_temporal_F1_17",
+  "declared": "2026-11-23; newly declared while core U outputs were available; structural contrasts chosen without inspecting effects; not a prospectively preregistered family",
+  "metric": "temporal_f1",
+  "unit": "cluster",
+  "cluster": "movie_id",
+  "confidence_level": 0.95,
+  "resamples": 10000,
+  "seed": 0,
+  "pvalue_adjustment": "Holm across all17 contrasts",
+  "oracle_policy": "O prompt contrast is upper-bound diagnostic only, never a deployable selector comparison",
+  "contrasts": [
+    {
+      "a": "V-P0",
+      "b": "U-P0",
+      "oracle_upper_bound": false
+    },
+    {
+      "a": "A_cue-P0",
+      "b": "U-P0",
+      "oracle_upper_bound": false
+    },
+    {
+      "a": "AV-P0",
+      "b": "U-P0",
+      "oracle_upper_bound": false
+    },
+    {
+      "a": "A_cue-P0",
+      "b": "V-P0",
+      "oracle_upper_bound": false
+    },
+    {
+      "a": "AV-P0",
+      "b": "V-P0",
+      "oracle_upper_bound": false
+    },
+    {
+      "a": "AV-P0",
+      "b": "A_cue-P0",
+      "oracle_upper_bound": false
+    },
+    {
+      "a": "V-P1",
+      "b": "U-P1",
+      "oracle_upper_bound": false
+    },
+    {
+      "a": "A_cue-P1",
+      "b": "U-P1",
+      "oracle_upper_bound": false
+    },
+    {
+      "a": "AV-P1",
+      "b": "U-P1",
+      "oracle_upper_bound": false
+    },
+    {
+      "a": "A_cue-P1",
+      "b": "V-P1",
+      "oracle_upper_bound": false
+    },
+    {
+      "a": "AV-P1",
+      "b": "V-P1",
+      "oracle_upper_bound": false
+    },
+    {
+      "a": "AV-P1",
+      "b": "A_cue-P1",
+      "oracle_upper_bound": false
+    },
+    {
+      "a": "U-P1",
+      "b": "U-P0",
+      "oracle_upper_bound": false
+    },
+    {
+      "a": "V-P1",
+      "b": "V-P0",
+      "oracle_upper_bound": false
+    },
+    {
+      "a": "A_cue-P1",
+      "b": "A_cue-P0",
+      "oracle_upper_bound": false
+    },
+    {
+      "a": "AV-P1",
+      "b": "AV-P0",
+      "oracle_upper_bound": false
+    },
+    {
+      "a": "O-P1",
+      "b": "O-P0",
+      "oracle_upper_bound": true
+    }
+  ]
+}

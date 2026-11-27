@@ -175,6 +175,10 @@ def evaluate_selections(cfg: dict, runs: Sequence[SelectionRun], records, exp_di
     for run in runs:
         rows = latest_by_key(read_jsonl(selections_path(exp_dir, run)), "video_id")
         scored, not_run = [], {}
+        missing_ids = sorted(set(by_id) - set(rows))
+        unexpected_ids = sorted(set(rows) - set(by_id))
+        if missing_ids:
+            not_run["missing"] = len(missing_ids)
         for video_id, row in rows.items():
             if video_id not in by_id:
                 continue
@@ -187,7 +191,10 @@ def evaluate_selections(cfg: dict, runs: Sequence[SelectionRun], records, exp_di
             else:
                 scored.append(metrics)
         per_run[run.name] = {"run_id": run.run_id, "oracle": run.is_oracle, "ablation": run.ablation,
-                             "not_run": not_run, "summary": _summary(scored, resamples, seed), "videos": scored}
+                             "not_run": not_run, "expected": len(by_id),
+                             "missing_video_ids": missing_ids, "unexpected_video_ids": unexpected_ids,
+                             "complete": len(scored) == len(by_id) and not unexpected_ids,
+                             "summary": _summary(scored, resamples, seed), "videos": scored}
     # Summary rows are only comparable on the same videos: also summarize every run
     # on the videos that every core run (ablation None) scored.
     core_sets = [{v["video_id"] for v in r["videos"]} for r in per_run.values() if r["ablation"] is None]

@@ -149,3 +149,151 @@ All normal tests use injected/mock judges and encoders, with no network calls
 or pretrained-model downloads. `--no-sync` permits these standard-library tests
 to run in the existing macOS environment despite the project's CUDA PyTorch
 wheel incompatibility; it does not validate real model/provider integration.
+
+## Rendered speech overlap (Revision 1.5)
+
+`scripts/evaluate_rendered_overlap.py` measures actual TTS audio after ffmpeg
+`atempo=1.2`, using the resulting 16 kHz PCM sample count. It does not estimate
+speech duration from a word cap or remove leading/trailing silence. Provide JSONL
+with `id`, `video_id`, `time` (playback placement), `output` (generated text),
+`tts_audio` (unaccelerated waveform path), `tts_playback_speed: 1.0`,
+`tts_audio_sha256`, and `tts_text_sha256` (SHA256 of the exact UTF-8 output text).
+The TTS producer must bind the audio to that text; hashes verify artifact
+consistency, not spoken semantic content. No TTS provider is invoked here.
+
+```bash
+python scripts/evaluate_rendered_overlap.py --input rendered_predictions.jsonl \
+  --cache-dir /scratch/yy5919/pyro-kd-derived/cache/reframed \
+  --output-dir NEW_OVERLAP_DIRECTORY
+```
+
+The output directory must be new. It retains accelerated WAVs and `report.json`;
+a failed run leaves artifacts without a complete report, never a partial success.
+Current media/VAD caches and Whisper waveform/gate provenance are checked first.
+Per-description and per-video results report VAD collision, Whisper word collision,
+and their union separately. Per-description summed collisions and unique timeline
+collisions differ when narrations overlap. `narration_excess_layer_seconds` measures
+extra narration layers (three simultaneous narrations count two extra layers), not
+just the duration with at least two narrations. Out-of-video playback is explicitly
+reported and cannot count as successful silence usage. Zero-length Whisper words
+contribute no duration. Empty evaluation has undefined fit fraction.
+
+This evaluates only the supplied successful rendered predictions. Generation
+failures, selector shortfalls and missing videos need separate coverage reporting.
+It is not a selector OP score: candidate narration is not yet available during
+selection. GF/OP selection mechanics and their development calibration remain
+outstanding. No actual project TTS/overlap results have been produced yet.
+
+## EgoSchema QA accuracy
+
+Use `scripts/evaluate_egoschema_qa.py --input PREDICTIONS.jsonl --answers
+/scratch/yy5919/pyro-kd-derived/datasets/egoschema/subset_answers.json --split
+pilot --output NEW_SCORE.json` (or `--split heldout`). The frozen config defines
+10 pilot and490 held-out IDs and the label-file SHA. The generation input builder
+and QA runner never load these labels. Evaluation refuses absent/empty predictions,
+changed label membership, pilot/held-out contamination, mixed run fingerprints or
+selectors, duplicate successes, and an index inconsistent with the strict letter
+parser. Malformed JSON lines fail explicitly; interrupted files require recovery.
+
+Primary accuracy uses every ID in the declared partition as the denominator.
+Missing, invalid, truncated and failed predictions count incorrect. Valid-only
+accuracy is a separate diagnostic and never replaces the primary figure. Error
+attempts superseded by a successful retry are counted separately; they do not add
+questions. Per-question outcomes retain IDs for later paired analysis. Incomplete
+coverage/invalid outputs are saved with `complete=false` and exit status1.
+
+This implementation has been tested with synthetic unit fixtures only. No actual
+EgoSchema predictions or accuracy results exist yet; GPU smoke remains required.
+
+Prediction-tail recovery: the AD and QA runners now inspect output JSONL before
+resuming. An unterminated malformed final line (including a partial UTF-8 code
+point) is removed only after preserving the exact original file as
+`<output>.before-recovery-<SHA256>.bin`. A valid final object without a newline is
+retained and delimited. Publication uses atomic replacement; changes detected
+since inspection abort repair. Complete/interior corruption is never silently
+skipped. Existing prediction fingerprints are checked first; a partial-only file
+needs its matching provenance sidecar. Dry runs inspect but do not repair files.
+This assumes the job registry's single-writer rule; do not run two writers for
+one output. The strict evaluator can then consume resumed files without silently
+discarding malformed records. No real prediction file has required recovery yet.
+
+Video-MME long QA: `scripts/evaluate_video_mme_qa.py` uses
+`configs/video_mme_long_questions.json` as the fixed question denominator and
+links it to the pinned video subset and annotation-file hash. It refuses empty
+predictions before accessing labels, then reads only the selected question IDs,
+video IDs and answers. Prediction inputs must use dataset `video-mme`, split
+`long-heldout`, and source_sha256 keys `question_membership` and `subset` matching
+those configuration files. The shared QA runner preserves these fields.
+Missing/invalid/truncated/failed answers count incorrect; per-video and per-domain
+accuracy uses the same denominator policy. Mixed conditions and source mismatches
+fail explicitly. Run with `--input <actual-predictions.jsonl> --annotations
+<pinned-parquet> --output <new-score.json>` in the data environment. No real
+predictions or scores exist yet. This is selected-subset accuracy, not a claim
+about the whole Video-MME benchmark. Duration-stratified analysis and final
+selection/inference protocol are still pending.
+
+For paired QA comparisons, export evaluated outcomes with
+`scripts/export_qa_paired_metrics.py --dataset video-mme --report U <u-score.json>
+--report V <v-score.json> --output <new-paired.jsonl>` (use `egoschema` for that
+benchmark). The exporter requires identical frozen provenance, question IDs,
+video mappings and answer indices across conditions, validates per-row outcomes
+against aggregate accuracy, and retains missing/failed/invalid answers as zero.
+It records source report hashes in an adjacent provenance JSON.
+
+Pass the export to `analyze_paired.py` or `analyze_family.py` with `--unit cluster`
+and metric `accuracy`. The cluster is the video, so multiple Video-MME questions
+are resampled together. The estimand is equal-video mean accuracy difference;
+with three questions per selected Video-MME video it also equals the overall
+question-accuracy difference. EgoSchema has one question per video. Predeclare
+comparison families before scoring; use the existing Holm correction for the
+family, retaining unavailable comparisons rather than shrinking it. No actual
+QA confidence intervals or superiority claims have been produced yet.
+
+
+### REFRAMED generated descriptions
+
+`scripts/evaluate_ad.py --dataset reframed` now adapts the official US AD track,
+merging adjacent cues at <=0.5s before the same one-to-one temporal and matched
+text metrics used for MTG-AD. Each clip retains its `movie_id`; aggregate temporal
+counts are descriptive pooled counts, not movie-independent confidence intervals.
+Use movie clusters in later paired statistics. The `cosine` metric here is sentence
+embedding similarity, not the separately required OpenCLIP image/text score.
+
+For the later development smoke, supply the frozen ten-clip membership and include
+missing clips explicitly:
+
+```bash
+python scripts/evaluate_ad.py --dataset reframed --data-dir /scratch/yy5919/pyro-kd-derived/datasets/reframed --split validation --selection-config configs/reframed_splits.json --all-videos --input <actual-predictions.jsonl> --output <new-evaluation.json> --bert-model <frozen-local-model> --cosine-model <frozen-local-model>
+```
+
+The selection file must match the official split; unknown prediction IDs fail.
+Its SHA256 is retained in the CLI report. Mixed backend, audio context, selection
+condition or generation fingerprints fail. Empty/error/missing predictions never
+become successful descriptions. Semantic model failures remain explicit and
+matched-only semantic means must be interpreted alongside temporal coverage.
+Only synthetic injected-scorer tests have exercised this new dataset path; no
+real REFRAMED generation metrics are available yet. Semantic model pins, OpenCLIP,
+rendered overlap and calibrated judges remain separate required work.
+
+### Paired REFRAMED temporal export
+
+`export_ad_paired_metrics.py --report NAME FILE` (repeat for each condition)
+accepts only complete frozen selected-video reports with recorded generation
+fingerprints and selection hashes. Each report must come from `evaluate_ad.py
+--dataset reframed --selection-config ... --all-videos`. The exporter checks
+identical clip/movie membership, merged-reference hashes and temporal protocol,
+and reconstructs precision/recall/F1 from TP/FP/FN. Missing generations remain zero
+where a reference exists; truly empty reference/prediction pairs retain null.
+Generation errors/counts remain in the exported rows.
+
+```bash
+python scripts/export_ad_paired_metrics.py --report A <A-evaluation.json> --report B <B-evaluation.json> --output <paired-temporal.jsonl>
+python scripts/analyze_paired.py --input <paired-temporal.jsonl> --output <paired-analysis.json> --a A --b B --metric temporal_f1 --unit cluster
+```
+
+The estimand is an equal-movie mean of within-movie clip metrics, not pooled F1.
+Use the predeclared comparison family with `analyze_family.py` for Holm-adjusted
+inference. This export covers temporal metrics only: matched-only BERTScore and
+sentence cosine need separate coverage-aware analysis, and OpenCLIP/human/judge
+metrics remain separate. Synthetic tests verify clustering and comparability;
+no real paired AD scores have been exported yet.

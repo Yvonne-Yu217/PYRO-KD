@@ -1,12 +1,43 @@
 # PYRO-KD: cue-driven keyframe selection for long-video audio description and QA
 
-This project compares uniform (U), video-only (V), audio-only (A), fused audio+video (AV) and oracle (O) selection of the moments where a frozen MLLM writes inline audio descriptions, at a fixed budget K. Salience (what is worth describing: audio events, speech cues, visual novelty) is kept separate from feasibility (where a description can go: Silero VAD gaps and the word cap floor(Δt × 3)). The spec is the revised proposal; the repo's `CV Project Proposal.md` is the earlier version. Primary data is [MTG-AD](https://github.com/google/mtg-ad); REFRAMED, EgoSchema and a long-form QA set have adapters.
+This project compares uniform (U), video-only (V), audio-only (A), fused audio+video (AV) and oracle (O) selection of the moments where a frozen MLLM writes inline audio descriptions, at a fixed budget K. Salience (what is worth describing: audio events, speech cues, visual novelty) is kept separate from feasibility (where a description can go: Silero VAD gaps and the word cap floor(Δt × 3)). The spec is the revised proposal; the repo's `CV Project Proposal.md` is the earlier version. Revision 1.5 uses REFRAMED as the primary evaluation, EgoSchema as a visual-only diagnostic, and a frozen audio-bearing Video-MME long subset. MTG-AD remains available through the original adapters.
 
 - Current status, blockers and next steps: [PROJECT_STATUS.md](PROJECT_STATUS.md)
 - What was done and why (append-only): [DEVELOPMENT_LOG.md](DEVELOPMENT_LOG.md)
 - Readiness report and deviations from the proposal: [docs/readiness_report.md](docs/readiness_report.md)
 - File formats (caches, hand labels, canonical datasets, outputs): [docs/data_formats.md](docs/data_formats.md)
 - Week 1 dataset decisions: [docs/week1_spec.md](docs/week1_spec.md)
+
+## Revision 1.5 experiment records
+
+Authorized local runs are complete: 4,166 AD attempts, 360 long-QA predictions,
+and 1,470 EgoSchema predictions. The completion inventory and cached-table
+reproduction pass; 847 tests and 5,974 subtests pass. Paid/API and human
+validation requirements remain deferred; this is not full proposal completion.
+
+The current experiment source is frozen at `09abb6c` on
+`work/revision15-formal-runs`; long-video inference uses the recorded frozen
+worktrees. Progress and reports are maintained on `work/revision15-results`.
+Do not edit source underneath running jobs or reuse outputs after a configuration
+change without the provenance checks.
+
+- [Experiment status and active jobs](docs/EXPERIMENT_STATUS.md)
+- [Agent Log: failures, corrections and verification](docs/AGENT_LOG.md)
+- [Exact proposal specification](docs/PROPOSAL_REVISION_1_5.txt)
+- [Reproduction commands and artifact paths](docs/RESULTS_REPRODUCTION.md)
+- [Frozen formal AD configuration](configs/reframed_formal_freeze.json)
+- [Selector results](docs/results/reframed-selectors/selector-results.md) and
+  [movie-clustered ablations](docs/results/reframed-selector-ablations/selector-ablation-stats.md)
+- [Development coverage and failures](docs/results/dev-failure-analysis.md)
+- [Research report (PDF)](docs/report/main.pdf) and [12-slide deck](docs/slides/main.pdf)
+- [Verified local delivery and remaining requirements](docs/REVISION15_DELIVERY.md)
+- [Recorded HPC queue drivers](hpc/revision15/README.md)
+
+The frozen subsets are 30 REFRAMED test clips, 490 heldout EgoSchema questions,
+and 12 long videos with 36 questions per condition. Paid API calls are disabled;
+ten planned API cells and human-label/peer-rating requirements remain deferred.
+Proposal A means `A_cue`. Long A/AV realized frame budgets are smaller than the
+visual controls, so those comparisons are constrained-budget diagnostics.
 
 ## Local setup and tests
 
@@ -58,7 +89,7 @@ Outputs go to `$PYRO_OUTPUTS/experiments/<name>/` (`selections/`, `moments/`, `g
 
 AD generation resumes and evaluates results only when their request fingerprints match the prepared inputs. If the inputs change or the existing results predate fingerprints, keep the old outputs, rebuild moments as needed, and use a fresh experiment directory. If interrupted JSONL output ends with a partial record, the next append saves an exact backup before repairing the tail.
 
-Selectors: `U`, `V` and `A` are the team's implementations, called unchanged. `AV` is the proposal's two-stage selector (`src/selection/two_stage.py`): candidates from VN/NSE/SC peaks, snapping to VAD gaps long enough for the word budget, then K picks with t_min = 2 s (and optional MMR) and running-memory novelty. `A_cue` is the proposal's A (speech cues + NSE, no visual input) and `V_mem` is V with running memory. `matrix.a_selector` chooses which A fills the matrix (team decision; default `A`). All AV/A_cue weights are untuned placeholders.
+Selectors: `U`, `V` and `A` are the team's implementations, called unchanged. `AV` is the proposal's two-stage selector (`src/selection/two_stage.py`): candidates from VN/NSE/SC peaks, snapping to VAD gaps long enough for the word budget, then K picks with t_min = 2 s (and optional MMR) and running-memory novelty. `A_cue` is the proposal's A (speech cues + NSE, no visual input) and `V_mem` is V with running memory. `matrix.a_selector` chooses which A fills the matrix (team decision; default `A`). Registry defaults are generic; Revision 1.5 configs freeze development-selected weights and explicitly map proposal A to A_cue.
 
 Models: `hf_vlm` (Qwen2.5-VL / Qwen3-VL via transformers), `openai` / `gemini` (keys from environment variables only, with configured per-token prices and a shared spend ledger), `qwen_omni` (audio-native ablation) and `echo` (dry runs and tests only). The ledger checks the estimated cost of each API attempt, including retries, before dispatch. Actual provider charges can exceed the estimate. Temperature is fixed at 0.
 
@@ -74,7 +105,7 @@ DRY_RUN=1 bash hpc/submit_stage.sh audio-cues      # print the sbatch command wi
 bash hpc/submit_stage.sh tests                      # CPU unit tests on a compute node
 ```
 
-`hpc/submit_stage.sh` maps each stage to CPU or GPU resources from the cluster profile (`hpc/profiles/cloud_bursting.sh`, or `torch.sh`, which needs its partitions filled in). Jobs requeue safely because every stage resumes. **Open question:** `hpc/README.md` records that coursework runs on Cloud Bursting, while the MTG-AD Globus copy is described as landing on Torch scratch; confirm which cluster to use. The original generation scripts (`hpc/submit.sh`, `scripts/run_ad_vlm.py`) still work and are documented in [hpc/README.md](hpc/README.md).
+`hpc/submit_stage.sh` maps each stage to CPU or GPU resources from the cluster profile (`hpc/profiles/cloud_bursting.sh`, or `torch.sh`, which needs its partitions filled in). Jobs requeue safely because every stage resumes. The recorded Revision 1.5 jobs use the course Cloud Bursting cluster; Torch download paths are historical source locations. Frozen configs record the validated local dataset paths. The original generation scripts (`hpc/submit.sh`, `scripts/run_ad_vlm.py`) still work and are documented in [hpc/README.md](hpc/README.md).
 
 ## Selector-only evaluation with the original script
 

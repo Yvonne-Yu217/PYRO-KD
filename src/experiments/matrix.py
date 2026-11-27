@@ -119,7 +119,10 @@ def core_generation_runs(cfg: dict, task: str = "ad") -> list[GenerationRun]:
 
 
 def _gen_identity(gen: dict) -> dict:
-    return {k: gen.get(k) for k in ("max_new_tokens", "temperature", "word_limit_policy", "timeline_window_seconds")}
+    identity = {k: gen.get(k) for k in ("max_new_tokens", "temperature", "word_limit_policy", "timeline_window_seconds")}
+    if "native_audio_window_seconds" in gen:
+        identity["native_audio_window_seconds"] = gen["native_audio_window_seconds"]
+    return identity
 
 
 # --- ablations (proposal §5.3) -------------------------------------------------
@@ -127,38 +130,61 @@ def _gen_identity(gen: dict) -> dict:
 SUPERCLASS_SET = ("music", "impulsive", "vocal_nonspeech", "ambient", "other")
 
 
+def controlled_ablation_spec(spec: str | dict, cfg: dict) -> dict:
+    """Start from the frozen core spec, then change only the ablated factors."""
+    import copy
+    raw = {"base": spec} if isinstance(spec, str) else copy.deepcopy(spec)
+    base_name = raw.get("base")
+    custom = get(cfg, f"selectors.{base_name}")
+    if not custom:
+        return resolve_spec(spec)
+    base = resolve_spec({"name": base_name, **custom} if isinstance(custom, dict) else custom)
+    def merge(a, b):
+        result = copy.deepcopy(a)
+        for key, value in b.items():
+            if isinstance(value, dict) and isinstance(result.get(key), dict):
+                result[key] = merge(result[key], value)
+            else:
+                result[key] = copy.deepcopy(value)
+        return result
+    return resolve_spec(merge(base, {k: v for k, v in raw.items() if k != "base"}))
+
+
 def ablation_selections(name: str, cfg: dict) -> list[SelectionRun]:
     """Selector-level variants for one ablation (1-4, 6-8)."""
     a = f"ablation{name}"
+    def select(spec, ablation):
+        return _selection(controlled_ablation_spec(spec, cfg), ablation)
     if name == "1":  # speech cues only vs non-speech events only vs both (audio-only selector)
         return [
-            _selection({"base": "A_cue", "name": "A_cue-speech", "options": {"weights": {"nse": 0.0}, "candidate_streams": ["sc"]}}, a),
-            _selection({"base": "A_cue", "name": "A_cue-nonspeech", "options": {"weights": {"sc": 0.0}, "candidate_streams": ["nse"]}}, a),
-            _selection({"base": "A_cue", "name": "A_cue-both"}, a),
+            select({"base": "A_cue", "name": "A_cue-speech", "options": {"weights": {"nse": 0.0}, "candidate_streams": ["sc"]}}, a),
+            select({"base": "A_cue", "name": "A_cue-nonspeech", "options": {"weights": {"sc": 0.0}, "candidate_streams": ["nse"]}}, a),
+            select({"base": "A_cue", "name": "A_cue-both"}, a),
         ]
     if name == "2":  # trigger vs suppress, global and per class
         b = abs(float(get(cfg, "ablations.nse_magnitude", 0.5)))
         runs = [
-            _selection({"base": "AV", "name": "AV-trigger", "options": {"weights": {"nse": b}}}, a),
-            _selection({"base": "AV", "name": "AV-suppress", "options": {"weights": {"nse": -b}}}, a),
+            select({"base": "AV", "name": "AV-trigger", "options": {"weights": {"nse": b}}}, a),
+            select({"base": "AV", "name": "AV-suppress", "options": {"weights": {"nse": -b}}}, a),
         ]
         for c in SUPERCLASS_SET:
             for sign, tag in ((1.0, "trig"), (-1.0, "supp")):
                 comps = {k: 0.0 for k in ("music", "impulsive", "vocal_nonspeech", "ambient", "other",
                                           "clap_change", "loudness", "onset")}
                 comps[c] = sign
-                runs.append(_selection({"base": "AV", "name": f"AV-{c}-{tag}",
+                runs.append(select({"base": "AV", "name": f"AV-{c}-{tag}",
                                         "options": {"weights": {"nse": b}, "nse_components": comps}}, a))
         return runs
     if name == "3":  # Whisper-only audio events vs the tagger (needs both cue sets cached)
         return [
-            _selection({"base": "A_cue", "name": "A_cue-tagger", "cue_set": "audio_cues.json"}, a),
-            _selection({"base": "A_cue", "name": "A_cue-whispertags", "cue_set": "audio_cues.whisper_tags.json"}, a),
+            select({"base": "A_cue", "name": "A_cue-tagger", "cue_set": "audio_cues.json"}, a),
+            select({"base": "A_cue", "name": "A_cue-whispertags", "cue_set": "audio_cues.whisper_tags.json",
+                    "options": {"nse_components": {"clap_change": 0.0}}}, a),
         ]
     if name == "4":  # event-time vs snap-to-gap placement
         return [
-            _selection({"base": "AV", "name": "AV-snap", "options": {"placement": "snap"}}, a),
-            _selection({"base": "AV", "name": "AV-event", "options": {"placement": "event"}}, a),
+            select({"base": "AV", "name": "AV-snap", "options": {"placement": "snap"}}, a),
+            select({"base": "AV", "name": "AV-event", "options": {"placement": "event"}}, a),
         ]
     if name == "6":  # per-class breakdown: one superclass at a time
         runs = []
@@ -166,22 +192,22 @@ def ablation_selections(name: str, cfg: dict) -> list[SelectionRun]:
             comps = {k: 0.0 for k in ("music", "impulsive", "vocal_nonspeech", "ambient", "other",
                                       "clap_change", "loudness", "onset")}
             comps[c] = 1.0
-            runs.append(_selection({"base": "A_cue", "name": f"A_cue-{c}-only",
+            runs.append(select({"base": "A_cue", "name": f"A_cue-{c}-only",
                                     "options": {"weights": {"sc": 0.0}, "candidate_streams": ["nse"], "nse_components": comps}}, a))
         return runs
     if name == "7":  # flat vs hierarchical budget (run on the long-video subset)
         return [
-            _selection({"base": "AV", "name": "AV-flat", "budget": "flat"}, a),
-            _selection({"base": "AV", "name": "AV-hier", "budget": "hierarchical",
+            select({"base": "AV", "name": "AV-flat", "budget": "flat"}, a),
+            select({"base": "AV", "name": "AV-hier", "budget": "hierarchical",
                         "hierarchy": get(cfg, "ablations.hierarchy", {}) or {}}, a),
         ]
     if name == "8":  # running memory vs local-window novelty
         return [
-            _selection({"base": "AV", "name": "AV-memory", "options": {"novelty_mode": "memory"}}, a),
-            _selection({"base": "AV", "name": "AV-memory-pure", "options": {"novelty_mode": "memory", "memory_blend": 1.0}}, a),
-            _selection({"base": "AV", "name": "AV-local", "options": {"novelty_mode": "local"}}, a),
-            _selection("V", a),
-            _selection("V_mem", a),
+            select({"base": "AV", "name": "AV-memory", "options": {"novelty_mode": "memory"}}, a),
+            select({"base": "AV", "name": "AV-memory-pure", "options": {"novelty_mode": "memory", "memory_blend": 1.0}}, a),
+            select({"base": "AV", "name": "AV-local", "options": {"novelty_mode": "local"}}, a),
+            select("V", a),
+            select("V_mem", a),
         ]
     if name == "5":
         return []

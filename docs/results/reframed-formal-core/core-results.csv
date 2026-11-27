@@ -1,0 +1,21 @@
+selector,prior,model,timeline,status,requested_moments,selected_moments,valid,expected,failed,missing,zero_output_videos,budget_overruns,budget_known,budget_unknown,f1,bertscore,openclip,tts_fit,tts_rendered,tts_overlap_seconds,tts_narration_excess_seconds,generation_latency_seconds
+U,P0,qwen,True,evaluated with failures,388,388,255,283,28,0,3,22,277,6,0.2745887598718167,0.862744564911554,0.4079225287635156,246,255,2.0746874999999925,407.324625,438.04
+U,P0,api,True,deferred: no paid authorization,,,,,,,,,,,,,,,,,,
+U,P1,qwen,True,evaluated with failures,388,388,251,283,32,0,3,32,283,0,0.2762984420006103,0.8623596462091864,0.3799296061923993,243,251,3.0795625000000157,550.1971874999999,458.833
+U,P1,api,True,deferred: no paid authorization,,,,,,,,,,,,,,,,,,
+V,P0,qwen,True,evaluated with failures,388,388,266,305,39,0,4,31,297,8,0.3514170793462371,0.8655452352485669,0.39986753206368925,258,266,1.8648749999999552,675.1264375000002,472.175
+V,P0,api,True,deferred: no paid authorization,,,,,,,,,,,,,,,,,,
+V,P1,qwen,True,evaluated with failures,388,388,264,305,41,0,5,41,305,0,0.31473134812335146,0.8619012226921656,0.3812267152320911,249,264,2.870875000000023,978.5818750000001,480.183
+V,P1,api,True,deferred: no paid authorization,,,,,,,,,,,,,,,,,,
+A_cue,P0,qwen,True,evaluated with failures,388,384,372,384,12,0,0,6,378,6,0.5211779849992354,0.8666991293573993,0.4086010035368604,370,372,0.2706250000000239,729.9713125000001,555.328
+A_cue,P0,api,True,deferred: no paid authorization,,,,,,,,,,,,,,,,,,
+A_cue,P1,qwen,True,evaluated with failures,388,384,372,384,12,0,0,12,384,0,0.5157183218140335,0.864269218951334,0.37786376947845285,365,372,1.9715625000000223,1021.7975624999999,580.057
+A_cue,P1,api,True,deferred: no paid authorization,,,,,,,,,,,,,,,,,,
+AV,P0,qwen,True,evaluated with failures,388,384,347,384,37,0,1,28,375,9,0.44057547065336455,0.8673445758796997,0.3940107195248897,336,347,1.298937500000017,843.7193750000002,565.842
+AV,P0,api,True,deferred: no paid authorization,,,,,,,,,,,,,,,,,,
+AV,P1,qwen,True,evaluated with failures,388,384,341,384,43,0,1,43,384,0,0.4408035903335063,0.8651277100840871,0.37750088378404284,331,341,3.001125000000034,1242.2691249999998,585.318
+AV,P1,api,True,deferred: no paid authorization,,,,,,,,,,,,,,,,,,
+O,P0,qwen,True,evaluated with failures,388,366,322,343,21,0,3,16,338,5,0.6694196445248591,0.8672450957493306,0.4108190849143484,315,322,0.49156249999999657,491.10093750000004,487.26
+O,P0,api,True,deferred: no paid authorization,,,,,,,,,,,,,,,,,,
+O,P1,qwen,True,evaluated with failures,388,366,318,343,25,0,2,25,343,0,0.6963695970995667,0.8639426453014308,0.3841065379689537,311,318,0.8831875000000409,711.8510000000001,497.443
+O,P1,api,True,deferred: no paid authorization,,,,,,,,,,,,,,,,,,

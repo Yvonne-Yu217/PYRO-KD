@@ -1,0 +1,149 @@
+{
+  "status": "frozen before heldout inference and correctness scoring",
+  "frozen_utc": "2026-11-23T16:43:59.036810+00:00",
+  "scope": "EgoSchema visual-only diagnostic; no audio-aware claims",
+  "source_commit": "09abb6c0512e5e97549ad4e66d3bae05a68c42c8",
+  "source_worktree": "/scratch/yy5919/pyro-revision15-formal",
+  "membership_config": "configs/egoschema_pilot.json",
+  "membership_sha256": "ca04605bc038d32f1422b02644da4e7c0f8a0cb6563080f51f9da77e16cfd63f",
+  "budget_config": "configs/reframed_splits.json",
+  "budget_sha256": "96bc45bab00287e11423f5eef68083a389349253ca49c0d67f64a2a63f5e22c6",
+  "questions_path": "/scratch/yy5919/pyro-kd-derived/datasets/egoschema/questions.json",
+  "questions_sha256": "92c61d06c026455ce5320fa1fcc6cf43b77d874b708076f6b87abfef6fcb08a8",
+  "answers_sha256_from_membership_only": "a38d0aefcf8bcd5fb8888c7598b4550dc9ac6f6ad11cb2e1eae7b93e4c72468d",
+  "questions_per_condition": 490,
+  "videos": 490,
+  "pilot_excluded": 10,
+  "conditions": [
+    "U",
+    "V_local",
+    "V_memory"
+  ],
+  "model": "/home/yy5919/.cache/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5",
+  "model_revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5",
+  "quant": "none",
+  "dtype": "bfloat16",
+  "attn_impl": "sdpa",
+  "max_side": 768,
+  "max_new_tokens": 16,
+  "temperature": 0.0,
+  "top_p": 0.9,
+  "batch_size": 1,
+  "answer_parser": "strict_standalone_letter_v1",
+  "answer_options": 5,
+  "audio_context": "none",
+  "frames_per_moment": 4,
+  "span_seconds": 2.0,
+  "minimum_separation_seconds": 2.0,
+  "k_per_minute": 5.0,
+  "k_formula": "max(1, round(5 * duration_seconds / 60))",
+  "max_frame_subsampling": null,
+  "shortfall_policy": "retain realized K and report every shortfall; do not silently pad or change selection",
+  "prompt_priors": "none; zero-shot multiple-choice QA without AD exemplars",
+  "inputs": {
+    "U": {
+      "path": "/scratch/yy5919/pyro-kd-derived/moments/egoschema-heldout-U-v1.jsonl",
+      "hash_receipt": "/scratch/yy5919/pyro-kd-derived/moments/egoschema-heldout-U-v1.jsonl.preparation.json",
+      "status": "pending validated CPU publication"
+    },
+    "V_local": {
+      "path": "/scratch/yy5919/pyro-kd-derived/moments/egoschema-heldout-V_local-v1.jsonl",
+      "hash_receipt": "/scratch/yy5919/pyro-kd-derived/moments/egoschema-heldout-V_local-v1.jsonl.preparation.json",
+      "status": "pending validated CPU publication"
+    },
+    "V_memory": {
+      "path": "/scratch/yy5919/pyro-kd-derived/moments/egoschema-heldout-V_memory-v1.jsonl",
+      "hash_receipt": "/scratch/yy5919/pyro-kd-derived/moments/egoschema-heldout-V_memory-v1.jsonl.preparation.json",
+      "status": "pending validated CPU publication"
+    }
+  },
+  "predictions": {
+    "U": "/scratch/yy5919/pyro-resume-results/egoschema-heldout/U.jsonl",
+    "V_local": "/scratch/yy5919/pyro-resume-results/egoschema-heldout/V_local.jsonl",
+    "V_memory": "/scratch/yy5919/pyro-resume-results/egoschema-heldout/V_memory.jsonl"
+  },
+  "cpu_dependency_chain": [
+    "41027",
+    "41038",
+    "41198"
+  ],
+  "gpu_assignment": {
+    "secondary_41197": [
+      "U",
+      "V_local"
+    ],
+    "primary_40964": [
+      "V_memory"
+    ]
+  },
+  "gpu_assignment_policy": "disjoint outputs; skip unavailable inputs and release resources rather than idle; requeue unfinished legitimate work",
+  "estimated_total_gpu_minutes": 105,
+  "estimate_note": "pilot mean4.22\u20134.29s/question times1470; excludes loading, filesystem/provenance overhead; not a reservation",
+  "maximum_gpu_minutes_per_condition": 90,
+  "api_cost_usd": 0,
+  "pilot_evidence": {
+    "U": {
+      "expected": 10,
+      "valid": 10,
+      "correct": 10,
+      "mean_generation_seconds": 4.2876,
+      "evaluation_path": "/home/yy5919/PYRO-KD/outputs/real-data-smoke/egoschema-U-ten.evaluation.json",
+      "evaluation_sha256": "a36de068e69e0b268fa6c010bb549681f6132d7e469465c42b2f9f8bb617fbcd",
+      "provenance_sha256": "b506120da95916fcf6b51550a40f29828d01cc6dccc4bf5c7647710d0861343f",
+      "prediction_sha256": "4906e7f21bb3cf377734395a1d4697e4663eb9ec989d7c0cc9b3009113a8aa4c"
+    },
+    "V_local": {
+      "expected": 10,
+      "valid": 10,
+      "correct": 9,
+      "mean_generation_seconds": 4.2368,
+      "evaluation_path": "/home/yy5919/PYRO-KD/outputs/real-data-smoke/egoschema-V_local-ten.evaluation.json",
+      "evaluation_sha256": "f27ec865b12a6c1c681cb7b9d50cc41c216ec0233ff94e54f47d2b01e442c2e0",
+      "provenance_sha256": "f548109ab0bc56728f5c670197ea5e4d2cc042509223b04497203aa3179a022a",
+      "prediction_sha256": "424af82f40310a3773dfd8f64b1f9cdb16d920a98d31e7ff1647bf124b96b0b2"
+    },
+    "V_memory": {
+      "expected": 10,
+      "valid": 10,
+      "correct": 9,
+      "mean_generation_seconds": 4.2241,
+      "evaluation_path": "/home/yy5919/PYRO-KD/outputs/real-data-smoke/egoschema-V_memory-ten.evaluation.json",
+      "evaluation_sha256": "560360dc45eb3abf045b9d1b47360a687cc3f75f88d2bcf08aee73bde7dd326b",
+      "provenance_sha256": "c03e826b3c65a469a7710f8db39c388cab42d4b924666756b1c4f584fe16793a",
+      "prediction_sha256": "154844f88f2c67ab2878b09b61040c33f2e738c1407a1a6deedcb8e4413b2ac6"
+    }
+  },
+  "audio_gate": "all5031 distributed videos verified without audio; U/V only",
+  "evaluation": {
+    "denominator": "all490 frozen heldout questions, including missing/invalid/generation-error rows",
+    "correctness": "only valid strict letter matching frozen answer index counts correct",
+    "labels": "load only in dedicated evaluator after predictions exist; no prompt/input label access",
+    "paired_family": "configs/egoschema_qa_comparisons.json",
+    "no_tuning": "do not change settings after inspecting heldout correctness"
+  },
+  "execution_amendments": [
+    {
+      "recorded_utc": "2026-11-23T16:58:43.623325+00:00",
+      "reason": "Slurm user environment retrieval failure held an unstarted validation shard; release/requeue and dependency update failed",
+      "historical_chain_retained": [
+        "41027",
+        "41038",
+        "41198"
+      ],
+      "cancelled_unstarted_only": [
+        "41038_1",
+        "41198"
+      ],
+      "continuing_validation_shards": [
+        "41038_0",
+        "41038_2",
+        "41038_3"
+      ],
+      "replacement_validation": "41216 array task1; afterok:41038_0:41038_2:41038_3",
+      "replacement_input_builder": "41217 afterok:41216",
+      "environment_workaround": "unset SLURM_GET_USER_ENV; SLURM_EXPORT_ENV=ALL; sbatch --export=ALL",
+      "research_protocol_changed": false,
+      "duplicate_running_cache_jobs": false
+    }
+  ]
+}

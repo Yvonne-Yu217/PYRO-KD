@@ -1,0 +1,14 @@
+a,b,metric,unit,n,mean_diff,ci_low,ci_high,pvalue,holm_pvalue,oracle_upper_bound
+V-local-none,U-none,accuracy,cluster,12,-0.027777777777777776,-0.1111111111111111,0.05555555555555555,1.0,1.0,False
+U-flat-timeline,U-none,accuracy,cluster,12,-0.05555555555555555,-0.19444444444444442,0.08333333333333333,0.6875,1.0,False
+V_local-flat-timeline,V-local-none,accuracy,cluster,12,-0.027777777777777776,-0.1388888888888889,0.08333333333333333,1.0,1.0,False
+V_local-flat-timeline,U-flat-timeline,accuracy,cluster,12,0.0,-0.08333333333333333,0.08333333333333333,1.0,1.0,False
+A_cue-flat-timeline,V_local-flat-timeline,accuracy,cluster,12,0.11111111111111112,0.0,0.25,0.25,1.0,False
+AV-flat-timeline,V_local-flat-timeline,accuracy,cluster,12,0.05555555555555556,-0.05555555555555555,0.19444444444444445,0.75,1.0,False
+A_cue-hierarchical-timeline,A_cue-flat-timeline,accuracy,cluster,12,0.0,-0.08333333333333333,0.08333333333333333,1.0,1.0,False
+AV-hierarchical-timeline,AV-flat-timeline,accuracy,cluster,12,0.0,0.0,0.0,1.0,1.0,False
+AV-hierarchical-timeline,V-local-none,accuracy,cluster,12,0.02777777777777778,-0.08333333333333333,0.13888888888888892,1.0,1.0,False
+A_cue-flat-timeline,A_cue-flat-none,accuracy,cluster,12,-0.02777777777777778,-0.1388888888888889,0.08333333333333333,1.0,1.0,False
+AV-flat-timeline,AV-flat-none,accuracy,cluster,12,-0.05555555555555556,-0.16666666666666666,0.05555555555555555,0.625,1.0,False
+A_cue-flat-none,V-local-none,accuracy,cluster,12,0.11111111111111112,0.027777777777777776,0.19444444444444445,0.125,1.0,False
+AV-flat-none,V-local-none,accuracy,cluster,12,0.08333333333333333,0.0,0.16666666666666666,0.25,1.0,False

@@ -29,9 +29,70 @@ except ImportError:  # pragma: no cover - non-POSIX
 from src.experiments.config import get
 
 
-def experiment_dir(cfg: dict) -> Path:
+# src/ files that cannot change what an experiment writes (metrics and reporting) are left out of the
+# guard; the listed evaluation modules are used while producing outputs.
+_OUTPUT_EVALUATION_MODULES = {"evaluation/parsing.py", "evaluation/qa.py"}
+_REPORTING_MODULES = {"experiments/report.py"}
+_HASH_KEYS = ("source_hashes", "input_hashes", "source_and_input_hashes")
+
+
+def output_sources(repo: Path) -> dict[str, str]:
+    """Repo-relative path -> SHA-256 of the code that determines selections, moments and generations."""
+    import hashlib
+
+    files = [repo / "scripts" / "run_experiment.py"]
+    for path in (repo / "src").rglob("*.py"):
+        name = path.relative_to(repo / "src").as_posix()
+        if name in _REPORTING_MODULES or (name.startswith("evaluation/") and name not in _OUTPUT_EVALUATION_MODULES):
+            continue
+        files.append(path)
+    return {p.relative_to(repo).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+            for p in sorted(files) if p.is_file()}
+
+
+def experiment_dir(cfg: dict, writes_outputs: bool = True) -> Path:
+    """The experiment's output directory, guarded against stale reuse.
+
+    Stages that write selections, moments or generations (writes_outputs) require the same
+    configuration, inputs and output-determining code as the run that created the directory.
+    Read-only stages (reporting and evaluation of existing outputs) require only the same
+    configuration, so fixing a metric or a plot does not strand finished results.
+    """
     path = Path(get(cfg, "paths.output_root")) / get(cfg, "experiment.name")
+    path = path.resolve()
     path.mkdir(parents=True, exist_ok=True)
+    # Refuse stale reuse even for options not represented in individual run IDs.
+    identity = {k: v for k, v in cfg.items() if k not in ("_source", "evaluation")}
+    identity = json.loads(json.dumps(identity, default=str))
+    from src.experiments.matrix import NON_RESULT_MODEL_KEYS
+    for model in identity.get("models", {}).values():
+        for key in NON_RESULT_MODEL_KEYS:
+            model.pop(key, None)
+    import hashlib
+    identity["input_hashes"] = {}
+    for dotted in ("dataset.splits_config", "generation.exemplars_path"):
+        value = get(cfg, dotted)
+        if value and Path(value).is_file():
+            identity["input_hashes"][dotted] = hashlib.sha256(Path(value).read_bytes()).hexdigest()
+    guard = path / "config.identity.json"
+    with _locked(guard):
+        previous = json.loads(guard.read_text()) if guard.exists() else None
+        if not writes_outputs:
+            if previous is not None:
+                config = {k: v for k, v in identity.items() if k not in _HASH_KEYS}
+                recorded = {k: v for k, v in previous.items() if k not in _HASH_KEYS}
+                inputs_differ = "input_hashes" in previous and previous["input_hashes"] != identity["input_hashes"]
+                if config != recorded or inputs_differ:
+                    raise ValueError("experiment configuration changed; use a new experiment.name to avoid stale outputs")
+            return path
+        identity["source_hashes"] = output_sources(Path(__file__).resolve().parents[2])
+        if previous is not None and previous != identity:
+            raise ValueError("experiment configuration changed (settings, inputs or output-determining code); "
+                             "use a new experiment.name to avoid stale outputs")
+        if previous is None:
+            if any((path / stage).exists() for stage in ("selections", "moments", "generations")):
+                raise ValueError("unverified legacy outputs; use a new experiment.name")
+            write_json(guard, identity)
     return path
 
 

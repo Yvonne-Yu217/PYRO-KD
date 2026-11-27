@@ -1,0 +1,1837 @@
+{
+  "plan_sha256": "42cb19c5f2bdf693a883b6e6a90e79bd645a82d5aad0e779d2a45fa9a6764a6c",
+  "interpretation": "A/AV are constrained-budget diagnostics; realized-frame counts differ, so do not attribute their differences solely to selection at equalK",
+  "comparisons": [
+    {
+      "condition_a": "V-local-none",
+      "condition_b": "U-none",
+      "metric": "accuracy",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "604-1",
+        "604-2",
+        "604-3",
+        "616-1",
+        "616-2",
+        "616-3",
+        "710-1",
+        "710-2",
+        "710-3",
+        "729-1",
+        "729-2",
+        "729-3",
+        "753-1",
+        "753-2",
+        "753-3",
+        "763-1",
+        "763-2",
+        "763-3",
+        "802-1",
+        "802-2",
+        "802-3",
+        "808-1",
+        "808-2",
+        "808-3",
+        "857-1",
+        "857-2",
+        "857-3",
+        "864-1",
+        "864-2",
+        "864-3",
+        "891-1",
+        "891-2",
+        "891-3",
+        "898-1",
+        "898-2",
+        "898-3"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "604",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "616",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "710",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "729",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "753",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        },
+        {
+          "unit_id": "763",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "802",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.0
+        },
+        {
+          "unit_id": "808",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "857",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "864",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "891",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "898",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 12,
+        "mean_diff": -0.027777777777777776,
+        "ci_low": -0.1111111111111111,
+        "ci_high": 0.05555555555555555
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "none",
+        "statistic": 2.0,
+        "pvalue": 1.0,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "p_holm": 1.0
+      }
+    },
+    {
+      "condition_a": "U-flat-timeline",
+      "condition_b": "U-none",
+      "metric": "accuracy",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "604-1",
+        "604-2",
+        "604-3",
+        "616-1",
+        "616-2",
+        "616-3",
+        "710-1",
+        "710-2",
+        "710-3",
+        "729-1",
+        "729-2",
+        "729-3",
+        "753-1",
+        "753-2",
+        "753-3",
+        "763-1",
+        "763-2",
+        "763-3",
+        "802-1",
+        "802-2",
+        "802-3",
+        "808-1",
+        "808-2",
+        "808-3",
+        "857-1",
+        "857-2",
+        "857-3",
+        "864-1",
+        "864-2",
+        "864-3",
+        "891-1",
+        "891-2",
+        "891-3",
+        "898-1",
+        "898-2",
+        "898-3"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "604",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "616",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "710",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "729",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "753",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        },
+        {
+          "unit_id": "763",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "802",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "808",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "857",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "864",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "891",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "898",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 1.0
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 12,
+        "mean_diff": -0.05555555555555555,
+        "ci_low": -0.19444444444444442,
+        "ci_high": 0.08333333333333333
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "none",
+        "statistic": 7.0,
+        "pvalue": 0.6875,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "p_holm": 1.0
+      }
+    },
+    {
+      "condition_a": "V_local-flat-timeline",
+      "condition_b": "V-local-none",
+      "metric": "accuracy",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "604-1",
+        "604-2",
+        "604-3",
+        "616-1",
+        "616-2",
+        "616-3",
+        "710-1",
+        "710-2",
+        "710-3",
+        "729-1",
+        "729-2",
+        "729-3",
+        "753-1",
+        "753-2",
+        "753-3",
+        "763-1",
+        "763-2",
+        "763-3",
+        "802-1",
+        "802-2",
+        "802-3",
+        "808-1",
+        "808-2",
+        "808-3",
+        "857-1",
+        "857-2",
+        "857-3",
+        "864-1",
+        "864-2",
+        "864-3",
+        "891-1",
+        "891-2",
+        "891-3",
+        "898-1",
+        "898-2",
+        "898-3"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "604",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "616",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "710",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "729",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "753",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        },
+        {
+          "unit_id": "763",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "802",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "808",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "857",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.0
+        },
+        {
+          "unit_id": "864",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "891",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "898",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 1.0
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 12,
+        "mean_diff": -0.027777777777777776,
+        "ci_low": -0.1388888888888889,
+        "ci_high": 0.08333333333333333
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "none",
+        "statistic": 6.0,
+        "pvalue": 1.0,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "p_holm": 1.0
+      }
+    },
+    {
+      "condition_a": "V_local-flat-timeline",
+      "condition_b": "U-flat-timeline",
+      "metric": "accuracy",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "604-1",
+        "604-2",
+        "604-3",
+        "616-1",
+        "616-2",
+        "616-3",
+        "710-1",
+        "710-2",
+        "710-3",
+        "729-1",
+        "729-2",
+        "729-3",
+        "753-1",
+        "753-2",
+        "753-3",
+        "763-1",
+        "763-2",
+        "763-3",
+        "802-1",
+        "802-2",
+        "802-3",
+        "808-1",
+        "808-2",
+        "808-3",
+        "857-1",
+        "857-2",
+        "857-3",
+        "864-1",
+        "864-2",
+        "864-3",
+        "891-1",
+        "891-2",
+        "891-3",
+        "898-1",
+        "898-2",
+        "898-3"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "604",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "616",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "710",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "729",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "753",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        },
+        {
+          "unit_id": "763",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "802",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.0
+        },
+        {
+          "unit_id": "808",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "857",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "864",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "891",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        },
+        {
+          "unit_id": "898",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 12,
+        "mean_diff": 0.0,
+        "ci_low": -0.08333333333333333,
+        "ci_high": 0.08333333333333333
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "none",
+        "statistic": 1.5,
+        "pvalue": 1.0,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "p_holm": 1.0
+      }
+    },
+    {
+      "condition_a": "A_cue-flat-timeline",
+      "condition_b": "V_local-flat-timeline",
+      "metric": "accuracy",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "604-1",
+        "604-2",
+        "604-3",
+        "616-1",
+        "616-2",
+        "616-3",
+        "710-1",
+        "710-2",
+        "710-3",
+        "729-1",
+        "729-2",
+        "729-3",
+        "753-1",
+        "753-2",
+        "753-3",
+        "763-1",
+        "763-2",
+        "763-3",
+        "802-1",
+        "802-2",
+        "802-3",
+        "808-1",
+        "808-2",
+        "808-3",
+        "857-1",
+        "857-2",
+        "857-3",
+        "864-1",
+        "864-2",
+        "864-3",
+        "891-1",
+        "891-2",
+        "891-3",
+        "898-1",
+        "898-2",
+        "898-3"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "604",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "616",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "710",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "729",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "753",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        },
+        {
+          "unit_id": "763",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "802",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "808",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "857",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "864",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "891",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        },
+        {
+          "unit_id": "898",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 12,
+        "mean_diff": 0.11111111111111112,
+        "ci_low": 0.0,
+        "ci_high": 0.25
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "none",
+        "statistic": 0.0,
+        "pvalue": 0.25,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "p_holm": 1.0
+      }
+    },
+    {
+      "condition_a": "AV-flat-timeline",
+      "condition_b": "V_local-flat-timeline",
+      "metric": "accuracy",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "604-1",
+        "604-2",
+        "604-3",
+        "616-1",
+        "616-2",
+        "616-3",
+        "710-1",
+        "710-2",
+        "710-3",
+        "729-1",
+        "729-2",
+        "729-3",
+        "753-1",
+        "753-2",
+        "753-3",
+        "763-1",
+        "763-2",
+        "763-3",
+        "802-1",
+        "802-2",
+        "802-3",
+        "808-1",
+        "808-2",
+        "808-3",
+        "857-1",
+        "857-2",
+        "857-3",
+        "864-1",
+        "864-2",
+        "864-3",
+        "891-1",
+        "891-2",
+        "891-3",
+        "898-1",
+        "898-2",
+        "898-3"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "604",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "616",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "710",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "729",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "753",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        },
+        {
+          "unit_id": "763",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "802",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "808",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "857",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "864",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "891",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        },
+        {
+          "unit_id": "898",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 12,
+        "mean_diff": 0.05555555555555556,
+        "ci_low": -0.05555555555555555,
+        "ci_high": 0.19444444444444445
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "none",
+        "statistic": 1.5,
+        "pvalue": 0.75,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "p_holm": 1.0
+      }
+    },
+    {
+      "condition_a": "A_cue-hierarchical-timeline",
+      "condition_b": "A_cue-flat-timeline",
+      "metric": "accuracy",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "604-1",
+        "604-2",
+        "604-3",
+        "616-1",
+        "616-2",
+        "616-3",
+        "710-1",
+        "710-2",
+        "710-3",
+        "729-1",
+        "729-2",
+        "729-3",
+        "753-1",
+        "753-2",
+        "753-3",
+        "763-1",
+        "763-2",
+        "763-3",
+        "802-1",
+        "802-2",
+        "802-3",
+        "808-1",
+        "808-2",
+        "808-3",
+        "857-1",
+        "857-2",
+        "857-3",
+        "864-1",
+        "864-2",
+        "864-3",
+        "891-1",
+        "891-2",
+        "891-3",
+        "898-1",
+        "898-2",
+        "898-3"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "604",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "616",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "710",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "729",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        },
+        {
+          "unit_id": "753",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        },
+        {
+          "unit_id": "763",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "802",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "808",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "857",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "864",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "891",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        },
+        {
+          "unit_id": "898",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 12,
+        "mean_diff": 0.0,
+        "ci_low": -0.08333333333333333,
+        "ci_high": 0.08333333333333333
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "none",
+        "statistic": 1.5,
+        "pvalue": 1.0,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "p_holm": 1.0
+      }
+    },
+    {
+      "condition_a": "AV-hierarchical-timeline",
+      "condition_b": "AV-flat-timeline",
+      "metric": "accuracy",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "604-1",
+        "604-2",
+        "604-3",
+        "616-1",
+        "616-2",
+        "616-3",
+        "710-1",
+        "710-2",
+        "710-3",
+        "729-1",
+        "729-2",
+        "729-3",
+        "753-1",
+        "753-2",
+        "753-3",
+        "763-1",
+        "763-2",
+        "763-3",
+        "802-1",
+        "802-2",
+        "802-3",
+        "808-1",
+        "808-2",
+        "808-3",
+        "857-1",
+        "857-2",
+        "857-3",
+        "864-1",
+        "864-2",
+        "864-3",
+        "891-1",
+        "891-2",
+        "891-3",
+        "898-1",
+        "898-2",
+        "898-3"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "604",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "616",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "710",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "729",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        },
+        {
+          "unit_id": "753",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        },
+        {
+          "unit_id": "763",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "802",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "808",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "857",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "864",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "891",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        },
+        {
+          "unit_id": "898",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 12,
+        "mean_diff": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "none",
+        "statistic": 0.0,
+        "pvalue": 1.0,
+        "status": "all_zero_differences",
+        "p_holm": 1.0
+      }
+    },
+    {
+      "condition_a": "AV-hierarchical-timeline",
+      "condition_b": "V-local-none",
+      "metric": "accuracy",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "604-1",
+        "604-2",
+        "604-3",
+        "616-1",
+        "616-2",
+        "616-3",
+        "710-1",
+        "710-2",
+        "710-3",
+        "729-1",
+        "729-2",
+        "729-3",
+        "753-1",
+        "753-2",
+        "753-3",
+        "763-1",
+        "763-2",
+        "763-3",
+        "802-1",
+        "802-2",
+        "802-3",
+        "808-1",
+        "808-2",
+        "808-3",
+        "857-1",
+        "857-2",
+        "857-3",
+        "864-1",
+        "864-2",
+        "864-3",
+        "891-1",
+        "891-2",
+        "891-3",
+        "898-1",
+        "898-2",
+        "898-3"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "604",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "616",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "710",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "729",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "753",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        },
+        {
+          "unit_id": "763",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "802",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "808",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "857",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "864",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "891",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "898",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 1.0
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 12,
+        "mean_diff": 0.02777777777777778,
+        "ci_low": -0.08333333333333333,
+        "ci_high": 0.13888888888888892
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "none",
+        "statistic": 6.0,
+        "pvalue": 1.0,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "p_holm": 1.0
+      }
+    },
+    {
+      "condition_a": "A_cue-flat-timeline",
+      "condition_b": "A_cue-flat-none",
+      "metric": "accuracy",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "604-1",
+        "604-2",
+        "604-3",
+        "616-1",
+        "616-2",
+        "616-3",
+        "710-1",
+        "710-2",
+        "710-3",
+        "729-1",
+        "729-2",
+        "729-3",
+        "753-1",
+        "753-2",
+        "753-3",
+        "763-1",
+        "763-2",
+        "763-3",
+        "802-1",
+        "802-2",
+        "802-3",
+        "808-1",
+        "808-2",
+        "808-3",
+        "857-1",
+        "857-2",
+        "857-3",
+        "864-1",
+        "864-2",
+        "864-3",
+        "891-1",
+        "891-2",
+        "891-3",
+        "898-1",
+        "898-2",
+        "898-3"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "604",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "616",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "710",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "729",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        },
+        {
+          "unit_id": "753",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        },
+        {
+          "unit_id": "763",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "802",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "808",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "857",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "864",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "891",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        },
+        {
+          "unit_id": "898",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 1.0
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 12,
+        "mean_diff": -0.02777777777777778,
+        "ci_low": -0.1388888888888889,
+        "ci_high": 0.08333333333333333
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "none",
+        "statistic": 6.0,
+        "pvalue": 1.0,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "p_holm": 1.0
+      }
+    },
+    {
+      "condition_a": "AV-flat-timeline",
+      "condition_b": "AV-flat-none",
+      "metric": "accuracy",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "604-1",
+        "604-2",
+        "604-3",
+        "616-1",
+        "616-2",
+        "616-3",
+        "710-1",
+        "710-2",
+        "710-3",
+        "729-1",
+        "729-2",
+        "729-3",
+        "753-1",
+        "753-2",
+        "753-3",
+        "763-1",
+        "763-2",
+        "763-3",
+        "802-1",
+        "802-2",
+        "802-3",
+        "808-1",
+        "808-2",
+        "808-3",
+        "857-1",
+        "857-2",
+        "857-3",
+        "864-1",
+        "864-2",
+        "864-3",
+        "891-1",
+        "891-2",
+        "891-3",
+        "898-1",
+        "898-2",
+        "898-3"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "604",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "616",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "710",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "729",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        },
+        {
+          "unit_id": "753",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        },
+        {
+          "unit_id": "763",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "802",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "808",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "857",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "864",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "891",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        },
+        {
+          "unit_id": "898",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 1.0
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 12,
+        "mean_diff": -0.05555555555555556,
+        "ci_low": -0.16666666666666666,
+        "ci_high": 0.05555555555555555
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "none",
+        "statistic": 2.5,
+        "pvalue": 0.625,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "p_holm": 1.0
+      }
+    },
+    {
+      "condition_a": "A_cue-flat-none",
+      "condition_b": "V-local-none",
+      "metric": "accuracy",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "604-1",
+        "604-2",
+        "604-3",
+        "616-1",
+        "616-2",
+        "616-3",
+        "710-1",
+        "710-2",
+        "710-3",
+        "729-1",
+        "729-2",
+        "729-3",
+        "753-1",
+        "753-2",
+        "753-3",
+        "763-1",
+        "763-2",
+        "763-3",
+        "802-1",
+        "802-2",
+        "802-3",
+        "808-1",
+        "808-2",
+        "808-3",
+        "857-1",
+        "857-2",
+        "857-3",
+        "864-1",
+        "864-2",
+        "864-3",
+        "891-1",
+        "891-2",
+        "891-3",
+        "898-1",
+        "898-2",
+        "898-3"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "604",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "616",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "710",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "729",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "753",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        },
+        {
+          "unit_id": "763",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "802",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "808",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "857",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.0
+        },
+        {
+          "unit_id": "864",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.0
+        },
+        {
+          "unit_id": "891",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "898",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 12,
+        "mean_diff": 0.11111111111111112,
+        "ci_low": 0.027777777777777776,
+        "ci_high": 0.19444444444444445
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "none",
+        "statistic": 0.0,
+        "pvalue": 0.125,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "p_holm": 1.0
+      }
+    },
+    {
+      "condition_a": "AV-flat-none",
+      "condition_b": "V-local-none",
+      "metric": "accuracy",
+      "unit": "cluster",
+      "estimand": "equal-weight mean across analysis units",
+      "included_example_ids": [
+        "604-1",
+        "604-2",
+        "604-3",
+        "616-1",
+        "616-2",
+        "616-3",
+        "710-1",
+        "710-2",
+        "710-3",
+        "729-1",
+        "729-2",
+        "729-3",
+        "753-1",
+        "753-2",
+        "753-3",
+        "763-1",
+        "763-2",
+        "763-3",
+        "802-1",
+        "802-2",
+        "802-3",
+        "808-1",
+        "808-2",
+        "808-3",
+        "857-1",
+        "857-2",
+        "857-3",
+        "864-1",
+        "864-2",
+        "864-3",
+        "891-1",
+        "891-2",
+        "891-3",
+        "898-1",
+        "898-2",
+        "898-3"
+      ],
+      "excluded": [],
+      "units": [
+        {
+          "unit_id": "604",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "616",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "710",
+          "n_examples": 3,
+          "a": 0.6666666666666666,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "729",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "753",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        },
+        {
+          "unit_id": "763",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "802",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "808",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.3333333333333333
+        },
+        {
+          "unit_id": "857",
+          "n_examples": 3,
+          "a": 0.0,
+          "b": 0.0
+        },
+        {
+          "unit_id": "864",
+          "n_examples": 3,
+          "a": 0.3333333333333333,
+          "b": 0.0
+        },
+        {
+          "unit_id": "891",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 0.6666666666666666
+        },
+        {
+          "unit_id": "898",
+          "n_examples": 3,
+          "a": 1.0,
+          "b": 1.0
+        }
+      ],
+      "seed": 0,
+      "resamples": 10000,
+      "confidence_level": 0.95,
+      "bootstrap": {
+        "n": 12,
+        "mean_diff": 0.08333333333333333,
+        "ci_low": 0.0,
+        "ci_high": 0.16666666666666666
+      },
+      "wilcoxon": {
+        "alternative": "two-sided",
+        "zero_method": "wilcox",
+        "difference_decimals": 12,
+        "pvalue_adjustment": "none",
+        "statistic": 0.0,
+        "pvalue": 0.25,
+        "status": "ok",
+        "method": "permutation",
+        "scipy_version": "1.18.1",
+        "p_holm": 1.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,1052 @@
+{
+  "captured_utc": "2026-11-23T18:43:03.758201+00:00",
+  "status": "experiments_complete_allocation_snapshot",
+  "api_spend_usd": 0,
+  "notes": [
+    "Completed experiment accounting snapshot; user-owned 40964 remains allocated and its allocation time is measured only to this snapshot.",
+    "Allocation elapsed GPU-hours are not GPU-busy hours or model inference time. Job 40964 is user-owned; no release is authorized by this report.",
+    "Only this Slurm query window is inventoried; it is not lifetime project accounting. Unattributed user allocation jobs are listed separately and are not charged to these experiments.",
+    "Process wall includes interpreter/container startup, model loading, I/O and inference. Primary wall times are process-monitor estimates with 15-second completion-poll uncertainty. File modification spans are not used as substitutes.",
+    "AD latency_s uses batch_size=1 and includes image preparation within the model wrapper; QA batch_latency_s uses batch_size=1 and excludes preceding frame preparation. Neither includes all model loads, cache preparation, failed unrecorded retries, scoring or TTS. Do not sum wall, latency and allocation hours as independent costs.",
+    "Recorded row latency is summed over preserved raw attempts, not only successful outputs; missing latency is not evidence of zero runtime. QA model-load metadata is appended only on process completion, so running processes may not yet have it.",
+    "Utilization snapshots are sampled observations over limited time windows, not integrated GPU-busy duration.",
+    "Paid API calls remain unauthorized; API spend is $0. No monetary estimate for local compute."
+  ],
+  "scheduler_command": "sacct -u yy5919 -S 2026-11-23T00:00:00 --allocations --format=JobID,JobName,State,ExitCode,Start,End,ElapsedRaw,AllocTRES -P",
+  "scheduler_allocations": [
+    {
+      "JobID": "40036",
+      "JobName": "ood-jupyter",
+      "State": "TIMEOUT",
+      "ExitCode": "0:0",
+      "Start": "2026-11-22T22:22:47",
+      "End": "2026-11-23T04:22:54",
+      "ElapsedRaw": "21607",
+      "AllocTRES": "billing=24,cpu=24,mem=23500M,node=1",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "40363",
+      "JobName": "pyro-long-cpu",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Start": "2026-11-23T04:23:54",
+      "End": "2026-11-23T05:00:30",
+      "ElapsedRaw": "2196",
+      "AllocTRES": "billing=24,cpu=24,mem=8G,node=1",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "40408",
+      "JobName": "pyro-long-events",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Start": "2026-11-23T04:23:54",
+      "End": "2026-11-23T08:01:26",
+      "ElapsedRaw": "13052",
+      "AllocTRES": "billing=24,cpu=24,mem=12G,node=1",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "40876",
+      "JobName": "ood-jupyter",
+      "State": "CANCELLED by 4645820",
+      "ExitCode": "0:0",
+      "Start": "2026-11-23T13:24:03",
+      "End": "2026-11-23T13:24:10",
+      "ElapsedRaw": "7",
+      "AllocTRES": "billing=24,cpu=24,mem=23500M,node=1",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "40877",
+      "JobName": "ood-jupyter",
+      "State": "CANCELLED by 4645820",
+      "ExitCode": "0:0",
+      "Start": "None",
+      "End": "2026-11-23T13:24:16",
+      "ElapsedRaw": "0",
+      "AllocTRES": "",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "40878",
+      "JobName": "ood-jupyter",
+      "State": "CANCELLED by 4645820",
+      "ExitCode": "0:0",
+      "Start": "None",
+      "End": "2026-11-23T13:24:22",
+      "ElapsedRaw": "0",
+      "AllocTRES": "",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "40879",
+      "JobName": "ood-jupyter",
+      "State": "CANCELLED by 4645820",
+      "ExitCode": "0:0",
+      "Start": "2026-11-23T13:25:29",
+      "End": "2026-11-23T13:42:27",
+      "ElapsedRaw": "1018",
+      "AllocTRES": "billing=24,cpu=24,mem=23500M,node=1",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "40880",
+      "JobName": "ood-jupyter",
+      "State": "CANCELLED by 0",
+      "ExitCode": "0:0",
+      "Start": "2026-11-23T13:26:29",
+      "End": "2026-11-23T13:51:01",
+      "ElapsedRaw": "1472",
+      "AllocTRES": "billing=12,cpu=12,gres/gpu=1,mem=85000M,node=1",
+      "allocated_gpu_count": 1,
+      "elapsed_gpu_hours": 0.4088888888888889
+    },
+    {
+      "JobID": "40886",
+      "JobName": "ood-jupyter",
+      "State": "CANCELLED by 4645820",
+      "ExitCode": "0:0",
+      "Start": "2026-11-23T13:52:37",
+      "End": "2026-11-23T13:52:42",
+      "ElapsedRaw": "5",
+      "AllocTRES": "billing=12,cpu=12,gres/gpu=1,mem=85000M,node=1",
+      "allocated_gpu_count": 1,
+      "elapsed_gpu_hours": 0.001388888888888889
+    },
+    {
+      "JobID": "40887",
+      "JobName": "ood-jupyter",
+      "State": "CANCELLED by 4645820",
+      "ExitCode": "0:0",
+      "Start": "None",
+      "End": "2026-11-23T13:52:50",
+      "ElapsedRaw": "0",
+      "AllocTRES": "",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "40889",
+      "JobName": "ood-jupyter",
+      "State": "CANCELLED by 4645820",
+      "ExitCode": "0:0",
+      "Start": "None",
+      "End": "2026-11-23T13:52:56",
+      "ElapsedRaw": "0",
+      "AllocTRES": "",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "40890",
+      "JobName": "ood-jupyter",
+      "State": "CANCELLED by 4645820",
+      "ExitCode": "0:0",
+      "Start": "2026-11-23T13:52:59",
+      "End": "2026-11-23T13:53:03",
+      "ElapsedRaw": "4",
+      "AllocTRES": "billing=12,cpu=12,gres/gpu=1,mem=85000M,node=1",
+      "allocated_gpu_count": 1,
+      "elapsed_gpu_hours": 0.0011111111111111111
+    },
+    {
+      "JobID": "40891",
+      "JobName": "ood-jupyter",
+      "State": "CANCELLED by 0",
+      "ExitCode": "0:0",
+      "Start": "2026-11-23T13:54:29",
+      "End": "2026-11-23T14:31:01",
+      "ElapsedRaw": "2192",
+      "AllocTRES": "billing=12,cpu=12,gres/gpu=1,mem=85000M,node=1",
+      "allocated_gpu_count": 1,
+      "elapsed_gpu_hours": 0.6088888888888889
+    },
+    {
+      "JobID": "40892",
+      "JobName": "ood-jupyter",
+      "State": "CANCELLED by 4645820",
+      "ExitCode": "0:0",
+      "Start": "2026-11-23T13:54:59",
+      "End": "2026-11-23T14:38:38",
+      "ElapsedRaw": "2619",
+      "AllocTRES": "billing=24,cpu=24,mem=23500M,node=1",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "40964",
+      "JobName": "ood-jupyter",
+      "State": "RUNNING",
+      "ExitCode": "0:0",
+      "Start": "2026-11-23T14:40:29",
+      "End": "Unknown",
+      "ElapsedRaw": "14554",
+      "AllocTRES": "billing=12,cpu=12,gres/gpu=1,mem=85000M,node=1",
+      "allocated_gpu_count": 1,
+      "elapsed_gpu_hours": 4.042777777777777
+    },
+    {
+      "JobID": "40988",
+      "JobName": "pyro-test-media",
+      "State": "FAILED",
+      "ExitCode": "1:0",
+      "Start": "2026-11-23T15:18:30",
+      "End": "2026-11-23T15:18:34",
+      "ElapsedRaw": "4",
+      "AllocTRES": "billing=24,cpu=24,mem=12G,node=1",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "41016",
+      "JobName": "pyro-test-media",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Start": "2026-11-23T15:22:00",
+      "End": "2026-11-23T15:23:34",
+      "ElapsedRaw": "94",
+      "AllocTRES": "billing=24,cpu=24,mem=12G,node=1",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "41017",
+      "JobName": "pyro-test-speech-visual",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Start": "2026-11-23T15:25:00",
+      "End": "2026-11-23T15:42:46",
+      "ElapsedRaw": "1066",
+      "AllocTRES": "billing=24,cpu=24,mem=16G,node=1",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "41018",
+      "JobName": "pyro-test-events",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Start": "2026-11-23T15:25:00",
+      "End": "2026-11-23T16:15:19",
+      "ElapsedRaw": "3019",
+      "AllocTRES": "billing=24,cpu=24,mem=16G,node=1",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "41027_1",
+      "JobName": "pyro-ego-heldout",
+      "State": "FAILED",
+      "ExitCode": "1:0",
+      "Start": "2026-11-23T15:37:30",
+      "End": "2026-11-23T16:07:27",
+      "ElapsedRaw": "1797",
+      "AllocTRES": "billing=24,cpu=24,mem=12G,node=1",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "41027_2",
+      "JobName": "pyro-ego-heldout",
+      "State": "FAILED",
+      "ExitCode": "1:0",
+      "Start": "2026-11-23T15:47:30",
+      "End": "2026-11-23T16:18:19",
+      "ElapsedRaw": "1849",
+      "AllocTRES": "billing=24,cpu=24,mem=12G,node=1",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "41027_3",
+      "JobName": "pyro-ego-heldout",
+      "State": "FAILED",
+      "ExitCode": "1:0",
+      "Start": "2026-11-23T16:08:30",
+      "End": "2026-11-23T16:39:03",
+      "ElapsedRaw": "1833",
+      "AllocTRES": "billing=24,cpu=24,mem=12G,node=1",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "41034",
+      "JobName": "pyro-test-cue-bridge",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Start": "2026-11-23T16:16:30",
+      "End": "2026-11-23T16:17:40",
+      "ElapsedRaw": "70",
+      "AllocTRES": "billing=24,cpu=24,mem=12G,node=1",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "41038_0",
+      "JobName": "pyro-ego-heldout",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Start": "2026-11-23T16:55:00",
+      "End": "2026-11-23T16:59:33",
+      "ElapsedRaw": "273",
+      "AllocTRES": "billing=24,cpu=24,mem=12G,node=1",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "41038_2",
+      "JobName": "pyro-ego-heldout",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Start": "2026-11-23T16:56:31",
+      "End": "2026-11-23T17:01:50",
+      "ElapsedRaw": "319",
+      "AllocTRES": "billing=24,cpu=24,mem=12G,node=1",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "41038_3",
+      "JobName": "pyro-ego-heldout",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Start": "2026-11-23T17:00:30",
+      "End": "2026-11-23T17:05:14",
+      "ElapsedRaw": "284",
+      "AllocTRES": "billing=24,cpu=24,mem=12G,node=1",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "41027_0",
+      "JobName": "pyro-ego-heldout",
+      "State": "FAILED",
+      "ExitCode": "1:0",
+      "Start": "2026-11-23T16:19:30",
+      "End": "2026-11-23T16:54:07",
+      "ElapsedRaw": "2077",
+      "AllocTRES": "billing=24,cpu=24,mem=12G,node=1",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "41116",
+      "JobName": "pyro-formal-prepare",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Start": "2026-11-23T16:19:00",
+      "End": "2026-11-23T16:20:38",
+      "ElapsedRaw": "98",
+      "AllocTRES": "billing=24,cpu=24,mem=12G,node=1",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "41197",
+      "JobName": "pyro-parallel-eval",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Start": "2026-11-23T16:41:00",
+      "End": "2026-11-23T18:33:41",
+      "ElapsedRaw": "6761",
+      "AllocTRES": "billing=12,cpu=12,gres/gpu=1,mem=80G,node=1",
+      "allocated_gpu_count": 1,
+      "elapsed_gpu_hours": 1.8780555555555556
+    },
+    {
+      "JobID": "41038_1",
+      "JobName": "pyro-ego-heldout",
+      "State": "CANCELLED by 4645820",
+      "ExitCode": "0:0",
+      "Start": "None",
+      "End": "2026-11-23T16:57:38",
+      "ElapsedRaw": "0",
+      "AllocTRES": "",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "41216_1",
+      "JobName": "pyro-ego-heldout",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Start": "2026-11-23T17:06:30",
+      "End": "2026-11-23T17:12:23",
+      "ElapsedRaw": "353",
+      "AllocTRES": "billing=24,cpu=24,mem=12G,node=1",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "41217",
+      "JobName": "pyro-ego-inputs",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Start": "2026-11-23T17:13:30",
+      "End": "2026-11-23T17:23:35",
+      "ElapsedRaw": "605",
+      "AllocTRES": "billing=24,cpu=24,mem=12G,node=1",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    },
+    {
+      "JobID": "41245",
+      "JobName": "pyro-ego-controller",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Start": "2026-11-23T18:35:03",
+      "End": "2026-11-23T18:35:05",
+      "ElapsedRaw": "2",
+      "AllocTRES": "billing=24,cpu=24,mem=2G,node=1",
+      "allocated_gpu_count": 0,
+      "elapsed_gpu_hours": 0.0
+    }
+  ],
+  "tracked_gpu_hours_40964_41197": 5.9208333333333325,
+  "secondary_completed_stages": {
+    "job_id": "41197",
+    "stages": [
+      {
+        "name": "AV-flat-timeline",
+        "exit_code": 0,
+        "seconds": 486.066
+      },
+      {
+        "name": "AV-hierarchical-timeline",
+        "exit_code": 0,
+        "seconds": 335.691
+      },
+      {
+        "name": "formal-no-context",
+        "exit_code": 0,
+        "seconds": 632.565
+      },
+      {
+        "name": "formal-native",
+        "exit_code": 0,
+        "seconds": 984.64
+      },
+      {
+        "name": "EgoSchema-U",
+        "exit_code": 0,
+        "seconds": 2129.478
+      },
+      {
+        "name": "EgoSchema-V_local",
+        "exit_code": 0,
+        "seconds": 2157.977
+      }
+    ],
+    "scope": "no paid API calls; separate outputs from primary GPU"
+  },
+  "primary_process_timing": {
+    "scope": "Primary GPU process wall time, includes model/input setup; not allocated GPU time or summed model-call latency",
+    "processes": [
+      {
+        "pid": 59758,
+        "command": "python -u scripts/run_experiment.py --config configs/experiments/reframed_test_local.toml --stage generate --runs ad-*-qwen-*",
+        "start_epoch_approx": 1795451276.83,
+        "first_observed_utc": "2026-11-23T17:29:46.830192+00:00",
+        "completion_observed_utc": "2026-11-23T17:55:05.541279+00:00",
+        "process_wall_seconds_approx": 5228.711,
+        "completion_uncertainty_seconds": 15
+      },
+      {
+        "pid": 150806,
+        "command": "python -u scripts/run_qa_vlm.py --input /scratch/yy5919/pyro-kd-derived/moments/video-mme-long-A_cue-flat-none-v1.jsonl --output /scratch/y",
+        "start_epoch_approx": 1795456495.541,
+        "first_observed_utc": "2026-11-23T17:55:05.541236+00:00",
+        "completion_observed_utc": "2026-11-23T18:00:51.379472+00:00",
+        "process_wall_seconds_approx": 355.838,
+        "completion_uncertainty_seconds": 15
+      },
+      {
+        "pid": 158047,
+        "command": "python -u scripts/run_qa_vlm.py --input /scratch/yy5919/pyro-kd-derived/moments/video-mme-long-AV-flat-none-v1.jsonl --output /scratch/yy59",
+        "start_epoch_approx": 1795456837.379,
+        "first_observed_utc": "2026-11-23T18:00:51.379443+00:00",
+        "completion_observed_utc": "2026-11-23T18:06:22.205774+00:00",
+        "process_wall_seconds_approx": 344.827,
+        "completion_uncertainty_seconds": 15
+      },
+      {
+        "pid": 159792,
+        "command": "python -u scripts/run_qa_vlm.py --input /scratch/yy5919/pyro-kd-derived/moments/egoschema-heldout-V_memory-v1.jsonl --output /scratch/yy591",
+        "start_epoch_approx": 1795457191.227,
+        "first_observed_utc": "2026-11-23T18:06:37.226825+00:00",
+        "completion_observed_utc": "2026-11-23T18:42:12.483997+00:00",
+        "process_wall_seconds_approx": 2141.257,
+        "completion_uncertainty_seconds": 15
+      }
+    ]
+  },
+  "active_primary_process_snapshot": [],
+  "frozen_counts": {
+    "formal_core": 3398,
+    "formal_ablation5_incremental": 768,
+    "long_qa": 360,
+    "egoschema_qa": 1470
+  },
+  "cells": [
+    {
+      "condition": "ad-AV-P0-qwen-tl1-139f8918",
+      "task": "REFRAMED AD",
+      "expected": 384,
+      "rows": 384,
+      "unique": 384,
+      "partial_tail_excluded": false,
+      "latency_field": "latency_s",
+      "recorded_model_call_seconds": 565.8420000000002,
+      "rows_with_latency": 384,
+      "complete_unique_coverage": true,
+      "model_load_seconds": null
+    },
+    {
+      "condition": "ad-AV-P1-qwen-tl1-8ad669f8",
+      "task": "REFRAMED AD",
+      "expected": 384,
+      "rows": 384,
+      "unique": 384,
+      "partial_tail_excluded": false,
+      "latency_field": "latency_s",
+      "recorded_model_call_seconds": 585.3180000000001,
+      "rows_with_latency": 384,
+      "complete_unique_coverage": true,
+      "model_load_seconds": null
+    },
+    {
+      "condition": "ad-A_cue-P0-omni-tl0-25a0a799",
+      "task": "REFRAMED AD",
+      "expected": 384,
+      "rows": 384,
+      "unique": 384,
+      "partial_tail_excluded": false,
+      "latency_field": "latency_s",
+      "recorded_model_call_seconds": 775.0489999999993,
+      "rows_with_latency": 384,
+      "complete_unique_coverage": true,
+      "model_load_seconds": null
+    },
+    {
+      "condition": "ad-A_cue-P0-qwen-tl0-36f4221c",
+      "task": "REFRAMED AD",
+      "expected": 384,
+      "rows": 384,
+      "unique": 384,
+      "partial_tail_excluded": false,
+      "latency_field": "latency_s",
+      "recorded_model_call_seconds": 585.8030000000001,
+      "rows_with_latency": 384,
+      "complete_unique_coverage": true,
+      "model_load_seconds": null
+    },
+    {
+      "condition": "ad-A_cue-P0-qwen-tl1-d76065c6",
+      "task": "REFRAMED AD",
+      "expected": 384,
+      "rows": 384,
+      "unique": 384,
+      "partial_tail_excluded": false,
+      "latency_field": "latency_s",
+      "recorded_model_call_seconds": 555.3280000000001,
+      "rows_with_latency": 384,
+      "complete_unique_coverage": true,
+      "model_load_seconds": null
+    },
+    {
+      "condition": "ad-A_cue-P1-qwen-tl1-92bec846",
+      "task": "REFRAMED AD",
+      "expected": 384,
+      "rows": 384,
+      "unique": 384,
+      "partial_tail_excluded": false,
+      "latency_field": "latency_s",
+      "recorded_model_call_seconds": 580.0569999999999,
+      "rows_with_latency": 384,
+      "complete_unique_coverage": true,
+      "model_load_seconds": null
+    },
+    {
+      "condition": "ad-O-P0-qwen-tl1-42b6dc1d",
+      "task": "REFRAMED AD",
+      "expected": 343,
+      "rows": 343,
+      "unique": 343,
+      "partial_tail_excluded": false,
+      "latency_field": "latency_s",
+      "recorded_model_call_seconds": 487.25999999999965,
+      "rows_with_latency": 343,
+      "complete_unique_coverage": true,
+      "model_load_seconds": null
+    },
+    {
+      "condition": "ad-O-P1-qwen-tl1-0f4e1fb6",
+      "task": "REFRAMED AD",
+      "expected": 343,
+      "rows": 343,
+      "unique": 343,
+      "partial_tail_excluded": false,
+      "latency_field": "latency_s",
+      "recorded_model_call_seconds": 497.443,
+      "rows_with_latency": 343,
+      "complete_unique_coverage": true,
+      "model_load_seconds": null
+    },
+    {
+      "condition": "ad-U-P0-qwen-tl1-ac15cad2",
+      "task": "REFRAMED AD",
+      "expected": 283,
+      "rows": 283,
+      "unique": 283,
+      "partial_tail_excluded": false,
+      "latency_field": "latency_s",
+      "recorded_model_call_seconds": 438.04000000000013,
+      "rows_with_latency": 283,
+      "complete_unique_coverage": true,
+      "model_load_seconds": null
+    },
+    {
+      "condition": "ad-U-P1-qwen-tl1-fe9f86c3",
+      "task": "REFRAMED AD",
+      "expected": 283,
+      "rows": 283,
+      "unique": 283,
+      "partial_tail_excluded": false,
+      "latency_field": "latency_s",
+      "recorded_model_call_seconds": 458.833,
+      "rows_with_latency": 283,
+      "complete_unique_coverage": true,
+      "model_load_seconds": null
+    },
+    {
+      "condition": "ad-V-P0-qwen-tl1-c7d7ceef",
+      "task": "REFRAMED AD",
+      "expected": 305,
+      "rows": 305,
+      "unique": 305,
+      "partial_tail_excluded": false,
+      "latency_field": "latency_s",
+      "recorded_model_call_seconds": 472.17499999999984,
+      "rows_with_latency": 305,
+      "complete_unique_coverage": true,
+      "model_load_seconds": null
+    },
+    {
+      "condition": "ad-V-P1-qwen-tl1-b20a06a2",
+      "task": "REFRAMED AD",
+      "expected": 305,
+      "rows": 305,
+      "unique": 305,
+      "partial_tail_excluded": false,
+      "latency_field": "latency_s",
+      "recorded_model_call_seconds": 480.1829999999997,
+      "rows_with_latency": 305,
+      "complete_unique_coverage": true,
+      "model_load_seconds": null
+    },
+    {
+      "condition": "AV-flat-none-224",
+      "task": "Video-MME long QA",
+      "expected": 36,
+      "rows": 36,
+      "unique": 36,
+      "partial_tail_excluded": false,
+      "latency_field": "batch_latency_s",
+      "recorded_model_call_seconds": 186.384,
+      "rows_with_latency": 36,
+      "complete_unique_coverage": true,
+      "model_load_seconds": 14.2901665699992,
+      "completed_process_attempt_records": 1,
+      "questions_in_completed_process_records": 36
+    },
+    {
+      "condition": "AV-flat-timeline-224",
+      "task": "Video-MME long QA",
+      "expected": 36,
+      "rows": 36,
+      "unique": 36,
+      "partial_tail_excluded": false,
+      "latency_field": "batch_latency_s",
+      "recorded_model_call_seconds": 189.51199999999997,
+      "rows_with_latency": 36,
+      "complete_unique_coverage": true,
+      "model_load_seconds": 129.049769455,
+      "completed_process_attempt_records": 1,
+      "questions_in_completed_process_records": 36
+    },
+    {
+      "condition": "AV-hierarchical-timeline-224",
+      "task": "Video-MME long QA",
+      "expected": 36,
+      "rows": 36,
+      "unique": 36,
+      "partial_tail_excluded": false,
+      "latency_field": "batch_latency_s",
+      "recorded_model_call_seconds": 190.06399999999994,
+      "rows_with_latency": 36,
+      "complete_unique_coverage": true,
+      "model_load_seconds": 13.904392763000033,
+      "completed_process_attempt_records": 1,
+      "questions_in_completed_process_records": 36
+    },
+    {
+      "condition": "A_cue-flat-none-224",
+      "task": "Video-MME long QA",
+      "expected": 36,
+      "rows": 36,
+      "unique": 36,
+      "partial_tail_excluded": false,
+      "latency_field": "batch_latency_s",
+      "recorded_model_call_seconds": 190.193,
+      "rows_with_latency": 36,
+      "complete_unique_coverage": true,
+      "model_load_seconds": 15.150285858000643,
+      "completed_process_attempt_records": 1,
+      "questions_in_completed_process_records": 36
+    },
+    {
+      "condition": "A_cue-flat-timeline-224",
+      "task": "Video-MME long QA",
+      "expected": 36,
+      "rows": 36,
+      "unique": 36,
+      "partial_tail_excluded": false,
+      "latency_field": "batch_latency_s",
+      "recorded_model_call_seconds": 190.12900000000005,
+      "rows_with_latency": 36,
+      "complete_unique_coverage": true,
+      "model_load_seconds": 13.786142287000075,
+      "completed_process_attempt_records": 1,
+      "questions_in_completed_process_records": 36
+    },
+    {
+      "condition": "A_cue-hierarchical-timeline-224",
+      "task": "Video-MME long QA",
+      "expected": 36,
+      "rows": 36,
+      "unique": 36,
+      "partial_tail_excluded": false,
+      "latency_field": "batch_latency_s",
+      "recorded_model_call_seconds": 190.30700000000007,
+      "rows_with_latency": 36,
+      "complete_unique_coverage": true,
+      "model_load_seconds": 14.079758530000618,
+      "completed_process_attempt_records": 1,
+      "questions_in_completed_process_records": 36
+    },
+    {
+      "condition": "U-flat-timeline-224",
+      "task": "Video-MME long QA",
+      "expected": 36,
+      "rows": 36,
+      "unique": 36,
+      "partial_tail_excluded": false,
+      "latency_field": "batch_latency_s",
+      "recorded_model_call_seconds": 300.79499999999996,
+      "rows_with_latency": 36,
+      "complete_unique_coverage": true,
+      "model_load_seconds": 13.300694368999757,
+      "completed_process_attempt_records": 1,
+      "questions_in_completed_process_records": 36
+    },
+    {
+      "condition": "U-none-224",
+      "task": "Video-MME long QA",
+      "expected": 36,
+      "rows": 36,
+      "unique": 36,
+      "partial_tail_excluded": false,
+      "latency_field": "batch_latency_s",
+      "recorded_model_call_seconds": 301.07000000000005,
+      "rows_with_latency": 36,
+      "complete_unique_coverage": true,
+      "model_load_seconds": 30.401902814000096,
+      "completed_process_attempt_records": 2,
+      "questions_in_completed_process_records": 36
+    },
+    {
+      "condition": "V-local-none-224",
+      "task": "Video-MME long QA",
+      "expected": 36,
+      "rows": 36,
+      "unique": 36,
+      "partial_tail_excluded": false,
+      "latency_field": "batch_latency_s",
+      "recorded_model_call_seconds": 301.87,
+      "rows_with_latency": 36,
+      "complete_unique_coverage": true,
+      "model_load_seconds": 14.39871141499998,
+      "completed_process_attempt_records": 1,
+      "questions_in_completed_process_records": 36
+    },
+    {
+      "condition": "V_local-flat-timeline-224",
+      "task": "Video-MME long QA",
+      "expected": 36,
+      "rows": 36,
+      "unique": 36,
+      "partial_tail_excluded": false,
+      "latency_field": "batch_latency_s",
+      "recorded_model_call_seconds": 301.18,
+      "rows_with_latency": 36,
+      "complete_unique_coverage": true,
+      "model_load_seconds": 14.016089847999865,
+      "completed_process_attempt_records": 1,
+      "questions_in_completed_process_records": 36
+    },
+    {
+      "condition": "U",
+      "task": "EgoSchema QA",
+      "expected": 490,
+      "rows": 490,
+      "unique": 490,
+      "partial_tail_excluded": false,
+      "latency_field": "batch_latency_s",
+      "recorded_model_call_seconds": 1926.2589999999996,
+      "rows_with_latency": 490,
+      "complete_unique_coverage": true,
+      "model_load_seconds": 13.977081373000146,
+      "completed_process_attempt_records": 1,
+      "questions_in_completed_process_records": 490
+    },
+    {
+      "condition": "V_local",
+      "task": "EgoSchema QA",
+      "expected": 490,
+      "rows": 490,
+      "unique": 490,
+      "partial_tail_excluded": false,
+      "latency_field": "batch_latency_s",
+      "recorded_model_call_seconds": 1929.7509999999993,
+      "rows_with_latency": 490,
+      "complete_unique_coverage": true,
+      "model_load_seconds": 15.010979828999552,
+      "completed_process_attempt_records": 1,
+      "questions_in_completed_process_records": 490
+    },
+    {
+      "condition": "V_memory",
+      "task": "EgoSchema QA",
+      "expected": 490,
+      "rows": 490,
+      "unique": 490,
+      "partial_tail_excluded": false,
+      "latency_field": "batch_latency_s",
+      "recorded_model_call_seconds": 1921.1719999999973,
+      "rows_with_latency": 490,
+      "complete_unique_coverage": true,
+      "model_load_seconds": 12.63819394299935,
+      "completed_process_attempt_records": 1,
+      "questions_in_completed_process_records": 490
+    }
+  ],
+  "utilization_samples": [
+    {
+      "job_id": "40964",
+      "samples": 230,
+      "first": "2026/11/23 16:48:07.667",
+      "last": "2026/11/23 18:42:38.538",
+      "gpu": "NVIDIA A100-SXM4-40GB",
+      "sample_mean_gpu_utilization_percent": 53.78260869565217,
+      "zero_utilization_samples": 20,
+      "peak_sampled_memory_mib": 32828.0
+    },
+    {
+      "job_id": "41197",
+      "samples": 226,
+      "first": "2026/11/23 16:41:02.828",
+      "last": "2026/11/23 18:33:33.736",
+      "gpu": "NVIDIA A100-SXM4-40GB",
+      "sample_mean_gpu_utilization_percent": 51.36283185840708,
+      "zero_utilization_samples": 33,
+      "peak_sampled_memory_mib": 34910.0
+    }
+  ],
+  "sources": {
+    "/scratch/yy5919/pyro-resume-results/secondary-gpu-41197.json": {
+      "sha256": "17c51b3ed792f95f263e8d6108cea1e85516768946fb7aabec69f7273cbf2e8c",
+      "bytes": 676
+    },
+    "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/preparation_counts.json": {
+      "sha256": "93601ae1375a726d0c9623daea593385529f5b398b1dae2580b9ea1e60aaf380",
+      "bytes": 369
+    },
+    "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/generations/ad-AV-P0-qwen-tl1-139f8918.jsonl": {
+      "sha256": "fdf00ab63cc135e466e5da7b0224659b8d372337c5fa4aafa5a5b4fd8ae0a555",
+      "bytes": 658825
+    },
+    "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/generations/ad-AV-P1-qwen-tl1-8ad669f8.jsonl": {
+      "sha256": "18ae3a220be474000f9f3aab1ce719f3431f06ea7377a3d03c5179bea69ac5d8",
+      "bytes": 978036
+    },
+    "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/generations/ad-A_cue-P0-omni-tl0-25a0a799.jsonl": {
+      "sha256": "dd996e464ac8e10866642170324a788631c66df9bec504d25abd6cf716df2894",
+      "bytes": 626548
+    },
+    "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/generations/ad-A_cue-P0-qwen-tl0-36f4221c.jsonl": {
+      "sha256": "44394705237248eeaa4df95cf1809642b004805ce6786100858397e5e06d0344",
+      "bytes": 588029
+    },
+    "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/generations/ad-A_cue-P0-qwen-tl1-d76065c6.jsonl": {
+      "sha256": "4c4682cfcc180714409e51ae7382775d207bb75093dd5a3bebf5e40ec710f1e5",
+      "bytes": 658817
+    },
+    "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/generations/ad-A_cue-P1-qwen-tl1-92bec846.jsonl": {
+      "sha256": "11c4a0621d8d080dfdd09129a45270c04d159368f3de480f58ae2bb7b69fb468",
+      "bytes": 977575
+    },
+    "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/generations/ad-O-P0-qwen-tl1-42b6dc1d.jsonl": {
+      "sha256": "ff5890dd40569a21036463faf4e441537524cb162d6f449158ff2e218d494fb0",
+      "bytes": 578599
+    },
+    "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/generations/ad-O-P1-qwen-tl1-0f4e1fb6.jsonl": {
+      "sha256": "66379f19f1cf46dd031d8efdbae5eb50bc516311382bcfecfff5e2091c0c655a",
+      "bytes": 863649
+    },
+    "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/generations/ad-U-P0-qwen-tl1-ac15cad2.jsonl": {
+      "sha256": "e3bf175b3e06f5603a86746488769a77f3baea3878845dfd198cf73adb04ffda",
+      "bytes": 487444
+    },
+    "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/generations/ad-U-P1-qwen-tl1-fe9f86c3.jsonl": {
+      "sha256": "756ac008f5a364d4e62fd6d32382bd8e29777d717d679159c3933849e7fd4cd9",
+      "bytes": 718459
+    },
+    "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/generations/ad-V-P0-qwen-tl1-c7d7ceef.jsonl": {
+      "sha256": "b6c1fe3a2faec9f83182ec3db5d553093f8a4dae887f94aeb8d6f42b7899df9a",
+      "bytes": 522184
+    },
+    "/scratch/yy5919/pyro-resume-results/experiments/reframed_test_local_v1/generations/ad-V-P1-qwen-tl1-b20a06a2.jsonl": {
+      "sha256": "697f0e8e0b4d28b342486d49270875165ddfe833f960b958c75e193e5a9dfd39",
+      "bytes": 773088
+    },
+    "/scratch/yy5919/pyro-resume-results/long-qa-frozen/AV-flat-none-224.jsonl": {
+      "sha256": "50f92aced7339d409028769812eb8f0574cd9d0f5dab8e29dbd862f85ea7bf27",
+      "bytes": 402226
+    },
+    "/scratch/yy5919/pyro-resume-results/long-qa-frozen/AV-flat-none-224.jsonl.attempts.jsonl": {
+      "sha256": "cc4ac379442f240d71c51a6d1b92defda4b81986118bd6cffbfa62d9398e1c17",
+      "bytes": 828910
+    },
+    "/scratch/yy5919/pyro-resume-results/long-qa-frozen/AV-flat-timeline-224.jsonl": {
+      "sha256": "94383de2669fad6044a65ab0ea2127c28665797f6f6666444dc38cc00bcbaa06",
+      "bytes": 482141
+    },
+    "/scratch/yy5919/pyro-resume-results/long-qa-frozen/AV-flat-timeline-224.jsonl.attempts.jsonl": {
+      "sha256": "ec086409535a1ecb92cbc62f71af75730151919ff493ebfbf5d680e0c88d85ca",
+      "bytes": 828907
+    },
+    "/scratch/yy5919/pyro-resume-results/long-qa-frozen/AV-hierarchical-timeline-224.jsonl": {
+      "sha256": "c972e8131a0f8d93cdb43aeb51002fb46750eebc05b61bbd49a1c59bb142a9b0",
+      "bytes": 481789
+    },
+    "/scratch/yy5919/pyro-resume-results/long-qa-frozen/AV-hierarchical-timeline-224.jsonl.attempts.jsonl": {
+      "sha256": "826b7049285030872b7759b2fbdb0d2569363376432fea84e5f370d0b7d09f11",
+      "bytes": 828207
+    },
+    "/scratch/yy5919/pyro-resume-results/long-qa-frozen/A_cue-flat-none-224.jsonl": {
+      "sha256": "5132d5f7e0bfffa2620f7afbb7b680f0b84aff3384381f6b0aa1e7812eacd883",
+      "bytes": 404275
+    },
+    "/scratch/yy5919/pyro-resume-results/long-qa-frozen/A_cue-flat-none-224.jsonl.attempts.jsonl": {
+      "sha256": "2b64121f9f9fac3a9a796912b285e46c8122bd920efdb8e4bb2f35ff0e2c49a9",
+      "bytes": 820593
+    },
+    "/scratch/yy5919/pyro-resume-results/long-qa-frozen/A_cue-flat-timeline-224.jsonl": {
+      "sha256": "8fedff88d36d48f2f09ee34f523c0e3b8aa3c5d86f9e70e95de56443f26322b1",
+      "bytes": 484193
+    },
+    "/scratch/yy5919/pyro-resume-results/long-qa-frozen/A_cue-flat-timeline-224.jsonl.attempts.jsonl": {
+      "sha256": "f3f3312342f43fb73c25727b34c577f7d46e0796bed214e8f6c937f21605eea0",
+      "bytes": 820593
+    },
+    "/scratch/yy5919/pyro-resume-results/long-qa-frozen/A_cue-hierarchical-timeline-224.jsonl": {
+      "sha256": "7958af535854ea2e22ae999195e923a22185a6f99111d718d522f33c5d839a2d",
+      "bytes": 484432
+    },
+    "/scratch/yy5919/pyro-resume-results/long-qa-frozen/A_cue-hierarchical-timeline-224.jsonl.attempts.jsonl": {
+      "sha256": "fb5e1379537952616785f2edf38840879d78fb80aaf58d2c9813e3783c832afa",
+      "bytes": 823272
+    },
+    "/scratch/yy5919/pyro-resume-results/long-qa-frozen/U-flat-timeline-224.jsonl": {
+      "sha256": "d064b59ff961134cae97d92f3014ea9f57f153475f5b1157a7805aab901ab76c",
+      "bytes": 681171
+    },
+    "/scratch/yy5919/pyro-resume-results/long-qa-frozen/U-flat-timeline-224.jsonl.attempts.jsonl": {
+      "sha256": "f90b11cba37fabaddf2cfa762b593afebaba21eb94d05a0b37cc6db2cfdaf6d1",
+      "bytes": 1322271
+    },
+    "/scratch/yy5919/pyro-resume-results/long-qa-frozen/U-none-224.jsonl": {
+      "sha256": "6f828ed017d57acf4828015aad80d9d77b7483e3afbf52aa7943445ed319e8fd",
+      "bytes": 598090
+    },
+    "/scratch/yy5919/pyro-resume-results/long-qa-frozen/U-none-224.jsonl.attempts.jsonl": {
+      "sha256": "f807392a9e28a18dcea54d9b812462dfc636c7ba5ac977014c96f67a0b1be872",
+      "bytes": 2644541
+    },
+    "/scratch/yy5919/pyro-resume-results/long-qa-frozen/V-local-none-224.jsonl": {
+      "sha256": "76f2a416f3e4827f3cd28eb963d7b8a1d0a701971df0e46a8618a4761fb72dcb",
+      "bytes": 581694
+    },
+    "/scratch/yy5919/pyro-resume-results/long-qa-frozen/V-local-none-224.jsonl.attempts.jsonl": {
+      "sha256": "32f20593141cffddd623a45126317bfb2e592bac98ac7f6280396a641eb580b2",
+      "bytes": 1300133
+    },
+    "/scratch/yy5919/pyro-resume-results/long-qa-frozen/V_local-flat-timeline-224.jsonl": {
+      "sha256": "c9fd02c0bef52ba650bed84c7188ff0d36fcf2556499d2aef55995887258b14b",
+      "bytes": 664779
+    },
+    "/scratch/yy5919/pyro-resume-results/long-qa-frozen/V_local-flat-timeline-224.jsonl.attempts.jsonl": {
+      "sha256": "599a1f2bb5b5144e19ef4848808d8b44698010f3690b7f79ed9cc5c2ad478e94",
+      "bytes": 1300134
+    },
+    "/scratch/yy5919/pyro-resume-results/egoschema-heldout/U.jsonl": {
+      "sha256": "c4029ff666a1d0af4c4b0e86d32c7f05f7418deddd73c652757912690ce2f560",
+      "bytes": 1519049
+    },
+    "/scratch/yy5919/pyro-resume-results/egoschema-heldout/U.jsonl.attempts.jsonl": {
+      "sha256": "421232edcdfa0f1659f296af7ef5766903345cd4eb2d1fe99c96b982f60cff32",
+      "bytes": 5133730
+    },
+    "/scratch/yy5919/pyro-resume-results/egoschema-heldout/V_local.jsonl": {
+      "sha256": "f1f1ae186a62787db378f64a21ff3a41d5ed67f471ea41edd5c8bd8ece1a764a",
+      "bytes": 1545343
+    },
+    "/scratch/yy5919/pyro-resume-results/egoschema-heldout/V_local.jsonl.attempts.jsonl": {
+      "sha256": "02a3c687feb4ca8543fc0b3e13c285cee8d1f4af48d045b86bff84eda959305e",
+      "bytes": 5010364
+    },
+    "/scratch/yy5919/pyro-resume-results/egoschema-heldout/V_memory.jsonl": {
+      "sha256": "51e11f6aad5401f767b914d570e7e657c83f44ed2b8e49f61242186d05b78202",
+      "bytes": 1544668
+    },
+    "/scratch/yy5919/pyro-resume-results/egoschema-heldout/V_memory.jsonl.attempts.jsonl": {
+      "sha256": "127d9549070d70020a4a4777e53cc918b7c9d94cc63718ad9018df5590c00a30",
+      "bytes": 5022717
+    },
+    "/scratch/yy5919/pyro-primary-util-40964.csv": {
+      "sha256": "b3bd0c45e035e8985297872ed377b51bb836e0aa8b07fe71a3c35d0de4c55af4",
+      "bytes": 14683
+    },
+    "/scratch/yy5919/pyro-secondary-util-41197.csv": {
+      "sha256": "63f280c8eb0e7c7db3c22ceaea53be6eddb68d69b262dce0f7fc40ad8047ca9c",
+      "bytes": 14454
+    },
+    "/scratch/yy5919/pyro-resume-results/primary-process-timing.json": {
+      "sha256": "3d45ff360c08e5004c8e426ce5e0726e37e4c1cea99a822a08398618ef2440a7",
+      "bytes": 1975
+    }
+  },
+  "export_driver": {
+    "path": "/scratch/yy5919/pyro-compute-accounting-export.py",
+    "sha256": "0bf51abd09cd44f00a23081db1f36dcd90c30b30f6c1424809723633c704ed53"
+  }
+}

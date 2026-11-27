@@ -1,0 +1,6 @@
+{
+  "source": "/scratch/yy5919/pyro-resume-results/formal-ablation5-temporal/contrasts.json",
+  "source_sha256": "80239f8bcffe1360af413ee5e0d62fb9881a7c9dbf3c05573b3470079209d8a4",
+  "comparisons": 3,
+  "scope": "All30clips and10movies;3structural contrasts, Holm3. Native comparisons change model andmodality; no humanquality claim."
+}

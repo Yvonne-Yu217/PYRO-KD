@@ -9,7 +9,7 @@ Selectors so far: U (uniform), A (audio-only) and V (video-only). A needs
 audio_features.json (scripts/cache_audio_features.py); V needs
 visual_features.json (scripts/cache_visual_features.py). All selectors use
 validated audio features for word limits and report unusable features.
-The word limit is floor(gap * 3), capped,
+The word limit is floor(gap * 3), without an additional concision cap,
 where gap is the time from the moment to the next speech onset, computed the
 same way for every selector from the cached VAD segments.
 Zero-word moments are skipped and recorded as not safely speakable in a
@@ -30,7 +30,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.datasets import mtg_ad, reframed  # noqa: E402
-from src.generation.prompts import transcript_context, word_limit_for_gap  # noqa: E402
+from src.generation.prompts import WORD_BUDGET_RULE, transcript_context, word_limit_for_gap  # noqa: E402
 from src.utils.audio_features import (  # noqa: E402
     InvalidAudioPath, available_gap, load_current_features, owned_media_manifest, speech_of,
 )
@@ -39,6 +39,7 @@ from src.utils.cache_checks import load_audio_features  # noqa: E402
 from src.utils.media import cache_is_complete, cache_is_current, frame_window, load_manifest  # noqa: E402
 from src.utils.selection import k_for_duration, uniform_timestamps  # noqa: E402
 from src.utils.visual_features import VisualCueSelector, load_current_features as load_visual_features  # noqa: E402
+from src.utils.visual_features import load_embeddings  # noqa: E402
 
 
 def _select_audio(duration, k, features):
@@ -83,6 +84,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--dataset", choices=["mtg-ad", "reframed"], default="mtg-ad")
     parser.add_argument("--selector", choices=sorted(SELECTORS), default="U")
+    parser.add_argument("--visual-novelty", choices=["local", "memory"], default="local",
+                        help="V ranking: historical adjacent-frame or selected-memory novelty")
     parser.add_argument("--videos", choices=["dev", "test"], default="dev")
     parser.add_argument("--splits", type=Path, default=None)
     parser.add_argument("--data-dir", type=Path, default=None)
@@ -104,6 +107,7 @@ def main() -> None:
     output = args.output or Path(f"data/moments/{name}_{args.selector}_{args.videos}.jsonl")
     output.parent.mkdir(parents=True, exist_ok=True)
     rows, missing, shortfalls, no_audio, no_visual, unsafe = 0, [], [], [], [], []
+    no_embeddings = []
     stale = []
     unusable_features = []
     reports = []
@@ -148,6 +152,8 @@ def main() -> None:
             if feature_problem not in (None, "no_audio_stream", "no_audio_features"):
                 unusable_features.append(f"{video_id} ({feature_problem})")
             speech = speech_of(features) if features else None
+            memory = args.selector == "V" and args.visual_novelty == "memory"
+            embeddings = load_embeddings(cache, visual) if memory and visual is not None else None
             if args.selector == "A" and features is None:
                 no_audio.append(video_id)
                 report["status"] = "missing_audio_features"
@@ -156,10 +162,24 @@ def main() -> None:
                 report["status"] = "missing_visual_features"
             else:
                 report["status"] = "ok"
-            times = SELECTORS[args.selector](duration, k, visual if args.selector == "V" else features)
+            times = None
+            if memory and visual is not None:
+                # One video with unusable embeddings is recorded and skipped; it must not leave a
+                # partial moments file without a report behind.
+                try:
+                    if embeddings is None:
+                        raise ValueError("no valid cached embeddings")
+                    times = [c.time for c in VisualCueSelector().select_memory(visual, embeddings, k)]
+                except ValueError as exc:
+                    no_embeddings.append(f"{video_id} ({exc})")
+                    report["status"] = "missing_visual_embeddings"
+                    times = []
+            if times is None:
+                times = SELECTORS[args.selector](duration, k, visual if args.selector == "V" else features)
             report["num_selected"] = len(times)
             report["selection_shortfall"] = (
-                0 if report["status"] in ("missing_audio_features", "missing_visual_features")
+                0 if report["status"] in ("missing_audio_features", "missing_visual_features",
+                                          "missing_visual_embeddings")
                 else k - len(times)
             )
             if report["selection_shortfall"]:
@@ -180,12 +200,15 @@ def main() -> None:
                     "video_id": video_id,
                     "dataset": name,
                     "selector": args.selector,
+                    "visual_novelty": args.visual_novelty if args.selector == "V" else None,
                     "time": t,
                     "frames": [f.path for f in window],
                     "frame_times": [f.timestamp for f in window],
                     "transcript": transcript_context(transcript, t),
                     "k_requested": k,
                     "word_limit": word_limit,
+                    "gap_seconds": gap,
+                    "word_budget_rule": WORD_BUDGET_RULE if gap is not None else "unknown-gap",
                 }) + "\n")
                 rows += 1
                 report["num_written"] += 1
@@ -194,7 +217,8 @@ def main() -> None:
                 report["status"] = "shortfall"
     report_path = output.with_suffix(".report.json")
     report_path.write_text(json.dumps({
-        "dataset": name, "selector": args.selector, "videos": reports,
+        "dataset": name, "selector": args.selector, "visual_novelty": args.visual_novelty if args.selector == "V" else None, "videos": reports,
+        "word_budget_rule": WORD_BUDGET_RULE,
     }, indent=2) + "\n", encoding="utf-8")
     print(f"wrote {rows} moments to {output}")
     if shortfalls:
@@ -203,6 +227,8 @@ def main() -> None:
         print(f"no audio/features; zero A moments: {' '.join(no_audio)} (run scripts/cache_audio_features.py)")
     if no_visual:
         print(f"no visual features; zero V moments: {' '.join(no_visual)} (run scripts/cache_visual_features.py)")
+    if no_embeddings:
+        print(f"unusable visual embeddings; zero V memory moments: {', '.join(no_embeddings)}")
     if unsafe:
         print(f"not safely speakable; skipped {len(unsafe)} zero-word moments; details: {report_path}")
     if missing:

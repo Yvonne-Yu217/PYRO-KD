@@ -425,16 +425,11 @@ class QwenOmniBackend:
     supports_audio = True
 
     def __init__(self, model: str = "Qwen/Qwen2.5-Omni-7B", config: dict | None = None):
-        import torch
-        from transformers import Qwen2_5OmniForConditionalGeneration, Qwen2_5OmniProcessor
+        from src.generation.omni import load_model
 
         self.config = dict(config or {})
         self.model_id = model
-        self.processor = Qwen2_5OmniProcessor.from_pretrained(model)
-        self.model = Qwen2_5OmniForConditionalGeneration.from_pretrained(
-            model, torch_dtype=torch.bfloat16, device_map="auto").eval()
-        if hasattr(self.model, "disable_talker"):
-            self.model.disable_talker()
+        self.processor, self.model, self.model_class = load_model(model, self.config.get("attn_impl"))
 
     def generate(self, requests: list[GenRequest]) -> list[GenResult]:
         import torch
@@ -452,18 +447,15 @@ class QwenOmniBackend:
                     audio = wave[int(r.audio["start"] * sr):int(r.audio["end"] * sr)]
                     content.append({"type": "audio", "audio": audio})
                 content.append({"type": "text", "text": r.prompt})
-                conversation = [{"role": "user", "content": content}]
-                text_in = self.processor.apply_chat_template(conversation, add_generation_prompt=True, tokenize=False)
-                inputs = self.processor(text=text_in, images=[c["image"] for c in content if c["type"] == "image"] or None,
-                                        audio=[audio] if audio is not None else None, return_tensors="pt", padding=True)
-                inputs = inputs.to(self.model.device)
+                from src.generation.omni import generate_one
                 started = time.time()
-                with torch.inference_mode():
-                    ids = self.model.generate(**inputs, max_new_tokens=r.max_new_tokens, do_sample=False, return_audio=False)
-                new = ids[:, inputs["input_ids"].shape[-1]:]
-                text = self.processor.batch_decode(new, skip_special_tokens=True)[0]
-                n = int(new.shape[-1])
-                out.append(GenResult(r.id, text.strip(), text, n, latency_s=round(time.time() - started, 3),
+                text, raw, counts = generate_one(
+                    self.processor, self.model,
+                    [c["image"] for c in content if c["type"] == "image"], r.prompt,
+                    waveform=audio, max_new_tokens=r.max_new_tokens, temperature=0.0,
+                )
+                n = counts[0]
+                out.append(GenResult(r.id, text[0], raw[0], n, latency_s=round(time.time() - started, 3),
                                      hit_token_limit=n >= r.max_new_tokens,
                                      error=f"hit_token_limit: max_new_tokens={r.max_new_tokens}" if n >= r.max_new_tokens else None))
             except Exception as exc:

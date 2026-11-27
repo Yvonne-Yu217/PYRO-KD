@@ -1,0 +1,6 @@
+{
+  "source": "/scratch/yy5919/pyro-resume-results/egoschema-heldout/evaluation/comparisons.json",
+  "source_sha256": "8125ccf75b6f2d9edac534d47ad9b118e1cf72dc3ac6e8e4b04ebd83574d8db8",
+  "comparisons": 3,
+  "scope": "490frozen heldout questions,10pilot questions excluded. Visual-only diagnostic; no audio-aware claim."
+}

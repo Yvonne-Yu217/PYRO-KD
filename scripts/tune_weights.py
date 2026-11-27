@@ -32,7 +32,7 @@ def main(argv: list[str] | None = None) -> int:
     args = p.parse_args(argv)
     cfg = load_config(args.config, args.overrides)
     result = tune(cfg, load_records(cfg), args.base, json.loads(args.grid) if args.grid else None, args.folds)
-    path = write_json(experiment_dir(cfg) / "eval" / f"tuning_{args.base}.json", result)
+    path = write_json(experiment_dir(cfg, writes_outputs=False) / "eval" / f"tuning_{args.base}.json", result)
     print(f"best {result['best']} macroF1={result['best_f1']}; CV held-out mean {result['cv_held_out_mean_f1']}")
     print(f"wrote {path}")
     return 0

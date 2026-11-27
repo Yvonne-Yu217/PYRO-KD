@@ -1,0 +1,19 @@
+{
+  "sources": {
+    "docs/results/reframed-local-dev.csv": "5b77a0b6ec5e436dc7d9b060f0d5ea97f49ec1798d54012bbeabbef8fdb4d5ae",
+    "docs/results/reframed-selectors/selector-results.json": "0b55f202cae0f65e263856d3a18dfb0263acff3d160182dcb6a925daeef347b1",
+    "docs/results/reframed-formal-core/core-results.json": "b840ee38c996f34653f971d1b4c39a8eedc39460c356124eede1266569b3b1c6",
+    "docs/results/video-mme-long/qa-results.json": "22543bdafc6ae54e6398f771c7ad3a29a1613bf9a2a977141071b34d4937853c",
+    "docs/results/egoschema-heldout/qa-results.json": "0204ffabc22bfea6015ed25cb99cb615177bceeff000e5bdeae81d8fd3a328c3"
+  },
+  "scope": "completed authorized local development, selector, caption, long QA and EgoSchema results",
+  "development_cells": 10,
+  "selector_core_cells": 5,
+  "formal_core_cells": 20,
+  "formal_local_cells": 10,
+  "formal_deferred_cells": 10,
+  "long_qa_conditions": 10,
+  "long_qa_attempts": 360,
+  "ego_qa_conditions": 3,
+  "ego_qa_expected": 1470
+}

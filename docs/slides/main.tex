@@ -1,0 +1,213 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+\usetheme{Boadilla}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,booktabs,graphicx}
+\definecolor{pyroblue}{RGB}{23,107,145}
+\setbeamercolor{structure}{fg=pyroblue}
+\setbeamercolor{title}{fg=pyroblue}
+\setbeamercolor{frametitle}{fg=pyroblue,bg=black!3}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{\hfill\scriptsize PYRO-KD \textbullet\ Revision 1.5 draft\hspace{1em}\insertframenumber/\inserttotalframenumber\hspace{1em}\vspace{2mm}}
+\setbeamertemplate{itemize items}[circle]
+\newcommand{\Acue}{A\textsubscript{cue}}
+\newcommand{\source}[1]{\vfill{\tiny\color{gray}Evidence: #1}}
+\title{Cue-Driven Keyframe Selection}
+\subtitle{Audio description and video QA\newline Revision 1.5: local experiment evidence}
+\author{PYRO-KD team\newline\small Human names, contributions, and original track declaration pending team confirmation}
+\institute{NYU Computer Vision \textbullet\ Agent Track research project}
+\date{Draft: 23 November 2026}
+\begin{document}
+
+\begin{frame}
+\titlepage
+\vspace{-4mm}
+\begin{center}\small Authorized local captions and QA evaluated; human/API requirements remain deferred.\newline Paid APIs and human labels are deferred; no human-quality claim.\end{center}
+\end{frame}
+
+\begin{frame}{Separate what matters from where narration fits}
+\begin{columns}[T]
+\column{.48\textwidth}
+\begin{block}{Salience}
+Visual novelty; speech cues;\newline non-speech events and acoustic change.
+\end{block}
+\begin{block}{Feasibility}
+VAD gaps; two-second separation;\newline word cap $\lfloor3\Delta t\rfloor$.
+\end{block}
+\column{.48\textwidth}
+\begin{block}{Frozen generation}
+Four frames across two seconds.\newline P0 plain / P1 guidelines + three training exemplars.\newline Qwen2.5-VL; temperature zero.\newline 192-token ceiling chosen on dev only.
+\end{block}
+\begin{alertblock}{Evaluate every transition}
+Requested $\rightarrow$ selected $\rightarrow$ prepared $\rightarrow$ valid $\rightarrow$ rendered.
+\end{alertblock}
+\end{columns}
+\source{Proposal Revision 1.5; frozen REFRAMED TOML and source 09abb6c.}
+\end{frame}
+
+\begin{frame}{The matrix and the scope actually evaluated}
+\centering
+\begin{tabular}{lll}
+\toprule Benchmark & Frozen scope & Conditions \\
+\midrule REFRAMED & 30 test clips; 10 dev & 5 selectors $\times$ 2 prompts \\
+EgoSchema & 490 heldout; 10 pilot & U / V-local / V-memory \\
+Long Video-MME & 12 videos; 36 questions & 10 conditions; 360 requests \\
+\bottomrule
+\end{tabular}
+\vspace{5mm}
+\begin{itemize}
+\item Core plan: U, V, \Acue{}, AV, O $\times$ P0/P1 $\times$ local/API = 20 cells.
+\item Ten local cells authorized; ten paid cells explicitly deferred (\$0 cap).
+\item Proposal A is \Acue{}; O uses reference timestamps and is an upper bound.
+\item EgoSchema has no distributed audio: visual-only diagnostic.
+\end{itemize}
+\source{Frozen split/config hashes; all 5,031 EgoSchema distributed videos probed; Cue2Narrate comparison unavailable.}
+\end{frame}
+
+\begin{frame}{Formal local coverage: losses remain visible}
+\begin{columns}[c]
+\column{.68\textwidth}
+\includegraphics[width=\linewidth]{../results/reframed-formal-core/coverage.pdf}
+\column{.30\textwidth}
+\large 3,398 attempts\\[2mm]
+\normalsize 3,108 valid captions\\
+256 word-budget failures\\
+34 token-limit failures\\[4mm]
+\textbf{3,024 fit individually}\\
+This does not exclude narration self-overlap.
+\end{columns}
+\source{Ten formal local cells; actual Piper at 1.2$\times$. Dev pilot:804 attempts/705 valid; formal settings frozen before test.}
+\end{frame}
+
+\begin{frame}{Formal captions: complete local matrix, explicit failures}
+\centering\small
+\input{core_table.tex}
+\vspace{4mm}
+\begin{itemize}
+\item Ten API cells remain deferred, not missing from the 20-cell plan.
+\item \Acue{}--V under P0: movie-clustered difference .1698, Holm17 $p=.0332$.
+\item Four of 17 structural contrasts meet adjusted $p<.05$; all P1--P0 contrasts have $p=1.0$.
+\item Family declared after descriptive results; not preregistered. Temporal F1 is not semantic quality.
+\end{itemize}
+\source{All 30 clips and 10 movie clusters. Full matrix and 17 contrasts in canonical formal-core/core-temporal exports.}
+\end{frame}
+
+\begin{frame}{Heldout selector agreement before caption generation}
+\begin{columns}[T]
+\column{.52\textwidth}
+\centering
+\begin{tabular}{lrr}
+\toprule Selector & Selected / requested & F1 \\
+\midrule U & 388/388 & .311 \\
+V & 388/388 & .389 \\
+\Acue{} & 384/388 & .505 \\
+AV & 384/388 & .494 \\
+O (oracle) & 366/388 & .839 \\
+\bottomrule
+\end{tabular}
+\column{.44\textwidth}
+\begin{itemize}
+\item All 31 configurations cover all 30 clips.
+\item Descriptive clip-mean temporal F1 at$\pm2$s.
+\item Selection agreement is not caption correctness.
+\item Audio-event human validation remains absent.
+\end{itemize}
+\end{columns}
+\vspace{4mm}
+\small Selector ablation family: 16 movie-clustered contrasts across 10 movies; all Holm-adjusted $p=1.0$. Family declared after descriptive results; not preregistered. No validated ablation winner.
+\vspace{2mm}\small Dev CV: 5 folds / 10 movies; global NSE/SC/GF only. Superclass weights are fixed $\pm.5$; VN/OP were not grid axes.
+\source{Verified development-CV evidence and frozen selector exports; no heldout tuning.}
+\end{frame}
+
+\begin{frame}{Formal audio context: coverage changes with the condition}
+\centering
+\begin{tabular}{lrrr}
+\toprule \Acue{}/P0 context & Valid / 384 & Temporal F1 & TTS fit / rendered \\
+\midrule None (Qwen) & 349 & .469 & 345/349 \\
+Text timeline (Qwen) & 372 & .521 & 370/372 \\
+Native audio (Omni) & 326 & .465 & 324/326 \\
+\bottomrule
+\end{tabular}
+\vspace{5mm}
+\begin{itemize}
+\item Same 384 prepared moments and selected timestamps; selector chosen on dev.
+\item Timeline minus none: $\Delta F1=.0519$, 95\% CI[.0107,.1189], Holm3 $p=.0410$.
+\item Native audio changes the model as well as modality.
+\item Identical timestamps: F1 changes through valid-output availability, not selection or demonstrated semantic improvement.
+\end{itemize}
+\source{Newly declared structural family, not preregistered; all 30 clips/10 movies; native minus none Holm p=.7344.}
+\end{frame}
+
+\begin{frame}{A valid caption can still fail during playback}
+\begin{columns}[T]
+\column{.48\textwidth}
+\begin{block}{Word-compliant, but too long in seconds}
+A six-word dev caption meets its six-word cap.\\[2mm]
+Rendered at 1.2$\times$:2.525s.\newline Available machine speech-free interval:2.200s.\\[2mm]
+\textbf{Speech collision: 0.325 s.}
+\end{block}
+\column{.48\textwidth}
+\begin{block}{Individually fitting, jointly overlapping}
+Caption 1:[27.5,34.429]s\newline Caption 2:[34.0,36.830]s\\[2mm]
+Both avoid machine-labeled original speech.\\[2mm]
+\textbf{AD--AD overlap: 0.429 s.}
+\end{block}
+\end{columns}
+\small Formal timeline ablation totals 729.971 s of excess overlapping narration, despite 370/372 individual fits. A future narration scheduler is a separate method.
+\source{Development qualitative review with IDs, frame/WAV hashes and actual overlap rows; agent inspection, not human labels.}
+\end{frame}
+
+\begin{frame}{EgoSchema: visual-only, complete heldout coverage}
+\centering\small
+\input{ego_qa_table.tex}
+\vspace{4mm}
+\begin{itemize}
+\item Same 490 heldout questions; 10 pilot questions excluded. All 1,470 answers valid.
+\item V-local minus U: $-.0163$, 95\% paired CI[$-.0408,.0102$], Holm $p=.5443$.
+\item V-memory minus U: $-.0204$,Holm $p=.5003$ ; memory minus local: $p=.8337$.
+\item No detected visual-selection advantage; not an equivalence or audio claim.
+\end{itemize}
+\source{Predeclared 3-contrast family; pointwise 95\% video-bootstrap intervals. Distributed videos contain no audio.}
+\end{frame}
+
+\begin{frame}{Long QA: complete coverage, no validated benefit}
+\centering\small
+\input{long_qa_table.tex}
+\vspace{4mm}
+\begin{itemize}
+\item All 360 answers valid: 36 questions from 12 videos per condition.
+\item Matched frames: timeline \Acue{} 20 versus 21 without; AV 18 versus 20.
+\item All 13 video-clustered contrasts have Holm $p=1.0$. Small sample; not proof of no effect.
+\item Unequal realized budget: flat A uses 1,497/2,314 moments (5,988 frames versus 9,256 for U). Cross-selector A/AV comparisons remain diagnostic.
+\end{itemize}
+\source{Frozen 10 conditions/13 contrasts; no missing or invalid answers. All QA: 1,830 valid answers; zero missing, invalid, or generation-error rows.}
+\end{frame}
+
+\begin{frame}{Agent verification: failures that changed the workflow}
+\begin{tabular}{p{.42\textwidth}p{.50\textwidth}}
+\toprule Failure & Verification / repair \\
+\midrule Stale output reuse & Source/config/split/exemplar identity guards \\
+Missing videos omitted & Expected membership and zero-output coverage \\
+Budget errors looked compliant & Complete-decode denominator; truncation unknown \\
+Truncated JSONL resume & Backup + final-fragment recovery; interior corruption fails \\
+False cache failure & Reload published metadata; reuse verified features \\
+Wrong formal TTS cache & Correct external watcher; reuse existing renders \\
+\bottomrule
+\end{tabular}
+\vspace{4mm}
+\small Frozen inference: 817 tests; integrated reports: 847 tests. Both: 3 skips, 5,974 subtests. Real-data smokes, raw-ID accounting, hashes, and measured speech checks complement tests. Scheduler success alone is not scientific validation.
+\source{Agent Log appendix and chronological English log; human contributions require team confirmation.}
+\end{frame}
+
+\begin{frame}{What the evidence supports—and what remains open}
+\begin{itemize}
+\item Higher placement means do not guarantee usable narration.
+\item Text timelines improve valid-output availability at identical selected moments; playback self-overlap remains substantial.
+\item All prompt-prior temporal contrasts have Holm $p=1.0$; human-quality effects remain unmeasured.
+\item Long QA: all 13 Holm $p=1.0$; matched-frame timelines do not improve descriptive accuracy. EgoSchema also has no detected selection advantage; no equal-budget or human-quality claim.
+\end{itemize}
+\begin{block}{Remaining requirements}
+Paid/rubric authorization; human detector labels and peer ratings; per-class learned-weight CV remains unimplemented; truthful team attribution and code walkthrough.
+\end{block}
+\small Reproduce: \texttt{docs/RESULTS\_REPRODUCTION.md}\newline Code and artifacts: \url{https://github.com/Yvonne-Yu217/PYRO-KD}
+\end{frame}
+\end{document}

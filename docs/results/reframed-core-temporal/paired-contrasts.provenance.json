@@ -1,0 +1,6 @@
+{
+  "source": "/scratch/yy5919/pyro-resume-results/formal-core-temporal/contrasts.json",
+  "source_sha256": "4fa615074223bc7c50c0849b012527874abad32e7fff00e3020c2b4d6d0858a4",
+  "comparisons": 17,
+  "scope": "All30clips and10movies;17newlydeclared structural contrasts. Oracleprompt contrast is an upper-bound diagnostic. No matched-pair text significance claim."
+}

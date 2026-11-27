@@ -1,0 +1,216 @@
+{
+  "scope": "Existing dev CV only; no tuning rerun, reference text or human labels",
+  "config": "configs/experiments/reframed_dev_nonzero_tuning.toml",
+  "config_sha256": "bf569d6e5bb872e10630f2e2688c7eaeb59b6cb4c9bb1ea48c4585fd0a4c0f16",
+  "selectors": {
+    "A_cue": {
+      "artifact": "/scratch/yy5919/pyro-resume-results/experiments/reframed_dev_nonzero_tuning_v1/eval/tuning_A_cue.json",
+      "sha256": "b0591df8556b8a3c8d9c90f0dc8915562dfb8130b1fa1b2052e89ce6f1f5be3f",
+      "grid": {
+        "weights.nse": [
+          -0.5,
+          0.5
+        ],
+        "weights.sc": [
+          0.5,
+          1.0
+        ],
+        "weights.gf": [
+          0.0,
+          0.5
+        ]
+      },
+      "n_videos": 10,
+      "n_videos_scored": 10,
+      "objective": "macro F1 at +/-2.0 s",
+      "best": {
+        "weights.gf": 0.5,
+        "weights.nse": 0.5,
+        "weights.sc": 0.5
+      },
+      "best_f1": 0.5136809367454529,
+      "cv_held_out_mean_f1": 0.49516241822693435,
+      "cv": [
+        {
+          "fold": 0,
+          "held_out": [
+            "XW8ibMVLyUUG",
+            "nhzM_vBuMrVq"
+          ],
+          "best_point": {
+            "weights.gf": 0.5,
+            "weights.nse": 0.5,
+            "weights.sc": 0.5
+          },
+          "train_f1": 0.5013387075887076,
+          "held_out_f1": 0.563049853372434
+        },
+        {
+          "fold": 1,
+          "held_out": [
+            "KqNcAcZWNijZ",
+            "q78W0DyIxH79"
+          ],
+          "best_point": {
+            "weights.gf": 0.0,
+            "weights.nse": 0.5,
+            "weights.sc": 0.5
+          },
+          "train_f1": 0.5675010025816477,
+          "held_out_f1": 0.29292929292929293
+        },
+        {
+          "fold": 2,
+          "held_out": [
+            "CxWby8RuUwU6",
+            "HfOMXYYPG5nx"
+          ],
+          "best_point": {
+            "weights.gf": 0.0,
+            "weights.nse": 0.5,
+            "weights.sc": 0.5
+          },
+          "train_f1": 0.4851777702584154,
+          "held_out_f1": 0.6222222222222222
+        },
+        {
+          "fold": 3,
+          "held_out": [
+            "eFTqT0_Z632j",
+            "v2gCnXXTSp6W"
+          ],
+          "best_point": {
+            "weights.gf": 0.5,
+            "weights.nse": 0.5,
+            "weights.sc": 0.5
+          },
+          "train_f1": 0.5031151569458021,
+          "held_out_f1": 0.5559440559440559
+        },
+        {
+          "fold": 4,
+          "held_out": [
+            "QP7CsuF86J2V",
+            "l5lLQICPOcnb"
+          ],
+          "best_point": {
+            "weights.gf": 0.5,
+            "weights.nse": 0.5,
+            "weights.sc": 0.5
+          },
+          "train_f1": 0.5316845042651495,
+          "held_out_f1": 0.44166666666666665
+        }
+      ],
+      "grid_points": 8,
+      "dev_ids_partition_exactly_once": true,
+      "ten_distinct_dev_movies": true,
+      "disjoint_test_ids": true
+    },
+    "AV": {
+      "artifact": "/scratch/yy5919/pyro-resume-results/experiments/reframed_dev_nonzero_tuning_v1/eval/tuning_AV.json",
+      "sha256": "85aa523db275c5001cfc36b961347ace208e841325880f22e8970a0e731369b2",
+      "grid": {
+        "weights.nse": [
+          -0.5,
+          0.5
+        ],
+        "weights.sc": [
+          0.5,
+          1.0
+        ],
+        "weights.gf": [
+          0.0,
+          0.5
+        ]
+      },
+      "n_videos": 10,
+      "n_videos_scored": 10,
+      "objective": "macro F1 at +/-2.0 s",
+      "best": {
+        "weights.gf": 0.0,
+        "weights.nse": 0.5,
+        "weights.sc": 1.0
+      },
+      "best_f1": 0.48337289353418383,
+      "cv_held_out_mean_f1": 0.47226178242307276,
+      "cv": [
+        {
+          "fold": 0,
+          "held_out": [
+            "XW8ibMVLyUUG",
+            "nhzM_vBuMrVq"
+          ],
+          "best_point": {
+            "weights.gf": 0.0,
+            "weights.nse": 0.5,
+            "weights.sc": 1.0
+          },
+          "train_f1": 0.46821904946904946,
+          "held_out_f1": 0.5439882697947214
+        },
+        {
+          "fold": 1,
+          "held_out": [
+            "KqNcAcZWNijZ",
+            "q78W0DyIxH79"
+          ],
+          "best_point": {
+            "weights.gf": 0.5,
+            "weights.nse": 0.5,
+            "weights.sc": 0.5
+          },
+          "train_f1": 0.5136226825742954,
+          "held_out_f1": 0.3484848484848485
+        },
+        {
+          "fold": 2,
+          "held_out": [
+            "CxWby8RuUwU6",
+            "HfOMXYYPG5nx"
+          ],
+          "best_point": {
+            "weights.gf": 0.0,
+            "weights.nse": 0.5,
+            "weights.sc": 1.0
+          },
+          "train_f1": 0.4671790798806928,
+          "held_out_f1": 0.5481481481481482
+        },
+        {
+          "fold": 3,
+          "held_out": [
+            "eFTqT0_Z632j",
+            "v2gCnXXTSp6W"
+          ],
+          "best_point": {
+            "weights.gf": 0.0,
+            "weights.nse": 0.5,
+            "weights.sc": 1.0
+          },
+          "train_f1": 0.48446087216248507,
+          "held_out_f1": 0.47902097902097907
+        },
+        {
+          "fold": 4,
+          "held_out": [
+            "QP7CsuF86J2V",
+            "l5lLQICPOcnb"
+          ],
+          "best_point": {
+            "weights.gf": 0.0,
+            "weights.nse": 0.5,
+            "weights.sc": 1.0
+          },
+          "train_f1": 0.49379945025106314,
+          "held_out_f1": 0.44166666666666665
+        }
+      ],
+      "grid_points": 8,
+      "dev_ids_partition_exactly_once": true,
+      "ten_distinct_dev_movies": true,
+      "disjoint_test_ids": true
+    }
+  },
+  "limitation": "Global signed NSE, SC and GF grid cross-validated; per-superclass fixed +/- ablations were not cross-validated per-superclass weight learning."
+}

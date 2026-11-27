@@ -25,6 +25,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from src.generation.hf_vlm import MODELS, generate_batch, load_model, resolve_model  # noqa: E402
 from src.generation.outputs import merge_meta, read_rows, settled_ids, status_counts  # noqa: E402
 from src.generation.prompts import PROMPTS, build_prompt, word_limit_for_gap  # noqa: E402
+from src.generation.exemplars import check_resume_prior, load_exemplars  # noqa: E402
+from src.generation.audio_timeline import check_audio_resume, render_timeline, timeline_hash  # noqa: E402
+from src.generation.jsonl_recovery import read_resume_rows,apply_tail_recovery
+from src.generation.provenance import capture_provenance, check_resume_fingerprint  # noqa: E402
+from src.generation.native_audio import load_native_audio
 
 
 def read_jsonl(path: Path) -> list[dict]:
@@ -54,6 +59,7 @@ def done_ids(path: Path, max_new_tokens: int | None = None, temperature: float =
 
 def finalize_generation(
     text: str, raw: str, new_tokens: int, batch_size: int, latency: float, max_new_tokens: int,
+    word_limit: int | None = None,
 ) -> dict:
     """Result record for one generation.
 
@@ -77,6 +83,12 @@ def finalize_generation(
             f"hit_token_limit: generation reached max_new_tokens={max_new_tokens} "
             "before finishing (output is cut off and was not scored)"
         )
+    if word_limit is not None:
+        result['word_count'] = len(text.split())
+        result['word_limit_exceeded'] = result['word_count'] > word_limit
+        if result['word_limit_exceeded']:
+            result['error'] = result.get('error', '') + (
+                f" word_limit_exceeded: {result['word_count']} words > {word_limit}; full decode retained")
     return result
 
 
@@ -98,9 +110,19 @@ def prepare(row: dict, args) -> tuple[list, str, int]:
     from PIL import Image
 
     images = [resize_max_side(Image.open(p).convert("RGB"), args.max_side) for p in row["frames"]]
+    audio_context = getattr(args, "audio_context", "legacy")
+    transcript = row.get("transcript", "") if audio_context == "legacy" else ""
+    timeline = render_timeline(row.get("audio_timeline")) if audio_context == "timeline" else None
     prompt = build_prompt(
-        args.prior, row["time"], len(images), args.span, word_limit, row.get("transcript", ""),
+        args.prior, row.get("frame_center_time", row["time"]), len(images), args.span, word_limit, transcript,
+        exemplars=getattr(args, "exemplar_texts", ()),
+        audio_timeline_text=timeline,
     )
+    if audio_context == 'native':
+        audio = row['native_audio']
+        prompt += (f"\nThe supplied audio covers {audio['start_seconds']:.6f} to "
+                   f"{audio['end_seconds']:.6f} seconds of the clip. Use it as context "
+                   "for the visible scene; do not transcribe dialogue.")
     return images, prompt, word_limit
 
 
@@ -112,6 +134,12 @@ def parse_args():
     p.add_argument("--output", default=None,
                    help="default: outputs/<model>/<input stem>_<prior>.jsonl")
     p.add_argument("--prior", choices=sorted(PROMPTS), default="P0")
+    p.add_argument("--exemplars", help="frozen training-only bundle required for P1")
+    p.add_argument('--backend', choices=('vlm', 'omni'), default='vlm')
+    p.add_argument('--word-budget-retries', type=int, choices=(0, 1), default=0,
+                   help='optional one model repair of an over-budget draft; all attempts retained')
+    p.add_argument("--audio-context", choices=("legacy", "none", "timeline", "native"), default="legacy",
+                   help="legacy transcript; no audio text; or cached speech/event timeline")
     p.add_argument("--span", type=float, default=2.0, help="seconds covered by each frame window")
     p.add_argument("--batch-size", type=int, default=4)
     p.add_argument("--max-new-tokens", type=int, default=64)
@@ -129,24 +157,56 @@ def parse_args():
 
 def main():
     args = parse_args()
+    if args.audio_context == 'native' and args.backend != 'omni':
+        raise ValueError('native waveform context requires --backend omni')
+    if args.backend == 'omni' and (args.batch_size != 1 or args.quant != 'none' or args.reasoning_strength):
+        raise ValueError('Omni requires --batch-size 1, --quant none, and no reasoning-strength')
+    if (args.prior == "P1") != bool(args.exemplars):
+        raise ValueError("--exemplars is required for P1 and forbidden for P0")
+    args.exemplar_texts, args.exemplar_sha256 = (
+        load_exemplars(args.exemplars) if args.exemplars else ([], None)
+    )
     model_id = resolve_model(args.model)
     short = args.model.replace("/", "__") + ("" if args.quant == "none" else f"-{args.quant}")
     out_path = Path(args.output or f"outputs/{short}/{Path(args.input).stem}_{args.prior}.jsonl")
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     rows = read_jsonl(Path(args.input))
+    if args.audio_context == 'native':
+        for row in rows:
+            if row.get('transcript') or row.get('audio_timeline'):
+                raise ValueError('native input must not include transcript/timeline context')
+            if row['native_audio']['frame_center_time'] != row.get('frame_center_time', row['time']):
+                raise ValueError('native audio and visual center differ')
+            load_native_audio(row['native_audio'])
+    provenance = capture_provenance(Path(__file__).resolve().parents[1], Path(args.input), rows, {
+        "model_id": model_id, "quant": args.quant, "attn_impl": args.attn_impl,
+        "prior": args.prior, "exemplar_sha256": args.exemplar_sha256,
+        "audio_context": args.audio_context, "span": args.span, "max_side": args.max_side,
+        "temperature": args.temperature, "top_p": args.top_p,
+        "reasoning_strength": args.reasoning_strength,
+        "backend": args.backend,
+        "word_budget_retries": args.word_budget_retries,
+    })
     if args.limit:
         rows = rows[: args.limit]
-    rows_on_disk = read_rows(out_path)
+    rows_on_disk, recovery = read_resume_rows(out_path)
+    check_resume_fingerprint(rows_on_disk, provenance["run_fingerprint"])
+    check_resume_prior(rows_on_disk, args.prior, args.exemplar_sha256)
+    check_audio_resume(rows_on_disk, rows, args.audio_context)
+    if args.audio_context == "timeline":
+        for row in rows:
+            render_timeline(row.get("audio_timeline"))
     finished, repeats = settled_ids(rows_on_disk, args.max_new_tokens, args.temperature)
     finished &= {r["id"] for r in rows}
     todo = [r for r in rows if r["id"] not in finished]
     print(f"[run_ad] {len(rows)} moments, {len(finished)} already done, {len(todo)} to run", flush=True)
     if repeats & finished:
         print(
-            f"[run_ad] {len(repeats & finished)} of the finished moments are token-limit failures "
-            f"that would repeat at max_new_tokens={args.max_new_tokens}, temperature={args.temperature}; "
-            "raise --max-new-tokens to retry them", flush=True)
+            f"[run_ad] {len(repeats & finished)} of the finished moments are failures that would repeat "
+            f"at max_new_tokens={args.max_new_tokens}, temperature={args.temperature} (over the word "
+            "budget, or cut off at the token limit; raising --max-new-tokens retries only the latter)",
+            flush=True)
 
     if args.dry_run:
         for row in todo[:5]:
@@ -156,11 +216,31 @@ def main():
         print("[run_ad] dry run: no model loaded")
         return
 
+    if recovery is not None:
+        if not rows_on_disk:
+            sidecar = json.loads(out_path.with_suffix(out_path.suffix + '.provenance.json').read_text())
+            if sidecar['run_fingerprint'] != provenance['run_fingerprint']:
+                raise ValueError('interrupted output provenance mismatch')
+        print(json.dumps({'output_recovery': apply_tail_recovery(out_path, recovery)}), flush=True)
+    if not todo:
+        print("[run_ad] no pending moments; no model loaded")
+        return
+
+    # Save before model loading so an interrupted attempt still has source evidence.
+    provenance_path = out_path.with_suffix(out_path.suffix + ".provenance.json")
+    temporary = provenance_path.with_suffix(".json.tmp")
+    temporary.write_text(json.dumps(provenance, indent=2) + "\n")
+    temporary.replace(provenance_path)
+
     import torch
     import transformers
 
     t0 = time.time()
-    processor, model, cls_name = load_model(model_id, args.attn_impl, args.quant)
+    if args.backend == 'omni':
+        from src.generation.omni import load_model as load_omni
+        processor, model, cls_name = load_omni(model_id, args.attn_impl)
+    else:
+        processor, model, cls_name = load_model(model_id, args.attn_impl, args.quant)
     load_s = time.time() - t0
     print(f"[run_ad] loaded {model_id} via {cls_name} in {load_s:.0f}s", flush=True)
     if torch.cuda.is_available():
@@ -176,7 +256,22 @@ def main():
                 base = {"id": row["id"], "video_id": row.get("video_id"), "temperature": args.temperature,
                         "selector": row.get("selector"), "time": row["time"],
                         "frame_times": row.get("frame_times"), "model": args.model,
-                        "model_id": model_id, "quant": args.quant, "prior": args.prior}
+                        "model_id": model_id, "quant": args.quant, "prior": args.prior,
+                        "exemplar_sha256": args.exemplar_sha256,
+                        "gap_seconds": row.get("gap_seconds"),
+                        "word_budget_rule": row.get("word_budget_rule"),
+                        "audio_context": args.audio_context,
+                        "backend": args.backend,
+                        "run_fingerprint": provenance["run_fingerprint"],
+                        "audio_timeline_sha256": timeline_hash(row["audio_timeline"]) if args.audio_context == "timeline" else None}
+                for key in ("event_time", "placement_lag_seconds", "frame_center_policy",
+                            "frame_center_time", "selection_condition", "selection_rank",
+                            "selection_score", "selection_report_sha256", "protocol_status",
+                            "k_requested", "k_shortfall", "gap_start", "gap_end"):
+                    if key in row:
+                        base[key] = row[key]
+                if args.audio_context == 'native':
+                    base['native_audio'] = row['native_audio']
                 try:
                     images, prompt, word_limit = prepare(row, args)
                     prepared.append((images, prompt))
@@ -194,17 +289,27 @@ def main():
                 idx = chunks.pop(0)
                 try:
                     t = time.time()
-                    texts, raws, n_new = generate_batch(
-                        processor, model,
-                        [prepared[i][0] for i in idx], [prepared[i][1] for i in idx],
-                        max_new_tokens=args.max_new_tokens, temperature=args.temperature,
-                        top_p=args.top_p, reasoning_strength=args.reasoning_strength,
-                    )
+                    if args.backend == 'omni':
+                        from src.generation.omni import generate_one
+                        i = idx[0]
+                        waveform = (load_native_audio(records[i]['native_audio'])
+                                    if args.audio_context == 'native' else None)
+                        texts, raws, n_new = generate_one(
+                            processor, model, prepared[i][0], prepared[i][1], waveform,
+                            args.max_new_tokens, args.temperature, args.top_p)
+                    else:
+                        texts, raws, n_new = generate_batch(
+                            processor, model,
+                            [prepared[i][0] for i in idx], [prepared[i][1] for i in idx],
+                            max_new_tokens=args.max_new_tokens, temperature=args.temperature,
+                            top_p=args.top_p, reasoning_strength=args.reasoning_strength,
+                        )
                     dt = time.time() - t
                     gen_s += dt
                     for j, i in enumerate(idx):
                         results[i] = finalize_generation(
-                            texts[j], raws[j], n_new[j], len(idx), dt, args.max_new_tokens)
+                            texts[j], raws[j], n_new[j], len(idx), dt, args.max_new_tokens,
+                            records[i]['word_limit'])
                 except Exception as e:
                     if torch.cuda.is_available():
                         torch.cuda.empty_cache()
@@ -215,6 +320,25 @@ def main():
 
             for i, rec in enumerate(records):
                 res = results[i]
+                if args.word_budget_retries:
+                    from src.generation.budget_repair import repair_once
+                    def repair_generate(repair_prompt):
+                        start_time = time.time()
+                        if args.backend == 'omni':
+                            from src.generation.omni import generate_one
+                            wave = load_native_audio(rec['native_audio']) if args.audio_context == 'native' else None
+                            text, raw, tokens = generate_one(
+                                processor, model, prepared[i][0], repair_prompt, wave,
+                                args.max_new_tokens, args.temperature, args.top_p)
+                        else:
+                            text, raw, tokens = generate_batch(
+                                processor, model, [prepared[i][0]], [repair_prompt],
+                                max_new_tokens=args.max_new_tokens, temperature=args.temperature,
+                                top_p=args.top_p, reasoning_strength=args.reasoning_strength)
+                        return finalize_generation(text[0], raw[0], tokens[0], 1,
+                            time.time()-start_time, args.max_new_tokens, rec['word_limit'])
+                    res = repair_once(res, rec['prompt'], rec['word_limit'], repair_generate)
+                    gen_s += res['repair_latency_s']
                 n_ok += "error" not in res
                 n_err += "error" in res
                 n_truncated += bool(res.get("hit_token_limit"))
@@ -224,6 +348,7 @@ def main():
                   f"({n_err} errors, {gen_s:.0f}s generating)", flush=True)
 
     attempt = {
+        "provenance": provenance,
         "model_id": model_id, "model_class": cls_name, "quant": args.quant,
         "n_gpus": torch.cuda.device_count() if torch.cuda.is_available() else 0, "args": vars(args),
         "n_ok": n_ok, "n_error": n_err, "n_hit_token_limit": n_truncated,

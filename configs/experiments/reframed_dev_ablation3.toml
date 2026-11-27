@@ -1,0 +1,31 @@
+# Selector-only development comparison. Whisper events remain VAD-gated.
+# AST/CLAP are replaced; acoustic and speech controls and tuned weights are shared.
+[experiment]
+name = "reframed_dev_ablation3_gated_v1"
+seed = 0
+task = "ad"
+allow_test = false
+[dataset]
+name = "reframed"
+root = "${REFRAMED_ROOT:-/scratch/yy5919/pyro-kd-derived/datasets/reframed}"
+split = "validation"
+subset = "dev"
+splits_config = "configs/reframed_splits.json"
+[paths]
+cache_root = "${PYRO_CACHE:-/scratch/yy5919/pyro-kd-derived/cache/reframed-whisper-gated-dev}"
+output_root = "${PYRO_OUTPUTS:-/scratch/yy5919/pyro-resume-results}/experiments"
+[matrix]
+selectors = ["A_cue"]
+priors = ["P0"]
+models = []
+[selectors.A_cue]
+base = "A_cue"
+[selectors.A_cue.options.weights]
+gf = 0.5
+nse = 0.5
+sc = 0.5
+[ablations]
+enabled = ["3"]
+[evaluation]
+baseline = "A_cue-tagger"
+resamples = 10000

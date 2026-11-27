@@ -1,0 +1,134 @@
+# Development placement feasibility
+
+The fixed Uniform candidate formula and bounded placement in VAD gaps do not
+necessarily permit K generated descriptions. An audit of the frozen ten-clip
+development subsets quantified this before changing the selector protocol.
+No test outcomes or model generations were used. The audit changes no inputs.
+
+| Dataset | Requested Uniform moments | Minimum word capacity | Advance/lag bound | Individually snappable | Nearest placements after 2s separation |
+|---|---:|---:|---:|---:|---:|
+| REFRAMED | 111 | 1 | 0s | 60 | 60 |
+| REFRAMED | 111 | 1 | 2s | 76 | 76 |
+| REFRAMED | 111 | 1 | 10s | 94 | 89 |
+| REFRAMED | 111 | 15 | 2s | 62 | 62 |
+| MTG | 189 | 1 | 0s | 71 | 71 |
+| MTG | 189 | 1 | 2s | 93 | 93 |
+| MTG | 189 | 1 | 10s | 135 | 134 |
+| MTG | 189 | 15 | 2s | 65 | 65 |
+
+Bounds are symmetric and exploratory; no final bound or minimum capacity has
+been selected by this audit. It uses current cached usable gaps, including
+the existing minimum-gap duration and speech-boundary margins. That differs
+from the old builder's untrimmed remaining-time-to-speech test, so the0s counts
+are not expected to match the old66/78 emitted inputs. A one-word requirement
+is a feasibility diagnostic, not a recommendation for description quality.
+
+The individual count is exact for each candidate under the specified gaps and
+bounds. The separated count greedily removes collisions among nearest snapped
+placements; it is not an optimal joint placement algorithm or a proof of the
+maximum feasible cardinality. Missing individual placements cannot be repaired
+by a better collision solver under the same bounds.
+
+Maximum absolute annotation/media duration drift on these development clips
+was0.043s for REFRAMED and0.852s for MTG. Those checks do not prove transcript
+or AD alignment across the entire dataset.
+
+Implications for implementation:
+
+- Keep the shared requested K explicit. Do not reduce it separately per selector.
+- Preserve infeasible requests and reasons in coverage/failure accounting.
+- Do not silently move Uniform events arbitrarily far or add replacement events
+  while continuing to call the condition the fixed Uniform baseline.
+- Distinguish requested candidate budget from feasible/generated descriptions;
+  a claim of equal generated counts is not currently supported.
+- Complete dev-only placement/protocol reconciliation before the full matrix.
+  This audit does not freeze a replacement protocol or resolve the requirement.
+
+Reproduce with scripts/audit_gap_feasibility.py, passing --dataset, --data-dir,
+--cache-dir, --splits and --output. Actual commands and outputs:
+
+```bash
+source hpc/config.sh
+in_env ro 'python scripts/audit_gap_feasibility.py --dataset reframed --data-dir /scratch/yy5919/pyro-kd-derived/datasets/reframed --cache-dir /scratch/yy5919/pyro-kd-derived/cache/reframed --splits configs/reframed_splits.json --output outputs/verification/reframed-dev-gap-feasibility.json'
+in_env ro 'python scripts/audit_gap_feasibility.py --dataset mtg-ad --data-dir /scratch/yy5919/pyro-kd-derived/datasets/mtg-ad --cache-dir /scratch/yy5919/pyro-kd-derived/cache/mtg-ad --splits configs/mtg_ad_splits.json --output outputs/verification/mtg-dev-gap-feasibility.json'
+```
+
+Reports include all15 combinations of capacity1/6/15 and bounds0/1/2/5/10,
+per-video counts and split hashes. No generation or quality metric was run.
+
+Running visual memory implementation checkpoint
+
+`build_moments.py --selector V --visual-novelty memory` now enables greedy novelty against every already-selected embedding, recomputed after each choice. The first selection uses the historical adjacent-frame score; subsequent novelty is `(1 - max cosine to selected frames) / 2`, plus the existing shot-boundary bonus. Embeddings are normalized at use, validated against the committed cache, and invalid/missing embeddings fail explicitly. Minimum separation remains 2 seconds; ties choose earlier times and output is chronological. `--visual-novelty local` preserves the adjacent-frame baseline (still the compatibility default). Mode is recorded in inputs and reports.
+
+This is ranking integration, not completion of the two-stage selector: the builder still filters unspeakable moments after ranking, and the placement/fixed-K protocol remains unresolved. Memory currently refers to selected candidates, including candidates subsequently filtered by the old builder; the final snapped-candidate pipeline must rank feasible placements before generation. Shot/novelty weights remain untuned. There are no real development visual caches in the derived cache directory yet, so validation currently covers synthetic recurrence/separation cases and existing pipeline tests, not real visual feature extraction or scientific results. Per-label event weights, speech cues and AV integration remain outstanding.
+
+Feasible-placement ranking checkpoint
+
+`src/utils/placed_selection.py` now snaps candidates before ranking. Infeasible events cannot seed visual memory; subsequent memory contains only selected candidates. Separation is checked at snapped playback times, while source event times and selection ranks are retained. Signed base scores are supported for later event trigger/suppress integration. The result partitions every candidate into selected, infeasible, separation-rejected or budget-unselected groups, preserving requested K and explicit shortfall. This is greedy nearest-gap placement, not an optimal joint placement solver. Gap word capacity does not reserve duration against other descriptions; rendered AD-to-AD overlap still requires evaluation.
+
+Real development diagnostic: `scripts/audit_placed_visual.py --data-dir /scratch/yy5919/pyro-kd-derived/datasets/reframed --cache-dir /scratch/yy5919/pyro-kd-derived/cache/reframed --required-words 1 --max-advance 2 --max-lag 2 --output outputs/verification/reframed-dev-placed-visual.json` inside the read-only environment with OMP_NUM_THREADS=4 and OPENBLAS_NUM_THREADS=4. Both local and memory rankers selected97 of111 requested moments, shortfall14, across the ten frozen dev clips. This uses existing margin-trimmed VAD gaps. One-word minimum/±2s are exploratory settings; no tuning or protocol freeze. Do not directly attribute the change from earlier82/75 outputs to memory: this diagnostic changes placement and gap definitions too. Complete candidate accounting and exact gap capacity, bounds and separation checks passed for all20 video/mode cases. Generation inputs still need explicit event-frame versus playback-time handling, and A/AV cue integration remains incomplete.
+
+Exploratory audio/fused ranking checkpoint
+
+`src/utils/fused_candidates.py` connects cached event rises, CLAP change, loudness change, speech semantic/deictic cues and VAD silence opportunities to A/AV candidate scores. A uses audio-derived event-grid/speech/silence times only and never reads visual inputs inside the candidate function. AV adds visual frame times, shot bonuses and running selected-frame novelty. Events use strongest positive minus strongest negative weighted class rise, masking all speech/silence labels, plus signed CLAP/2 and loudness-rise/20dB clipped at1. Explicit per-label overrides are supported but no superclass mapping/weights have been tuned. Candidate components are retained, and event sign changes both labelled and unlabelled audio-change terms. Semantic change is supported within±0.5s of a chunk start; lexical and long-silence cues apply within their recorded intervals. These support widths/scales are exploratory.
+
+`audit_fused_selectors.py` ran A/AV x global trigger/suppress on ten frozen dev clips using the same explicit1word/±2s placement settings. All four selected97/111; sign changes altered selected event sets in all ten clips for both A and AV. Independent40-case audit verified exact score reconstruction, time bounds, word capacity, separation and complete candidate accounting. This establishes mechanics, not accuracy or a result supporting either sign hypothesis. Evidence outputs/verification/reframed-dev-fused-selectors{,-check}.json.
+
+Outstanding before the final method: onset-strength incorporation, calibrated event scores and human detector validation, dev tuning, superclass parameterization, GF/OP score terms and rendered overlap, hierarchical budget allocation, generation input integration, and the unresolved fixed-K policy. The audit is not the20-run experiment matrix. Existing historical `build_moments --selector A` remains the old gap-feature selector; do not substitute it for this new pipeline.
+
+Exploratory development placement metrics (not final results)
+
+`scripts/evaluate_placed_dev.py` now evaluates the six cached placed conditions against real US AD start times after merging adjacent cues at<=0.5s. Matching is one-to-one within±2s. All ten clips are from distinct movies (checked), permitting video bootstrap here; do not reuse that assumption for the test set. All annotations are retained, with0out-of-bounds annotations observed. Raw match records, tolerance sweeps, requested/selected counts and matched-per-requested values are saved, including zero-selection videos if any.
+
+| Condition | Selected/requested | Macro F1 | 95% bootstrap CI |
+|---|---:|---:|---:|
+| A trigger |97/111|0.389|0.302–0.482|
+| A suppress |97/111|0.330|0.222–0.450|
+| AV trigger |97/111|0.407|0.350–0.478|
+| AV suppress |97/111|0.377|0.304–0.462|
+| V local |97/111|0.413|0.346–0.486|
+| V memory |97/111|0.461|0.369–0.566|
+
+Paired macro-F1 differences (10000bootstrap resamples, seed0): A trigger-minus-suppress0.059 [-0.015,0.139]; AV trigger-minus-suppress0.030 [-0.042,0.098]; V memory-minus-local0.048 [-0.024,0.141]. All include zero. These are untuned dev diagnostics with missing method components; no superiority, final hypothesis, or held-out generalization claim. U/O comparators and the complete matrix remain pending.
+
+Artifacts: outputs/verification/reframed-dev-placement-metrics.json (60 per-video records, six summaries and paired intervals), .csv, -metrics-check.json, and reframed-dev-placement-f1.png. The plot was rendered and visually inspected. Reproduce evaluation using --data-dir with the derived REFRAMED path, --fused-report outputs/verification/reframed-dev-fused-selectors.json, --visual-report outputs/verification/reframed-dev-placed-visual.json and a new --output path. Plot with scripts/plot_placed_dev.py --input <metrics.json> --output <figure.png>.
+
+Hierarchical allocation mechanics
+
+`src/utils/hierarchical_budget.py` segments an explicit scene/silence/music boundary list with min/max lengths, distributes K using unsigned event density with a quiet-segment floor, and conserves integer budgets using capped largest remainders. It reports capacity/floor shortfalls; K too small for the requested floor raises instead of silently weakening the floor. Optional segment quotas in `select_placed` retain global novelty memory and global2s separation; memory is not reset per chunk. Quotas govern source-event segments, not delayed playback segments. They are not a guarantee of feasible output count.
+
+Tests include200 randomized conservation/capacity cases and a repeated-scene example requiring memory across segments. Short-dev diagnostic `scripts/audit_hierarchical_dev.py` uses20–60s segments, existing shot boundaries, starts of>=5s VAD gaps and exploratory Music rises>=0.1/probability>=0.5. Density is summed maximum non-speech class-rise mass per second, not a human event count. The ten clips yielded55segments; allocated111 slots, selected92 (19shortfall), compared with97 flat selections from the same exploratory AV-trigger source. Do not interpret this as a long-form ablation or performance result: clips are short, settings untuned, and segment capacity/placement constraints can leave quotas unfilled. Evidence outputs/verification/reframed-dev-hierarchy{,-check}.json. Long-form data access, boundary calibration and actual long-video evaluation remain outstanding.
+
+Shared-placement Uniform/oracle diagnostics
+
+Working default for CPU diagnostics is fixed requested K with explicit unfilled-slot failures, rather than changing K to the realized count. This does not claim equal numbers of generated descriptions or a frozen final protocol. `audit_placed_baselines.py` now applies the same1word/±2s/2s-separation rule to Uniform event anchors and a reference-conditioned oracle. U anchors remain exactly uniform; playback can move within the shared bounds. O uses all merged US AD starts as candidates, equal scores and earliest feasible placement ties. It is not deployable, and this nearest-gap version is not claimed as an optimal global placement bound. Reference times never enter A/AV/V ranking.
+
+Results on the same ten dev clips: U_snapped76/111slots, O_snapped85/111. New eight-condition diagnostic uses the onset-enhanced A/AV recipe and prior V variants, preserving earlier reports. MacroF1: U_snapped0.377, O_snapped0.845; macro matched/requested:0.335 and0.746. Each report also shows realized counts and shortfalls. `evaluate_placed_dev.py --baseline-report ...` checks matching splits/settings/K and now reports a bootstrap interval for matched placements divided by requested slots, so fewer generated placements cannot disappear from that accounting. The metric is descriptive and is not a substitute for AD quality or rendered-overlap evaluation.
+
+Evidence: outputs/verification/reframed-dev-placement-with-baselines.json/.csv/.png and reframed-dev-baseline-metrics-check.json.80per-video records passed independent count/match/budget arithmetic checks; the eight-condition plot was visually inspected and its caption now derives selected/requested ranges from actual data. Current U/O variants still need generation-input integration and all methods need final score/weight/protocol work before the core matrix.
+
+Explicit gap score (exploratory)
+
+`select_placed` now accepts `gap_weight` and an explicit `gap_target_words`.
+GF = C/(C+T), where C=floor(3*(gap_end-playback_time)) is the remaining
+whole-word capacity after snapping and T is the declared scoring target.
+This bounded normalization is an implementation choice, not a formula specified
+by the proposal: target capacity gives0.5, longer gaps approach1. It rewards
+room for narration without an unbounded long-silence score. T neither caps
+generation nor replaces the hard `required_words` feasibility minimum. The
+weight defaults to0; a positive weight requires an explicit positive integer T.
+Selected records retain the unweighted GF so total scores can be reconstructed.
+The greedy method still picks the nearest feasible gap before scoring; it does
+not optimize alternative gap assignments. Rendered OP remains outstanding.
+
+A diagnostic with onset features, GF weight1 and target15 (an explicitly untuned
+scale, not a frozen narration length) selected97/99/98/98 of111 requested moments
+for A-trigger/A-suppress/AV-trigger/AV-suppress. Arithmetic was independently
+reconstructed for all392 selections. Candidate symmetric differences from the
+prior zero-GF recipe were34/66/43/40, counting additions and removals. No quality
+improvement is inferred. A separate zero-weight run exactly reproduced all391
+prior placements, scores, rejection lists and component records across40
+video-condition records (excluding the newly recorded GF field). Evidence:
+outputs/verification/reframed-dev-fused-with-gap-score.json,
+reframed-dev-fused-gap-zero-ablation.json and reframed-dev-gap-score-check.json.
+This is development-only mechanics, not tuning or a final matrix result.

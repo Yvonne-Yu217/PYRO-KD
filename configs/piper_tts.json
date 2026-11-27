@@ -1,0 +1,33 @@
+{
+  "repo_id": "rhasspy/piper-voices",
+  "revision": "e9c8a39444359388adaa94255becb37a5a2b8e51",
+  "voice": "en_US-ljspeech-medium",
+  "engine": "piper-tts",
+  "engine_version": "1.8.0",
+  "files": [
+    {
+      "name": "MODEL_CARD",
+      "bytes": 517,
+      "sha256": "fbee1529c89d36b3fe76d7e9f3f832dce17f44900a52d76a9bda735654766b4d"
+    },
+    {
+      "name": "en_US-ljspeech-medium.onnx",
+      "bytes": 63531379,
+      "sha256": "6f52a751e2349abe7a76735eb09dc1875298c77ea2342ffd2fef79ff81b87f22"
+    },
+    {
+      "name": "en_US-ljspeech-medium.onnx.json",
+      "bytes": 4972,
+      "sha256": "141d612cc0a95ed7efc1ca936b845c2364967f2e9217c5dbfcf69fc4d6c65860"
+    }
+  ],
+  "sample_rate": 22050,
+  "dataset_license": "public domain per pinned MODEL_CARD",
+  "synthesis": {
+    "length_scale": 1.0,
+    "noise_scale": 0.0,
+    "noise_w_scale": 0.0,
+    "normalize_audio": true
+  },
+  "evaluation_playback_speed": 1.2
+}

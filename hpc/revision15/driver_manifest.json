@@ -1,0 +1,117 @@
+[
+  {
+    "file": "pyro-secondary-gpu.py",
+    "original": "/scratch/yy5919/pyro-secondary-gpu.py",
+    "sha256": "84a35a73897fbb3f02e1db23fd48e3e0ca25b40767ef477aa63df7fa4e01ba08"
+  },
+  {
+    "file": "pyro-secondary-gpu.sbatch",
+    "original": "/scratch/yy5919/pyro-secondary-gpu.sbatch",
+    "sha256": "b306aec3d529c183b963bf6c41fb6f6b8da3f94966a3f54a358a5a4d1ff21036"
+  },
+  {
+    "file": "pyro-primary-ego-queue.py",
+    "original": "/scratch/yy5919/pyro-primary-ego-queue.py",
+    "sha256": "56cafd09b68619539f039ef8c1a448e86d214b561638b0e96cbaed448d30c0ae"
+  },
+  {
+    "file": "pyro-primary-long-controls.py",
+    "original": "/scratch/yy5919/pyro-primary-long-controls.py",
+    "sha256": "396ddd0414f7b4dd70614adddca4571860c876d0c0de30d388615f7c63102e21"
+  },
+  {
+    "file": "pyro-egoschema-heldout-v2.sbatch",
+    "original": "/scratch/yy5919/pyro-egoschema-heldout-v2.sbatch",
+    "sha256": "540f9d98cfc045cd980d46b0fd036d8a26bc49a8c6848bccec03e35271adbc49"
+  },
+  {
+    "file": "pyro-prepare-egoschema-heldout-v2.py",
+    "original": "/scratch/yy5919/pyro-prepare-egoschema-heldout-v2.py",
+    "sha256": "f10493e40bd5e7ad891499a5f585327e608ff16fc784c80a7d675dd7a984024d"
+  },
+  {
+    "file": "pyro-egoschema-heldout-inputs.sbatch",
+    "original": "/scratch/yy5919/pyro-egoschema-heldout-inputs.sbatch",
+    "sha256": "b40dca2b691b406b8f739627ef7e2de203eca8ef4990e8395cd963e64bc9679a"
+  },
+  {
+    "file": "pyro-build-egoschema-heldout-inputs.py",
+    "original": "/scratch/yy5919/pyro-build-egoschema-heldout-inputs.py",
+    "sha256": "084170744f59d569080a7ae37ad599ef3e7919d3a656021e2631b75027c36535"
+  },
+  {
+    "file": "pyro-evaluate-formal.py",
+    "original": "/scratch/yy5919/pyro-evaluate-formal.py",
+    "sha256": "8077c0c3c80de599730aab87e5f43b394ec7013dcd312afc10198371cdabda31"
+  },
+  {
+    "file": "pyro-tts-formal.py",
+    "original": "/scratch/yy5919/pyro-tts-formal.py",
+    "sha256": "2810ef8dfd656b2163c892e1b5a88b983a8990ab023124f5b383c5789995b31b"
+  },
+  {
+    "file": "pyro-evaluate-formal-ablation5.py",
+    "original": "/scratch/yy5919/pyro-evaluate-formal-ablation5.py",
+    "sha256": "2c982397fc31e7b121ee67abcce2a2ab78346b68260a8bc5fd6bdc12bf0ed003"
+  },
+  {
+    "file": "pyro-tts-formal-ablation5.py",
+    "original": "/scratch/yy5919/pyro-tts-formal-ablation5.py",
+    "sha256": "60655bf8fda9384bff45b73f0e42d5850e932e58548c44b8da7de6bd24323ebf"
+  },
+  {
+    "file": "pyro-score-long-qa.py",
+    "original": "/scratch/yy5919/pyro-score-long-qa.py",
+    "sha256": "31346d09ac7aba349d37626ef497dbeb671cd419ea15015adfa0184430b07917"
+  },
+  {
+    "file": "pyro-watch-egoschema-evaluation.py",
+    "original": "/scratch/yy5919/pyro-watch-egoschema-evaluation.py",
+    "sha256": "6e861cfc6e4117c080d660263613dfcea0381fdbde06596e00b41edb693d914f"
+  },
+  {
+    "file": "pyro-score-long-qa-v3.py",
+    "original": "/scratch/yy5919/pyro-score-long-qa-v3.py",
+    "sha256": "bc2ae11c10d594bd4a2f113bbc119ee4a1415a59447ac760098d9885e2047ee4"
+  },
+  {
+    "file": "pyro-ego-continuation.py",
+    "original": "/scratch/yy5919/pyro-ego-continuation.py",
+    "sha256": "5b425212bd503eb47520c1c0f351c96aec2b02d7346ec0ff45d52a1d297c83f9"
+  },
+  {
+    "file": "pyro-ego-continuation-controller.sbatch",
+    "original": "/scratch/yy5919/pyro-ego-continuation-controller.sbatch",
+    "sha256": "2c4fa4f11274659c9253e85f75786f6948b400ec06e9f967baf72e0a6b38cd21"
+  },
+  {
+    "file": "pyro-ego-continuation-gpu.sbatch",
+    "original": "/scratch/yy5919/pyro-ego-continuation-gpu.sbatch",
+    "sha256": "a6be74f56f73a4b6260c6e66c086653e54f3885f38eab9c3755083c5b49715f0"
+  },
+  {
+    "file": "pyro-finalize-formal-reports-v2.py",
+    "original": "/scratch/yy5919/pyro-finalize-formal-reports-v2.py",
+    "sha256": "704e1b7d0505965d25a4afab606709e6ce5c969f6179cbd94f04505d58dc572c"
+  },
+  {
+    "file": "pyro-finalize-qa-reports-v2.py",
+    "original": "/scratch/yy5919/pyro-finalize-qa-reports-v2.py",
+    "sha256": "3ec30a9f9d8324f4d4086e86021081d2bc0a5c1fb5b7a6344076771e1cfc3061"
+  },
+  {
+    "file": "pyro-verify-and-reproduce-final.py",
+    "original": "/scratch/yy5919/pyro-verify-and-reproduce-final.py",
+    "sha256": "031ec48a446c3426dc4cf60d2388ee7208862238de363ebb4ccc47f864bd6368"
+  },
+  {
+    "file": "pyro-retain-revision15-artifacts.py",
+    "original": "/scratch/yy5919/pyro-retain-revision15-artifacts.py",
+    "sha256": "420a1f56f75538f003f9abfe0f60007012286c3b99997e7612e5b33caca0d092"
+  },
+  {
+    "file": "pyro-compute-accounting-export.py",
+    "original": "/scratch/yy5919/pyro-compute-accounting-export.py",
+    "sha256": "0bf51abd09cd44f00a23081db1f36dcd90c30b30f6c1424809723633c704ed53"
+  }
+]

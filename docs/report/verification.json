@@ -1,0 +1,38 @@
+{
+  "status": "authorized local experiment tables complete; team attribution and deferred human/API requirements remain explicit",
+  "engine": "existing read-only container /usr/bin/pdflatex",
+  "compile_passes": 2,
+  "total_pages": 8,
+  "appendix_start_page": 7,
+  "pre_appendix_pages": 6,
+  "overfull_boxes": 0,
+  "undefined_references": 0,
+  "visual_inspection": [
+    "page6 EgoSchema table, comparisons and conclusions"
+  ],
+  "main_tex_sha256": "e2bb4a9664ca4140bf813657a715c2ce5da6b015321057c37ff76b2d2cf72395",
+  "pdf_sha256": "a8f44a8d9d3183adab7d20774786283a59d762cb02c972d61e4a198e7682ee98",
+  "no_new_software_installation": true,
+  "source_sha256": {
+    "docs/results/reframed-formal-core/core-results.json": "b840ee38c996f34653f971d1b4c39a8eedc39460c356124eede1266569b3b1c6",
+    "docs/results/reframed-core-temporal/contrasts.json": "4fa615074223bc7c50c0849b012527874abad32e7fff00e3020c2b4d6d0858a4",
+    "docs/results/reframed-ablation5-temporal/contrasts.json": "80239f8bcffe1360af413ee5e0d62fb9881a7c9dbf3c05573b3470079209d8a4",
+    "docs/results/reframed-formal-gap-utilization/measured-gap-utilization.json": "191c187a3028fb689eea9897e9b9f9663ce77c1b3592614a3346e647649ffda6",
+    "docs/results/reframed-audio-cue-diagnostics/audio-cue-diagnostics.json": "35956dc1120515870af06b774ab27ac9d6da3ba55e0c83b18c4031c4abf215bc",
+    "docs/report/main.tex": "e2bb4a9664ca4140bf813657a715c2ce5da6b015321057c37ff76b2d2cf72395",
+    "docs/report/formal_core_table.tex": "57cc482daef60b9e62eaecc4f1af7efc01c66c76fbb37739ea53b865df0e0a26",
+    "docs/report/dev_table.tex": "4888409bb45d91993baae17342171e7480657054c42fad5c8d0aa7fdfb9731ca",
+    "docs/report/selector_table.tex": "af1c8178bd68cf727f4b255e9f03af289a958e7cbdcf31a801419d62d6472e3c",
+    "docs/results/video-mme-long/qa-results.json": "22543bdafc6ae54e6398f771c7ad3a29a1613bf9a2a977141071b34d4937853c",
+    "docs/results/video-mme-long/comparisons.json": "da35f91bbe04b5677145f62e4a8fc2e6a11988843f75c995aa5ea7b42414f445",
+    "docs/results/video-mme-long/paired-contrasts.md": "fef5dc408281c6c68b9643cc953d5f25aa31b42e94c40c06ea3e32b9a0315008",
+    "docs/report/long_qa_table.tex": "6c4d462248a54ce78df17e09ec5bb1cd156d65759d201e2e595b59cf565a5b65",
+    "docs/results/egoschema-heldout/qa-results.json": "0204ffabc22bfea6015ed25cb99cb615177bceeff000e5bdeae81d8fd3a328c3",
+    "docs/results/egoschema-heldout/comparisons.json": "8125ccf75b6f2d9edac534d47ad9b118e1cf72dc3ac6e8e4b04ebd83574d8db8",
+    "docs/verification/development-cv-evidence.json": "61b065ec69535dd629aea3099e7c6057766f5bc131eb58ad3c3b20a80606e074",
+    "docs/verification/final-test-results.json": "707742f44cb17f7b65a346af13f33518b969102820411b04bd8b759976fb3373",
+    "docs/verification/revision15-completion.json": "1369be50792ab255c075cd669efc17b4a6dbaa4d7bdd364d19d631b6f0ffc92c",
+    "docs/verification/reproduction.json": "870eae4e769bc7db94c0bca1b9345310f697b27038e7fcc26b429294fb0b8689",
+    "docs/report/ego_qa_table.tex": "a25f784e3c29fe9faebf08b95d8257d5177347819b0a18e1f5f3e4575a29c280"
+  }
+}

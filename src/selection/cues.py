@@ -127,7 +127,9 @@ def build_cue_bundle(
         streams = audio_cues.get("streams", {})
         events = list(audio_cues.get("events", []))
         bundle.events = events
-        if str(streams.get("tagger", "")).startswith("ok") or any(e.get("source") == "whisper_tag" for e in events):
+        if (str(streams.get("tagger", "")).startswith("ok")
+                or str(streams.get("whisper_tags", "")).startswith("ok")
+                or any(e.get("source") == "whisper_tag" for e in events)):
             for superclass in SUPERCLASSES:
                 bundle.nse[superclass] = [
                     min(1.0, v) for v in salience.events_to_track(events, grid, cfg["event_spread_seconds"], superclass)

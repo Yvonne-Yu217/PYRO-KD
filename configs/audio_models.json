@@ -1,0 +1,94 @@
+{
+  "models": [
+    {
+      "repo_id": "Systran/faster-whisper-small.en",
+      "revision": "d1d751a5f8271d482d14ca55d9e2deeebbae577f",
+      "files": [
+        {
+          "name": "README.md",
+          "bytes": 1330
+        },
+        {
+          "name": "config.json",
+          "bytes": 2657
+        },
+        {
+          "name": "model.bin",
+          "bytes": 483545366
+        },
+        {
+          "name": "tokenizer.json",
+          "bytes": 2128466
+        },
+        {
+          "name": "vocabulary.txt",
+          "bytes": 422309
+        }
+      ]
+    },
+    {
+      "repo_id": "MIT/ast-finetuned-audioset-10-10-0.4593",
+      "revision": "f826b80d28226b62986cc218e5cec390b1096902",
+      "files": [
+        {
+          "name": "README.md",
+          "bytes": 1165
+        },
+        {
+          "name": "config.json",
+          "bytes": 26763
+        },
+        {
+          "name": "model.safetensors",
+          "bytes": 346404948
+        },
+        {
+          "name": "preprocessor_config.json",
+          "bytes": 297
+        }
+      ]
+    },
+    {
+      "repo_id": "laion/clap-htsat-unfused",
+      "revision": "8fa0f1c6d0433df6e97c127f64b2a1d6c0dcda8a",
+      "files": [
+        {
+          "name": "README.md",
+          "bytes": 4454
+        },
+        {
+          "name": "config.json",
+          "bytes": 5390
+        },
+        {
+          "name": "merges.txt",
+          "bytes": 456356
+        },
+        {
+          "name": "preprocessor_config.json",
+          "bytes": 541
+        },
+        {
+          "name": "pytorch_model.bin",
+          "bytes": 614525833
+        },
+        {
+          "name": "special_tokens_map.json",
+          "bytes": 280
+        },
+        {
+          "name": "tokenizer.json",
+          "bytes": 2108746
+        },
+        {
+          "name": "tokenizer_config.json",
+          "bytes": 384
+        },
+        {
+          "name": "vocab.json",
+          "bytes": 798293
+        }
+      ]
+    }
+  ]
+}

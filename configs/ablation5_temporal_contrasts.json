@@ -1,0 +1,10 @@
+{
+  "declaration": "Newly declared structural temporal comparisons while inference is in progress; not preregistered before all heldout outputs existed",
+  "metric": "temporal_f1",
+  "unit": "cluster",
+  "resamples": 10000,
+  "seed": 0,
+  "contrasts": [["timeline", "no_context"], ["native", "no_context"], ["native", "timeline"]],
+  "adjustment": "Holm across all3 contrasts",
+  "interpretation": "Native contrasts also change model; temporal agreement is not human description quality"
+}

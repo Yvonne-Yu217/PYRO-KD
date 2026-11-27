@@ -16,7 +16,9 @@ Retry policy: a token-limit failure is deterministic when it was produced at
 temperature 0 with at least the current max_new_tokens. Running it again would
 reproduce the same cut-off and append another error, so it is treated as settled.
 Raising --max-new-tokens (or sampling at temperature > 0) makes it eligible for a
-retry. Every other error, such as an out-of-memory failure, is retried.
+retry. A complete temperature-0 decode rejected for its content (over the word
+budget, or an invalid answer letter) is settled too, whatever the token budget.
+Every other error, such as an out-of-memory failure, is retried.
 """
 
 from __future__ import annotations
@@ -43,6 +45,13 @@ def read_rows(path: str | Path) -> list[dict[str, Any]]:
     return rows
 
 
+def exceeds_word_budget(row: dict[str, Any]) -> bool:
+    """AD word budgets count whitespace-delimited words; preserve the full decode."""
+    budget, text = row.get('word_limit'), row.get('output')
+    return (isinstance(budget, int) and not isinstance(budget, bool) and budget >= 0
+            and isinstance(text, str) and len(text.split()) > budget)
+
+
 def is_failure(row: dict[str, Any]) -> bool:
     """True for an error row, including a legacy truncated row.
 
@@ -53,7 +62,8 @@ def is_failure(row: dict[str, Any]) -> bool:
     token budget is raised. Every reader (runner, meta, evaluator) goes through this
     one definition.
     """
-    return "error" in row or row.get("hit_token_limit") is True
+    return ("error" in row or row.get("hit_token_limit") is True
+            or row.get('word_limit_exceeded') is True or exceeds_word_budget(row))
 
 
 def is_success(row: dict[str, Any]) -> bool:
@@ -104,7 +114,21 @@ def status_counts(rows: Iterable[dict[str, Any]]) -> dict[str, int]:
 
 
 def is_deterministic_failure(row: dict[str, Any], max_new_tokens: int, temperature: float) -> bool:
-    """True if retrying this error row with the current settings would repeat it."""
+    """True if retrying this error row with the current settings would repeat it.
+
+    Two kinds qualify, both only at temperature 0. A token-limit cut-off repeats unless the budget
+    is raised. A complete decode rejected for its content (over the word budget, or not a valid
+    option letter) repeats whatever the token budget, because greedy decoding of the same inputs
+    returns the same text. Callers must only pass rows from unchanged inputs (the runners check an
+    input or run fingerprint first). A failed budget repair is transient and stays retryable.
+    """
+    error = str(row.get("error") or "").lstrip()
+    if (
+        temperature == 0 and row.get("temperature") == 0 and row.get("hit_token_limit") is not True
+        and not row.get("repair_error")
+        and (row.get("word_limit_exceeded") is True or error.startswith(("word_budget:", "invalid_answer:")))
+    ):
+        return True
     recorded_tokens = row.get("max_new_tokens")
     return bool(
         not is_success(row)
@@ -120,7 +144,7 @@ def is_deterministic_failure(row: dict[str, Any], max_new_tokens: int, temperatu
 def settled_ids(
     rows: Iterable[dict[str, Any]], max_new_tokens: int | None = None, temperature: float = 0.0,
 ) -> tuple[set[str], set[str]]:
-    """(ids needing no more work, the subset that are deterministic token-limit failures).
+    """(ids needing no more work, the subset that are deterministic failures).
 
     Without max_new_tokens only successes count as settled.
     """
@@ -139,7 +163,7 @@ def settled_ids(
 
 
 _ATTEMPT_KEYS = (
-    "slurm_job_id", "host", "gpu", "n_gpus", "torch", "transformers", "model_class", "args",
+    "slurm_job_id", "host", "gpu", "n_gpus", "torch", "transformers", "model_class", "args", "provenance",
     "n_ok", "n_error", "n_hit_token_limit", "load_s", "generate_s",
     "peak_gpu_mem_gb", "peak_gpu_mem_gb_per_device",
 )
@@ -170,7 +194,7 @@ def merge_meta(
     heaviest = max(peaks, key=lambda a: a["peak_gpu_mem_gb"]) if peaks else {}
     meta = {key: attempt[key] for key in (
         "model_id", "model_class", "quant", "n_gpus", "args", "gpu", "torch", "transformers",
-        "host", "slurm_job_id",
+        "host", "slurm_job_id", "provenance",
     ) if key in attempt}
     meta.update(
         n_ok=counts["n_ok"],

@@ -221,7 +221,7 @@ audio_native_model = "m2"
                 self.assertLessEqual(row["words"], row["word_limit"])
                 self.assertEqual(row["temperature"], 0.0)
         p1 = [f for f in files if "-P1-" in f.name][0]
-        self.assertIn("Examples of professional audio descriptions", json.loads(p1.read_text().splitlines()[0])["prompt"])
+        self.assertIn("Professional descriptions below illustrate style only", json.loads(p1.read_text().splitlines()[0])["prompt"])
         self.assertEqual(self.run_stage("generate"), 0)  # resume: nothing appended
         self.assertEqual({f: f.read_text().count("\n") for f in files}, sizes)
         self.assertEqual(self.run_stage("ablation5"), 0)

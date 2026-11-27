@@ -1,0 +1,29 @@
+{
+  "status": "frozen before accuracy scoring",
+  "scope": "local visual-only long QA controls; audio-aware conditions prepared separately under same resource settings",
+  "frozen_utc": "2026-11-23T15:32:31.790339+00:00",
+  "source_commit": "1f5fb60",
+  "source_worktree": "/scratch/yy5919/pyro-revision15-next",
+  "model": "/home/yy5919/.cache/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5",
+  "max_side": 224,
+  "max_new_tokens": 16,
+  "temperature": 0,
+  "frames_per_moment": 4,
+  "span_seconds": 2,
+  "minimum_separation_seconds": 2,
+  "k_per_minute": 5,
+  "questions_per_condition": 36,
+  "videos": 12,
+  "conditions": [
+    "U/none",
+    "V_local/none"
+  ],
+  "api_cost_usd": 0,
+  "estimate_gpu_minutes": 30,
+  "maximum_gpu_minutes_per_condition": 45,
+  "validation": "612-frame and1012-frame resource checks both success; no correctness inspected",
+  "inputs": {
+    "/scratch/yy5919/pyro-kd-derived/moments/video-mme-long-U-none-v1.jsonl": "6a68106eca8c17a085950bf0ac8ed0d201e2d8827f8db717182a923355029175",
+    "/scratch/yy5919/pyro-kd-derived/moments/video-mme-long-V-local-none-v1.jsonl": "c0f312a6c292718dbbd93cf04ee3d82c4446280c8e429b1a243360a9fd5aac87"
+  }
+}

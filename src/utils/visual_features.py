@@ -57,6 +57,7 @@ FEATURE_VERSION = 1
 DEFAULT_CONFIG: dict[str, Any] = {
     "clip_model": "ViT-B-32",
     "clip_pretrained": "laion2b_s34b_b79k",
+    "clip_revision": "1a25a446712ba5ee05982a381eed697ef9b435cf",
     "shot_detector": "ContentDetector",
     "shot_threshold": 27.0,
     "shot_min_scene_seconds": 1.0,
@@ -118,6 +119,11 @@ def clip_embedder(
 
     from src.utils.visual_selector import VisualSelector
 
+    if model_name == DEFAULT_CONFIG["clip_model"] and pretrained == DEFAULT_CONFIG["clip_pretrained"]:
+        from huggingface_hub import hf_hub_download
+        pretrained = hf_hub_download(
+            "laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
+            "open_clip_model.safetensors", revision=DEFAULT_CONFIG["clip_revision"])
     selector = VisualSelector(model_name, pretrained, device)
 
     def embed(paths: Sequence[str]):
@@ -522,6 +528,19 @@ class VisualCandidate:
     shot_boundary: bool
 
 
+def _segment_counts(segment_ids, segment_quotas, count, k):
+    if (segment_ids is None) != (segment_quotas is None):
+        raise ValueError('segment IDs and quotas must be supplied together')
+    if segment_ids is None:
+        return None
+    if (len(segment_ids) != count or not segment_quotas
+            or any(isinstance(q,bool) or not isinstance(q,int) or q<0 for q in segment_quotas)
+            or sum(segment_quotas)>k
+            or any(isinstance(i,bool) or not isinstance(i,int) or not 0<=i<len(segment_quotas) for i in segment_ids)):
+        raise ValueError('invalid segment IDs/quotas')
+    return [0]*len(segment_quotas)
+
+
 class VisualCueSelector:
     """V: frames ranked by CLIP novelty plus a shot-boundary bonus, top K with separation.
 
@@ -562,9 +581,74 @@ class VisualCueSelector:
         features: dict,
         k: int,
         min_separation: float = MIN_SEPARATION_SECONDS,
+        *, segment_ids=None, segment_quotas=None,
     ) -> list[VisualCandidate]:
         """Up to K moments in chronological order; fewer only if separation leaves no room."""
+        candidates = self.candidates(features)
+        counts = _segment_counts(segment_ids, segment_quotas, len(candidates), k)
+        if counts is not None:
+            if isinstance(k,bool) or not isinstance(k,int) or k<1 or not math.isfinite(min_separation) or min_separation<0:
+                raise ValueError('positive budget and finite nonnegative separation required')
+            chosen = []
+            for i in sorted(range(len(candidates)), key=lambda i:(-candidates[i].score,candidates[i].time,i)):
+                if len(chosen)==k: break
+                if (counts[segment_ids[i]]<segment_quotas[segment_ids[i]]
+                        and all(abs(candidates[i].time-c.time)>=min_separation for c in chosen)):
+                    chosen.append(candidates[i]); counts[segment_ids[i]]+=1
+            return sorted(chosen,key=lambda c:c.time)
         return select_top_k(
-            self.candidates(features), k, min_separation,
+            candidates, k, min_separation,
             time_of=lambda c: c.time, score_of=lambda c: c.score,
         )
+
+    def select_memory(self, features, embeddings, k, min_separation=MIN_SEPARATION_SECONDS,
+                      *, segment_ids=None, segment_quotas=None):
+        """Greedy novelty against all selected embeddings, with a shot bonus.
+
+        Initialize with the local-window score. After the first selection,
+        novelty is (1 - maximum cosine to selected memory) / 2, bounded [0,1].
+        Returned scores describe each candidate when it was chosen. Selection
+        order is used for memory; the result is then sorted chronologically.
+        No held-out labels, time-gap placement or model inference occurs here.
+        """
+        import numpy as np
+
+        candidates = self.candidates(features)
+        vectors = np.asarray(embeddings, dtype=np.float64)
+        if (vectors.ndim != 2 or len(vectors) != len(candidates)
+                or vectors.shape[1] == 0 or not np.isfinite(vectors).all()):
+            raise ValueError('memory requires finite embeddings aligned with frame times')
+        norms = np.linalg.norm(vectors, axis=1)
+        if np.any(norms <= 0):
+            raise ValueError('memory requires nonzero embeddings')
+        if isinstance(k, bool) or not isinstance(k, int) or k < 1:
+            raise ValueError('k must be a positive integer')
+        if not math.isfinite(min_separation) or min_separation < 0:
+            raise ValueError('min_separation must be finite and nonnegative')
+        if any(not math.isfinite(w) or w < 0 for w in (self.novelty_weight, self.shot_weight)):
+            raise ValueError('visual weights must be finite and nonnegative')
+        unit = vectors / norms[:, None]
+        counts = _segment_counts(segment_ids, segment_quotas, len(candidates), k)
+        remaining = set(range(len(candidates)))
+        chosen = []
+        max_similarity = np.full(len(candidates), -1.0)
+        while remaining and len(chosen) < k:
+            eligible = (remaining if counts is None else
+                        {i for i in remaining if counts[segment_ids[i]]<segment_quotas[segment_ids[i]]})
+            if not eligible: break
+            def scored(i):
+                candidate = candidates[i]
+                if not chosen:
+                    return candidate
+                novelty = float((1 - np.clip(max_similarity[i], -1, 1)) / 2)
+                return VisualCandidate(candidate.time,
+                    self.novelty_weight * novelty + self.shot_weight * candidate.shot_boundary,
+                    novelty, candidate.shot_boundary)
+            index = min(eligible, key=lambda i: (-scored(i).score, candidates[i].time, i))
+            selected = scored(index)
+            chosen.append(selected)
+            if counts is not None: counts[segment_ids[index]]+=1
+            max_similarity = np.maximum(max_similarity, unit @ unit[index])
+            remaining = {i for i in remaining if i != index
+                         and abs(candidates[i].time - selected.time) >= min_separation}
+        return sorted(chosen, key=lambda c: c.time)

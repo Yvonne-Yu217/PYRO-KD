@@ -47,6 +47,21 @@ def _transcript_items(record) -> list:
     return [SimpleNamespace(start=float(t["start"]), end=float(t["end"]), text=str(t["text"])) for t in record.transcript or []]
 
 
+def native_audio_clip(cfg: dict, wav, time: float, duration: float, visual_span: float) -> dict | None:
+    """Explicit native window for controlled ablations; legacy default unchanged."""
+    if wav is None:
+        return None
+    window = get(cfg, "generation.native_audio_window_seconds")
+    if window is None:
+        return {"path": str(wav), "start": max(0.0, time - visual_span / 2 - 1.0),
+                "end": time + visual_span / 2 + 1.0}
+    window = float(window)
+    if not math.isfinite(window) or window <= 0:
+        raise ConfigError("native_audio_window_seconds must be finite and positive")
+    return {"path": str(wav), "start": max(0.0, time - window / 2),
+            "end": min(duration, time + window / 2)}
+
+
 def _current_media(cache: Path) -> tuple[dict | None, str | None]:
     manifest, reason = read_manifest(cache)
     if manifest is None:
@@ -103,8 +118,7 @@ def build_moments(cfg: dict, run: SelectionRun, records, exp_dir: Path) -> Path:
                 "transcript": transcript_context(transcript, t), "word_limit": limit,
                 "word_limit_source": "vad" if speech is not None else "fallback_no_vad",
                 "audio_timeline": timeline, "timeline_status": "ok" if cues is not None else available.get("audio_cues"),
-                "audio_clip": ({"path": str(wav), "start": max(0.0, t - span / 2 - 1.0), "end": t + span / 2 + 1.0}
-                               if wav is not None else None),
+                "audio_clip": native_audio_clip(cfg, wav, t, context.duration, span),
             })
             entry["written"] += 1
     path = moments_path(exp_dir, run)
@@ -172,7 +186,7 @@ def _ad_inputs(cfg: dict, run: GenerationRun, exp_dir: Path, records) -> dict[st
             checked_media.add(media_key)
         use_timeline = mode == "timeline" or (mode is None and run.timeline)
         prompt = build_prompt(run.prior, m["time"], len(m["frames"]), span, m["word_limit"],
-                              m.get("transcript", "") if mode is None else "",
+                              m.get("transcript", "") if mode is None and not run.timeline else "",
                               audio_timeline=m.get("audio_timeline", "") if use_timeline else "", exemplars=exemplars)
         audio = m.get("audio_clip") if mode == "native" or (mode is None and has_audio_input) else None
         request = GenRequest(moment_id, prompt, list(m["frames"]), audio, max_new)
@@ -223,7 +237,8 @@ def run_generation(
         for m, request, digest in batch:
             if run.audio_context == "native" and not request.audio:
                 rejected.append(GenResult(m["id"], error="no_native_audio"))
-            elif run.audio_context == "timeline" and m.get("timeline_status") != "ok":
+            elif ((run.audio_context == "timeline" or (run.audio_context is None and run.timeline))
+                  and m.get("timeline_status") != "ok"):
                 rejected.append(GenResult(m["id"], error="unavailable_audio_timeline"))
             else:
                 requests.append(request)
@@ -247,7 +262,11 @@ def run_generation(
                 capped = enforce_word_limit(row["model_output"], base[r.id]["word_limit"], policy)
                 row.update(output=capped["text"], words=capped["words"], raw_words=capped["raw_words"],
                            over_budget=capped["over_budget"], truncated=capped["truncated"])
-                n_ok += 1
+                if capped["over_budget"] and policy == "flag":
+                    row["error"] = "word_budget: generated output exceeds the declared limit"
+                    n_err += 1
+                else:
+                    n_ok += 1
             else:
                 row["output"] = row["model_output"]
                 n_err += 1
@@ -286,6 +305,29 @@ def _optional_scorer(name: str, cfg: dict):
     return None, f"unknown scorer {name}"
 
 
+def budget_compliance(rows: list[dict], missing_count: int = 0) -> dict:
+    """Budget rate among complete decodes with explicit boolean budget flags.
+
+    A word-budget flag failure is a complete decode and belongs in this rate.
+    Token-limit/backend failures and legacy rows without a flag remain unknown;
+    missing expected predictions are separate, never silently counted as passes.
+    """
+    known = []
+    for row in rows:
+        error = row.get("error")
+        complete_decode = (not row.get("hit_token_limit")
+                           and (error is None or str(error).startswith("word_budget:"))
+                           and isinstance(row.get("output"), str))
+        if complete_decode and isinstance(row.get("over_budget"), bool):
+            known.append(row)
+    n_over = sum(row["over_budget"] for row in known)
+    total = len(rows) + missing_count
+    return {"n_known": len(known), "n_over_budget": n_over,
+            "n_unknown_generated": len(rows) - len(known), "n_missing": missing_count,
+            "known_fraction": len(known) / total if total else None,
+            "rate": n_over / len(known) if known else None}
+
+
 def evaluate_generation(cfg: dict, run: GenerationRun, records, exp_dir: Path, scorers: dict | None = None) -> dict:
     """Placement with real word counts, budget compliance and matched-pair text metrics."""
     by_id = {r.video_id: r for r in records}
@@ -318,14 +360,19 @@ def evaluate_generation(cfg: dict, run: GenerationRun, records, exp_dir: Path, s
         primary = temporal_precision_recall_f1(times, truth, tol)
         speech = [tuple(s) for s in context.audio_features["speech"]] if context.audio_features else None
         placements = [(r["time"], len(r["output"].split())) for r in ok]
+        actual_ids = {r["id"] for r in vrows}
+        budget = budget_compliance(vrows, len(missing))
         entry = {"video_id": video_id, "n_expected": len(expected_ids), "n_missing": len(missing),
                  "missing_ids": missing, "no_prepared_moments": not expected_ids,
                  "n_moments": len(vrows), "n_ok": len(ok), "n_error": len(vrows) - len(ok),
                  "precision": primary["precision"], "recall": primary["recall"], "f1": primary["f1"],
                  "mean_words": (sum(n for _, n in placements) / len(placements)) if placements else None,
-                 "over_budget_rate": (sum(bool(r.get("over_budget")) for r in ok) / len(ok)) if ok else None,
+                 "over_budget_rate": budget["rate"], "budget_compliance": budget,
                  "overlap_seconds": (placement.speech_overlap(placements, speech, wps, speed)["overlap_seconds"]
                                      if speech is not None else None)}
+        entry.update(n_expected=len(expected_ids), missing_ids=sorted(expected_ids - actual_ids),
+                     unexpected_ids=sorted(actual_ids - expected_ids),
+                     no_generation_rows=not bool(vrows))
         per_video.append(entry)
         gt_items = sorted(record.ad or [], key=lambda e: e.start)
         gt_items = [e for e in gt_items if e.start in set(truth)]
@@ -349,6 +396,14 @@ def evaluate_generation(cfg: dict, run: GenerationRun, records, exp_dir: Path, s
         except Exception as exc:
             text_metrics[name] = {"status": f"failed: {exc!r}"}
     resamples, seed = int(get(cfg, "evaluation.resamples", 10000)), int(get(cfg, "experiment.seed", 0))
+    budget_totals = {key: sum(v["budget_compliance"][key] for v in per_video)
+                     for key in ("n_known", "n_over_budget", "n_unknown_generated", "n_missing")}
+    budget_total = budget_totals["n_known"] + budget_totals["n_unknown_generated"] + budget_totals["n_missing"]
+    budget_totals["known_fraction"] = budget_totals["n_known"] / budget_total if budget_total else None
+    budget_totals["rate"] = (budget_totals["n_over_budget"] / budget_totals["n_known"]
+                             if budget_totals["n_known"] else None)
+
+
     no_inputs = sorted(v for v in by_id if not expected_by_video.get(v))
     n_errors = sum(v["n_error"] for v in per_video)
     status = "incomplete" if missing_ids or no_inputs else ("complete_with_errors" if n_errors else "complete")
@@ -360,9 +415,17 @@ def evaluate_generation(cfg: dict, run: GenerationRun, records, exp_dir: Path, s
         "n_error": n_errors,
         "run_id": run.run_id, "selector": run.selection.name, "prior": run.prior, "model": run.model_label,
         "timeline": run.timeline, "audio_context": run.audio_context, "oracle": run.selection.is_oracle, "n_videos": len(per_video),
+        "expected_videos": len(by_id),
+        "missing_video_ids": sorted(set(by_id) - set(by_video)),
+        "unexpected_video_ids": sorted(set(by_video) - set(by_id)),
+        "expected_moments": len(inputs),
+        "missing_moment_ids": missing_ids,
         "macro_f1": bootstrap_mean_ci([v["f1"] for v in per_video], resamples, seed),
         "overlap_seconds": bootstrap_mean_ci([v["overlap_seconds"] for v in per_video], resamples, seed),
         "over_budget_rate": bootstrap_mean_ci([v["over_budget_rate"] for v in per_video], resamples, seed),
+        "budget_compliance": {**budget_totals,
+            "denominator": "complete decoded rows with explicit boolean over_budget flags; observed evaluated-video rows",
+            "unknown_policy": "token/backend failures or absent flags are unknown; missing expected predictions are separate"},
         "text_metrics": text_metrics, "videos": per_video,
     }
     write_json(exp_dir / "eval" / f"generation_{run.run_id}.json", result)
@@ -420,11 +483,14 @@ def run_qa(
             frames = [frame_window(manifest, t, 1, 0.0)[0] for t in times]
             timeline = ""
             if run.timeline:
-                context, _ = load_context(record, cfg, need_visual=False)
-                if context.audio_cues is not None:
-                    timeline = format_timeline(context.audio_cues.get("events", []),
-                                               (context.audio_cues.get("asr") or {}).get("segments", []),
-                                               config={"max_items": int(get(cfg, "qa.timeline_max_items", 40))})
+                context, available = load_context(record, cfg, need_visual=False)
+                if context.audio_cues is None:
+                    append_jsonl(out_path, [{**base, "status": "error", "prediction": None,
+                                             "error": f"unavailable_audio_timeline: {available.get('audio_cues')}"}])
+                    continue
+                timeline = format_timeline(context.audio_cues.get("events", []),
+                                           (context.audio_cues.get("asr") or {}).get("segments", []),
+                                           config={"max_items": int(get(cfg, "qa.timeline_max_items", 40))})
             prompt = build_qa_prompt(item.question, item.options, [f.timestamp for f in frames], timeline)
             result = backend.generate([GenRequest(item.question_id, prompt, [f.path for f in frames], None,
                                                   int(get(cfg, "qa.max_new_tokens", 8)))])[0]

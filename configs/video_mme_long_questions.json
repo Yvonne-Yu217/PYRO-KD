@@ -1,0 +1,176 @@
+{
+  "questions": [
+    {
+      "question_id": "604-1",
+      "video_id": "604"
+    },
+    {
+      "question_id": "604-2",
+      "video_id": "604"
+    },
+    {
+      "question_id": "604-3",
+      "video_id": "604"
+    },
+    {
+      "question_id": "616-1",
+      "video_id": "616"
+    },
+    {
+      "question_id": "616-2",
+      "video_id": "616"
+    },
+    {
+      "question_id": "616-3",
+      "video_id": "616"
+    },
+    {
+      "question_id": "710-1",
+      "video_id": "710"
+    },
+    {
+      "question_id": "710-2",
+      "video_id": "710"
+    },
+    {
+      "question_id": "710-3",
+      "video_id": "710"
+    },
+    {
+      "question_id": "729-1",
+      "video_id": "729"
+    },
+    {
+      "question_id": "729-2",
+      "video_id": "729"
+    },
+    {
+      "question_id": "729-3",
+      "video_id": "729"
+    },
+    {
+      "question_id": "753-1",
+      "video_id": "753"
+    },
+    {
+      "question_id": "753-2",
+      "video_id": "753"
+    },
+    {
+      "question_id": "753-3",
+      "video_id": "753"
+    },
+    {
+      "question_id": "763-1",
+      "video_id": "763"
+    },
+    {
+      "question_id": "763-2",
+      "video_id": "763"
+    },
+    {
+      "question_id": "763-3",
+      "video_id": "763"
+    },
+    {
+      "question_id": "802-1",
+      "video_id": "802"
+    },
+    {
+      "question_id": "802-2",
+      "video_id": "802"
+    },
+    {
+      "question_id": "802-3",
+      "video_id": "802"
+    },
+    {
+      "question_id": "808-1",
+      "video_id": "808"
+    },
+    {
+      "question_id": "808-2",
+      "video_id": "808"
+    },
+    {
+      "question_id": "808-3",
+      "video_id": "808"
+    },
+    {
+      "question_id": "857-1",
+      "video_id": "857"
+    },
+    {
+      "question_id": "857-2",
+      "video_id": "857"
+    },
+    {
+      "question_id": "857-3",
+      "video_id": "857"
+    },
+    {
+      "question_id": "864-1",
+      "video_id": "864"
+    },
+    {
+      "question_id": "864-2",
+      "video_id": "864"
+    },
+    {
+      "question_id": "864-3",
+      "video_id": "864"
+    },
+    {
+      "question_id": "891-1",
+      "video_id": "891"
+    },
+    {
+      "question_id": "891-2",
+      "video_id": "891"
+    },
+    {
+      "question_id": "891-3",
+      "video_id": "891"
+    },
+    {
+      "question_id": "898-1",
+      "video_id": "898"
+    },
+    {
+      "question_id": "898-2",
+      "video_id": "898"
+    },
+    {
+      "question_id": "898-3",
+      "video_id": "898"
+    }
+  ],
+  "video_question_counts": {
+    "604": 3,
+    "616": 3,
+    "710": 3,
+    "729": 3,
+    "753": 3,
+    "763": 3,
+    "802": 3,
+    "808": 3,
+    "857": 3,
+    "864": 3,
+    "891": 3,
+    "898": 3
+  },
+  "expected_questions": 36,
+  "dataset": "lmms-eval/Video-MME",
+  "revision": "ead1408f75b618502df9a1d8e0950166bf0a2a0b",
+  "official_split": "test",
+  "subset_sha256": "5966315180cbd7650d4c99b2469cd55c167688f39d0dab2e4bf7d2e6f84a5f03",
+  "annotations_sha256": "7fffab8ed38ecc2f9f0eca4c44d8a11636f0ee96116ede83580c8b9ae0faf986",
+  "columns_read": [
+    "video_id",
+    "videoID",
+    "duration",
+    "domain",
+    "question_id"
+  ],
+  "scope": "held-out question membership only; no QA content or answer labels read; selection/inference protocol still requires freezing"
+}

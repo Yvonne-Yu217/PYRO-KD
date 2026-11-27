@@ -1,0 +1,86 @@
+{
+  "dataset": "lmms-eval/Video-MME",
+  "revision": "ead1408f75b618502df9a1d8e0950166bf0a2a0b",
+  "official_split": "test",
+  "use": "small held-out long-form QA evaluation subset; not a tuning set",
+  "selection": "duration long; per-domain ascending SHA256(seed:video_id); no question/answer columns read",
+  "seed": 0,
+  "per_domain": 2,
+  "eligible_videos": 300,
+  "annotations_sha256": "7fffab8ed38ecc2f9f0eca4c44d8a11636f0ee96116ede83580c8b9ae0faf986",
+  "videos": [
+    {
+      "video_id": "808",
+      "videoID": "leG0U5wzGlA",
+      "duration": "long",
+      "domain": "Artistic Performance"
+    },
+    {
+      "video_id": "802",
+      "videoID": "TYmHe20p_zU",
+      "duration": "long",
+      "domain": "Artistic Performance"
+    },
+    {
+      "video_id": "710",
+      "videoID": "IPqb_oDlGBU",
+      "duration": "long",
+      "domain": "Film & Television"
+    },
+    {
+      "video_id": "729",
+      "videoID": "bBazRZOxl-k",
+      "duration": "long",
+      "domain": "Film & Television"
+    },
+    {
+      "video_id": "616",
+      "videoID": "aansXcMqnNk",
+      "duration": "long",
+      "domain": "Knowledge"
+    },
+    {
+      "video_id": "604",
+      "videoID": "0RxMZBLeqRI",
+      "duration": "long",
+      "domain": "Knowledge"
+    },
+    {
+      "video_id": "864",
+      "videoID": "VFntoBRGF1A",
+      "duration": "long",
+      "domain": "Life Record"
+    },
+    {
+      "video_id": "857",
+      "videoID": "25Pt1AZO9EM",
+      "duration": "long",
+      "domain": "Life Record"
+    },
+    {
+      "video_id": "898",
+      "videoID": "K9MQATj3894",
+      "duration": "long",
+      "domain": "Multilingual"
+    },
+    {
+      "video_id": "891",
+      "videoID": "uuCVnqV4cNc",
+      "duration": "long",
+      "domain": "Multilingual"
+    },
+    {
+      "video_id": "753",
+      "videoID": "RwdvZLz-aSk",
+      "duration": "long",
+      "domain": "Sports Competition"
+    },
+    {
+      "video_id": "763",
+      "videoID": "sDWOsWawxPc",
+      "duration": "long",
+      "domain": "Sports Competition"
+    }
+  ],
+  "availability_policy": "retain selected IDs and report missing/unusable audio; no performance-based replacement"
+}

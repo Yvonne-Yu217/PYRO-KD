@@ -74,3 +74,23 @@ def paired_bootstrap_diff(
     means = [math.fsum(diffs[rng.randrange(n)] for _ in range(n)) / n for _ in range(resamples)]
     low, high = _interval(means, alpha)
     return {"n": n, "mean_diff": mean, "ci_low": low, "ci_high": high}
+
+
+def holm_adjust(pvalues: Sequence[float | None]) -> list[float | None]:
+    """Holm family-wise correction; unavailable hypotheses stay in the family.
+
+    Missing p-values receive None, but still count toward family size. This
+    avoids shrinking a predeclared family after failed/missing comparisons.
+    """
+    indexed = []
+    for index, value in enumerate(pvalues):
+        if value is not None:
+            if isinstance(value, bool) or not math.isfinite(value) or not 0 <= value <= 1:
+                raise ValueError('p-values must be finite numbers in [0, 1] or None')
+            indexed.append((float(value), index))
+    adjusted = [None] * len(pvalues)
+    running = 0.0
+    for rank, (value, index) in enumerate(sorted(indexed)):
+        running = max(running, min(1.0, (len(pvalues) - rank) * value))
+        adjusted[index] = running
+    return adjusted

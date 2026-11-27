@@ -266,6 +266,9 @@ def malformed_cues(record: Any) -> str | None:
         return "duration must be a finite non-negative number"
     if not isinstance(record.get("streams"), dict):
         return "streams is not an object"
+    bridge = record.get("bridge_sources", {})
+    if not isinstance(bridge, dict) or not all(isinstance(k, str) and isinstance(v, str) for k, v in bridge.items()):
+        return "bridge_sources must map source paths to hashes"
     for name in ("events", "speech_cues"):
         rows = record.get(name)
         if not isinstance(rows, list):
@@ -371,6 +374,12 @@ def load_cues_for_selection(
         return None, "missing_wav"
     if record.get("audio_sha256") != digest or record.get("vad_hash") != vad_features.get("config_hash"):
         return None, STALE_CUES
+    for source, expected in record.get("bridge_sources", {}).items():
+        try:
+            if hashlib.sha256(Path(source).read_bytes()).hexdigest() != expected:
+                return None, STALE_CUES
+        except OSError:
+            return None, STALE_CUES
     return record, None
 
 
