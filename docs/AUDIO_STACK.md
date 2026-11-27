@@ -174,6 +174,47 @@ using /scratch/yy5919/pyro-audio-env/bin/python inside the container, OMP_NUM_TH
 Artifacts multilingual-speech-{download,offline-check}.json/log are in
 outputs/verification. No long held-out ASR output or QA answers inspected.
 
+## Bridged speech cues (what the published A_cue and AV results used)
+
+`scripts/bridge_hpc_audio_caches.py` builds `audio_cues.json` from the HPC caches.
+Its speech cues come from `src/utils/speech_cues.cue_tracks`, which differs from
+the native `src/audio/speech_cues.py`:
+
+| Cue | Bridged (used here) | Native |
+|---|---|---|
+| Semantic shift | `(1 - cos(chunk, previous chunk)) / 2` for **every** speech chunk (first chunk 0); no window, threshold or local-maximum step | `1 - cos` between means of 3 segments either side; kept only at local maxima >= 0.35 |
+| Deictic | exact match of the short `DEICTIC_PHRASES` list in `src/utils/speech_cues.py`; one cue per chunk with strength 0 or 1 | the longer `DEICTIC_PATTERNS` regex list; a cue per occurrence |
+| Long silence | not bridged; selectors derive it from VAD gaps | cue and track from VAD gaps |
+
+Embeddings are the pinned all-mpnet-base-v2 of the speech-cue report, over chunks
+of at most 24 words. Records written before this note carry the **native default
+config** in their `config` field although the method above produced them; read
+that field as wrong for `sc`. Newer records describe the method that ran, so
+re-bridging into an existing output root is refused (use a new root).
+
+Results that read bridged speech cues (selectors with a non-zero `sc` weight:
+A_cue, AV and their variants that keep it):
+
+- development: `reframed_dev_bridged_v1`, `reframed_dev_nonzero_tuning_v1` (the
+  source of the frozen weights), `reframed_local_dev_pilot_v1` and development
+  ablation 5, all from `cache/reframed-pr22-bridge`; ablation 3 from
+  `cache/reframed-whisper-gated-dev`, a view derived from bridged records;
+- REFRAMED test: `reframed_test_local_v1` and everything built on its selections,
+  via `cache/reframed-test-whisper-gated-v1` (derived from
+  `cache/reframed-test-pr22-bridge-v1`);
+- long Video-MME QA A_cue and AV conditions, from
+  `cache/video-mme-pr22-bridge-v1`.
+
+U, V, O and the EgoSchema runs (U, V_local, V_memory) do not read these cues.
+This list is taken from the experiment configs, preparation commands and logs in
+this repository; it was not re-verified against the caches on HPC.
+
+Development check reported by Kiran on PR #24 (10 REFRAMED dev clips, not
+re-run for this note): the bridge emitted 294 semantic cues from 294 segments
+against 86 from the native method; after retuning each, held-out CV F1 was
+A_cue 0.495 bridged vs 0.498 native and AV 0.472 vs 0.466, and removing semantic
+cues was lowest (0.462 / 0.457). Published results were not rerun.
+
 ## Human detector scoring interface (labels still pending)
 
 `src/evaluation/event_detection.py` and `scripts/evaluate_event_detector.py`

@@ -1557,3 +1557,9 @@ covers all of src, scripts and configs) and the bridge semantic-shift documentat
 changed code, as before for any code change; published results were not rerun or
 re-evaluated. Verification: 891 passed, 4 skipped on macOS/CPU (uv environment);
 each fix was reverted in turn and its tests failed. No HPC or GPU run.
+
+Follow-up (same day): documented the bridged speech-cue method and the results
+that used it (docs/AUDIO_STACK.md, docs/REVISION15_DELIVERY.md), and changed the
+bridge to record the settings that ran instead of the native defaults. Cue values
+are unchanged. Existing bridge outputs were not rewritten; Kiran's development
+numbers are cited from the PR comment, not re-run. No HPC access.

@@ -8,6 +8,10 @@ REFRAMED is the primary evaluation: the frozen 30-clip subset across ten movies,
 
 Formal AD and EgoSchema use immutable source `09abb6c0512e5e97549ad4e66d3bae05a68c42c8`. Later long-video conditions use immutable `a7e0e1a`; original visual controls retain `1f5fb60` provenance. Reporting and verified fixes are on `work/revision15-results`. No running inference source was edited.
 
+A_cue and AV used bridged speech cues, whose semantic-shift and deictic methods
+differ from the native ones; see [the audio stack notes](AUDIO_STACK.md) for the
+method and the affected results.
+
 ## Completed AD results
 
 - Ten local core cells: 3,398 unique attempts, 3,108 valid captions, 290 failures (256 word-budget violations; 34 token-limit failures), zero missing IDs.

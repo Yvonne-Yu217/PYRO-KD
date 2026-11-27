@@ -3,6 +3,10 @@
 Uses explicit frozen dev, test or long membership; preserves cached ASR, CLAP
 and acoustic tracks. Tagger
 onset extraction uses PR22's declared default policy, which remains untuned.
+Speech cues are NOT computed like src/audio/speech_cues.py: they come from
+src/utils/speech_cues.cue_tracks (see docs/AUDIO_STACK.md, "Bridged speech
+cues"), and the record's config describes that method rather than the native
+speech-cue settings.
 """
 import argparse
 import hashlib
@@ -15,7 +19,7 @@ from src.audio.cues_io import malformed_cues, write_cues, merged_config
 from src.audio.salience import class_onsets
 from src.utils.audio_features import load_current_features, resolve_audio_path
 from src.utils.media import load_manifest, cache_is_current
-from src.utils.speech_cues import speech_chunks
+from src.utils.speech_cues import DEICTIC_PHRASES, speech_chunks
 from src.datasets.frozen_membership import frozen_video_ids
 
 
@@ -23,7 +27,40 @@ def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def bridge(cache, speech_record, config):
+def bridge_config(config, speech_report=None):
+    """The settings that actually produced a bridged record.
+
+    Only config["nse"] (event onsets) is applied here. The speech cues are copied from
+    the speech-cue report, so the native speech-cue settings (window, threshold, local
+    maxima) are replaced by a description of what ran. ASR, tagger, CLAP and acoustic
+    settings belong to the upstream caches and are recorded under "backends".
+    """
+    report = speech_report or {}
+    settings = report.get('settings') or {}
+    return {
+        'source': 'bridge_hpc_audio_caches',
+        'nse': config['nse'],
+        'sc': {
+            'semantic_shift': {
+                'method': 'src.utils.speech_cues.cue_tracks',
+                'strength': '(1 - cosine(chunk embedding, previous chunk embedding)) / 2',
+                'first_chunk_strength': 0.0, 'emitted': 'every speech chunk',
+                'window': None, 'threshold': None, 'local_maxima_only': False,
+                'max_words_per_chunk': settings.get('max_words'),
+                'model': report.get('model'), 'revision': report.get('revision'),
+            },
+            'deictic': {
+                'method': 'exact phrase match per speech chunk (strength 0 or 1)',
+                'phrases': list(settings.get('phrases') or DEICTIC_PHRASES),
+                'emitted': 'every speech chunk',
+            },
+            'long_silence': 'not bridged; selectors derive it from the VAD gaps',
+        },
+        'upstream': 'asr, tagger, clap and acoustic settings: see backends',
+    }
+
+
+def bridge(cache, speech_record, config, speech_report=None):
     manifest = load_manifest(cache)
     if not cache_is_current(manifest):
         raise ValueError('stale media cache')
@@ -58,9 +95,10 @@ def bridge(cache, speech_record, config):
             cues.append({'time': row['time'], 'strength': row[key], 'kind': kind,
                          'text': row['text'], 'timing': 'segment'})
     source_hashes = {str(p.resolve()): sha(p) for p in sources.values()}
-    identity = {'sources': source_hashes, 'speech_record': speech_record, 'config': config}
+    recorded = bridge_config(config, speech_report)
+    identity = {'sources': source_hashes, 'speech_record': speech_record, 'config': recorded}
     record = {
-        'version': 1, 'duration': event['duration'], 'config': config,
+        'version': 1, 'duration': event['duration'], 'config': recorded,
         'config_hash': hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest(),
         'audio_sha256': wavhash, 'vad_hash': vad['config_hash'],
         'bridge_sources': source_hashes,
@@ -110,7 +148,7 @@ def main():
     records = []
     for ident in ids:
         cache = args.cache_root / ident
-        record = bridge(cache, by_id[ident], merged_config(None))
+        record = bridge(cache, by_id[ident], merged_config(None), speech)
         record['bridge_sources'][str(args.speech_cues.resolve())] = sha(args.speech_cues)
         record['bridge_sources'][str(args.splits.resolve())] = sha(args.splits)
         target = args.output_root / ident
