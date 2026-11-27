@@ -203,9 +203,10 @@ def main():
     print(f"[run_ad] {len(rows)} moments, {len(finished)} already done, {len(todo)} to run", flush=True)
     if repeats & finished:
         print(
-            f"[run_ad] {len(repeats & finished)} of the finished moments are token-limit failures "
-            f"that would repeat at max_new_tokens={args.max_new_tokens}, temperature={args.temperature}; "
-            "raise --max-new-tokens to retry them", flush=True)
+            f"[run_ad] {len(repeats & finished)} of the finished moments are failures that would repeat "
+            f"at max_new_tokens={args.max_new_tokens}, temperature={args.temperature} (over the word "
+            "budget, or cut off at the token limit; raising --max-new-tokens retries only the latter)",
+            flush=True)
 
     if args.dry_run:
         for row in todo[:5]:

@@ -237,7 +237,8 @@ def run_generation(
         for m, request, digest in batch:
             if run.audio_context == "native" and not request.audio:
                 rejected.append(GenResult(m["id"], error="no_native_audio"))
-            elif run.audio_context == "timeline" and m.get("timeline_status") != "ok":
+            elif ((run.audio_context == "timeline" or (run.audio_context is None and run.timeline))
+                  and m.get("timeline_status") != "ok"):
                 rejected.append(GenResult(m["id"], error="unavailable_audio_timeline"))
             else:
                 requests.append(request)
@@ -482,11 +483,14 @@ def run_qa(
             frames = [frame_window(manifest, t, 1, 0.0)[0] for t in times]
             timeline = ""
             if run.timeline:
-                context, _ = load_context(record, cfg, need_visual=False)
-                if context.audio_cues is not None:
-                    timeline = format_timeline(context.audio_cues.get("events", []),
-                                               (context.audio_cues.get("asr") or {}).get("segments", []),
-                                               config={"max_items": int(get(cfg, "qa.timeline_max_items", 40))})
+                context, available = load_context(record, cfg, need_visual=False)
+                if context.audio_cues is None:
+                    append_jsonl(out_path, [{**base, "status": "error", "prediction": None,
+                                             "error": f"unavailable_audio_timeline: {available.get('audio_cues')}"}])
+                    continue
+                timeline = format_timeline(context.audio_cues.get("events", []),
+                                           (context.audio_cues.get("asr") or {}).get("segments", []),
+                                           config={"max_items": int(get(cfg, "qa.timeline_max_items", 40))})
             prompt = build_qa_prompt(item.question, item.options, [f.timestamp for f in frames], timeline)
             result = backend.generate([GenRequest(item.question_id, prompt, [f.path for f in frames], None,
                                                   int(get(cfg, "qa.max_new_tokens", 8)))])[0]
